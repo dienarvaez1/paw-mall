@@ -30,7 +30,7 @@ checked) · **Blocked**.
 | Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
 | ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
 | 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | In progress | 2026-10-05 | —          |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | In review   | 2026-10-05 | —          |
 | 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —          | —          |
 | 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —          |
 | 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —          |
