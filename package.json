@@ -19,7 +19,9 @@
     "db:migrate": "pnpm --filter api db:migrate",
     "places:import": "pnpm --filter @paw-mall/importers import:denue",
     "places:enrich-overture": "pnpm --filter @paw-mall/importers enrich-overture",
-    "places:check-websites": "pnpm --filter @paw-mall/importers check-websites"
+    "places:check-websites": "pnpm --filter @paw-mall/importers check-websites",
+    "places:claims": "pnpm --filter @paw-mall/importers claims",
+    "places:reports": "pnpm --filter @paw-mall/importers reports"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
