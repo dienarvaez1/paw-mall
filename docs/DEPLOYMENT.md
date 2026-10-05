@@ -24,15 +24,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                 | Branch                     | PR  | Status      | Started | Merged |
-| ----- | -------------------- | -------------------------- | --- | ----------- | ------- | ------ |
-| 1     | Foundation           | `phase-1/foundation`       | —   | Not started | —       | —      |
-| 2     | Pet businesses       | `phase-2/pet-businesses`   | —   | Not started | —       | —      |
-| 3     | Search and map       | `phase-3/search-and-map`   | —   | Not started | —       | —      |
-| 4     | Emergency vets       | `phase-4/emergency-vets`   | —   | Not started | —       | —      |
-| 5     | Trust                | `phase-5/trust`            | —   | Not started | —       | —      |
-| 6     | Pet-friendly layer   | `phase-6/pet-friendly`     | —   | Not started | —       | —      |
-| 7     | Tourism and museums  | `phase-7/tourism-museums`  | —   | Not started | —       | —      |
+| Phase | Name                | Branch                    | PR  | Status      | Started | Merged |
+| ----- | ------------------- | ------------------------- | --- | ----------- | ------- | ------ |
+| 1     | Foundation          | `phase-1/foundation`      | PR_REF | In progress | 2026-10-05 | —      |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | —   | Not started | —       | —      |
+| 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —       | —      |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —       | —      |
+| 5     | Trust               | `phase-5/trust`           | —   | Not started | —       | —      |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —       | —      |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —       | —      |
 
 ## Phase details
 
@@ -43,15 +43,33 @@ checked) · **Blocked**.
   and `en`.
 - **Done when:** the app opens on a phone or simulator via Expo Go with a Spanish welcome screen
   and reaches the local API.
-- **Branch / PR:** `phase-1/foundation` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-1/foundation` / PR_REF
+- **Status:** In progress (waiting for the device check)
 - **Checks:**
-  - [ ] `pnpm lint`
-  - [ ] `pnpm typecheck`
-  - [ ] `pnpm test`
-  - [ ] Done-when check on device
-- **Notes:** —
-- **Follow-ups:** —
+  - [x] `pnpm lint` (includes the `i18next/no-literal-string` rule, confirmed to reject JSX text)
+  - [x] `pnpm typecheck`
+  - [x] `pnpm test`: 18 tests (shared 5, api 3, mobile 10)
+  - [x] `pnpm i18n:check` and `pnpm format:check`
+  - [x] `curl localhost:8787/health` →
+        `{"status":"ok","version":"0.1.0","database":{"status":"ok","postgis":"3.6.4"}}`, also
+        from the LAN IP
+  - [x] `expo export` bundles for iOS and Android
+  - [ ] Done-when check on device (Expo Go)
+- **Notes:**
+  - Postgres 17 + PostGIS 3.6.4, pg_trgm and unaccent, from migration `0000_extensions`.
+  - Docker publishes Postgres on port **5434** (Ferre Mall uses 5433).
+  - The API reads `DATABASE_URL` from `wrangler.toml` `[vars]`; no Hyperdrive or other cloud
+    resources. `workers_dev = false`, and there is no deploy script.
+  - `/health` still answers when Postgres is down (`database.status: "unavailable"`), so the app
+    can tell "no server" from "no database".
+  - Tooling dependencies beyond the Tech stack table, all as in Ferre Mall: `postgres`
+    (postgres.js driver for Drizzle), `wrangler`, `drizzle-kit`, `@cloudflare/workers-types`,
+    `typescript-eslint`, `eslint-config-expo`, `eslint-plugin-i18next` and `tailwindcss` 3
+    (NativeWind).
+- **Follow-ups:**
+  - No app icon or splash yet (Expo defaults); add them with the app store readiness work.
+  - `pnpm peers check` lists two transitive peer warnings (`react-dom` 19.3 wants React 19.3;
+    `@react-native/metro-config` 0.87). `expo install --check` reports everything aligned.
 
 ### Phase 2 — Pet businesses
 
@@ -159,6 +177,7 @@ Play readiness").
 
 ## Change log
 
-| Date       | Change                          | PR  |
-| ---------- | ------------------------------- | --- |
-| 2026-10-05 | Rollout log created             | #1  |
+| Date       | Change              | PR  |
+| ---------- | ------------------- | --- |
+| 2026-10-05 | Rollout log created | #1  |
+| 2026-10-05 | Phase 1 started | PR_REF |
