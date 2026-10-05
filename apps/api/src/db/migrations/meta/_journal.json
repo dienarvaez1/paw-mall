@@ -22,6 +22,20 @@
       "when": 1791230722573,
       "tag": "0002_categories",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791232254310,
+      "tag": "0003_place_search",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791232255618,
+      "tag": "0004_place_search_index",
+      "breakpoints": true
     }
   ]
 }

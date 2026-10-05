@@ -50,9 +50,7 @@
       "uniqueConstraints": {
         "categories_slug_unique": {
           "name": "categories_slug_unique",
-          "columns": [
-            "slug"
-          ],
+          "columns": ["slug"],
           "nullsNotDistinct": false
         }
       },
@@ -88,13 +86,9 @@
         "category_translations_category_id_categories_id_fk": {
           "name": "category_translations_category_id_categories_id_fk",
           "tableFrom": "category_translations",
-          "columnsFrom": [
-            "category_id"
-          ],
+          "columnsFrom": ["category_id"],
           "tableTo": "categories",
-          "columnsTo": [
-            "id"
-          ],
+          "columnsTo": ["id"],
           "onUpdate": "no action",
           "onDelete": "cascade"
         }
@@ -102,10 +96,7 @@
       "compositePrimaryKeys": {
         "category_translations_category_id_locale_pk": {
           "name": "category_translations_category_id_locale_pk",
-          "columns": [
-            "category_id",
-            "locale"
-          ]
+          "columns": ["category_id", "locale"]
         }
       },
       "uniqueConstraints": {},
@@ -249,26 +240,18 @@
         "place_categories_place_id_places_id_fk": {
           "name": "place_categories_place_id_places_id_fk",
           "tableFrom": "place_categories",
-          "columnsFrom": [
-            "place_id"
-          ],
+          "columnsFrom": ["place_id"],
           "tableTo": "places",
-          "columnsTo": [
-            "id"
-          ],
+          "columnsTo": ["id"],
           "onUpdate": "no action",
           "onDelete": "cascade"
         },
         "place_categories_category_id_categories_id_fk": {
           "name": "place_categories_category_id_categories_id_fk",
           "tableFrom": "place_categories",
-          "columnsFrom": [
-            "category_id"
-          ],
+          "columnsFrom": ["category_id"],
           "tableTo": "categories",
-          "columnsTo": [
-            "id"
-          ],
+          "columnsTo": ["id"],
           "onUpdate": "no action",
           "onDelete": "no action"
         }
@@ -276,10 +259,7 @@
       "compositePrimaryKeys": {
         "place_categories_place_id_category_id_pk": {
           "name": "place_categories_place_id_category_id_pk",
-          "columns": [
-            "place_id",
-            "category_id"
-          ]
+          "columns": ["place_id", "category_id"]
         }
       },
       "uniqueConstraints": {},
@@ -554,13 +534,9 @@
         "vet_details_place_id_places_id_fk": {
           "name": "vet_details_place_id_places_id_fk",
           "tableFrom": "vet_details",
-          "columnsFrom": [
-            "place_id"
-          ],
+          "columnsFrom": ["place_id"],
           "tableTo": "places",
-          "columnsTo": [
-            "id"
-          ],
+          "columnsTo": ["id"],
           "onUpdate": "no action",
           "onDelete": "cascade"
         }

@@ -1,3 +1,5 @@
+import type { Locale } from '@paw-mall/shared';
+
 import type { Database } from './db/client';
 
 export type Bindings = {
@@ -7,6 +9,7 @@ export type Bindings = {
 
 export type Variables = {
   db: Database;
+  locale: Locale;
 };
 
 export type AppEnv = { Bindings: Bindings; Variables: Variables };

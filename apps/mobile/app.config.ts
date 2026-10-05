@@ -20,12 +20,23 @@ const config: ExpoConfig = {
   web: {
     bundler: 'metro',
   },
-  // Native strings (app name, later permission prompts) per device language.
+  // Native strings (app name, permission prompts) per device language.
   locales: {
     es: './native-locales/es.json',
     en: './native-locales/en.json',
   },
-  plugins: ['expo-router', 'expo-localization'],
+  plugins: [
+    'expo-router',
+    'expo-localization',
+    [
+      'expo-location',
+      {
+        // English default; the Spanish text comes from native-locales/es.json.
+        locationWhenInUsePermission:
+          'Paw Mall uses your location to show nearby vets, pet stores and pet-friendly places.',
+      },
+    ],
+  ],
   experiments: {
     typedRoutes: true,
   },
