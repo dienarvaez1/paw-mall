@@ -17,7 +17,10 @@ Every phase follows the same steps:
 4. Before marking ready: `pnpm lint`, `pnpm typecheck` and `pnpm test` pass, and the phase's
    "Done when" check passes on a phone or simulator.
 5. Update this file on the same branch: status, dates, checks, notes and follow-ups.
-6. Merge the PR into `main` (squash), delete the branch, then start the next phase.
+6. Merge the PR into `main` (squash) and delete the branch, locally and on GitHub.
+7. Start the next phase's branch. Nothing is committed straight to `main`, so the first commit on
+   the new branch records the merge here: the finished phase becomes **Done** with its merge date
+   and merge commit, and the new phase becomes **In progress**.
 
 Statuses: **Not started** · **In progress** · **In review** (PR ready) · **Done** (merged and
 checked) · **Blocked**.
@@ -26,8 +29,8 @@ checked) · **Blocked**.
 
 | Phase | Name                | Branch                    | PR  | Status      | Started    | Merged |
 | ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ------ |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | In review   | 2026-10-05 | —      |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | —   | Not started | —          | —      |
+| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | PR_REF | In progress | 2026-10-05 | — |
 | 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —          | —      |
 | 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —      |
 | 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —      |
@@ -44,7 +47,7 @@ checked) · **Blocked**.
 - **Done when:** the app opens on a phone or simulator via Expo Go with a Spanish welcome screen
   and reaches the local API.
 - **Branch / PR:** `phase-1/foundation` / #2
-- **Status:** In review
+- **Status:** Done. Squash-merged into `main` as `a0199db` on 2026-10-05; branch deleted.
 - **Checks:**
   - [x] `pnpm lint` (includes the `i18next/no-literal-string` rule, confirmed to reject JSX text)
   - [x] `pnpm typecheck`
@@ -82,15 +85,19 @@ checked) · **Blocked**.
   812990; categories; Overture enrichment; website checks.
 - **Done when:** `curl` lists real vets and pet stores near the Zócalo by category, with the
   PLAN.md counts (±1%), and grooming entries come only from matching names.
-- **Branch / PR:** `phase-2/pet-businesses` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-2/pet-businesses` / PR_REF
+- **Status:** In progress (checklist under review, no code yet)
 - **Checks:**
   - [ ] `pnpm lint`
   - [ ] `pnpm typecheck`
   - [ ] `pnpm test`
   - [ ] Import counts recorded below (465911 ≈ 8,709; 541941 ≈ 6,546; 541942 ≈ 70)
   - [ ] Done-when check
-- **Notes:** —
+- **Notes:**
+  - Counts measured on 2026-10-05 from the DENUE edition of 2026-05-20 (the six states' zips
+    already downloaded by Ferre Mall): 465911 = 8,709; 541941 = 6,546; 541942 = 70;
+    812990 = 2,921 in total, of which about 1,243 have grooming names and about 29 boarding names
+    (a first pass with simple patterns); 434112 = 4,447.
 - **Follow-ups:** —
 
 ### Phase 3 — Search and map
@@ -186,3 +193,5 @@ Play readiness").
 | ---------- | ------------------- | --- |
 | 2026-10-05 | Rollout log created | #1  |
 | 2026-10-05 | Phase 1 started     | #2  |
+| 2026-10-05 | Phase 1 merged (`a0199db`) | #2 |
+| 2026-10-05 | Phase 2 started | PR_REF |
