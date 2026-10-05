@@ -70,5 +70,48 @@
     "unavailable": "Hours aren't available right now. Try again later.",
     "limit_reached": "You've reached today's lookup limit. Try again tomorrow.",
     "credit": "Hours, phone and website: Google Maps"
+  },
+  "ownerVerified": "Verified by the owner on {{date}}",
+  "report": {
+    "closed": {
+      "button": "Has this place closed?",
+      "confirm": "Report that this place is no longer open?",
+      "thanks": "Thanks. We'll review this place."
+    },
+    "cruelty": {
+      "button": "Report animal cruelty",
+      "confirm": "Report that this place is linked to animal cruelty (for example, a puppy mill, animal fights or slaughter)?",
+      "thanks": "Thanks for your report. We'll review it."
+    },
+    "privacy": "Your report is anonymous: we don't send your location or your details.",
+    "yes": "Yes, report"
+  },
+  "claim": {
+    "title": "Your business details",
+    "button": "Do you own this business?",
+    "intro": "Publish your business's phone, hours and website. We'll review your request before publishing and contact you if needed.",
+    "storeSection": "What will be published",
+    "phone": "Phone",
+    "website": "Website (optional)",
+    "vetSection": "Veterinary care",
+    "open24h": "Open 24 hours, every day",
+    "acceptsEmergencies": "Takes emergencies",
+    "hoursSection": "Hours",
+    "hoursHint": "If you close after midnight, write the closing time as is (for example, 20:00 to 02:00).",
+    "weekdays": "Monday to Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "open": "Opens",
+    "close": "Closes",
+    "closedDay": "Closed",
+    "timePlaceholder": "08:00",
+    "contactSection": "How do we reach you?",
+    "contactHint": "Only to review your request; it isn't published and is deleted after the review.",
+    "contactName": "Your name",
+    "contact": "Phone or email",
+    "consent": "I agree that Paw Mall uses these details to review my request. My contact details are deleted after the review.",
+    "submit": "Send request",
+    "invalid": "Check the details: you need at least a phone, hours, a website or a veterinary detail, plus your contact and your consent.",
+    "thanks": "We received your request. We'll review it and, if everything is right, publish your business's details."
   }
 }

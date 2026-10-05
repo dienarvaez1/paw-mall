@@ -1,6 +1,7 @@
-import { type Place, WEEK_ORDER } from '@paw-mall/shared';
-import { Stack, useLocalSearchParams } from 'expo-router';
-import { Linking, ScrollView, Text, View } from 'react-native';
+import { type Place, type PlaceReportReason, WEEK_ORDER } from '@paw-mall/shared';
+import { Link, Stack, useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
+import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 import { usePlace } from '@/api/hooks';
@@ -9,7 +10,8 @@ import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { ErrorState, SkeletonList } from '@/components/states';
 import { GoogleHours } from '@/features/google/google-hours';
-import { formatClockTime, formatMonthYear, formatWeekday } from '@/i18n/format';
+import { useReportPlace } from '@/features/reports/place-reports';
+import { formatClockTime, formatDate, formatMonthYear, formatWeekday } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 import { pinColor } from '@/lib/categories';
@@ -51,6 +53,11 @@ function PlaceDetail({ place: p }: { place: Place }) {
         <Text className="text-2xl font-bold text-neutral-900 dark:text-white">{name}</Text>
         <CategoryLine place={p} selected={null} />
         <OpenStatus place={p} />
+        {p.ownerVerifiedOn ? (
+          <Text className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
+            {t('places.ownerVerified', { date: formatLongDate(p.ownerVerifiedOn, locale) })}
+          </Text>
+        ) : null}
       </View>
 
       <View className="flex-row gap-3 px-4 pt-5">
@@ -95,6 +102,26 @@ function PlaceDetail({ place: p }: { place: Place }) {
       </View>
 
       <HoursSection place={p} />
+
+      <View className="gap-3 px-4 pt-8">
+        <ReportButton placeId={p.id} reason="closed" />
+        <ReportButton placeId={p.id} reason="cruelty" />
+      </View>
+
+      {!p.ownerVerifiedOn ? (
+        <View className="flex-row px-4 pt-3">
+          <Link href={{ pathname: '/claim/[placeId]', params: { placeId: p.id } }} asChild>
+            <Pressable
+              accessibilityRole="link"
+              className="min-h-12 flex-1 items-center justify-center rounded-xl px-4 active:bg-neutral-100 dark:active:bg-neutral-900"
+            >
+              <Text className="text-base font-semibold text-teal-800 dark:text-teal-300">
+                {t('places.claim.button')}
+              </Text>
+            </Pressable>
+          </Link>
+        </View>
+      ) : null}
 
       {p.source === 'denue' ? (
         <View className="gap-1 px-4 pt-6">
@@ -173,6 +200,65 @@ function HoursSection({ place: p }: { place: Place }) {
           )}
         </>
       )}
+    </View>
+  );
+}
+
+/** An ISO date ("2026-10-05") in the long local format ("5 de octubre de 2026"). */
+function formatLongDate(isoDate: string, language: Parameters<typeof formatDate>[1]): string {
+  const [year, month, day] = isoDate.split('-').map(Number);
+  return formatDate(new Date(year ?? 1970, (month ?? 1) - 1, day ?? 1), language);
+}
+
+/**
+ * "¿Cerró?" or "Reportar maltrato animal", with a confirm step. Several phones' reports hide the
+ * place pending the owner's review; only the reason and the app's random id are sent.
+ */
+function ReportButton({ placeId, reason }: { placeId: number; reason: PlaceReportReason }) {
+  const { t } = useAppTranslation();
+  const [confirming, setConfirming] = useState(false);
+  const { alreadyReported, report, isPending, isError, error } = useReportPlace(placeId, reason);
+
+  if (alreadyReported) {
+    return (
+      <Text className="text-sm text-neutral-600 dark:text-neutral-300">
+        {t(`places.report.${reason}.thanks`)}
+      </Text>
+    );
+  }
+  if (!confirming) {
+    return (
+      <View className="flex-row">
+        <Button
+          variant="secondary"
+          label={t(`places.report.${reason}.button`)}
+          onPress={() => setConfirming(true)}
+        />
+      </View>
+    );
+  }
+  return (
+    <View className="gap-3 rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-900">
+      <Text className="text-base text-neutral-900 dark:text-white">
+        {t(`places.report.${reason}.confirm`)}
+      </Text>
+      <Text className="text-xs text-neutral-500 dark:text-neutral-400">
+        {t('places.report.privacy')}
+      </Text>
+      <View className="flex-row gap-3">
+        <Button
+          label={t('places.report.yes')}
+          onPress={() => {
+            if (!isPending) report();
+          }}
+        />
+        <Button
+          variant="secondary"
+          label={t('common.cancel')}
+          onPress={() => setConfirming(false)}
+        />
+      </View>
+      {isError ? <ErrorState error={error} /> : null}
     </View>
   );
 }

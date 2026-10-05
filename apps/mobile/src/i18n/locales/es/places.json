@@ -70,5 +70,48 @@
     "unavailable": "El horario no está disponible por ahora. Inténtalo más tarde.",
     "limit_reached": "Llegaste al límite de consultas de hoy. Inténtalo mañana.",
     "credit": "Horario, teléfono y sitio web: Google Maps"
+  },
+  "ownerVerified": "Verificado por el dueño el {{date}}",
+  "report": {
+    "closed": {
+      "button": "¿Este lugar cerró?",
+      "confirm": "¿Reportar que este lugar ya no está abierto?",
+      "thanks": "Gracias. Revisaremos este lugar."
+    },
+    "cruelty": {
+      "button": "Reportar maltrato animal",
+      "confirm": "¿Reportar que este lugar está relacionado con maltrato animal (por ejemplo, criadero masivo, peleas de animales o sacrificio)?",
+      "thanks": "Gracias por tu reporte. Lo revisaremos."
+    },
+    "privacy": "Tu reporte es anónimo: no enviamos tu ubicación ni tus datos.",
+    "yes": "Sí, reportar"
+  },
+  "claim": {
+    "title": "Datos de tu negocio",
+    "button": "¿Eres el dueño de este negocio?",
+    "intro": "Publica el teléfono, el horario y el sitio web de tu negocio. Revisaremos tu solicitud antes de publicar y te contactaremos si hace falta.",
+    "storeSection": "Lo que se publicará",
+    "phone": "Teléfono",
+    "website": "Sitio web (opcional)",
+    "vetSection": "Atención veterinaria",
+    "open24h": "Abierto las 24 horas, todos los días",
+    "acceptsEmergencies": "Atiende urgencias",
+    "hoursSection": "Horario",
+    "hoursHint": "Si cierras después de medianoche, escribe la hora de cierre tal cual (por ejemplo, de 20:00 a 02:00).",
+    "weekdays": "Lunes a viernes",
+    "saturday": "Sábado",
+    "sunday": "Domingo",
+    "open": "Abre",
+    "close": "Cierra",
+    "closedDay": "Cerrado",
+    "timePlaceholder": "08:00",
+    "contactSection": "¿Cómo te contactamos?",
+    "contactHint": "Solo para revisar tu solicitud; no se publica y se borra al terminar la revisión.",
+    "contactName": "Tu nombre",
+    "contact": "Teléfono o correo",
+    "consent": "Acepto que Paw Mall use estos datos para revisar mi solicitud. Mis datos de contacto se borran al terminar la revisión.",
+    "submit": "Enviar solicitud",
+    "invalid": "Revisa los datos: necesitas al menos un teléfono, un horario, un sitio web o un dato de atención veterinaria, además de tu contacto y tu aceptación.",
+    "thanks": "Recibimos tu solicitud. La revisaremos y, si todo está bien, publicaremos los datos de tu negocio."
   }
 }
