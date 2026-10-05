@@ -42,5 +42,33 @@
     "boarding": "Pensiones",
     "feed_store": "Forrajerías",
     "public_vet_service": "Servicios públicos"
+  },
+  "openNowChip": "Abierto ahora",
+  "noOpenPlaces": "No hay lugares abiertos ahora con horario confirmado a menos de {{distance}}.",
+  "noOpenPlacesHint": "Todavía pocos negocios tienen su horario confirmado. Quita «Abierto ahora» para ver todos, o revisa el horario de cada uno con «Ver horario».",
+  "hours": {
+    "title": "Horario",
+    "openNow": "Abierto ahora",
+    "closedNow": "Cerrado ahora",
+    "unconfirmed": "Horario sin confirmar",
+    "unconfirmed24h": "Dice «24 horas» · sin confirmar",
+    "closed": "Cerrado",
+    "allDay": "Abierto 24 horas",
+    "allDayEveryDay": "Abierto las 24 horas, todos los días (confirmado por el dueño)",
+    "range": "{{open}} – {{close}}"
+  },
+  "google": {
+    "showHours": "Ver horario",
+    "loading": "Buscando…",
+    "openNow": "Abierto ahora",
+    "closedNow": "Cerrado ahora",
+    "closedTemporarily": "Google indica que este lugar cerró temporalmente.",
+    "closedPermanently": "Google indica que este lugar cerró definitivamente.",
+    "noHours": "Google no tiene el horario de este lugar.",
+    "openInGoogleMaps": "Google Maps",
+    "not_found": "No encontramos este lugar en Google.",
+    "unavailable": "El horario no está disponible por ahora. Inténtalo más tarde.",
+    "limit_reached": "Llegaste al límite de consultas de hoy. Inténtalo mañana.",
+    "credit": "Horario, teléfono y sitio web: Google Maps"
   }
 }

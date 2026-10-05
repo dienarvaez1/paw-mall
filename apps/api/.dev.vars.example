@@ -1,0 +1,2 @@
+# Copy to .dev.vars (gitignored) for `pnpm --filter api dev`. See docs/GOOGLE-PLACES.md.
+GOOGLE_PLACES_API_KEY=

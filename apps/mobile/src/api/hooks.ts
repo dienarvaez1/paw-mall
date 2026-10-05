@@ -1,4 +1,9 @@
-import { placeListResponseSchema, placeMapResponseSchema, placeSchema } from '@paw-mall/shared';
+import {
+  placeListResponseSchema,
+  placeMapResponseSchema,
+  placeSchema,
+  urgentResponseSchema,
+} from '@paw-mall/shared';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
@@ -16,12 +21,12 @@ const PLACES_PAGE_SIZE = 50;
  * searches by name, city or state. Every key includes the locale, so switching language refetches
  * category names.
  */
-export function usePlaces(coords: Coords, category: ChipCategory, name = '') {
+export function usePlaces(coords: Coords, category: ChipCategory, name = '', openNow = false) {
   const locale = useLocale();
   const { radiusKm } = useSettings();
   const filters = usePlaceFilters();
   return useInfiniteQuery({
-    queryKey: ['places', locale, radiusKm, filters, coords, category, name],
+    queryKey: ['places', locale, radiusKm, filters, coords, category, name, openNow],
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
       apiGet(
@@ -31,6 +36,7 @@ export function usePlaces(coords: Coords, category: ChipCategory, name = '') {
           radiusKm,
           category: category ?? undefined,
           q: name || undefined,
+          openNow: openNow || undefined,
           ...filters,
           pageSize: PLACES_PAGE_SIZE,
           page: pageParam,
@@ -49,12 +55,17 @@ export type MapArea = { minLng: number; minLat: number; maxLng: number; maxLat: 
  * Places in the visible map area and within the Settings radius of the user (the circle on the
  * map), one by one or as clusters when too many are in view.
  */
-export function usePlacesMap(area: MapArea | null, coords: Coords, category: ChipCategory) {
+export function usePlacesMap(
+  area: MapArea | null,
+  coords: Coords,
+  category: ChipCategory,
+  openNow = false,
+) {
   const locale = useLocale();
   const { radiusKm } = useSettings();
   const filters = usePlaceFilters();
   return useQuery({
-    queryKey: ['places-map', locale, filters, area, coords, radiusKm, category],
+    queryKey: ['places-map', locale, filters, area, coords, radiusKm, category, openNow],
     enabled: area !== null,
     placeholderData: (previous) => previous,
     queryFn: () => {
@@ -66,6 +77,7 @@ export function usePlacesMap(area: MapArea | null, coords: Coords, category: Chi
           ...coords,
           radiusKm,
           category: category ?? undefined,
+          openNow: openNow || undefined,
           ...filters,
         },
         locale,
@@ -80,5 +92,19 @@ export function usePlace(id: number) {
   return useQuery({
     queryKey: ['place', locale, id],
     queryFn: () => apiGet(`/v1/places/${id}`, {}, locale, placeSchema),
+  });
+}
+
+/** "Open now" changes by the minute, so Urgencias refreshes while it's on screen. */
+const URGENT_REFRESH_MS = 60 * 1000;
+
+/** Urgencias: the nearest vet hospitals and 24-hour vets, open ones first. */
+export function useUrgentPlaces(coords: Coords) {
+  const locale = useLocale();
+  return useQuery({
+    queryKey: ['urgent', locale, coords],
+    queryFn: () => apiGet('/v1/places/urgent', { ...coords }, locale, urgentResponseSchema),
+    staleTime: 0,
+    refetchInterval: URGENT_REFRESH_MS,
   });
 }

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { CATEGORY_GROUPS, CATEGORY_SLUGS } from './categories';
+import { placeHoursSchema } from './hours';
 
 export const categorySlugSchema = z.enum(CATEGORY_SLUGS);
 
@@ -37,6 +38,13 @@ export const placeSchema = z.object({
   distanceKm: z.number().nullable(),
   /** Vets only: open 24 hours. A 'name' source is an unconfirmed hint from the business name. */
   open24h: z.object({ value: z.boolean(), source: z.enum(['name', 'owner']) }).nullable(),
+  /** Confirmed weekly hours (owner-verified from Phase 5); null when unknown. */
+  hours: placeHoursSchema.nullable(),
+  /**
+   * Open right now by confirmed hours (or an owner's 24-hour answer); null when unknown. A "24
+   * horas" name hint alone stays null.
+   */
+  openNow: z.boolean().nullable(),
   source: valueSourceSchema,
   phoneSource: valueSourceSchema.nullable(),
   websiteSource: valueSourceSchema.nullable(),
@@ -67,6 +75,8 @@ const placeFilters = {
   withSocial: z.stringbool().optional(),
   /** Hide places without a real name (none, or "… sin nombre"). */
   named: z.stringbool().optional(),
+  /** Only places open right now by confirmed hours. */
+  openNow: z.stringbool().optional(),
 };
 export type PlaceFilters = { [K in keyof typeof placeFilters]?: z.infer<(typeof placeFilters)[K]> };
 
@@ -143,3 +153,19 @@ export const placeMapResponseSchema = z.discriminatedUnion('kind', [
 export type PlaceMapResponse = z.infer<typeof placeMapResponseSchema>;
 
 export const idParamSchema = z.object({ id: z.coerce.number().int().positive() });
+
+/** Urgencias: the nearest vet hospitals and 24-hour vets, open ones first. */
+export const urgentQuerySchema = z.object({
+  lat: latitude,
+  lng: longitude,
+  radiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(25),
+});
+export type UrgentQuery = z.infer<typeof urgentQuerySchema>;
+
+export const URGENT_LIMIT = 20;
+
+export const urgentResponseSchema = z.object({
+  /** Open now (confirmed) first, then unconfirmed, then closed; nearest first within each. */
+  items: z.array(placeSchema),
+});
+export type UrgentResponse = z.infer<typeof urgentResponseSchema>;

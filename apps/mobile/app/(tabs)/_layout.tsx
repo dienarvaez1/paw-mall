@@ -5,18 +5,19 @@ import { useColorScheme } from 'react-native';
 import { ICONS } from '@/components/icons';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 
-type TabIconName = 'tab-explore' | 'tab-settings';
+type TabIconName = 'tab-explore' | 'tab-urgent' | 'tab-settings';
 
 function TabIcon({ name, color }: { name: TabIconName; color: string }) {
   return <Image source={ICONS[name]} style={{ width: 26, height: 26 }} tintColor={color} />;
 }
 
-/** Explorar and Ajustes for now; Urgencias arrives in Phase 4 and Favoritos later. */
+/** Explorar, Urgencias and Ajustes; Favoritos isn't scheduled yet. */
 export default function TabsLayout() {
   const { t } = useAppTranslation();
   const dark = useColorScheme() === 'dark';
   const tabs: { name: string; title: string; icon: TabIconName }[] = [
     { name: 'explore', title: t('places.tabTitle'), icon: 'tab-explore' },
+    { name: 'urgent', title: t('urgent.tabTitle'), icon: 'tab-urgent' },
     { name: 'settings', title: t('settings.tabTitle'), icon: 'tab-settings' },
   ];
 

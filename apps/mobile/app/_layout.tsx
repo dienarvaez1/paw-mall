@@ -23,7 +23,11 @@ function RootStack() {
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="place/[id]" options={{ title: t('places.title') }} />
+      {/* Just the arrow: the screen behind is the tab group, whose route name isn't a title. */}
+      <Stack.Screen
+        name="place/[id]"
+        options={{ title: t('places.title'), headerBackButtonDisplayMode: 'minimal' }}
+      />
     </Stack>
   );
 }

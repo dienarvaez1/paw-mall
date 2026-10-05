@@ -31,8 +31,8 @@ checked) · **Blocked**.
 | ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
 | 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
 | 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | #4  | In progress | 2026-10-05 | —          |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —          |
+| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | In progress | 2026-10-05 | —          |
 | 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —          |
 | 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
 | 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
@@ -155,7 +155,7 @@ importers (and a note in the phase that applies it).
 - **Done when:** on a phone, filtering "Veterinarias" shows only vets on the map and list, and
   "Cómo llegar" opens the chosen maps app.
 - **Branch / PR:** `phase-3/search-and-map` / #4
-- **Status:** In review
+- **Status:** Done. Squash-merged into `main` as `df26ef2` on 2026-10-05; branch deleted.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 103 tests (shared 10, api 17, importers 39, mobile 37)
@@ -202,16 +202,52 @@ importers (and a note in the phase that applies it).
   on demand within the free-tier cap.
 - **Done when:** Urgencias shows the nearest open vet with call and directions in one tap, and
   says clearly when hours are unconfirmed.
-- **Branch / PR:** `phase-4/emergency-vets` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-4/emergency-vets` / #5
+- **Status:** In review
 - **Checks:**
-  - [ ] `pnpm lint`
-  - [ ] `pnpm typecheck`
-  - [ ] `pnpm test`
-  - [ ] Google usage stays under the monthly cap (950)
-  - [ ] Done-when check on device
-- **Notes:** —
-- **Follow-ups:** —
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 122 tests (shared 15, api 31, importers 39, mobile 37), including Ferre
+        Mall's Google tests (free ids-only search, match check, monthly and daily limits, no key)
+        and a check that the SQL and TypeScript "open now" rules agree
+  - [x] Migrations build a fresh database; schema and migrations in sync
+  - [x] Google usage stays under the monthly cap (950): enforced in code and tested; no real
+        Google requests made yet (no key configured)
+  - [x] iOS simulator (Spanish), real data: Urgencias lists the nearest vet hospitals with
+        "Llamar" and "Cómo llegar" on each card and "Horario sin confirmar" on every one (no
+        place has confirmed hours yet)
+  - [x] iOS simulator, with 24-hour hours set on one vet temporarily (then removed): it moves to
+        the top with "Abierto ahora", and its page lists "Abierto 24 horas" each day
+  - [x] Done-when check on a phone: open Urgencias, tap "Llamar" and "Cómo llegar" on the first
+        card. Taps can't be automated here, so this was handed to the owner, who approved the
+        merge on 2026-10-05 without reporting problems.
+- **Notes:**
+  - **Owner decision (2026-10-05):** "Ver horario" uses a **new Google Cloud project for Paw
+    Mall**, not Ferre Mall's, since Ferre Mall may not resume soon. Setup steps are in
+    `docs/GOOGLE-PLACES.md`; the key goes in `apps/api/.dev.vars` (gitignored), never in chat
+    or a commit. Until then "Ver horario" says hours aren't available.
+  - **No place has confirmed hours yet:** DENUE and Overture don't publish hours. Confirmed hours
+    come from owners in Phase 5. Google's hours are shown on demand and never stored, so they
+    never count for "Abierto ahora". Urgencias therefore says "Horario sin confirmar" on every
+    card for now and the disclaimer asks users to call first.
+  - Hours model: Ferre Mall's (one interval per weekday, Mexico City time) extended with
+    overnight shifts (20:00–02:00) and 24-hour days (00:00–24:00); `isOpenAt()` in
+    `packages/shared` and its SQL twin `place_open_now()` (migration 0006).
+  - Urgencias: vet hospitals, 24-hour vets (confirmed or hinted by name) and vets that accept
+    emergencies, within 25 km; open now first, then unknown hours, then closed; nearest first in
+    each group; up to 20; refreshed every minute.
+  - Explorar gains an "Abierto ahora" chip (confirmed hours only, with an empty state that
+    explains why few places qualify); list rows and place pages show the open/closed/unconfirmed
+    badge.
+  - Fixed: the place page's back button read "(tabs)" (since Phase 3); it's now just the arrow.
+  - API: `GET /v1/places/urgent`, `POST /v1/places/:id/google`, `openNow` filter; migrations
+    0005 (Google columns, `google_usage`, `google_lookups`, `hours_source`) and 0006.
+- **Follow-ups:**
+  - Owner: create the Google Cloud project and key (`docs/GOOGLE-PLACES.md`), then try "Ver
+    horario" on a place page. Not done at merge time: "Ver horario" says hours are unavailable
+    until the key is set.
+  - Phase 5: owner-verified hours and 24-hour answers are what make "Abierto ahora" useful.
+  - Locally every request shares one daily "Ver horario" allowance (5), because `wrangler dev`
+    has no client IP; deployed Workers get it from Cloudflare.
 
 ### Phase 5 — Trust
 
@@ -276,3 +312,5 @@ Play readiness").
 | 2026-10-05 | Phase 2 started            | #3  |
 | 2026-10-05 | Phase 2 merged (`97d6019`) | #3  |
 | 2026-10-05 | Phase 3 started            | #4  |
+| 2026-10-05 | Phase 3 merged (`df26ef2`) | #4  |
+| 2026-10-05 | Phase 4 started            | #5  |

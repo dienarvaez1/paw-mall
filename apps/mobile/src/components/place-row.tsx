@@ -2,6 +2,7 @@ import type { Place } from '@paw-mall/shared';
 import { Link } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
+import { OpenStatus } from '@/components/open-status';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -61,6 +62,7 @@ export function PlaceRow({ place, selected }: { place: Place; selected: ChipCate
         <Text className="text-sm text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
           {placeLine(place)}
         </Text>
+        <OpenStatus place={place} />
       </Pressable>
     </Link>
   );

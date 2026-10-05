@@ -21,15 +21,14 @@ export class ApiError extends Error {
 
 type Params = Record<string, string | number | boolean | undefined>;
 
-export async function apiGet<S extends z.ZodType>(
-  path: string,
-  params: Params,
-  locale: Locale,
+async function request<S extends z.ZodType>(
+  url: string,
   schema: S,
+  init?: RequestInit,
 ): Promise<z.infer<S>> {
   let response: Response;
   try {
-    response = await fetch(buildApiUrl(API_BASE_URL, path, { ...params, lang: locale }));
+    response = await fetch(url, init);
   } catch {
     throw new ApiError('NETWORK_ERROR', 0);
   }
@@ -40,4 +39,26 @@ export async function apiGet<S extends z.ZodType>(
     throw new ApiError(parsed.success ? parsed.data.error.code : 'INTERNAL_ERROR', response.status);
   }
   return schema.parse(body);
+}
+
+export function apiGet<S extends z.ZodType>(
+  path: string,
+  params: Params,
+  locale: Locale,
+  schema: S,
+): Promise<z.infer<S>> {
+  return request(buildApiUrl(API_BASE_URL, path, { ...params, lang: locale }), schema);
+}
+
+export function apiPost<S extends z.ZodType>(
+  path: string,
+  body: unknown,
+  locale: Locale,
+  schema: S,
+): Promise<z.infer<S>> {
+  return request(buildApiUrl(API_BASE_URL, path, { lang: locale }), schema, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
 }

@@ -9,7 +9,11 @@ import {
   type PlaceListQuery,
   type PlaceListResponse,
   type PlaceMapQuery,
+  type PlaceHours,
   type PlaceMapResponse,
+  type UrgentQuery,
+  URGENT_LIMIT,
+  type UrgentResponse,
   type ValueSource,
 } from '@paw-mall/shared';
 import { type SQL, sql } from 'drizzle-orm';
@@ -33,6 +37,9 @@ const visibleSql = sql`p.hidden_at IS NULL`;
 const liveWebsiteSql = sql`(p.website IS NOT NULL AND
   (p.website_status IS DISTINCT FROM 'dead' OR p.owner_verified_at IS NOT NULL))`;
 
+/** Open now by confirmed hours: true, false or NULL (unknown). Places `p`, vet_details `v`. */
+const openNowSql = sql`place_open_now(p.hours, v.open24h, v.open24h_source, now())`;
+
 /** The conditions for a category and the user's Settings filters (places aliased `p`). */
 function filterConditions(filters: PlaceFilters): SQL[] {
   return [
@@ -47,6 +54,7 @@ function filterConditions(filters: PlaceFilters): SQL[] {
     filters.named
       ? sql`(p.name IS NOT NULL AND lower(f_unaccent(p.name)) NOT LIKE '%sin nombre%')`
       : null,
+    filters.openNow ? sql`${openNowSql} IS TRUE` : null,
   ].filter((condition) => condition !== null);
 }
 
@@ -66,6 +74,8 @@ type PlaceRow = {
   distance_km: string | null;
   open24h: boolean | null;
   open24h_source: 'name' | 'owner' | null;
+  hours: PlaceHours | null;
+  open_now: boolean | null;
   source: ValueSource;
   phone_source: ValueSource | null;
   website_source: ValueSource | null;
@@ -86,7 +96,7 @@ function placeColumnsSql(locale: Locale, point?: Point) {
     p.social_url, p.source, p.phone_source, p.source_updated_on::text, p.registered_on::text,
     ST_Y(p.location::geometry) AS lat, ST_X(p.location::geometry) AS lng,
     ${point ? sql`round((ST_Distance(p.location, ${pointSql(point)}) / 1000)::numeric, 1)` : sql`NULL`} AS distance_km,
-    v.open24h, v.open24h_source,
+    v.open24h, v.open24h_source, p.hours, ${openNowSql} AS open_now,
     (SELECT coalesce(json_agg(json_build_object('slug', c.slug, 'name', coalesce(t.name, d.name))
                               ORDER BY c.sort_order), '[]')
      FROM place_categories pc
@@ -114,6 +124,8 @@ function toPlace(row: PlaceRow): Place {
       row.open24h === null || row.open24h_source === null
         ? null
         : { value: row.open24h, source: row.open24h_source },
+    hours: row.hours,
+    openNow: row.open_now,
     source: row.source,
     phoneSource: row.phone_source,
     websiteSource: row.website_source,
@@ -178,9 +190,9 @@ async function pageOfPlaces(
 }
 
 async function countPlaces(db: Database, conditions: SQL[]): Promise<number> {
-  const [row] = await db.execute<{ total: number }>(
-    sql`SELECT count(*)::int AS total FROM places p WHERE ${sql.join(conditions, sql` AND `)}`,
-  );
+  const [row] = await db.execute<{ total: number }>(sql`
+    SELECT count(*)::int AS total FROM places p LEFT JOIN vet_details v ON v.place_id = p.id
+    WHERE ${sql.join(conditions, sql` AND `)}`);
   return row?.total ?? 0;
 }
 
@@ -266,7 +278,7 @@ export async function placesForMap(
            avg(ST_Y(p.location::geometry)) AS lat, avg(ST_X(p.location::geometry)) AS lng,
            min(ST_X(p.location::geometry)) AS min_lng, min(ST_Y(p.location::geometry)) AS min_lat,
            max(ST_X(p.location::geometry)) AS max_lng, max(ST_Y(p.location::geometry)) AS max_lat
-    FROM places p
+    FROM places p LEFT JOIN vet_details v ON v.place_id = p.id
     WHERE ${sql.join([...inRadius, inBox], sql` AND `)}
     GROUP BY ST_SnapToGrid(p.location::geometry, ${cell}::float8, ${cell}::float8)`);
   const clusters: PlaceCluster[] = rows.map((row) => ({
@@ -300,4 +312,27 @@ export async function listCategories(db: Database, locale: Locale): Promise<Cate
     name: r.name,
     placeCount: r.place_count,
   }));
+}
+
+/**
+ * Urgencias: the nearest vet hospitals and 24-hour vets (confirmed or hinted by name), open now
+ * first, then unknown hours, then closed; nearest first within each group.
+ */
+export async function urgentPlaces(
+  db: Database,
+  query: UrgentQuery,
+  locale: Locale,
+): Promise<UrgentResponse> {
+  const point = { lat: query.lat, lng: query.lng };
+  const rows = await db.execute<PlaceRow>(sql`
+    SELECT ${placeColumnsSql(locale, point)}
+    FROM places p
+    LEFT JOIN vet_details v ON v.place_id = p.id
+    WHERE ${visibleSql} AND ${withinRadiusSql(point, query.radiusKm)}
+      AND (v.open24h IS TRUE OR v.accepts_emergencies IS TRUE OR EXISTS (
+        SELECT 1 FROM place_categories pc JOIN categories c ON c.id = pc.category_id
+        WHERE pc.place_id = p.id AND c.slug = 'vet_hospital'))
+    ORDER BY CASE ${openNowSql} WHEN true THEN 0 WHEN false THEN 2 ELSE 1 END, distance_km, p.id
+    LIMIT ${URGENT_LIMIT}`);
+  return { items: rows.map(toPlace) };
 }
