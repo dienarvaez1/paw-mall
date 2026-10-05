@@ -37,6 +37,15 @@ checked) · **Blocked**.
 | 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
 | 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
 
+## Pending owner reviews
+
+Decisions the owner will make after seeing the data in the app. Each one becomes a rule in the
+importers (and a note in the phase that applies it).
+
+| Opened     | Review                                                                                                                                                                                                                                                                                                                               | Status                                |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
+| 2026-10-05 | **Which other businesses aren't suitable for Paw Mall.** The owner accepted Phase 2's data as is and will list unsuitable businesses once they can browse it in the app (Phase 3). Candidates raised so far: Petland (sells puppies), wholesale vet-medicine distributors in 434112, live-animal sellers, municipal control centers. | Open: review in the app after Phase 3 |
+
 ## Phase details
 
 ### Phase 1 — Foundation
@@ -126,6 +135,8 @@ checked) · **Blocked**.
   - API: `GET /v1/categories?lang=` (names and place counts) and
     `GET /v1/places?lat&lng&radiusKm&category&page&pageSize&lang` (nearest first, max 50 km).
   - New dependency: `@duckdb/node-api` (DuckDB is in the Tech stack table).
+- **Owner review (2026-10-05):** accepted as is. The owner will review the data in the app and
+  say which other businesses aren't suitable; see "Pending owner reviews" above.
 - **Follow-ups:**
   - About 300 businesses in 812990 have pet words but no grooming or boarding word (dog
     trainers, vets misfiled there, "pet salon" variants). Vets misfiled in 812990 could be
