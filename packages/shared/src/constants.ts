@@ -11,5 +11,8 @@ export function isSupportedLocale(value: unknown): value is Locale {
 /** Region used for `Intl` formatting of numbers, distances, dates and times. */
 export const REGION = 'MX';
 
+/** International mile. */
+export const KM_PER_MILE = 1.609344;
+
 /** Where the app centers when location is unavailable: Zócalo, Mexico City. */
 export const FALLBACK_LOCATION = { lat: 19.4326, lng: -99.1332 } as const;

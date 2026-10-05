@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "places_search_idx" ON "places" USING gin (place_search_text("name", "city", "state") gin_trgm_ops);

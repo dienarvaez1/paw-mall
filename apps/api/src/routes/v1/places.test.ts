@@ -1,4 +1,9 @@
-import { categoryListResponseSchema, placeListResponseSchema } from '@paw-mall/shared';
+import {
+  categoryListResponseSchema,
+  placeListResponseSchema,
+  placeMapResponseSchema,
+  placeSchema,
+} from '@paw-mall/shared';
 import postgres from 'postgres';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
@@ -14,16 +19,22 @@ async function addPlace(
   name: string,
   kmEast: number,
   slugs: string[],
-  extra: { hidden?: boolean; open24h?: boolean; deadWebsite?: boolean } = {},
+  extra: {
+    hidden?: boolean;
+    open24h?: boolean;
+    deadWebsite?: boolean;
+    phone?: string;
+    city?: string;
+  } = {},
 ) {
   const lng = ORIGIN.lng + kmEast / 111.32;
   const [row] = await sql<{ id: number }[]>`
     INSERT INTO places (source, external_id, name, address, city, state, location, website,
-                        website_source, website_status, hidden_at)
-    VALUES ('curated', ${`test-${externalId}`}, ${name}, 'Calle 1', 'Ciudad', 'Estado',
+                        website_source, website_status, hidden_at, phone)
+    VALUES ('curated', ${`test-${externalId}`}, ${name}, 'Calle 1', ${extra.city ?? 'Ciudad'}, 'Estado',
             ST_SetSRID(ST_MakePoint(${lng}, ${ORIGIN.lat}), 4326)::geography,
             'https://example.com', 'denue', ${extra.deadWebsite ? 'dead' : null},
-            ${extra.hidden ? sql`now()` : null})
+            ${extra.hidden ? sql`now()` : null}, ${extra.phone ?? null})
     RETURNING id`;
   await sql`
     INSERT INTO place_categories (place_id, category_id, source)
@@ -38,9 +49,10 @@ beforeAll(async () => {
   await sql`DELETE FROM places WHERE source = 'curated' AND external_id LIKE 'test-%'`;
   await addPlace('vet-near', 'Veterinaria Cercana', 0.5, ['veterinarian', 'groomer'], {
     open24h: true,
+    phone: '55 1234 5678',
   });
   await addPlace('store-mid', 'Tienda Media', 1.5, ['pet_store'], { deadWebsite: true });
-  await addPlace('vet-far', 'Veterinaria Lejana', 3, ['veterinarian']);
+  await addPlace('vet-far', 'Veterinaria Lejana', 3, ['veterinarian'], { city: 'Coyoacán' });
   await addPlace('vet-out', 'Veterinaria Fuera', 20, ['veterinarian']);
   await addPlace('vet-hidden', 'Veterinaria Cerrada', 0.2, ['veterinarian'], { hidden: true });
 });
@@ -115,5 +127,78 @@ describe('GET /v1/categories', () => {
     expect(items.map((c) => c.slug).slice(0, 3)).toEqual(['pet_store', 'boutique', 'veterinarian']);
     expect(items.find((c) => c.slug === 'feed_store')?.name).toBe('Feed store');
     expect(items.find((c) => c.slug === 'museum')?.placeCount).toBe(0);
+  });
+});
+
+describe('GET /v1/places search and filters', () => {
+  it('finds every word in the name or city, ignoring accents and small typos', async () => {
+    const byName = placeListResponseSchema.parse((await getPlaces('q=lejana')).body);
+    expect(byName.items.map((p) => p.name)).toEqual(['Veterinaria Lejana']);
+    const byCity = placeListResponseSchema.parse(
+      (await getPlaces('q=veterinaria%20coyoacan')).body,
+    );
+    expect(byCity.items.map((p) => p.name)).toEqual(['Veterinaria Lejana']);
+    const typo = placeListResponseSchema.parse((await getPlaces('q=cercanna')).body);
+    expect(typo.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);
+  });
+
+  it('keeps only places with a phone or a live website', async () => {
+    const phone = placeListResponseSchema.parse((await getPlaces('withPhone=true')).body);
+    expect(phone.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);
+    const website = placeListResponseSchema.parse((await getPlaces('withWebsite=true')).body);
+    expect(website.items.map((p) => p.name)).toEqual(['Veterinaria Cercana', 'Veterinaria Lejana']);
+  });
+});
+
+describe('GET /v1/places/map', () => {
+  // About 11 km around the origin; vet-out (20 km) is in the box but outside a 5 km radius.
+  const bbox = `${ORIGIN.lng - 0.1},${ORIGIN.lat - 0.1},${ORIGIN.lng + 0.2},${ORIGIN.lat + 0.1}`;
+  const map = async (params: string) =>
+    placeMapResponseSchema.parse(
+      await (
+        await app.request(
+          `/v1/places/map?bbox=${bbox}&lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&${params}`,
+          {},
+          testEnv,
+        )
+      ).json(),
+    );
+
+  it('returns places one by one when few are in view', async () => {
+    const result = await map('radiusKm=5');
+    expect(result).toMatchObject({ kind: 'places', total: 3, radiusTotal: 3 });
+  });
+
+  it('clusters when more than the limit are in view', async () => {
+    const result = await map('radiusKm=5&limit=2');
+    expect(result.kind).toBe('clusters');
+    if (result.kind !== 'clusters') return;
+    expect(result.clusters.reduce((sum, c) => sum + c.count, 0)).toBe(3);
+    expect(result.total).toBe(3);
+  });
+
+  it('filters the map by category', async () => {
+    expect(await map('radiusKm=5&category=pet_store')).toMatchObject({ total: 1, radiusTotal: 1 });
+  });
+});
+
+describe('GET /v1/places/:id', () => {
+  it('returns a visible place with its categories', async () => {
+    const list = placeListResponseSchema.parse((await getPlaces('radiusKm=1')).body);
+    const id = list.items[0]?.id;
+    const res = await app.request(`/v1/places/${id}?lang=en`, {}, testEnv);
+    const place = placeSchema.parse(await res.json());
+    expect(place).toMatchObject({ name: 'Veterinaria Cercana', distanceKm: null });
+    expect(place.categories.map((c) => c.name)).toEqual(['Veterinarian', 'Pet grooming']);
+  });
+
+  it('answers 404 for hidden or unknown places', async () => {
+    const [hidden] = await sql<{ id: number }[]>`
+      SELECT id FROM places WHERE external_id = 'test-vet-hidden'`;
+    for (const id of [hidden?.id, 999999999]) {
+      const res = await app.request(`/v1/places/${id}`, {}, testEnv);
+      expect(res.status).toBe(404);
+      expect(await res.json()).toEqual({ error: { code: 'PLACE_NOT_FOUND' } });
+    }
   });
 });

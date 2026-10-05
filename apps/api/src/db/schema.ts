@@ -100,6 +100,11 @@ export const places = pgTable(
       'gin',
       sql`lower(f_unaccent(coalesce(${t.name}, ''))) gin_trgm_ops`,
     ),
+    // Search by name, city or state, word by word. place_search_text() is defined in migration 0003.
+    index('places_search_idx').using(
+      'gin',
+      sql`place_search_text(${t.name}, ${t.city}, ${t.state}) gin_trgm_ops`,
+    ),
   ],
 );
 
