@@ -161,4 +161,4 @@ Play readiness").
 
 | Date       | Change                          | PR  |
 | ---------- | ------------------------------- | --- |
-| 2026-10-05 | Rollout log created             | —   |
+| 2026-10-05 | Rollout log created             | #1  |
