@@ -52,6 +52,8 @@ export const placeSchema = z.object({
   sourceUpdatedOn: z.string().nullable(),
   /** When the source first registered the business (first of the month), if known. */
   registeredOn: z.string().nullable(),
+  /** Date the owner's claim was approved ("Verificado por el dueño"); null when not verified. */
+  ownerVerifiedOn: z.string().nullable(),
 });
 export type Place = z.infer<typeof placeSchema>;
 

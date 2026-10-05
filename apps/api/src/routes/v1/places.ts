@@ -1,17 +1,24 @@
 import {
   type GoogleDetailsResponse,
   idParamSchema,
+  placeClaimSchema,
   placeListQuerySchema,
   placeMapQuerySchema,
+  placeReportSchema,
+  type receivedResponseSchema,
   urgentQuerySchema,
 } from '@paw-mall/shared';
 import { Hono } from 'hono';
+import type { z } from 'zod';
 
 import type { AppEnv } from '../../env';
 import { GoogleError } from '../../lib/google-places';
 import { errorResponse, parseInput } from '../../lib/http';
 import { lookupGoogleDetails, userKey } from '../../queries/google';
 import { getPlace, listPlaces, placesForMap, urgentPlaces } from '../../queries/places';
+import { createClaim, reportPlace } from '../../queries/trust';
+
+type Received = z.infer<typeof receivedResponseSchema>;
 
 export const placesRoute = new Hono<AppEnv>()
   .get('/', async (c) => {
@@ -37,6 +44,29 @@ export const placesRoute = new Hono<AppEnv>()
     if (!params.ok) return params.response;
     const place = await getPlace(c.var.db, params.data.id, c.var.locale);
     return place ? c.json(place) : errorResponse(c, 404, 'PLACE_NOT_FOUND');
+  })
+  // Reports carry only a reason and the app's random id; nothing about the phone is read or kept.
+  .post('/:id/reports', async (c) => {
+    const params = parseInput(c, idParamSchema, c.req.param());
+    if (!params.ok) return params.response;
+    const report = parseInput(c, placeReportSchema, await c.req.json().catch(() => null));
+    if (!report.ok) return report.response;
+    if (!(await getPlace(c.var.db, params.data.id, c.var.locale))) {
+      return errorResponse(c, 404, 'PLACE_NOT_FOUND');
+    }
+    await reportPlace(c.var.db, params.data.id, report.data);
+    return c.json<Received>({ received: true }, 201);
+  })
+  .post('/:id/claims', async (c) => {
+    const params = parseInput(c, idParamSchema, c.req.param());
+    if (!params.ok) return params.response;
+    const claim = parseInput(c, placeClaimSchema, await c.req.json().catch(() => null));
+    if (!claim.ok) return claim.response;
+    if (!(await getPlace(c.var.db, params.data.id, c.var.locale))) {
+      return errorResponse(c, 404, 'PLACE_NOT_FOUND');
+    }
+    await createClaim(c.var.db, params.data.id, claim.data);
+    return c.json<Received>({ received: true }, 201);
   })
   // POST, not GET: each call can spend from the monthly Google allowance, so nothing may prefetch it.
   .post('/:id/google', async (c) => {

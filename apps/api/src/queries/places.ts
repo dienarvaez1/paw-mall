@@ -81,6 +81,7 @@ type PlaceRow = {
   website_source: ValueSource | null;
   source_updated_on: string | null;
   registered_on: string | null;
+  owner_verified_on: string | null;
 };
 
 /**
@@ -94,6 +95,7 @@ function placeColumnsSql(locale: Locale, point?: Point) {
     CASE WHEN ${deadWebsite} THEN NULL ELSE p.website END AS website,
     CASE WHEN ${deadWebsite} THEN NULL ELSE p.website_source END AS website_source,
     p.social_url, p.source, p.phone_source, p.source_updated_on::text, p.registered_on::text,
+    (p.owner_verified_at AT TIME ZONE 'America/Mexico_City')::date::text AS owner_verified_on,
     ST_Y(p.location::geometry) AS lat, ST_X(p.location::geometry) AS lng,
     ${point ? sql`round((ST_Distance(p.location, ${pointSql(point)}) / 1000)::numeric, 1)` : sql`NULL`} AS distance_km,
     v.open24h, v.open24h_source, p.hours, ${openNowSql} AS open_now,
@@ -131,6 +133,7 @@ function toPlace(row: PlaceRow): Place {
     websiteSource: row.website_source,
     sourceUpdatedOn: row.source_updated_on,
     registeredOn: row.registered_on,
+    ownerVerifiedOn: row.owner_verified_on,
   };
 }
 
