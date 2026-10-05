@@ -1,0 +1,6 @@
+pnpm-lock.yaml
+.expo/
+.wrangler/
+.turbo/
+dist/
+apps/api/src/db/migrations/meta/

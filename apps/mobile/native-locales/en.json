@@ -1,0 +1,8 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "Paw Mall"
+  },
+  "android": {
+    "app_name": "Paw Mall"
+  }
+}

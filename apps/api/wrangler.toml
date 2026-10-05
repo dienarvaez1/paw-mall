@@ -1,0 +1,12 @@
+name = "paw-mall-api"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+# postgres.js needs Node's net/tls APIs.
+compatibility_flags = ["nodejs_compat"]
+# Development only: no deploys and no cloud resources until the owner decides (docs/PLAN.md).
+workers_dev = false
+preview_urls = false
+
+[vars]
+# The Docker DB from `pnpm db:up`. A deployed Worker would use Hyperdrive instead.
+DATABASE_URL = "postgres://paw:paw@localhost:5434/paw_mall"

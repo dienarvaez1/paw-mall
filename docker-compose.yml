@@ -1,0 +1,21 @@
+services:
+  db:
+    build: ./docker/postgres
+    image: paw-mall-postgres:17
+    environment:
+      POSTGRES_USER: paw
+      POSTGRES_PASSWORD: paw
+      POSTGRES_DB: paw_mall
+    ports:
+      # 5432 is often taken on dev machines, and Ferre Mall uses 5433.
+      - '5434:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U paw -d paw_mall']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  db-data:
