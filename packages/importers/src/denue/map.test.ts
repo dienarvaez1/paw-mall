@@ -83,6 +83,12 @@ describe('mapDenueRow on the sample file', () => {
     expect(await mapSample('9')).toBeNull();
   });
 
+  it('imports pet crematoriums and funeral homes by name, never ones for people', async () => {
+    expect(slugs(await placeFromSample('22'))).toEqual(['pet_funeral:name']);
+    expect(slugs(await placeFromSample('23'))).toEqual(['pet_funeral:name']);
+    expect(await mapSample('24')).toBeNull();
+  });
+
   it('imports feed stores, including names that only look like cruelty', async () => {
     expect(slugs(await placeFromSample('10'))).toEqual(['feed_store:activity']);
     expect(slugs(await placeFromSample('14'))).toEqual(['feed_store:activity']);

@@ -9,6 +9,7 @@ export const CHIP_CATEGORIES = [
   'groomer',
   'boarding',
   'feed_store',
+  'pet_funeral',
   'public_vet_service',
 ] as const satisfies readonly (CategorySlug | null)[];
 export type ChipCategory = (typeof CHIP_CATEGORIES)[number];
@@ -23,6 +24,7 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   boutique: '#db2777',
   pet_store: '#ea580c',
   feed_store: '#65a30d',
+  pet_funeral: '#854d0e',
 };
 const DEFAULT_COLOR = '#525252';
 

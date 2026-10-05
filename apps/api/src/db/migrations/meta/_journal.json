@@ -57,6 +57,13 @@
       "when": 1791240619211,
       "tag": "0007_trust",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791244237858,
+      "tag": "0008_pet_funeral_category",
+      "breakpoints": true
     }
   ]
 }

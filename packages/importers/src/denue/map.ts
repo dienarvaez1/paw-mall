@@ -15,8 +15,12 @@ const ACTIVITY_CATEGORIES: Record<string, CategorySlug> = {
   '434112': 'feed_store',
 };
 
-/** Otros servicios personales: a catch-all class, imported only for grooming and boarding names. */
-const NAME_ONLY_ACTIVITY = '812990';
+/**
+ * Classes imported only by name: 812990 (otros servicios personales, a catch-all) for grooming,
+ * boarding and pet funeral names; 812310 (servicios funerarios) for pet funeral names, since most
+ * funeral homes there are for people.
+ */
+const NAME_ONLY_ACTIVITIES = new Set(['812990', '812310']);
 
 const VET_ACTIVITIES = new Set(['541941', '541942']);
 
@@ -29,6 +33,9 @@ const BOARDING =
   /\b(PENSION(ES)?|HOTEL(ES)?|GUARDERIAS?|HOSPEDAJE|ESTANCIAS?|RESORT|DAYCARE|KINDER|INN|CAMP|HOUSING|HOSTAL)\b/;
 /** Shelters and rescues: a "hotel para perros abandonados" isn't a boarding business. */
 const SHELTER = /\b(ABANDONAD[OA]S?|REFUGIOS?|ALBERGUES?|ADOPCION(ES)?|RESCATES?)\b/;
+/** Pet crematoriums and funeral homes (owner's decision, 2026-10-05), with an animal word too. */
+const FUNERAL =
+  /\b(CREMATORIOS?|CREMACION(ES)?|FUNERARI[AO]S?|FUNERAL(ES)?|CEMENTERIOS?|PANTEON(ES)?|INCINERA\w*|MEMORIAL)\b/;
 const BOUTIQUE = /\bBOUTIQUE\b/;
 const HOSPITAL = /\bHOSPITAL\b/;
 /** "24 horas" in a vet's name: a hint, unconfirmed until the owner says so. */
@@ -112,11 +119,12 @@ export function categorize(activityCode: string, name: string): PlaceCategory[] 
 
   const own = ACTIVITY_CATEGORIES[activityCode];
   if (own) add(own, 'activity');
-  else if (activityCode !== NAME_ONLY_ACTIVITY) return [];
+  else if (!NAME_ONLY_ACTIVITIES.has(activityCode)) return [];
 
   const animal = ANIMAL.test(text);
   if (GROOMING_ALONE.test(text) || (GROOMING.test(text) && animal)) add('groomer', 'name');
   if (BOARDING.test(text) && animal && !SHELTER.test(text)) add('boarding', 'name');
+  if (FUNERAL.test(text) && animal) add('pet_funeral', 'name');
   if (own && BOUTIQUE.test(text)) add('boutique', 'name');
   if (HOSPITAL.test(text) && (VET_ACTIVITIES.has(activityCode) || animal)) {
     add('vet_hospital', 'name');
