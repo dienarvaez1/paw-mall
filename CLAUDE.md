@@ -53,3 +53,6 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 - Database: `pnpm db:up` (Postgres 17 + PostGIS in Docker on port 5434), then `pnpm db:migrate`.
 - API: `pnpm --filter api dev` serves `http://localhost:8787` (and the LAN IP, for phones).
 - App: `pnpm --filter mobile start`, then scan the QR code with Expo Go.
+- Data: `pnpm places:import` (DENUE, about 15 s from the cached zips), then
+  `pnpm places:enrich-overture` and `pnpm places:check-websites` (visits each business website
+  once). Each is safe to re-run; `pnpm places:import --dry-run` reports without writing.

@@ -87,24 +87,54 @@ checked) · **Blocked**.
 - **Done when:** `curl` lists real vets and pet stores near the Zócalo by category, with the
   PLAN.md counts (±1%), and grooming entries come only from matching names.
 - **Branch / PR:** `phase-2/pet-businesses` / #3
-- **Status:** In progress (checklist under review, no code yet)
+- **Status:** In review
 - **Checks:**
-  - [ ] `pnpm lint`
-  - [ ] `pnpm typecheck`
-  - [ ] `pnpm test`
-  - [ ] Import counts recorded below (465911 ≈ 8,709; 541941 ≈ 6,546; 541942 ≈ 70)
-  - [ ] Done-when check
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 67 tests (shared 8, api 10, importers 39, mobile 10)
+  - [x] Import counts per DENUE class vs PLAN.md: 465911 = 8,705 (8,709, −0.05%); 541941 =
+        6,544 (6,546, −0.03%); 541942 = 70 (70); 434112 = 4,444 (4,447, −0.07%). The small gaps
+        are cruelty exclusions, one Petland office and one merged Petco duplicate.
+  - [x] Grooming comes only from names: all 1,991 `groomer` rows have source `name`; 812990
+        contributes 1,410 groomers and 47 boarding places (the plan's "~1,200" was a rough count
+        with narrower words).
+  - [x] Re-running the import changes nothing and keeps Overture data and website checks.
+  - [x] Done-when check, `curl "localhost:8787/v1/places?lat=19.4326&lng=-99.1332&radiusKm=3&category=…"`:
+        veterinarian 103 (nearest Fundación Antonio Haghenbeck, 0.7 km), vet_hospital 3, pet_store
+        340, groomer 27, public_vet_service 2, feed_store 1, boarding 0.
 - **Notes:**
   - Counts measured on 2026-10-05 from the DENUE edition of 2026-05-20 (the six states' zips
-    already downloaded by Ferre Mall): 465911 = 8,709; 541941 = 6,546; 541942 = 70;
-    812990 = 2,921 in total, of which about 1,243 have grooming names and about 29 boarding names
-    (a first pass with simple patterns); 434112 = 4,447.
+    already downloaded by Ferre Mall, copied to `packages/importers/.cache/`).
   - **Owner decisions (2026-10-05):** no animal cruelty: puppy mills, kill shelters,
     slaughterhouses and butchers are never listed (now in PLAN.md principles and CLAUDE.md).
     Live pet sales and farm-animal vets and feed stores are listed. Municipal animal control
     centers (Centros de Control Canino, antirrábicos, zoonosis; about 30) are listed as public
     services. Feed stores (434112) are imported as forrajerías, beyond the plan's original scope.
-- **Follow-ups:** —
+  - **Excluded for cruelty (8):** fighting-cock suppliers ("gallos de pelea/combate", "La
+    Gallera"), a "rastro" (slaughterhouse) feed store, and two breeding operations (a "crianza"
+    groomer, a "crianza de gallos" vet). Breeding words count only with dogs, cats, pets or
+    roosters, so farm-animal raising ("Forrajera La Crianza") stays; "El Rastro" and "Palenque"
+    as place names stay.
+  - Data: 21,218 places, 22,143 category rows. Categories: pet_store 8,705, veterinarian 6,558,
+    feed_store 4,444, groomer 1,991, vet_hospital 232, boarding 73, public_vet_service 70,
+    boutique 69. Chains: Petco, +Kota, Maskota, Petland, Banfield. Two vets have a "24 horas"
+    name hint (unconfirmed).
+  - Overture Maps release 2026-09-23.1: 11,541 pet-type places in the region; 2,764 matched;
+    filled 1,212 phones, 489 websites and 2,750 social pages. Breeder and butcher categories are
+    not used for matching.
+  - Website checks (1,052 sites): 440 working, 24 blocking checks, 86 unreachable, 502 dead
+    (hidden in the API, data kept). Took 2.5 minutes.
+  - API: `GET /v1/categories?lang=` (names and place counts) and
+    `GET /v1/places?lat&lng&radiusKm&category&page&pageSize&lang` (nearest first, max 50 km).
+  - New dependency: `@duckdb/node-api` (DuckDB is in the Tech stack table).
+- **Follow-ups:**
+  - About 300 businesses in 812990 have pet words but no grooming or boarding word (dog
+    trainers, vets misfiled there, "pet salon" variants). Vets misfiled in 812990 could be
+    picked by name in a later phase.
+  - Petland sells puppies; its sourcing is a known controversy elsewhere. Listed under the
+    "live pet sales are fine" decision; flagged for the owner.
+  - Name patterns can't catch a puppy mill with a neutral name; Phase 5 reports should include
+    a cruelty reason.
+  - Credit INEGI and Overture Maps Foundation in the app where this data appears (Phase 3).
 
 ### Phase 3 — Search and map
 
