@@ -45,6 +45,7 @@ importers (and a note in the phase that applies it).
 | Opened     | Review                                                                                                                                                                                                                                                                                                                               | Status                                |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
 | 2026-10-05 | **Which other businesses aren't suitable for Paw Mall.** The owner accepted Phase 2's data as is and will list unsuitable businesses once they can browse it in the app (Phase 3). Candidates raised so far: Petland (sells puppies), wholesale vet-medicine distributors in 434112, live-animal sellers, municipal control centers. | Open: review in the app after Phase 3 |
+| 2026-10-05 | **SAT check for owner claims (RFC + idCIF), deferred by the owner.** Phase 5 was planned with Ferre Mall's check of the owner's Constancia de Situación Fiscal through SAT's public QR validation page. The owner deferred it on 2026-10-05; decide whether and when to add it before claims are opened to real owners.              | Open: deferred from Phase 5           |
 
 ## Phase details
 
@@ -261,7 +262,10 @@ importers (and a note in the phase that applies it).
   - [ ] `pnpm typecheck`
   - [ ] `pnpm test`
   - [ ] Done-when check on device
-- **Notes:** —
+- **Notes:**
+  - **Deferred by the owner (2026-10-05):** the SAT check of owner claims (RFC and idCIF from the
+    Constancia de Situación Fiscal, validated on SAT's public QR page as in Ferre Mall). Tracked
+    in "Pending owner reviews" so it isn't forgotten.
 - **Follow-ups:** —
 
 ### Phase 6 — Pet-friendly layer
