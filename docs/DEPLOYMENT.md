@@ -26,7 +26,7 @@ checked) · **Blocked**.
 
 | Phase | Name                | Branch                    | PR  | Status      | Started    | Merged |
 | ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ------ |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | In progress | 2026-10-05 | —      |
+| 1     | Foundation          | `phase-1/foundation`      | #2  | In review   | 2026-10-05 | —      |
 | 2     | Pet businesses      | `phase-2/pet-businesses`  | —   | Not started | —          | —      |
 | 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —          | —      |
 | 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —      |
@@ -44,7 +44,7 @@ checked) · **Blocked**.
 - **Done when:** the app opens on a phone or simulator via Expo Go with a Spanish welcome screen
   and reaches the local API.
 - **Branch / PR:** `phase-1/foundation` / #2
-- **Status:** In progress (waiting for the device check)
+- **Status:** In review
 - **Checks:**
   - [x] `pnpm lint` (includes the `i18next/no-literal-string` rule, confirmed to reject JSX text)
   - [x] `pnpm typecheck`
@@ -54,7 +54,9 @@ checked) · **Blocked**.
         `{"status":"ok","version":"0.1.0","database":{"status":"ok","postgis":"3.6.4"}}`, also
         from the LAN IP
   - [x] `expo export` bundles for iOS and Android
-  - [ ] Done-when check on device (Expo Go)
+  - [x] Done-when check: Expo Go on the iPhone 17 Pro Max simulator (iOS 26.5) shows
+        "¡Bienvenido a Paw Mall!", "Conectado al servidor (versión 0.1.0)" and "Base de datos
+        lista (PostGIS 3.6.4)"; the API logged `GET /health 200`
 - **Notes:**
   - Postgres 17 + PostGIS 3.6.4, pg_trgm and unaccent, from migration `0000_extensions`.
   - Docker publishes Postgres on port **5434** (Ferre Mall uses 5433).
@@ -67,6 +69,9 @@ checked) · **Blocked**.
     `typescript-eslint`, `eslint-config-expo`, `eslint-plugin-i18next` and `tailwindcss` 3
     (NativeWind).
 - **Follow-ups:**
+  - The app follows the device language (Spanish when it's unsupported), so an English
+    device shows English first; the screen's link switches language and remembers it.
+  - Check on a physical phone too (same Wi-Fi; allow port 8787 in the macOS firewall).
   - No app icon or splash yet (Expo defaults); add them with the app store readiness work.
   - `pnpm peers check` lists two transitive peer warnings (`react-dom` 19.3 wants React 19.3;
     `@react-native/metro-config` 0.87). `expo install --check` reports everything aligned.
