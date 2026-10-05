@@ -155,16 +155,45 @@ importers (and a note in the phase that applies it).
 - **Done when:** on a phone, filtering "Veterinarias" shows only vets on the map and list, and
   "Cómo llegar" opens the chosen maps app.
 - **Branch / PR:** `phase-3/search-and-map` / #4
-- **Status:** In progress (checklist under review, no code yet)
+- **Status:** In progress (waiting for the owner's check on a phone)
 - **Checks:**
-  - [ ] `pnpm lint`
-  - [ ] `pnpm typecheck`
-  - [ ] `pnpm test`
-  - [ ] Done-when check on device
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 103 tests (shared 10, api 17, importers 39, mobile 37)
+  - [x] Migrations build a fresh database from scratch (14 categories, search index)
+  - [x] API for "Veterinarias" within 5 km of the Zócalo: the list returns 386 places, all vets;
+        the map returns vet-only clusters (360 in view of 386 in the radius)
+  - [x] iOS simulator (Expo Go, Spanish): Explorar lists "1,236 lugares a menos de 5 km" nearest
+        first, with category chips (Todos, Veterinarias, Hospitales, Tiendas, …) and colored
+        category dots; `expo export` bundles for Android
+  - [ ] Done-when check on a phone: tap "Veterinarias" (list and map), open a place, "Cómo
+        llegar" opens Apple Maps, Google Maps or Waze. Taps can't be automated here (macOS blocks
+        scripted clicks), so the owner runs this check.
 - **Notes:**
+  - Adopted from Ferre Mall (owner's request): the map and list screen (radius circle, clusters
+    that zoom in when tapped, "N de M lugares a menos de X" legend, location and compass
+    buttons), search box, list rows, place page, directions chooser, Settings (language, radius
+    and units, contact filters), location with the Zócalo fallback, offline banner, and the API's
+    search (word by word over name, city and state, typo-tolerant) and map clustering.
+  - New for Paw Mall: category chips (Todos, Veterinarias, Hospitales, Tiendas, Estéticas,
+    Pensiones, Forrajerías, Servicios públicos) filtering both list and map; pins and dots
+    colored by category; the "24 horas" name hint shown as unconfirmed; attribution for INEGI
+    (with the edition date) and Overture Maps Foundation in the list, place page and Settings.
+  - API: `GET /v1/places` gains `q`, `withPhone`, `withWebsite`, `withSocial`, `named`;
+    new `GET /v1/places/map` (up to 200 pins, else clusters) and `GET /v1/places/:id`;
+    migrations 0003–0004 add `place_search_text()` and its index.
+  - Defaults: radius 5 km (choices 5, 10, 15, 25, 50, 80 km or 3–50 mi), Spanish first.
+  - New app dependencies (Expo SDK 57 versions, as in Ferre Mall): `react-native-maps` and
+    `expo-location` (in the Tech stack table), `expo-image` (SVG icons) and `expo-network`
+    (offline banner).
+  - Tabs: Explorar and Ajustes. Urgencias comes in Phase 4; Favoritos isn't scheduled yet.
   - After this phase the owner reviews the data in the app and lists unsuitable businesses
     (see "Pending owner reviews").
-- **Follow-ups:** —
+- **Follow-ups:**
+  - No app icon yet: Expo logs "Asset not found: assets/icon.png" (harmless in Expo Go); add
+    icons with the app store readiness work.
+  - Favoritos tab: not in any phase of PLAN.md; schedule it with the owner.
+  - The simulator had English saved as Paw Mall's language (from Phase 1's language switch), so
+    it opens in English there; Settings switches it.
 
 ### Phase 4 — Emergency vets
 
