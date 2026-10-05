@@ -27,15 +27,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR     | Status      | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | ------ | ----------- | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2     | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3     | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | PR_REF | In progress | 2026-10-05 | —          |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | —      | Not started | —          | —          |
-| 5     | Trust               | `phase-5/trust`           | —      | Not started | —          | —          |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —      | Not started | —          | —          |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | —      | Not started | —          | —          |
+| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
+| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map      | `phase-3/search-and-map`  | #4  | In progress | 2026-10-05 | —          |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —          |
+| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —          |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
 
 ## Pending owner reviews
 
@@ -154,7 +154,7 @@ importers (and a note in the phase that applies it).
   filters.
 - **Done when:** on a phone, filtering "Veterinarias" shows only vets on the map and list, and
   "Cómo llegar" opens the chosen maps app.
-- **Branch / PR:** `phase-3/search-and-map` / PR_REF
+- **Branch / PR:** `phase-3/search-and-map` / #4
 - **Status:** In progress (checklist under review, no code yet)
 - **Checks:**
   - [ ] `pnpm lint`
@@ -238,11 +238,11 @@ Play readiness").
 
 ## Change log
 
-| Date       | Change                     | PR     |
-| ---------- | -------------------------- | ------ |
-| 2026-10-05 | Rollout log created        | #1     |
-| 2026-10-05 | Phase 1 started            | #2     |
-| 2026-10-05 | Phase 1 merged (`a0199db`) | #2     |
-| 2026-10-05 | Phase 2 started            | #3     |
-| 2026-10-05 | Phase 2 merged (`97d6019`) | #3     |
-| 2026-10-05 | Phase 3 started            | PR_REF |
+| Date       | Change                     | PR  |
+| ---------- | -------------------------- | --- |
+| 2026-10-05 | Rollout log created        | #1  |
+| 2026-10-05 | Phase 1 started            | #2  |
+| 2026-10-05 | Phase 1 merged (`a0199db`) | #2  |
+| 2026-10-05 | Phase 2 started            | #3  |
+| 2026-10-05 | Phase 2 merged (`97d6019`) | #3  |
+| 2026-10-05 | Phase 3 started            | #4  |
