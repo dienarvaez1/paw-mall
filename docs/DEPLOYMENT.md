@@ -24,15 +24,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started | Merged |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ------- | ------ |
-| 1     | Foundation          | `phase-1/foundation`      | PR_REF | In progress | 2026-10-05 | —      |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | —   | Not started | —       | —      |
-| 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —       | —      |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —       | —      |
-| 5     | Trust               | `phase-5/trust`           | —   | Not started | —       | —      |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —       | —      |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —       | —      |
+| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged |
+| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ------ |
+| 1     | Foundation          | `phase-1/foundation`      | #2  | In progress | 2026-10-05 | —      |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | —   | Not started | —          | —      |
+| 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —          | —      |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —      |
+| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —      |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —      |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —      |
 
 ## Phase details
 
@@ -43,7 +43,7 @@ checked) · **Blocked**.
   and `en`.
 - **Done when:** the app opens on a phone or simulator via Expo Go with a Spanish welcome screen
   and reaches the local API.
-- **Branch / PR:** `phase-1/foundation` / PR_REF
+- **Branch / PR:** `phase-1/foundation` / #2
 - **Status:** In progress (waiting for the device check)
 - **Checks:**
   - [x] `pnpm lint` (includes the `i18next/no-literal-string` rule, confirmed to reject JSX text)
@@ -180,4 +180,4 @@ Play readiness").
 | Date       | Change              | PR  |
 | ---------- | ------------------- | --- |
 | 2026-10-05 | Rollout log created | #1  |
-| 2026-10-05 | Phase 1 started | PR_REF |
+| 2026-10-05 | Phase 1 started     | #2  |
