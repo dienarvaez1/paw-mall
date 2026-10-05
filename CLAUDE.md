@@ -23,6 +23,8 @@ phase at a time. The rollout of each phase (branch, pull request, status, checks
 - Credit every data source where its data appears (INEGI, Overture Maps Foundation, Google Maps,
   cultural sources).
 - No scraping of sites whose terms forbid it; no CAPTCHA bypassing.
+- **No animal cruelty:** never list puppy mills, kill shelters, slaughterhouses or butchers.
+  Pet stores that sell animals, and vets and feed stores that serve farm animals, are fine.
 
 ## Rollout workflow
 
@@ -43,9 +45,14 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 - Audience: pet owners, no login.
 - Pet-friendly coverage at launch: curated CDMX restaurants and lodging.
 - Vet license check: off until the registry's terms are confirmed.
+- Live animal sales: listed. Municipal animal control centers: listed as public services.
+- Feed stores (DENUE 434112): imported as forrajerías.
 
 ## Local setup
 
 - Database: `pnpm db:up` (Postgres 17 + PostGIS in Docker on port 5434), then `pnpm db:migrate`.
 - API: `pnpm --filter api dev` serves `http://localhost:8787` (and the LAN IP, for phones).
 - App: `pnpm --filter mobile start`, then scan the QR code with Expo Go.
+- Data: `pnpm places:import` (DENUE, about 15 s from the cached zips), then
+  `pnpm places:enrich-overture` and `pnpm places:check-websites` (visits each business website
+  once). Each is safe to re-run; `pnpm places:import --dry-run` reports without writing.

@@ -17,22 +17,34 @@ Every phase follows the same steps:
 4. Before marking ready: `pnpm lint`, `pnpm typecheck` and `pnpm test` pass, and the phase's
    "Done when" check passes on a phone or simulator.
 5. Update this file on the same branch: status, dates, checks, notes and follow-ups.
-6. Merge the PR into `main` (squash), delete the branch, then start the next phase.
+6. Merge the PR into `main` (squash) and delete the branch, locally and on GitHub.
+7. Start the next phase's branch. Nothing is committed straight to `main`, so the first commit on
+   the new branch records the merge here: the finished phase becomes **Done** with its merge date
+   and merge commit, and the new phase becomes **In progress**.
 
 Statuses: **Not started** · **In progress** · **In review** (PR ready) · **Done** (merged and
 checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ------ |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | In review   | 2026-10-05 | —      |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | —   | Not started | —          | —      |
-| 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —          | —      |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —      |
-| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —      |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —      |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —      |
+| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
+| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | In review   | 2026-10-05 | —          |
+| 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —          | —          |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —          |
+| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —          |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
+
+## Pending owner reviews
+
+Decisions the owner will make after seeing the data in the app. Each one becomes a rule in the
+importers (and a note in the phase that applies it).
+
+| Opened     | Review                                                                                                                                                                                                                                                                                                                               | Status                                |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
+| 2026-10-05 | **Which other businesses aren't suitable for Paw Mall.** The owner accepted Phase 2's data as is and will list unsuitable businesses once they can browse it in the app (Phase 3). Candidates raised so far: Petland (sells puppies), wholesale vet-medicine distributors in 434112, live-animal sellers, municipal control centers. | Open: review in the app after Phase 3 |
 
 ## Phase details
 
@@ -44,7 +56,7 @@ checked) · **Blocked**.
 - **Done when:** the app opens on a phone or simulator via Expo Go with a Spanish welcome screen
   and reaches the local API.
 - **Branch / PR:** `phase-1/foundation` / #2
-- **Status:** In review
+- **Status:** Done. Squash-merged into `main` as `a0199db` on 2026-10-05; branch deleted.
 - **Checks:**
   - [x] `pnpm lint` (includes the `i18next/no-literal-string` rule, confirmed to reject JSX text)
   - [x] `pnpm typecheck`
@@ -78,20 +90,62 @@ checked) · **Blocked**.
 
 ### Phase 2 — Pet businesses
 
-- **Scope:** data model; DENUE importer for 465911, 541941, 541942 and name-based picks from
-  812990; categories; Overture enrichment; website checks.
+- **Scope:** data model; DENUE importer for 465911, 541941, 541942, 434112 (feed stores) and
+  name-based picks from 812990; categories; Overture enrichment; website checks; cruelty-linked
+  names excluded.
 - **Done when:** `curl` lists real vets and pet stores near the Zócalo by category, with the
   PLAN.md counts (±1%), and grooming entries come only from matching names.
-- **Branch / PR:** `phase-2/pet-businesses` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-2/pet-businesses` / #3
+- **Status:** In review
 - **Checks:**
-  - [ ] `pnpm lint`
-  - [ ] `pnpm typecheck`
-  - [ ] `pnpm test`
-  - [ ] Import counts recorded below (465911 ≈ 8,709; 541941 ≈ 6,546; 541942 ≈ 70)
-  - [ ] Done-when check
-- **Notes:** —
-- **Follow-ups:** —
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 67 tests (shared 8, api 10, importers 39, mobile 10)
+  - [x] Import counts per DENUE class vs PLAN.md: 465911 = 8,705 (8,709, −0.05%); 541941 =
+        6,544 (6,546, −0.03%); 541942 = 70 (70); 434112 = 4,444 (4,447, −0.07%). The small gaps
+        are cruelty exclusions, one Petland office and one merged Petco duplicate.
+  - [x] Grooming comes only from names: all 1,991 `groomer` rows have source `name`; 812990
+        contributes 1,410 groomers and 47 boarding places (the plan's "~1,200" was a rough count
+        with narrower words).
+  - [x] Re-running the import changes nothing and keeps Overture data and website checks.
+  - [x] Done-when check, `curl "localhost:8787/v1/places?lat=19.4326&lng=-99.1332&radiusKm=3&category=…"`:
+        veterinarian 103 (nearest Fundación Antonio Haghenbeck, 0.7 km), vet_hospital 3, pet_store
+        340, groomer 27, public_vet_service 2, feed_store 1, boarding 0.
+- **Notes:**
+  - Counts measured on 2026-10-05 from the DENUE edition of 2026-05-20 (the six states' zips
+    already downloaded by Ferre Mall, copied to `packages/importers/.cache/`).
+  - **Owner decisions (2026-10-05):** no animal cruelty: puppy mills, kill shelters,
+    slaughterhouses and butchers are never listed (now in PLAN.md principles and CLAUDE.md).
+    Live pet sales and farm-animal vets and feed stores are listed. Municipal animal control
+    centers (Centros de Control Canino, antirrábicos, zoonosis; about 30) are listed as public
+    services. Feed stores (434112) are imported as forrajerías, beyond the plan's original scope.
+  - **Excluded for cruelty (8):** fighting-cock suppliers ("gallos de pelea/combate", "La
+    Gallera"), a "rastro" (slaughterhouse) feed store, and two breeding operations (a "crianza"
+    groomer, a "crianza de gallos" vet). Breeding words count only with dogs, cats, pets or
+    roosters, so farm-animal raising ("Forrajera La Crianza") stays; "El Rastro" and "Palenque"
+    as place names stay.
+  - Data: 21,218 places, 22,143 category rows. Categories: pet_store 8,705, veterinarian 6,558,
+    feed_store 4,444, groomer 1,991, vet_hospital 232, boarding 73, public_vet_service 70,
+    boutique 69. Chains: Petco, +Kota, Maskota, Petland, Banfield. Two vets have a "24 horas"
+    name hint (unconfirmed).
+  - Overture Maps release 2026-09-23.1: 11,541 pet-type places in the region; 2,764 matched;
+    filled 1,212 phones, 489 websites and 2,750 social pages. Breeder and butcher categories are
+    not used for matching.
+  - Website checks (1,052 sites): 440 working, 24 blocking checks, 86 unreachable, 502 dead
+    (hidden in the API, data kept). Took 2.5 minutes.
+  - API: `GET /v1/categories?lang=` (names and place counts) and
+    `GET /v1/places?lat&lng&radiusKm&category&page&pageSize&lang` (nearest first, max 50 km).
+  - New dependency: `@duckdb/node-api` (DuckDB is in the Tech stack table).
+- **Owner review (2026-10-05):** accepted as is. The owner will review the data in the app and
+  say which other businesses aren't suitable; see "Pending owner reviews" above.
+- **Follow-ups:**
+  - About 300 businesses in 812990 have pet words but no grooming or boarding word (dog
+    trainers, vets misfiled there, "pet salon" variants). Vets misfiled in 812990 could be
+    picked by name in a later phase.
+  - Petland sells puppies; its sourcing is a known controversy elsewhere. Listed under the
+    "live pet sales are fine" decision; flagged for the owner.
+  - Name patterns can't catch a puppy mill with a neutral name; Phase 5 reports should include
+    a cruelty reason.
+  - Credit INEGI and Overture Maps Foundation in the app where this data appears (Phase 3).
 
 ### Phase 3 — Search and map
 
@@ -182,7 +236,9 @@ Play readiness").
 
 ## Change log
 
-| Date       | Change              | PR  |
-| ---------- | ------------------- | --- |
-| 2026-10-05 | Rollout log created | #1  |
-| 2026-10-05 | Phase 1 started     | #2  |
+| Date       | Change                     | PR  |
+| ---------- | -------------------------- | --- |
+| 2026-10-05 | Rollout log created        | #1  |
+| 2026-10-05 | Phase 1 started            | #2  |
+| 2026-10-05 | Phase 1 merged (`a0199db`) | #2  |
+| 2026-10-05 | Phase 2 started            | #3  |
