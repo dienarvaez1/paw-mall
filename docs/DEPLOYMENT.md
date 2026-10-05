@@ -27,15 +27,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | In review   | 2026-10-05 | —          |
-| 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —          | —          |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —          |
-| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —          |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
+| Phase | Name                | Branch                    | PR     | Status      | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | ------ | ----------- | ---------- | ---------- |
+| 1     | Foundation          | `phase-1/foundation`      | #2     | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3     | Done        | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map      | `phase-3/search-and-map`  | PR_REF | In progress | 2026-10-05 | —          |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | —      | Not started | —          | —          |
+| 5     | Trust               | `phase-5/trust`           | —      | Not started | —          | —          |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —      | Not started | —          | —          |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | —      | Not started | —          | —          |
 
 ## Pending owner reviews
 
@@ -96,7 +96,7 @@ importers (and a note in the phase that applies it).
 - **Done when:** `curl` lists real vets and pet stores near the Zócalo by category, with the
   PLAN.md counts (±1%), and grooming entries come only from matching names.
 - **Branch / PR:** `phase-2/pet-businesses` / #3
-- **Status:** In review
+- **Status:** Done. Squash-merged into `main` as `97d6019` on 2026-10-05; branch deleted.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 67 tests (shared 8, api 10, importers 39, mobile 10)
@@ -154,14 +154,16 @@ importers (and a note in the phase that applies it).
   filters.
 - **Done when:** on a phone, filtering "Veterinarias" shows only vets on the map and list, and
   "Cómo llegar" opens the chosen maps app.
-- **Branch / PR:** `phase-3/search-and-map` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-3/search-and-map` / PR_REF
+- **Status:** In progress (checklist under review, no code yet)
 - **Checks:**
   - [ ] `pnpm lint`
   - [ ] `pnpm typecheck`
   - [ ] `pnpm test`
   - [ ] Done-when check on device
-- **Notes:** —
+- **Notes:**
+  - After this phase the owner reviews the data in the app and lists unsuitable businesses
+    (see "Pending owner reviews").
 - **Follow-ups:** —
 
 ### Phase 4 — Emergency vets
@@ -236,9 +238,11 @@ Play readiness").
 
 ## Change log
 
-| Date       | Change                     | PR  |
-| ---------- | -------------------------- | --- |
-| 2026-10-05 | Rollout log created        | #1  |
-| 2026-10-05 | Phase 1 started            | #2  |
-| 2026-10-05 | Phase 1 merged (`a0199db`) | #2  |
-| 2026-10-05 | Phase 2 started            | #3  |
+| Date       | Change                     | PR     |
+| ---------- | -------------------------- | ------ |
+| 2026-10-05 | Rollout log created        | #1     |
+| 2026-10-05 | Phase 1 started            | #2     |
+| 2026-10-05 | Phase 1 merged (`a0199db`) | #2     |
+| 2026-10-05 | Phase 2 started            | #3     |
+| 2026-10-05 | Phase 2 merged (`97d6019`) | #3     |
+| 2026-10-05 | Phase 3 started            | PR_REF |
