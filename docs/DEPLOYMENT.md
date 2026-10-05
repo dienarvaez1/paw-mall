@@ -27,15 +27,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | In progress | 2026-10-05 | —          |
-| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —          |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
+| Phase | Name                | Branch                    | PR     | Status      | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | ------ | ----------- | ---------- | ---------- |
+| 1     | Foundation          | `phase-1/foundation`      | #2     | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3     | Done        | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map      | `phase-3/search-and-map`  | #4     | Done        | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5     | Done        | 2026-10-05 | 2026-10-05 |
+| 5     | Trust               | `phase-5/trust`           | PR_REF | In progress | 2026-10-05 | —          |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —      | Not started | —          | —          |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | —      | Not started | —          | —          |
 
 ## Pending owner reviews
 
@@ -203,7 +203,7 @@ importers (and a note in the phase that applies it).
 - **Done when:** Urgencias shows the nearest open vet with call and directions in one tap, and
   says clearly when hours are unconfirmed.
 - **Branch / PR:** `phase-4/emergency-vets` / #5
-- **Status:** In review
+- **Status:** Done. Squash-merged into `main` as `c30d151` on 2026-10-05; branch deleted.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 122 tests (shared 15, api 31, importers 39, mobile 37), including Ferre
@@ -254,8 +254,8 @@ importers (and a note in the phase that applies it).
 - **Scope:** owner claims with the SAT check, closed-business reports, owner-verified badges;
   optional cédula profesional check only after confirming the registry's terms.
 - **Done when:** an approved claim shows "Verificado por el dueño" and its hours drive "open now".
-- **Branch / PR:** `phase-5/trust` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-5/trust` / PR_REF
+- **Status:** In progress (checklist under review, no code yet)
 - **Checks:**
   - [ ] `pnpm lint`
   - [ ] `pnpm typecheck`
@@ -304,13 +304,15 @@ Play readiness").
 
 ## Change log
 
-| Date       | Change                     | PR  |
-| ---------- | -------------------------- | --- |
-| 2026-10-05 | Rollout log created        | #1  |
-| 2026-10-05 | Phase 1 started            | #2  |
-| 2026-10-05 | Phase 1 merged (`a0199db`) | #2  |
-| 2026-10-05 | Phase 2 started            | #3  |
-| 2026-10-05 | Phase 2 merged (`97d6019`) | #3  |
-| 2026-10-05 | Phase 3 started            | #4  |
-| 2026-10-05 | Phase 3 merged (`df26ef2`) | #4  |
-| 2026-10-05 | Phase 4 started            | #5  |
+| Date       | Change                     | PR     |
+| ---------- | -------------------------- | ------ |
+| 2026-10-05 | Rollout log created        | #1     |
+| 2026-10-05 | Phase 1 started            | #2     |
+| 2026-10-05 | Phase 1 merged (`a0199db`) | #2     |
+| 2026-10-05 | Phase 2 started            | #3     |
+| 2026-10-05 | Phase 2 merged (`97d6019`) | #3     |
+| 2026-10-05 | Phase 3 started            | #4     |
+| 2026-10-05 | Phase 3 merged (`df26ef2`) | #4     |
+| 2026-10-05 | Phase 4 started            | #5     |
+| 2026-10-05 | Phase 4 merged (`c30d151`) | #5     |
+| 2026-10-05 | Phase 5 started            | PR_REF |
