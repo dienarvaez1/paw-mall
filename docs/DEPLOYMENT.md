@@ -57,6 +57,7 @@ checked) · **Blocked**.
   - [x] Done-when check: Expo Go on the iPhone 17 Pro Max simulator (iOS 26.5) shows
         "¡Bienvenido a Paw Mall!", "Conectado al servidor (versión 0.1.0)" and "Base de datos
         lista (PostGIS 3.6.4)"; the API logged `GET /health 200`
+  - [x] Verified by the owner in Expo Go on a physical iPhone and a physical Android phone
 - **Notes:**
   - Postgres 17 + PostGIS 3.6.4, pg_trgm and unaccent, from migration `0000_extensions`.
   - Docker publishes Postgres on port **5434** (Ferre Mall uses 5433).
@@ -71,7 +72,6 @@ checked) · **Blocked**.
 - **Follow-ups:**
   - The app follows the device language (Spanish when it's unsupported), so an English
     device shows English first; the screen's link switches language and remembers it.
-  - Check on a physical phone too (same Wi-Fi; allow port 8787 in the macOS firewall).
   - No app icon or splash yet (Expo defaults); add them with the app store readiness work.
   - `pnpm peers check` lists two transitive peer warnings (`react-dom` 19.3 wants React 19.3;
     `@react-native/metro-config` 0.87). `expo install --check` reports everything aligned.
