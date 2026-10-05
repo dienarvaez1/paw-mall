@@ -23,6 +23,10 @@ Principles:
 - **Real data from day one** where open data exists (INEGI DENUE, Overture Maps), instead of mock
   businesses.
 - **Development only, $0.** No deploys until the owner decides; everything runs locally.
+- **No animal cruelty.** Paw Mall never lists businesses tied to animal cruelty: puppy mills,
+  kill shelters, slaughterhouses or butchers. Pet stores that sell animals, and vets and feed
+  stores that serve farm animals, are fine. Importers exclude cruelty-linked names, and owners or
+  shoppers can report a listing that slips through.
 
 Region: the same six states as Ferre Mall (Ciudad de México, Estado de México, Morelos, Hidalgo,
 Puebla, Tlaxcala), so the data work is known.
@@ -111,7 +115,7 @@ values always win, as in Ferre Mall.
 | INEGI DENUE, SCIAN **541941**  | Private vets ("Servicios veterinarios para mascotas"): 6,546                             | Hospitals and "24 horas" spotted by name (~180)                                               |
 | INEGI DENUE, SCIAN **541942**  | Public vet services: 70 (e.g. Centros de Control Canino)                                 | Labeled as public services                                                                    |
 | INEGI DENUE, SCIAN **812990**  | "Otros servicios personales": grooming (~1,200) and boarding, **by name only**           | A catch-all class; import only names like "estética canina", "pensión canina", "hotel canino" |
-| INEGI DENUE, SCIAN **434112**  | Wholesale vet medicine and animal feed: some forrajeras sell retail                      | Optional, by name only; mostly livestock                                                      |
+| INEGI DENUE, SCIAN **434112**  | Wholesale vet medicine and animal feed: some forrajeras sell retail                      | Imported as feed stores (forrajerías), farm animals included; cruelty-linked names excluded   |
 | Overture Maps                  | Missing phones, websites, social pages; pet categories                                   | Category names to confirm in Overture's taxonomy                                              |
 | Google Places (on demand)      | Hours and "open now" for one view                                                        | Free-tier cap (950 a month); nothing stored but place ids                                     |
 | Owners                         | Verified details, hours, 24-hour flag, pet policies                                      | Claims checked with the SAT certificate                                                       |
@@ -234,14 +238,18 @@ Copy these rules into `CLAUDE.md` at the repo root.
   unknown.
 - **Pet-friendly data is user-sourced:** policies change and venues vary by branch; show who said
   it and when, and let shoppers confirm or dispute.
-- **Pet sales:** live animal sales raise animal welfare and legal questions; decide whether to list
-  them or only supplies and services.
+- **Animal welfare:** the no-cruelty rule is enforced by name patterns, which miss businesses with
+  neutral names (a puppy mill called "Mascotas Felices"); closed-business reports need a
+  "cruelty" reason so shoppers can flag them.
 - **Licensing:** cultural and tourism datasets, and the cédula registry, need their terms checked
   before use.
 
 **Open questions**
 
-- [ ] Should live animal sales be listed, or only supplies and services?
+- [x] Should live animal sales be listed? **Yes** (owner, 2026-10-05): pet stores that sell
+      animals and farm-animal vets and feed stores are listed; cruelty-linked businesses never are.
+      Municipal animal control centers (Centros de Control Canino, antirrábicos) are listed as
+      public services.
 - [ ] Which curated sources for pet-friendly places are acceptable (the venues' own statements,
       partnerships)?
 - [ ] Is a vet license check worth the legal review?

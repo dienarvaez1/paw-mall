@@ -81,8 +81,9 @@ checked) · **Blocked**.
 
 ### Phase 2 — Pet businesses
 
-- **Scope:** data model; DENUE importer for 465911, 541941, 541942 and name-based picks from
-  812990; categories; Overture enrichment; website checks.
+- **Scope:** data model; DENUE importer for 465911, 541941, 541942, 434112 (feed stores) and
+  name-based picks from 812990; categories; Overture enrichment; website checks; cruelty-linked
+  names excluded.
 - **Done when:** `curl` lists real vets and pet stores near the Zócalo by category, with the
   PLAN.md counts (±1%), and grooming entries come only from matching names.
 - **Branch / PR:** `phase-2/pet-businesses` / #3
@@ -98,6 +99,11 @@ checked) · **Blocked**.
     already downloaded by Ferre Mall): 465911 = 8,709; 541941 = 6,546; 541942 = 70;
     812990 = 2,921 in total, of which about 1,243 have grooming names and about 29 boarding names
     (a first pass with simple patterns); 434112 = 4,447.
+  - **Owner decisions (2026-10-05):** no animal cruelty: puppy mills, kill shelters,
+    slaughterhouses and butchers are never listed (now in PLAN.md principles and CLAUDE.md).
+    Live pet sales and farm-animal vets and feed stores are listed. Municipal animal control
+    centers (Centros de Control Canino, antirrábicos, zoonosis; about 30) are listed as public
+    services. Feed stores (434112) are imported as forrajerías, beyond the plan's original scope.
 - **Follow-ups:** —
 
 ### Phase 3 — Search and map
