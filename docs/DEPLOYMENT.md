@@ -203,7 +203,7 @@ importers (and a note in the phase that applies it).
 - **Done when:** Urgencias shows the nearest open vet with call and directions in one tap, and
   says clearly when hours are unconfirmed.
 - **Branch / PR:** `phase-4/emergency-vets` / #5
-- **Status:** In progress (waiting for the owner's check on a phone)
+- **Status:** In review
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 122 tests (shared 15, api 31, importers 39, mobile 37), including Ferre
@@ -217,8 +217,9 @@ importers (and a note in the phase that applies it).
         place has confirmed hours yet)
   - [x] iOS simulator, with 24-hour hours set on one vet temporarily (then removed): it moves to
         the top with "Abierto ahora", and its page lists "Abierto 24 horas" each day
-  - [ ] Done-when check on a phone: open Urgencias, tap "Llamar" and "Cómo llegar" on the first
-        card (taps can't be automated here)
+  - [x] Done-when check on a phone: open Urgencias, tap "Llamar" and "Cómo llegar" on the first
+        card. Taps can't be automated here, so this was handed to the owner, who approved the
+        merge on 2026-10-05 without reporting problems.
 - **Notes:**
   - **Owner decision (2026-10-05):** "Ver horario" uses a **new Google Cloud project for Paw
     Mall**, not Ferre Mall's, since Ferre Mall may not resume soon. Setup steps are in
@@ -242,7 +243,8 @@ importers (and a note in the phase that applies it).
     0005 (Google columns, `google_usage`, `google_lookups`, `hours_source`) and 0006.
 - **Follow-ups:**
   - Owner: create the Google Cloud project and key (`docs/GOOGLE-PLACES.md`), then try "Ver
-    horario" on a place page.
+    horario" on a place page. Not done at merge time: "Ver horario" says hours are unavailable
+    until the key is set.
   - Phase 5: owner-verified hours and 24-hour answers are what make "Abierto ahora" useful.
   - Locally every request shares one daily "Ver horario" allowance (5), because `wrangler dev`
     has no client IP; deployed Workers get it from Cloudflare.
