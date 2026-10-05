@@ -76,6 +76,7 @@ paw-mall/
   docker/postgres/    Postgres 17 + PostGIS image (Apple Silicon friendly)
   docs/
     PLAN.md           This plan
+    DEPLOYMENT.md     Rollout log: status, branch and PR per phase
   CLAUDE.md           Conventions for Claude Code
 ```
 
