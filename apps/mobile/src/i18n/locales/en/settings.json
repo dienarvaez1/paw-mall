@@ -1,0 +1,23 @@
+{
+  "tabTitle": "Settings",
+  "language": "Language",
+  "searchRadius": "Search radius",
+  "searchRadiusHint": "How far around you to look for places.",
+  "units": "Distance units",
+  "unit": {
+    "km": "Kilometers",
+    "mi": "Miles"
+  },
+  "placesTitle": "Places",
+  "onlyWithPhone": "Only places with a phone",
+  "onlyWithPhoneHint": "Hides places without a number to call.",
+  "onlyWithWebsite": "Only places with a website",
+  "onlyWithWebsiteHint": "Hides places without a working website.",
+  "onlyWithSocial": "Only places with social media",
+  "onlyWithSocialHint": "Hides places without a social-media page.",
+  "hideUnnamed": "Hide unnamed businesses",
+  "hideUnnamedHint": "Hides businesses registered as “sin nombre” or without a trade name.",
+  "about": "About",
+  "version": "Version {{version}}",
+  "dataSources": "Business data: INEGI, National Statistical Directory of Economic Units (DENUE). Phones, websites and social media: Overture Maps Foundation."
+}

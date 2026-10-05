@@ -4,5 +4,14 @@
   "language": {
     "es": "Spanish",
     "en": "English"
-  }
+  },
+  "getDirections": "Directions",
+  "directionsWith": "Get directions with…",
+  "cancel": "Cancel",
+  "mapsApp": {
+    "apple": "Apple Maps",
+    "google": "Google Maps",
+    "waze": "Waze"
+  },
+  "approximateLocation": "Using an approximate location: Mexico City"
 }

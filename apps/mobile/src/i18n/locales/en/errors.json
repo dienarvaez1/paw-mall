@@ -1,0 +1,11 @@
+{
+  "generic": "Something went wrong. Please try again.",
+  "offline": "You're offline. Check your internet.",
+  "network": "We couldn't reach the server.",
+  "codes": {
+    "BAD_REQUEST": "The request isn't valid.",
+    "NOT_FOUND": "We couldn't find what you're looking for.",
+    "PLACE_NOT_FOUND": "We couldn't find this place.",
+    "INTERNAL_ERROR": "Something went wrong on the server."
+  }
+}

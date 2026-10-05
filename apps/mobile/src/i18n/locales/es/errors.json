@@ -1,0 +1,11 @@
+{
+  "generic": "Algo salió mal. Inténtalo de nuevo.",
+  "offline": "Sin conexión. Revisa tu internet.",
+  "network": "No pudimos conectar con el servidor.",
+  "codes": {
+    "BAD_REQUEST": "La solicitud no es válida.",
+    "NOT_FOUND": "No encontramos lo que buscas.",
+    "PLACE_NOT_FOUND": "No encontramos este lugar.",
+    "INTERNAL_ERROR": "Algo salió mal en el servidor."
+  }
+}

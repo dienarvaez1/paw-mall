@@ -1,6 +1,7 @@
 {
   "ios": {
-    "CFBundleDisplayName": "Paw Mall"
+    "CFBundleDisplayName": "Paw Mall",
+    "NSLocationWhenInUseUsageDescription": "Paw Mall uses your location to show nearby vets, pet stores and pet-friendly places."
   },
   "android": {
     "app_name": "Paw Mall"

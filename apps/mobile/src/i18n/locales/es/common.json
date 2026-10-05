@@ -4,5 +4,14 @@
   "language": {
     "es": "Español",
     "en": "Inglés"
-  }
+  },
+  "getDirections": "Cómo llegar",
+  "directionsWith": "Cómo llegar con…",
+  "cancel": "Cancelar",
+  "mapsApp": {
+    "apple": "Apple Maps",
+    "google": "Google Maps",
+    "waze": "Waze"
+  },
+  "approximateLocation": "Usando una ubicación aproximada: Ciudad de México"
 }
