@@ -39,13 +39,14 @@ checked) · **Blocked**.
 
 ## Pending owner reviews
 
-Decisions the owner will make after seeing the data in the app. Each one becomes a rule in the
-importers (and a note in the phase that applies it).
+Decisions and discussions the owner has left for later. Each one, once decided, becomes a rule or
+a task (and a note in the phase that applies it).
 
 | Opened     | Review                                                                                                                                                                                                                                                                                                                               | Status                                |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
 | 2026-10-05 | **Which other businesses aren't suitable for Paw Mall.** The owner accepted Phase 2's data as is and will list unsuitable businesses once they can browse it in the app (Phase 3). Candidates raised so far: Petland (sells puppies), wholesale vet-medicine distributors in 434112, live-animal sellers, municipal control centers. | Open: review in the app after Phase 3 |
 | 2026-10-05 | **SAT check for owner claims (RFC + idCIF), deferred by the owner.** Phase 5 was planned with Ferre Mall's check of the owner's Constancia de Situación Fiscal through SAT's public QR validation page. The owner deferred it on 2026-10-05; decide whether and when to add it before claims are opened to real owners.              | Open: deferred from Phase 5           |
+| 2026-10-05 | **An admin page for Paw Mall.** Reviewing claims and reports is command-line only (`pnpm places:claims`, `pnpm places:reports`). The owner wants to discuss an admin page later, probably after all phases are completed.                                                                                                            | Open: after Phase 7                   |
 
 ## Phase details
 
@@ -265,7 +266,15 @@ importers (and a note in the phase that applies it).
 - **Notes:**
   - **Deferred by the owner (2026-10-05):** the SAT check of owner claims (RFC and idCIF from the
     Constancia de Situación Fiscal, validated on SAT's public QR page as in Ferre Mall). Tracked
-    in "Pending owner reviews" so it isn't forgotten.
+    in "Pending owner reviews" so it isn't forgotten. Claims are reviewed by hand meanwhile.
+  - **Owner decisions (2026-10-05):** users can report "Maltrato animal" as well as "¿Cerró?".
+    Reports are stored only in an internal table of the app and reviewed with
+    `pnpm places:reports`; nothing is emailed or sent to third parties. **Privacy rule:** never
+    record location or personal information from the reporting phone (no coordinates, IP, name or
+    contact), only a random id the app generates to count each phone once (now in CLAUDE.md). An
+    admin page is to be discussed after all phases (see "Pending owner reviews").
+  - Vet details owners can send: open 24 hours and takes emergencies (the default proposed;
+    species treated can come later).
 - **Follow-ups:** —
 
 ### Phase 6 — Pet-friendly layer

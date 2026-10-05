@@ -23,6 +23,9 @@ phase at a time. The rollout of each phase (branch, pull request, status, checks
 - Credit every data source where its data appears (INEGI, Overture Maps Foundation, Google Maps,
   cultural sources).
 - No scraping of sites whose terms forbid it; no CAPTCHA bypassing.
+- **Reporter privacy:** user reports (closed, animal cruelty) are stored only in the app's own
+  tables. Never record location or personal information from the reporting phone (no
+  coordinates, IP, name or contact); only a random id the app generates, to count each phone once.
 - **No animal cruelty:** never list puppy mills, kill shelters, slaughterhouses or butchers.
   Pet stores that sell animals, and vets and feed stores that serve farm animals, are fine.
 
