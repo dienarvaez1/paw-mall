@@ -27,15 +27,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ------ |
+| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
 | 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | PR_REF | In progress | 2026-10-05 | — |
-| 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —          | —      |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —      |
-| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —      |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —      |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —      |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | In progress | 2026-10-05 | —          |
+| 3     | Search and map      | `phase-3/search-and-map`  | —   | Not started | —          | —          |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —          |
+| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —          |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
 
 ## Phase details
 
@@ -85,7 +85,7 @@ checked) · **Blocked**.
   812990; categories; Overture enrichment; website checks.
 - **Done when:** `curl` lists real vets and pet stores near the Zócalo by category, with the
   PLAN.md counts (±1%), and grooming entries come only from matching names.
-- **Branch / PR:** `phase-2/pet-businesses` / PR_REF
+- **Branch / PR:** `phase-2/pet-businesses` / #3
 - **Status:** In progress (checklist under review, no code yet)
 - **Checks:**
   - [ ] `pnpm lint`
@@ -189,9 +189,9 @@ Play readiness").
 
 ## Change log
 
-| Date       | Change              | PR  |
-| ---------- | ------------------- | --- |
-| 2026-10-05 | Rollout log created | #1  |
-| 2026-10-05 | Phase 1 started     | #2  |
-| 2026-10-05 | Phase 1 merged (`a0199db`) | #2 |
-| 2026-10-05 | Phase 2 started | PR_REF |
+| Date       | Change                     | PR  |
+| ---------- | -------------------------- | --- |
+| 2026-10-05 | Rollout log created        | #1  |
+| 2026-10-05 | Phase 1 started            | #2  |
+| 2026-10-05 | Phase 1 merged (`a0199db`) | #2  |
+| 2026-10-05 | Phase 2 started            | #3  |
