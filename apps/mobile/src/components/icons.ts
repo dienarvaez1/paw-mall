@@ -6,4 +6,5 @@ export const ICONS = {
   locate: require('../../assets/icons/locate.svg') as ImageSource,
   'tab-explore': require('../../assets/icons/tab-search.svg') as ImageSource,
   'tab-settings': require('../../assets/icons/tab-settings.svg') as ImageSource,
+  'tab-urgent': require('../../assets/icons/tab-urgent.svg') as ImageSource,
 };

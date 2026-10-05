@@ -42,5 +42,33 @@
     "boarding": "Boarding",
     "feed_store": "Feed stores",
     "public_vet_service": "Public services"
+  },
+  "openNowChip": "Open now",
+  "noOpenPlaces": "No places open now with confirmed hours within {{distance}}.",
+  "noOpenPlacesHint": "Few businesses have confirmed hours yet. Turn off “Open now” to see them all, or check each one with “See hours”.",
+  "hours": {
+    "title": "Hours",
+    "openNow": "Open now",
+    "closedNow": "Closed now",
+    "unconfirmed": "Hours not confirmed",
+    "unconfirmed24h": "Says “24 horas” · not confirmed",
+    "closed": "Closed",
+    "allDay": "Open 24 hours",
+    "allDayEveryDay": "Open 24 hours, every day (confirmed by the owner)",
+    "range": "{{open}} – {{close}}"
+  },
+  "google": {
+    "showHours": "See hours",
+    "loading": "Looking…",
+    "openNow": "Open now",
+    "closedNow": "Closed now",
+    "closedTemporarily": "Google says this place is temporarily closed.",
+    "closedPermanently": "Google says this place has closed permanently.",
+    "noHours": "Google doesn't have this place's hours.",
+    "openInGoogleMaps": "Google Maps",
+    "not_found": "We couldn't find this place on Google.",
+    "unavailable": "Hours aren't available right now. Try again later.",
+    "limit_reached": "You've reached today's lookup limit. Try again tomorrow.",
+    "credit": "Hours, phone and website: Google Maps"
   }
 }
