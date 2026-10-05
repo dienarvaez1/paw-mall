@@ -1,4 +1,6 @@
-// Database schema. Kept free of relative imports so the importers can load it with plain Node.
+// Database schema. Kept free of relative imports (and value imports from packages) so the
+// importers can load it with plain Node.
+import type { PlaceHours } from '@paw-mall/shared';
 import { sql } from 'drizzle-orm';
 import {
   boolean,
@@ -66,8 +68,10 @@ export const places = pgTable(
     website: text(),
     /** A social-media page (usually Facebook) from Overture Maps; many small businesses only have this. */
     socialUrl: text(),
-    /** Opening hours; filled from Phase 4 on. */
-    hours: jsonb(),
+    /** Confirmed weekly hours (PlaceHours in packages/shared); null when unknown. */
+    hours: jsonb().$type<PlaceHours>(),
+    /** Where the hours came from: 'owner' (Phase 5). Google's hours are never stored. */
+    hoursSource: text(),
     location: geographyPoint().notNull(),
     /** When the source first registered the business (DENUE fecha_alta, first of the month). */
     registeredOn: date({ mode: 'string' }),
@@ -91,6 +95,14 @@ export const places = pgTable(
     websiteCheckedAt: timestamp({ withTimezone: true }),
     /** The matching Overture Maps place, set by `pnpm places:enrich-overture`. */
     overtureId: text(),
+    /**
+     * Google place id, found on demand with Google's free IDs-only search. Google's terms allow
+     * storing place ids; the hours, phone and website it returns are never stored.
+     */
+    googlePlaceId: text(),
+    /** 'matched' or 'no_match' (Google has no matching listing; don't search again). */
+    googleMatchStatus: text(),
+    googleMatchedAt: timestamp({ withTimezone: true }),
   },
   (t) => [
     index('places_location_idx').using('gist', t.location),
@@ -139,6 +151,28 @@ export const vetDetails = pgTable('vet_details', {
   /** Species treated, e.g. ['dog', 'cat']; null when unknown. */
   species: text().array(),
 });
+
+/** Google requests per billing month (Pacific time) and SKU, to stay inside the free allowance. */
+export const googleUsage = pgTable(
+  'google_usage',
+  {
+    month: text().notNull(),
+    sku: text().notNull(),
+    count: integer().notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.month, t.sku] })],
+);
+
+/** "Ver horario" lookups per user per day (client is a hash of the IP; rows kept 2 days). */
+export const googleLookups = pgTable(
+  'google_lookups',
+  {
+    day: date({ mode: 'string' }).notNull(),
+    client: text().notNull(),
+    count: integer().notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.day, t.client] })],
+);
 
 export const importRuns = pgTable(
   'import_runs',

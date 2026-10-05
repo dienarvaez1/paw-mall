@@ -10,3 +10,8 @@ preview_urls = false
 [vars]
 # The Docker DB from `pnpm db:up`. A deployed Worker would use Hyperdrive instead.
 DATABASE_URL = "postgres://paw:paw@localhost:5434/paw_mall"
+# "Ver horario" from Google, kept free: paid detail requests per month (Google gives 1,000 free)
+# and lookups per user per day. The key itself is a secret: GOOGLE_PLACES_API_KEY in .dev.vars
+# locally (see docs/GOOGLE-PLACES.md); without it the feature says hours are unavailable.
+GOOGLE_MONTHLY_LIMIT = "950"
+GOOGLE_DAILY_LOOKUPS = "5"
