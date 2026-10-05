@@ -253,16 +253,27 @@ a task (and a note in the phase that applies it).
 
 ### Phase 5 — Trust
 
-- **Scope:** owner claims with the SAT check, closed-business reports, owner-verified badges;
-  optional cédula profesional check only after confirming the registry's terms.
+- **Scope:** owner claims (SAT check deferred by the owner), closed-business and animal-cruelty
+  reports, owner-verified badges; optional cédula profesional check only after confirming the
+  registry's terms.
 - **Done when:** an approved claim shows "Verificado por el dueño" and its hours drive "open now".
 - **Branch / PR:** `phase-5/trust` / #6
-- **Status:** In progress (checklist under review, no code yet)
+- **Status:** In progress (waiting for the owner's check on a phone)
 - **Checks:**
-  - [ ] `pnpm lint`
-  - [ ] `pnpm typecheck`
-  - [ ] `pnpm test`
-  - [ ] Done-when check on device
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 141 tests (shared 18, api 37, importers 44, mobile 42), including report
+        thresholds, the privacy rule (reports with location or personal fields are rejected;
+        `place_reports` holds only id, place, reason, random id and date), and claim
+        approval/rejection against the database
+  - [x] Migrations build a fresh database; schema and migrations in sync
+  - [x] Done-when check, end to end on real data then reverted: a claim for Hospital Veterinaria
+        Rampu sent through the API (as the app does), listed by `pnpm places:claims`, approved
+        with `--approve`. The API and the iOS simulator showed "Verificado por el dueño el 5 de
+        octubre de 2026", the owner's hours, "Abierto ahora" (Mon 16:53, hours 09:00–21:00), and
+        Rampu first in Urgencias; the contact was deleted. Rampu was then restored exactly (0
+        verified places, 0 claims left).
+  - [ ] Owner check on a phone: open a place, try "¿Eres el dueño?" and the two report buttons
+        (taps can't be automated here)
 - **Notes:**
   - **Deferred by the owner (2026-10-05):** the SAT check of owner claims (RFC and idCIF from the
     Constancia de Situación Fiscal, validated on SAT's public QR page as in Ferre Mall). Tracked
@@ -275,7 +286,25 @@ a task (and a note in the phase that applies it).
     admin page is to be discussed after all phases (see "Pending owner reviews").
   - Vet details owners can send: open 24 hours and takes emergencies (the default proposed;
     species treated can come later).
-- **Follow-ups:** —
+  - Adopted from Ferre Mall: the claim form (without the SAT section), claim review command,
+    closed reports with the 3-phones-in-90-days rule, report review command, verified badge.
+  - New for Paw Mall: "Reportar maltrato animal" (hides after 2 phones, pending review); vet
+    answers in claims (open 24 hours replaces the name hint with an owner answer; takes
+    emergencies), shown only for vets; overnight hours in the claim form; a privacy line on every
+    report confirm ("no enviamos tu ubicación ni tus datos"); API rejects any extra field on a
+    report.
+  - Review commands: `pnpm places:claims [--approve N | --reject N]` and
+    `pnpm places:reports [--restore N | --confirm N --reason closed|cruelty]`. Confirmed reports
+    keep a place hidden across re-imports.
+  - Cédula profesional check: off, as planned (registry terms not confirmed).
+  - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
+    places; migration 0007 (`place_reports`, `place_claims`).
+- **Follow-ups:**
+  - SAT check for claims: deferred (see "Pending owner reviews").
+  - No notifications: the owner sees new claims and reports only by running the review commands;
+    an admin page is to be discussed after Phase 7.
+  - Reports have no rate limit beyond one per phone and reason; a deployed API would add Ferre
+    Mall's per-IP rate limit (without storing IPs).
 
 ### Phase 6 — Pet-friendly layer
 

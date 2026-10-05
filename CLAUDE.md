@@ -59,5 +59,7 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 - Data: `pnpm places:import` (DENUE, about 15 s from the cached zips), then
   `pnpm places:enrich-overture` and `pnpm places:check-websites` (visits each business website
   once). Each is safe to re-run; `pnpm places:import --dry-run` reports without writing.
+- Owner review: `pnpm places:claims` (owner claims) and `pnpm places:reports` (closed and
+  animal-cruelty reports); see each command's header for options.
 - Google "Ver horario": Paw Mall's own Google Cloud project; setup and limits in
   `docs/GOOGLE-PLACES.md`. The key lives only in `apps/api/.dev.vars`; never print or commit it.
