@@ -27,15 +27,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | #4  | In progress | 2026-10-05 | —          |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | —   | Not started | —          | —          |
-| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —          |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
+| Phase | Name                | Branch                    | PR     | Status      | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | ------ | ----------- | ---------- | ---------- |
+| 1     | Foundation          | `phase-1/foundation`      | #2     | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3     | Done        | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map      | `phase-3/search-and-map`  | #4     | Done        | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | PR_REF | In progress | 2026-10-05 | —          |
+| 5     | Trust               | `phase-5/trust`           | —      | Not started | —          | —          |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —      | Not started | —          | —          |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | —      | Not started | —          | —          |
 
 ## Pending owner reviews
 
@@ -155,7 +155,7 @@ importers (and a note in the phase that applies it).
 - **Done when:** on a phone, filtering "Veterinarias" shows only vets on the map and list, and
   "Cómo llegar" opens the chosen maps app.
 - **Branch / PR:** `phase-3/search-and-map` / #4
-- **Status:** In review
+- **Status:** Done. Squash-merged into `main` as `df26ef2` on 2026-10-05; branch deleted.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 103 tests (shared 10, api 17, importers 39, mobile 37)
@@ -202,8 +202,8 @@ importers (and a note in the phase that applies it).
   on demand within the free-tier cap.
 - **Done when:** Urgencias shows the nearest open vet with call and directions in one tap, and
   says clearly when hours are unconfirmed.
-- **Branch / PR:** `phase-4/emergency-vets` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-4/emergency-vets` / PR_REF
+- **Status:** In progress (checklist under review, no code yet)
 - **Checks:**
   - [ ] `pnpm lint`
   - [ ] `pnpm typecheck`
@@ -268,11 +268,13 @@ Play readiness").
 
 ## Change log
 
-| Date       | Change                     | PR  |
-| ---------- | -------------------------- | --- |
-| 2026-10-05 | Rollout log created        | #1  |
-| 2026-10-05 | Phase 1 started            | #2  |
-| 2026-10-05 | Phase 1 merged (`a0199db`) | #2  |
-| 2026-10-05 | Phase 2 started            | #3  |
-| 2026-10-05 | Phase 2 merged (`97d6019`) | #3  |
-| 2026-10-05 | Phase 3 started            | #4  |
+| Date       | Change                     | PR     |
+| ---------- | -------------------------- | ------ |
+| 2026-10-05 | Rollout log created        | #1     |
+| 2026-10-05 | Phase 1 started            | #2     |
+| 2026-10-05 | Phase 1 merged (`a0199db`) | #2     |
+| 2026-10-05 | Phase 2 started            | #3     |
+| 2026-10-05 | Phase 2 merged (`97d6019`) | #3     |
+| 2026-10-05 | Phase 3 started            | #4     |
+| 2026-10-05 | Phase 3 merged (`df26ef2`) | #4     |
+| 2026-10-05 | Phase 4 started            | PR_REF |
