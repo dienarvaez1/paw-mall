@@ -37,3 +37,6 @@ pnpm-debug.log*
 # editor / OS
 .DS_Store
 .idea/
+
+# downloaded source data (DENUE zips, Overture extracts)
+**/.cache/

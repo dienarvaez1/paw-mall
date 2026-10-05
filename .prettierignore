@@ -4,3 +4,4 @@ pnpm-lock.yaml
 .turbo/
 dist/
 apps/api/src/db/migrations/meta/
+**/.cache/

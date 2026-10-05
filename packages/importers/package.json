@@ -1,0 +1,25 @@
+{
+  "name": "@paw-mall/importers",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "import:denue": "node src/denue/cli.ts",
+    "enrich-overture": "node src/overture/cli.ts",
+    "check-websites": "node src/websites/cli.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@duckdb/node-api": "1.5.6-r.1",
+    "@paw-mall/shared": "workspace:*",
+    "drizzle-orm": "^0.45.3",
+    "postgres": "^3.4.9"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.1",
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.3"
+  }
+}
