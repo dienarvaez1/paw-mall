@@ -32,17 +32,17 @@ export function CategoryLine({ place, selected }: { place: Place; selected: Chip
 }
 
 /**
- * A place in a list. Its distance reads "0.3 mi away" when it's from the user, and just "0.3 mi"
- * when it's from a searched area ("Zócalo"), since "away" would suggest it's from the user.
+ * A place in a list. Its distance reads "0.3 mi away" with `away` (Explorar's "Mi ubicación" on:
+ * distances from the user) and just "0.3 mi" otherwise (owner's rule).
  */
 export function PlaceRow({
   place,
   selected,
-  distanceFrom = 'user',
+  away = true,
 }: {
   place: Place;
   selected: ChipCategory;
-  distanceFrom?: 'user' | 'area';
+  away?: boolean;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
@@ -60,7 +60,7 @@ export function PlaceRow({
           </Text>
           {place.distanceKm !== null ? (
             <Text className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
-              {distanceFrom === 'area'
+              {!away
                 ? formatDistance(place.distanceKm, locale, units)
                 : t('places.distanceKm', {
                     distance: formatDistance(place.distanceKm, locale, units),

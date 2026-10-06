@@ -84,6 +84,14 @@ describe('searching an area', () => {
     expect(result.items.map((p) => p.name)).toEqual(['Estetica Cerca de la Plaza']);
   });
 
+  it('reads an area name at the end of the search ("veterinario tlaxcala")', async () => {
+    const result = await search('estetica plaza prueba paw');
+    expect(result.area?.name).toBe('Plaza Prueba Paw');
+    expect(result.items.map((p) => p.name)).toEqual(['Estetica Cerca de la Plaza']);
+    // Only an exact area name counts at the end; a misspelled one stays a name search.
+    expect((await search('estetica plaza prueva paw')).area).toBeNull();
+  });
+
   it('picks the nearest of several areas with the same name', async () => {
     const result = await search('gemela paw');
     expect(result.area?.location.lng).toBeCloseTo(kmEast(1), 4);

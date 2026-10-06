@@ -135,7 +135,7 @@ describe('GET /v1/places search and filters', () => {
     const byName = placeListResponseSchema.parse((await getPlaces('q=lejana')).body);
     expect(byName.items.map((p) => p.name)).toEqual(['Veterinaria Lejana']);
     const byCity = placeListResponseSchema.parse(
-      (await getPlaces('q=veterinaria%20coyoacan')).body,
+      (await getPlaces('q=veterinaria%20coyoacan&namesOnly=true')).body,
     );
     expect(byCity.items.map((p) => p.name)).toEqual(['Veterinaria Lejana']);
     const typo = placeListResponseSchema.parse((await getPlaces('q=cercanna')).body);

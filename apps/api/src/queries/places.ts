@@ -150,9 +150,9 @@ export async function listPlaces(
   locale: Locale,
 ): Promise<PlaceListResponse> {
   if (query.q && !query.namesOnly) {
-    const { business, area: areaText } = splitAreaSearch(query.q);
-    const area = await resolveArea(db, areaText, query, business ? 0.6 : undefined);
-    if (area) {
+    const found = await findAreaSearch(db, query.q, query);
+    if (found) {
+      const { area, business } = found;
       const result = await searchPlaces(
         db,
         { ...query, ...area.location, radiusKm: query.areaRadiusKm, q: business ?? undefined },
@@ -162,6 +162,28 @@ export async function listPlaces(
     }
   }
   return { ...(await searchPlaces(db, query, locale)), area: null };
+}
+
+/** Most words an area name at the end of a search can have ("san juan del rio"). */
+const MAX_AREA_WORDS = 4;
+
+/**
+ * The area a search names and the business words around it: the whole text ("Zócalo"), "X en Y"
+ * or "X cerca de Y", or an area name at the end ("veterinario tlaxcala": "veterinario" near
+ * Tlaxcala). An area at the end must match exactly, so ordinary business names stay name
+ * searches unless their last words are a real place.
+ */
+async function findAreaSearch(db: Database, q: string, near: { lat: number; lng: number }) {
+  const { business, area: areaText } = splitAreaSearch(q);
+  const area = await resolveArea(db, areaText, near, business ? 0.6 : undefined);
+  if (area) return { area, business };
+
+  const words = q.trim().split(/\s+/);
+  for (let n = Math.min(MAX_AREA_WORDS, words.length - 1); n >= 1; n--) {
+    const suffix = await resolveArea(db, words.slice(-n).join(' '), near, 1);
+    if (suffix) return { area: suffix, business: words.slice(0, -n).join(' ') };
+  }
+  return null;
 }
 
 /**

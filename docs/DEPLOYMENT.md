@@ -385,6 +385,15 @@ a task (and a note in the phase that applies it).
     the map); both change the same saved radius as Ajustes. "Mi ubicación" searches use that
     radius again instead of the fixed 3 mi (5 km) set earlier. Area searches ("Zócalo") keep
     5 km (3 mi) around the area. Seen on the simulator in list view.
+  - **Owner rule (2026-10-05), replacing the earlier distance wording: tied to "Mi ubicación".**
+    Off: list distances read just "0.3 mi" / "0.3 km", whatever the search. On: "0.3 mi away" /
+    "a 0.3 km". Seen on the simulator (off).
+  - **A place name at the end of a search** now counts as an area search when "Mi ubicación" is
+    off: "Veterinario Tlaxcala" searches "veterinario" within 5 km (3 mi) of Tlaxcala (69 places,
+    nearest "Centro Veterinario Tlaxcala"; before, it searched names around the user and found 1
+    unrelated place). Only an exact area name counts at the end. Consequence: "veterinaria la paz"
+    searches vets near La Paz (Edomex) rather than a business called "Veterinaria La Paz"; with
+    "Mi ubicación" on, text is always a business-name search.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

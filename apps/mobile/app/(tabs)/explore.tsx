@@ -225,9 +225,7 @@ function PlacesList({
     <FlatList
       data={items}
       keyExtractor={(place) => String(place.id)}
-      renderItem={({ item }) => (
-        <PlaceRow place={item} selected={category} distanceFrom={area ? 'area' : 'user'} />
-      )}
+      renderItem={({ item }) => <PlaceRow place={item} selected={category} away={nearMe} />}
       ItemSeparatorComponent={() => <View className="h-px bg-neutral-100 dark:bg-neutral-900" />}
       onEndReachedThreshold={0.5}
       onEndReached={() => {
