@@ -142,6 +142,20 @@ describe('GET /v1/places search and filters', () => {
     expect(typo.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);
   });
 
+  it('requires every word, except en, la, el, de, los, y and para', async () => {
+    const both = await getPlaces('q=lejana%20coyoacan&namesOnly=true');
+    expect(placeListResponseSchema.parse(both.body).items.map((p) => p.name)).toEqual([
+      'Veterinaria Lejana',
+    ]);
+    // "tlalpan" matches nothing, so nothing is listed, not just the "lejana" matches.
+    const missing = await getPlaces('q=lejana%20tlalpan&namesOnly=true');
+    expect(placeListResponseSchema.parse(missing.body).total).toBe(0);
+    const vague = await getPlaces('q=la%20lejana%20de%20los%20y%20para&namesOnly=true');
+    expect(placeListResponseSchema.parse(vague.body).items.map((p) => p.name)).toEqual([
+      'Veterinaria Lejana',
+    ]);
+  });
+
   it('keeps only places with a phone or a live website', async () => {
     const phone = placeListResponseSchema.parse((await getPlaces('withPhone=true')).body);
     expect(phone.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);

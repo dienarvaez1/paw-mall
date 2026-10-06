@@ -234,9 +234,8 @@ async function findAreaSearch(db: Database, q: string, near: { lat: number; lng:
 }
 
 /**
- * Places within the radius of lat/lng; with `q`, every word must appear in the name, city or
- * state (or nearly: a typo); if nothing matches, names close to the whole text are tried, which
- * catches a typo in a short word ("huelitas" → Huellitas) but would add noise to every search.
+ * Places within the radius of lat/lng; with `q`, every word (but the vague ones) must appear in
+ * the name, city or state, or nearly: a typo ("huelitas" → Huellitas).
  */
 async function searchPlaces(
   db: Database,
@@ -251,12 +250,8 @@ async function searchPlaces(
   ];
   if (!query.q) return pageOfPlaces(db, query, locale, conditions);
 
-  const found = await pageOfPlaces(db, query, locale, [...conditions, allWordsSql(query.q)]);
-  if (found.total > 0) return found;
-
-  const phrase = sql`lower(f_unaccent(${query.q}))`;
-  const nameText = sql`lower(f_unaccent(coalesce(p.name, '')))`;
-  return pageOfPlaces(db, query, locale, [...conditions, sql`${phrase} <% ${nameText}`]);
+  // Every word must match (each tolerating a small typo); no looser fallback (owner's rule).
+  return pageOfPlaces(db, query, locale, [...conditions, allWordsSql(query.q)]);
 }
 
 async function pageOfPlaces(
@@ -290,28 +285,19 @@ function plain(text: string): string {
   return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
-/** Words any place here could be described with, or that join words ("veterinaria en Toluca"). */
-const OPTIONAL_WORDS = new Set([
-  'veterinaria',
-  'veterinarias',
-  'tienda',
-  'tiendas',
-  'mascotas',
-  'en',
-  'de',
-  'del',
-  'la',
-  'el',
-  'y',
-]);
+/**
+ * Words too vague to require (owner's rule): every other word of a search must match. Business
+ * keywords ("veterinaria", "tienda") never get here; they become a category first.
+ */
+const IGNORED_WORDS = new Set(['en', 'la', 'el', 'de', 'los', 'y', 'para']);
 
 /**
- * Up to 6 words that must each match ("Veterinaria Huellitas en Coyoacán" → ["Huellitas",
- * "Coyoacán"]). Optional words are dropped unless the search has nothing else.
+ * Up to 6 words that must each match the name, city or state ("Huellitas de Coyoacán" →
+ * ["Huellitas", "Coyoacán"]). The ignored words are only searched when there's nothing else.
  */
 export function searchWords(q: string): string[] {
   const words = q.split(/[\s,.;]+/).filter(Boolean);
-  const required = words.filter((word) => !OPTIONAL_WORDS.has(plain(word)));
+  const required = words.filter((word) => !IGNORED_WORDS.has(plain(word)));
   return (required.length > 0 ? required : words).slice(0, 6);
 }
 

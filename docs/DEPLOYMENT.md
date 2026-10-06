@@ -430,6 +430,13 @@ a task (and a note in the phase that applies it).
     place inside the text; the whole text as a place with a small typo ("zocallo").
   - Fixed along the way: with `fetch_types` off (needed on Workers), postgres.js can't send text
     arrays, so candidate place names go in an `IN (…)` list.
+  - **Owner rule (2026-10-05): every word must match.** A name search requires all of its words
+    (in the name, city or state, each tolerating a small typo), except the vague ones: en, la, el,
+    de, los, y, para. The looser fallback (the whole text as one fuzzy name when nothing matched
+    every word) was removed, and "veterinaria", "tienda" and "mascotas" are no longer skipped
+    (they're category keywords now). Within 100 mi of the Zócalo: "huellitas" 216, "huellitas
+    felices" 2, "huellitas zzzz" 0, "la huellita" 212, "huelitas" (typo) 204. "del" and "las"
+    were left out of the ignored words, as listed by the owner.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
