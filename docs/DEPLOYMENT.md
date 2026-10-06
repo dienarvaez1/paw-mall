@@ -363,6 +363,11 @@ a task (and a note in the phase that applies it).
     Ajustes radius. The placeholder follows the toggle ("Busca una colonia, ciudad o lugar (ej.
     Zócalo)" / "Busca un negocio cerca de ti"). It replaces the "Buscar en nombres" link added
     with area search; the area header now points to the toggle instead.
+  - **Owner change (2026-10-05): "Mi ubicación" on always searches 3 mi (5 km) around the
+    user**, the same distance as area searches, ignoring the Ajustes radius (first built with the
+    Ajustes radius). The Ajustes radius still applies to plain browsing (toggle off, empty search)
+    and to the map. Example: "huellitas" near the Zócalo finds 7 places within 3 mi vs 216 within
+    100 mi.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

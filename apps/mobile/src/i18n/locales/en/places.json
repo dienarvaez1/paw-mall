@@ -117,7 +117,7 @@
   "areaCount_one": "{{total}} place within {{distance}} of {{area}}",
   "areaCount_other": "{{total}} places within {{distance}} of {{area}}",
   "nearMe": "My location",
-  "nearMeHint": "On: searches business names near you, within the Settings radius. Off: searches around a colonia, city or landmark.",
+  "nearMeHint": "On: searches business names within 5 km (3 mi) of you. Off: searches around a colonia, city or landmark.",
   "searchPlaceholderNearMe": "Search a business near you",
   "areaHint": "To search “{{query}}” in business names near you, turn on “My location”."
 }

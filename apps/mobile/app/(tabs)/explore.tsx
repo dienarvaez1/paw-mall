@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import MapView, { Circle, Marker, type Region } from 'react-native-maps';
 
-import { type MapArea, usePlaces, usePlacesMap } from '@/api/hooks';
+import { type MapArea, useAreaRadiusKm, usePlaces, usePlacesMap } from '@/api/hooks';
 import { ICONS } from '@/components/icons';
 import { PlaceRow, usePlaceName } from '@/components/place-row';
 import { SearchInput } from '@/components/search-input';
@@ -204,6 +204,7 @@ function PlacesList({
   const locale = useLocale();
   const { units, radiusKm, onlyOpenNow } = useSettings();
   const location = useUserLocation();
+  const areaRadiusKm = useAreaRadiusKm();
   const places = usePlaces(location.coords, category, name, nearMe);
   const area = places.data?.pages[0]?.area ?? null;
   const items = useMemo(
@@ -211,7 +212,12 @@ function PlacesList({
     [places.data],
   );
   const total = places.data?.pages[0]?.total ?? 0;
-  const distance = formatDistance(area ? area.radiusKm : radiusKm, locale, units);
+  // "Mi ubicación" and area searches use 5 km (3 mi); plain browsing uses the Ajustes radius.
+  const distance = formatDistance(
+    area ? area.radiusKm : nearMe ? areaRadiusKm : radiusKm,
+    locale,
+    units,
+  );
 
   if (places.isPending) return <SkeletonList />;
   if (places.isError)

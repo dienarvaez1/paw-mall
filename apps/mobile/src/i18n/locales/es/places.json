@@ -117,7 +117,7 @@
   "areaCount_one": "{{total}} lugar a menos de {{distance}} de {{area}}",
   "areaCount_other": "{{total}} lugares a menos de {{distance}} de {{area}}",
   "nearMe": "Mi ubicación",
-  "nearMeHint": "Activado: busca nombres de negocios cerca de ti, dentro del radio de Ajustes. Desactivado: busca alrededor de una colonia, ciudad o lugar.",
+  "nearMeHint": "Activado: busca nombres de negocios a menos de 5 km (3 mi) de ti. Desactivado: busca alrededor de una colonia, ciudad o lugar.",
   "searchPlaceholderNearMe": "Busca un negocio cerca de ti",
   "areaHint": "Para buscar «{{query}}» en nombres de negocios cerca de ti, activa «Mi ubicación»."
 }
