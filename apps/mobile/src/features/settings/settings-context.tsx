@@ -17,6 +17,8 @@ type Settings = {
   onlyWithSocial: boolean;
   /** Hide places without a real name (none, or "… sin nombre"). */
   hideUnnamed: boolean;
+  /** Show only places open right now by confirmed hours. */
+  onlyOpenNow: boolean;
 };
 type SettingsContextValue = Settings & {
   setRadiusKm: (radiusKm: number) => void;
@@ -25,6 +27,7 @@ type SettingsContextValue = Settings & {
   setOnlyWithWebsite: (onlyWithWebsite: boolean) => void;
   setOnlyWithSocial: (onlyWithSocial: boolean) => void;
   setHideUnnamed: (hideUnnamed: boolean) => void;
+  setOnlyOpenNow: (onlyOpenNow: boolean) => void;
 };
 
 const STORAGE_KEY = 'settings.preferences';
@@ -35,6 +38,7 @@ const DEFAULTS: Settings = {
   onlyWithWebsite: false,
   onlyWithSocial: false,
   hideUnnamed: false,
+  onlyOpenNow: false,
 };
 
 /**
@@ -55,6 +59,7 @@ export function parseSettings(raw: string | null): Settings {
       onlyWithWebsite: value.onlyWithWebsite === true,
       onlyWithSocial: value.onlyWithSocial === true,
       hideUnnamed: value.hideUnnamed === true,
+      onlyOpenNow: value.onlyOpenNow === true,
     };
   } catch {
     return DEFAULTS;
@@ -69,6 +74,7 @@ const SettingsContext = createContext<SettingsContextValue>({
   setOnlyWithWebsite: () => {},
   setOnlyWithSocial: () => {},
   setHideUnnamed: () => {},
+  setOnlyOpenNow: () => {},
 });
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
@@ -96,6 +102,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setOnlyWithWebsite: (onlyWithWebsite) => update({ onlyWithWebsite }),
       setOnlyWithSocial: (onlyWithSocial) => update({ onlyWithSocial }),
       setHideUnnamed: (hideUnnamed) => update({ hideUnnamed }),
+      setOnlyOpenNow: (onlyOpenNow) => update({ onlyOpenNow }),
     };
   }, [settings]);
 
@@ -111,14 +118,16 @@ export function useSettings() {
  * object is part of each query key, so changing a switch refetches.
  */
 export function usePlaceFilters() {
-  const { onlyWithPhone, onlyWithWebsite, onlyWithSocial, hideUnnamed } = useSettings();
+  const { onlyWithPhone, onlyWithWebsite, onlyWithSocial, hideUnnamed, onlyOpenNow } =
+    useSettings();
   return useMemo(
     () => ({
       withPhone: onlyWithPhone || undefined,
       withWebsite: onlyWithWebsite || undefined,
       withSocial: onlyWithSocial || undefined,
       named: hideUnnamed || undefined,
+      openNow: onlyOpenNow || undefined,
     }),
-    [onlyWithPhone, onlyWithWebsite, onlyWithSocial, hideUnnamed],
+    [onlyWithPhone, onlyWithWebsite, onlyWithSocial, hideUnnamed, onlyOpenNow],
   );
 }

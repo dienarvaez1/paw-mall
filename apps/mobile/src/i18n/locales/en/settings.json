@@ -19,5 +19,7 @@
   "hideUnnamedHint": "Hides businesses registered as “sin nombre” or without a trade name.",
   "about": "About",
   "version": "Version {{version}}",
-  "dataSources": "Business data: INEGI, National Statistical Directory of Economic Units (DENUE). Phones, websites and social media: Overture Maps Foundation."
+  "dataSources": "Business data: INEGI, National Statistical Directory of Economic Units (DENUE). Phones, websites and social media: Overture Maps Foundation.",
+  "onlyOpenNow": "Only places open now",
+  "onlyOpenNowHint": "Shows only places with confirmed hours that are open right now. Very few have confirmed hours for now."
 }

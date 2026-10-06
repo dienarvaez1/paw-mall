@@ -44,9 +44,8 @@
     "pet_funeral": "Funerarias",
     "public_vet_service": "Servicios públicos"
   },
-  "openNowChip": "Abierto ahora",
   "noOpenPlaces": "No hay lugares abiertos ahora con horario confirmado a menos de {{distance}}.",
-  "noOpenPlacesHint": "Todavía pocos negocios tienen su horario confirmado. Quita «Abierto ahora» para ver todos, o revisa el horario de cada uno con «Ver horario».",
+  "noOpenPlacesHint": "Todavía pocos negocios tienen su horario confirmado. Desactiva «Solo lugares abiertos ahora» en Ajustes para ver todos, o revisa el horario de cada uno con «Ver horario».",
   "hours": {
     "title": "Horario",
     "openNow": "Abierto ahora",

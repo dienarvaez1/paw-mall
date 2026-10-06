@@ -48,7 +48,6 @@ export default function ExploreScreen() {
   const location = useUserLocation();
   const [mode, setMode] = useState<Mode>('list');
   const [category, setCategory] = useState<ChipCategory>(null);
-  const [openNow, setOpenNow] = useState(false);
   const [text, setText] = useState('');
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
   useDismissKeyboardOnBlur();
@@ -65,12 +64,7 @@ export default function ExploreScreen() {
           disabled={mode === 'map'}
         />
       </View>
-      <CategoryChips
-        selected={category}
-        onSelect={setCategory}
-        openNow={openNow}
-        onToggleOpenNow={() => setOpenNow((value) => !value)}
-      />
+      <CategoryChips selected={category} onSelect={setCategory} />
       <View className="flex-row gap-2 border-b border-neutral-200 px-4 pb-3 pt-1 dark:border-neutral-800">
         {MODES.map((value) => (
           <Pressable
@@ -99,28 +93,21 @@ export default function ExploreScreen() {
         <Notice text={t('common.approximateLocation')} />
       ) : null}
       {mode === 'list' ? (
-        <PlacesList name={name} category={category} openNow={openNow} />
+        <PlacesList name={name} category={category} />
       ) : (
-        <PlacesMap category={category} openNow={openNow} />
+        <PlacesMap category={category} />
       )}
     </View>
   );
 }
 
-/**
- * "Abierto ahora" (a toggle), then one chip per category; the list and the map show only the
- * selected category, and only open places when the toggle is on.
- */
+/** One chip per category; the list and the map show only the selected one. */
 function CategoryChips({
   selected,
   onSelect,
-  openNow,
-  onToggleOpenNow,
 }: {
   selected: ChipCategory;
   onSelect: (category: ChipCategory) => void;
-  openNow: boolean;
-  onToggleOpenNow: () => void;
 }) {
   const { t } = useAppTranslation();
   return (
@@ -132,24 +119,6 @@ function CategoryChips({
       contentContainerClassName="gap-2 px-4 pb-4 pt-3"
       keyboardShouldPersistTaps="handled"
     >
-      <Pressable
-        accessibilityRole="switch"
-        accessibilityState={{ checked: openNow }}
-        onPress={onToggleOpenNow}
-        className={`min-h-10 flex-row items-center rounded-full border px-4 ${
-          openNow
-            ? 'border-emerald-700 bg-emerald-700'
-            : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
-        }`}
-      >
-        <Text
-          className={`text-sm font-semibold ${
-            openNow ? 'text-white' : 'text-emerald-800 dark:text-emerald-300'
-          }`}
-        >
-          {t('places.openNowChip')}
-        </Text>
-      </Pressable>
       {CHIP_CATEGORIES.map((slug) => {
         const active = selected === slug;
         const color = slug ? CATEGORY_COLORS[slug] : undefined;
@@ -185,20 +154,12 @@ function CategoryChips({
   );
 }
 
-function PlacesList({
-  name,
-  category,
-  openNow,
-}: {
-  name: string;
-  category: ChipCategory;
-  openNow: boolean;
-}) {
+function PlacesList({ name, category }: { name: string; category: ChipCategory }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
-  const { units, radiusKm } = useSettings();
+  const { units, radiusKm, onlyOpenNow } = useSettings();
   const location = useUserLocation();
-  const places = usePlaces(location.coords, category, name, openNow);
+  const places = usePlaces(location.coords, category, name);
   const items = useMemo(
     () => places.data?.pages.flatMap((page) => page.items) ?? [],
     [places.data],
@@ -235,7 +196,7 @@ function PlacesList({
             title={t('places.noMatchesNearby', { query: name, distance })}
             hint={t('places.noMatchesHint')}
           />
-        ) : openNow ? (
+        ) : onlyOpenNow ? (
           <EmptyState
             title={t('places.noOpenPlaces', { distance })}
             hint={t('places.noOpenPlacesHint')}
@@ -254,7 +215,7 @@ function PlacesList({
   );
 }
 
-function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boolean }) {
+function PlacesMap({ category }: { category: ChipCategory }) {
   const { t } = useAppTranslation();
   const { radiusKm } = useSettings();
   const router = useRouter();
@@ -296,7 +257,7 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
 
   // Places inside the radius circle: up to 200 one by one; with more in view, clusters (counting
   // only places inside the circle) that zoom in when tapped.
-  const places = usePlacesMap(area, location.coords, category, openNow);
+  const places = usePlacesMap(area, location.coords, category);
   const items = places.data?.kind === 'places' ? places.data.items : [];
   const clusters = places.data?.kind === 'clusters' ? places.data.clusters : [];
   const fitCircle = () =>

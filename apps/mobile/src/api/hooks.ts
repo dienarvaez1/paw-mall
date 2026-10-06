@@ -21,12 +21,12 @@ const PLACES_PAGE_SIZE = 50;
  * searches by name, city or state. Every key includes the locale, so switching language refetches
  * category names.
  */
-export function usePlaces(coords: Coords, category: ChipCategory, name = '', openNow = false) {
+export function usePlaces(coords: Coords, category: ChipCategory, name = '') {
   const locale = useLocale();
   const { radiusKm } = useSettings();
   const filters = usePlaceFilters();
   return useInfiniteQuery({
-    queryKey: ['places', locale, radiusKm, filters, coords, category, name, openNow],
+    queryKey: ['places', locale, radiusKm, filters, coords, category, name],
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
       apiGet(
@@ -36,7 +36,6 @@ export function usePlaces(coords: Coords, category: ChipCategory, name = '', ope
           radiusKm,
           category: category ?? undefined,
           q: name || undefined,
-          openNow: openNow || undefined,
           ...filters,
           pageSize: PLACES_PAGE_SIZE,
           page: pageParam,
@@ -55,17 +54,12 @@ export type MapArea = { minLng: number; minLat: number; maxLng: number; maxLat: 
  * Places in the visible map area and within the Settings radius of the user (the circle on the
  * map), one by one or as clusters when too many are in view.
  */
-export function usePlacesMap(
-  area: MapArea | null,
-  coords: Coords,
-  category: ChipCategory,
-  openNow = false,
-) {
+export function usePlacesMap(area: MapArea | null, coords: Coords, category: ChipCategory) {
   const locale = useLocale();
   const { radiusKm } = useSettings();
   const filters = usePlaceFilters();
   return useQuery({
-    queryKey: ['places-map', locale, filters, area, coords, radiusKm, category, openNow],
+    queryKey: ['places-map', locale, filters, area, coords, radiusKm, category],
     enabled: area !== null,
     placeholderData: (previous) => previous,
     queryFn: () => {
@@ -77,7 +71,6 @@ export function usePlacesMap(
           ...coords,
           radiusKm,
           category: category ?? undefined,
-          openNow: openNow || undefined,
           ...filters,
         },
         locale,

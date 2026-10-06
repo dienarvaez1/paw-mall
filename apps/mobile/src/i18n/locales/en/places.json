@@ -44,9 +44,8 @@
     "pet_funeral": "Pet funerals",
     "public_vet_service": "Public services"
   },
-  "openNowChip": "Open now",
   "noOpenPlaces": "No places open now with confirmed hours within {{distance}}.",
-  "noOpenPlacesHint": "Few businesses have confirmed hours yet. Turn off “Open now” to see them all, or check each one with “See hours”.",
+  "noOpenPlacesHint": "Few businesses have confirmed hours yet. Turn off “Only places open now” in Settings to see them all, or check each one with “See hours”.",
   "hours": {
     "title": "Hours",
     "openNow": "Open now",

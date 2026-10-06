@@ -331,6 +331,10 @@ a task (and a note in the phase that applies it).
     "Tienda de alimentos para animales Black Cock" and "Implementos para mascotas Cock House".
     "Cocker"/"Cockers" (the dog breed, in a vet and a groomer) stay. Exclusions: 41; places:
     25,441.
+  - **Owner request (2026-10-05): "Abierto ahora" moved to Ajustes.** The chip added to
+    Explorar in Phase 4 is now a saved switch, "Solo lugares abiertos ahora", after the other
+    switches in Ajustes → Lugares. It filters the list and the map like the other place filters;
+    Urgencias is unchanged (it already puts open places first).
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
