@@ -119,7 +119,6 @@
   "nearMe": "My location",
   "nearMeHint": "On: searches business names near you, within the chosen radius. Off: searches around a colonia, city or landmark.",
   "searchPlaceholderNearMe": "Search a business near you",
-  "areaHint": "To search “{{query}}” in business names near you, turn on “My location”.",
   "radiusButton": "Search radius: {{distance}}",
   "radiusButtonHint": "Tap for the next radius. It's used by the list, the map and “My location”, and saved in Settings."
 }

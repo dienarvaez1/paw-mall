@@ -119,7 +119,6 @@
   "nearMe": "Mi ubicación",
   "nearMeHint": "Activado: busca nombres de negocios cerca de ti, dentro del radio elegido. Desactivado: busca alrededor de una colonia, ciudad o lugar.",
   "searchPlaceholderNearMe": "Busca un negocio cerca de ti",
-  "areaHint": "Para buscar «{{query}}» en nombres de negocios cerca de ti, activa «Mi ubicación».",
   "radiusButton": "Radio de búsqueda: {{distance}}",
   "radiusButtonHint": "Toca para cambiar al siguiente radio. Se usa en la lista, el mapa y «Mi ubicación», y se guarda en Ajustes."
 }

@@ -131,8 +131,9 @@ function CategoryChips({
       horizontal
       showsHorizontalScrollIndicator={false}
       accessibilityLabel={t('places.categoriesLabel')}
-      className="grow-0"
-      contentContainerClassName="gap-2 px-4 pb-4 pt-3"
+      // Its own height: a ScrollView grows and shrinks by default, which the list would squeeze.
+      style={{ flexGrow: 0, flexShrink: 0 }}
+      contentContainerClassName="gap-2 px-4 pb-2 pt-3"
       keyboardShouldPersistTaps="handled"
     >
       <Pressable
@@ -221,61 +222,62 @@ function PlacesList({
   if (places.isError)
     return <ErrorState error={places.error} onRetry={() => void places.refetch()} />;
 
+  // The summary stays put above the list while it scrolls: "69 lugares a menos de 5 km de
+  // Tlaxcala", or "1,237 lugares a menos de 5 km" around the user.
+  const summary = area
+    ? t('places.areaCount', {
+        count: total,
+        total: formatCount(total, locale),
+        distance,
+        area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
+      })
+    : t('places.listCount', { count: total, total: formatCount(total, locale), distance });
+
   return (
-    <FlatList
-      data={items}
-      keyExtractor={(place) => String(place.id)}
-      renderItem={({ item }) => <PlaceRow place={item} selected={category} away={nearMe} />}
-      ItemSeparatorComponent={() => <View className="h-px bg-neutral-100 dark:bg-neutral-900" />}
-      onEndReachedThreshold={0.5}
-      onEndReached={() => {
-        if (places.hasNextPage && !places.isFetchingNextPage) void places.fetchNextPage();
-      }}
-      ListHeaderComponent={
-        area ? (
-          <View className="gap-1 px-4 pb-1 pt-3">
-            <Text className="text-sm font-semibold text-neutral-800 dark:text-neutral-100">
-              {t('places.areaCount', {
-                count: total,
-                total: formatCount(total, locale),
-                distance,
-                area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
-              })}
-            </Text>
-            <Text className="text-sm text-neutral-500 dark:text-neutral-400">
-              {t('places.areaHint', { query: name })}
-            </Text>
-          </View>
-        ) : items.length > 0 ? (
-          <Text className="px-4 pb-1 pt-3 text-sm text-neutral-500 dark:text-neutral-400">
-            {t('places.listCount', { count: total, total: formatCount(total, locale), distance })}
-          </Text>
-        ) : null
-      }
-      keyboardShouldPersistTaps="handled"
-      keyboardDismissMode="on-drag"
-      ListEmptyComponent={
-        name ? (
-          <EmptyState
-            title={t('places.noMatchesNearby', { query: name, distance })}
-            hint={t('places.noMatchesHint')}
-          />
-        ) : onlyOpenNow ? (
-          <EmptyState
-            title={t('places.noOpenPlaces', { distance })}
-            hint={t('places.noOpenPlacesHint')}
-          />
-        ) : (
-          <EmptyState title={t('places.noPlaces', { distance })} hint={t('places.noPlacesHint')} />
-        )
-      }
-      ListFooterComponent={
-        <>
-          {places.isFetchingNextPage ? <SkeletonList rows={2} /> : null}
-          <SourceNote places={items} />
-        </>
-      }
-    />
+    <View className="flex-1">
+      <Text
+        accessibilityRole="summary"
+        className="border-b border-neutral-100 px-4 py-2 text-sm font-semibold text-neutral-700 dark:border-neutral-900 dark:text-neutral-200"
+      >
+        {summary}
+      </Text>
+      <FlatList
+        data={items}
+        keyExtractor={(place) => String(place.id)}
+        renderItem={({ item }) => <PlaceRow place={item} selected={category} away={nearMe} />}
+        ItemSeparatorComponent={() => <View className="h-px bg-neutral-100 dark:bg-neutral-900" />}
+        onEndReachedThreshold={0.5}
+        onEndReached={() => {
+          if (places.hasNextPage && !places.isFetchingNextPage) void places.fetchNextPage();
+        }}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        ListEmptyComponent={
+          name ? (
+            <EmptyState
+              title={t('places.noMatchesNearby', { query: name, distance })}
+              hint={t('places.noMatchesHint')}
+            />
+          ) : onlyOpenNow ? (
+            <EmptyState
+              title={t('places.noOpenPlaces', { distance })}
+              hint={t('places.noOpenPlacesHint')}
+            />
+          ) : (
+            <EmptyState
+              title={t('places.noPlaces', { distance })}
+              hint={t('places.noPlacesHint')}
+            />
+          )
+        }
+        ListFooterComponent={
+          <>
+            {places.isFetchingNextPage ? <SkeletonList rows={2} /> : null}
+            <SourceNote places={items} />
+          </>
+        }
+      />
+    </View>
   );
 }
 

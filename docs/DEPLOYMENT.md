@@ -394,6 +394,11 @@ a task (and a note in the phase that applies it).
     unrelated place). Only an exact area name counts at the end. Consequence: "veterinaria la paz"
     searches vets near La Paz (Edomex) rather than a business called "Veterinaria La Paz"; with
     "Mi ubicación" on, text is always a business-name search.
+  - **Owner request (2026-10-05): a fixed results summary.** The line "69 lugares a menos de
+    5 km de Tlaxcala" / "1,237 lugares a menos de 5 km" now stays above the list while it scrolls
+    (it used to scroll away with the first rows). It's a single line; the hint under area results
+    ("activa «Mi ubicación»…") was dropped, since the placeholder and the chip explain the toggle.
+    The category chips also keep their own height now (the list used to squeeze them).
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
