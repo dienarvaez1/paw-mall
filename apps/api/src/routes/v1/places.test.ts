@@ -142,7 +142,7 @@ describe('GET /v1/places search and filters', () => {
     expect(typo.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);
   });
 
-  it('requires every word, except en, la, el, de, los, y and para', async () => {
+  it('requires every word, except en, la, el, de, del, los, las, y and para', async () => {
     const both = await getPlaces('q=lejana%20coyoacan&namesOnly=true');
     expect(placeListResponseSchema.parse(both.body).items.map((p) => p.name)).toEqual([
       'Veterinaria Lejana',
@@ -150,7 +150,7 @@ describe('GET /v1/places search and filters', () => {
     // "tlalpan" matches nothing, so nothing is listed, not just the "lejana" matches.
     const missing = await getPlaces('q=lejana%20tlalpan&namesOnly=true');
     expect(placeListResponseSchema.parse(missing.body).total).toBe(0);
-    const vague = await getPlaces('q=la%20lejana%20de%20los%20y%20para&namesOnly=true');
+    const vague = await getPlaces('q=la%20lejana%20de%20los%20y%20para%20del%20las&namesOnly=true');
     expect(placeListResponseSchema.parse(vague.body).items.map((p) => p.name)).toEqual([
       'Veterinaria Lejana',
     ]);

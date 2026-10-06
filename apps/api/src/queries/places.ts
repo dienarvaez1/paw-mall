@@ -289,7 +289,7 @@ function plain(text: string): string {
  * Words too vague to require (owner's rule): every other word of a search must match. Business
  * keywords ("veterinaria", "tienda") never get here; they become a category first.
  */
-const IGNORED_WORDS = new Set(['en', 'la', 'el', 'de', 'los', 'y', 'para']);
+const IGNORED_WORDS = new Set(['en', 'la', 'el', 'de', 'del', 'los', 'las', 'y', 'para']);
 
 /**
  * Up to 6 words that must each match the name, city or state ("Huellitas de Coyoacán" →
