@@ -443,7 +443,7 @@ function PlacesMap({
           if (details?.isGesture) {
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
             if (Math.abs(handRadiusKm - circle.radiusKm) >= 0.05) onZoomByHand(handRadiusKm);
-            // Moved by hand away from the user: no longer "at my location".
+            // The center moved by hand off the user: no longer "at my location".
             if (nearMe && isAwayFrom(next, location.coords)) onLeaveMyLocation();
           }
         }}

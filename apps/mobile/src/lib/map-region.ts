@@ -48,13 +48,16 @@ export function regionForBounds([minLng, minLat, maxLng, maxLat]: readonly [
   };
 }
 
+/** How far the map's center may drift from a point and still be "at" it: 5% of the view. */
+const CENTER_TOLERANCE = 0.05;
+
 /**
- * Whether the user has moved the map away from a point: it's no longer in the middle half of the
- * view. Zooming in place or nudging the map keeps it there; panning to another area doesn't.
+ * Whether the user has moved the map's center away from a point (owner's rule): more than a
+ * small drift (5% of the view's width or height) off it.
  */
 export function isAwayFrom(region: MapRegion, point: { lat: number; lng: number }): boolean {
   return (
-    Math.abs(point.lat - region.latitude) > region.latitudeDelta / 4 ||
-    Math.abs(point.lng - region.longitude) > region.longitudeDelta / 4
+    Math.abs(point.lat - region.latitude) > region.latitudeDelta * CENTER_TOLERANCE ||
+    Math.abs(point.lng - region.longitude) > region.longitudeDelta * CENTER_TOLERANCE
   );
 }

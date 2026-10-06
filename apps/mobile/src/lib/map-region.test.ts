@@ -54,13 +54,18 @@ describe('isAwayFrom', () => {
   const me = { lat: 19.4326, lng: -99.1332 };
   const around = regionForRadius(me, 5);
 
-  it('stays near when zoomed in place or nudged a little', () => {
+  it('stays at the point when the map is centered on it, give or take a small drift', () => {
+    expect(isAwayFrom(around, me)).toBe(false);
     expect(isAwayFrom(regionForRadius(me, 1), me)).toBe(false);
-    expect(isAwayFrom({ ...around, latitude: me.lat + around.latitudeDelta / 5 }, me)).toBe(false);
+    expect(isAwayFrom({ ...around, latitude: me.lat + around.latitudeDelta * 0.04 }, me)).toBe(
+      false,
+    );
   });
 
-  it('is away once the point leaves the middle half of the view', () => {
-    expect(isAwayFrom({ ...around, latitude: me.lat + around.latitudeDelta / 3 }, me)).toBe(true);
-    expect(isAwayFrom({ ...around, longitude: me.lng - around.longitudeDelta }, me)).toBe(true);
+  it('is away as soon as the center moves off the point', () => {
+    expect(isAwayFrom({ ...around, latitude: me.lat + around.latitudeDelta * 0.1 }, me)).toBe(true);
+    expect(isAwayFrom({ ...around, longitude: me.lng - around.longitudeDelta * 0.2 }, me)).toBe(
+      true,
+    );
   });
 });
