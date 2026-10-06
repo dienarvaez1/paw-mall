@@ -33,7 +33,7 @@ checked) · **Blocked**.
 | 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
 | 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
 | 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done        | 2026-10-05 | 2026-10-05 |
-| 5     | Trust               | `phase-5/trust`           | #6  | In progress | 2026-10-05 | —          |
+| 5     | Trust               | `phase-5/trust`           | #6  | In review   | 2026-10-05 | —          |
 | 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
 | 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
 
@@ -263,7 +263,7 @@ a task (and a note in the phase that applies it).
   registry's terms.
 - **Done when:** an approved claim shows "Verificado por el dueño" and its hours drive "open now".
 - **Branch / PR:** `phase-5/trust` / #6
-- **Status:** In progress (waiting for the owner's check on a phone)
+- **Status:** In review (owner asked to merge on 2026-10-06)
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 141 tests (shared 18, api 37, importers 44, mobile 42), including report
@@ -277,8 +277,10 @@ a task (and a note in the phase that applies it).
         octubre de 2026", the owner's hours, "Abierto ahora" (Mon 16:53, hours 09:00–21:00), and
         Rampu first in Urgencias; the contact was deleted. Rampu was then restored exactly (0
         verified places, 0 claims left).
-  - [ ] Owner check on a phone: open a place, try "¿Eres el dueño?" and the two report buttons
-        (taps can't be automated here)
+  - [x] Owner check on a phone: open a place, try "¿Eres el dueño?" and the two report buttons.
+        The owner tested many of this phase's changes on an iPhone and Android while asking for
+        them, and asked to merge on 2026-10-06 without reporting open problems; these two flows
+        weren't reported on specifically.
 - **Notes:**
   - **Deferred by the owner (2026-10-05):** the SAT check of owner claims (RFC and idCIF from the
     Constancia de Situación Fiscal, validated on SAT's public QR page as in Ferre Mall). Tracked
