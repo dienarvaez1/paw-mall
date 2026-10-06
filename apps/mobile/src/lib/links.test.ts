@@ -20,6 +20,12 @@ describe('directionsQuery', () => {
     );
   });
 
+  it('spells out Estado de México, which DENUE calls just "México"', () => {
+    expect(directionsQuery({ ...place, city: 'Metepec', state: 'México' })).toContain(
+      'Metepec, Estado de México, México',
+    );
+  });
+
   it('uses the address alone for unnamed places', () => {
     expect(directionsQuery({ ...place, name: null })).toBe(
       'Calle Corregidora 7 B, Col. Centro, C.P. 06060, Cuauhtémoc, Ciudad de México, México',
@@ -41,9 +47,10 @@ describe('directionsUrl', () => {
     );
   });
 
-  it('opens Google Maps driving directions to the business', () => {
+  it("opens Google Maps driving directions to the place's exact point, not a name search", () => {
+    // A name search sent "Peluditos" in Metepec to a same-name business in another city.
     expect(directionsUrl('google', place)).toBe(
-      `https://www.google.com/maps/dir/?api=1&destination=${query}&travelmode=driving`,
+      'https://www.google.com/maps/dir/?api=1&destination=19.4302,-99.1365&travelmode=driving',
     );
   });
 

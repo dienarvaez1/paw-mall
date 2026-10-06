@@ -15,8 +15,12 @@ const ACTIVITY_CATEGORIES: Record<string, CategorySlug> = {
   '434112': 'feed_store',
 };
 
-/** Otros servicios personales: a catch-all class, imported only for grooming and boarding names. */
-const NAME_ONLY_ACTIVITY = '812990';
+/**
+ * Classes imported only by name: 812990 (otros servicios personales, a catch-all) for grooming,
+ * boarding and pet funeral names; 812310 (servicios funerarios) for pet funeral names, since most
+ * funeral homes there are for people.
+ */
+const NAME_ONLY_ACTIVITIES = new Set(['812990', '812310']);
 
 const VET_ACTIVITIES = new Set(['541941', '541942']);
 
@@ -29,6 +33,20 @@ const BOARDING =
   /\b(PENSION(ES)?|HOTEL(ES)?|GUARDERIAS?|HOSPEDAJE|ESTANCIAS?|RESORT|DAYCARE|KINDER|INN|CAMP|HOUSING|HOSTAL)\b/;
 /** Shelters and rescues: a "hotel para perros abandonados" isn't a boarding business. */
 const SHELTER = /\b(ABANDONAD[OA]S?|REFUGIOS?|ALBERGUES?|ADOPCION(ES)?|RESCATES?)\b/;
+/**
+ * Dog training (owner's decision, 2026-10-05): a training word plus an animal word, in any DENUE
+ * class (trainers turn up under sports, social work, associations…). "K9" alone isn't enough
+ * ("Abarrotes K9"), and training without an animal ("adiestramiento táctico") isn't dog training.
+ */
+const TRAINING =
+  /\b(ADIESTRA\w*|ENTRENA\w*|DOG ?TRAIN\w*|TRAINING|ESCUELA CANINA|EDUCACION CANINA|CINOTECNIA|OBEDIENCIA)\b/;
+const TRAINED_ANIMALS = /\b(K ?9)\b/;
+/** Gyms (centros de acondicionamiento físico): "Black Dog Cross Training" trains people. */
+const GYMS = '713943';
+
+/** Pet crematoriums and funeral homes (owner's decision, 2026-10-05), with an animal word too. */
+const FUNERAL =
+  /\b(CREMATORIOS?|CREMACION(ES)?|FUNERARI[AO]S?|FUNERAL(ES)?|CEMENTERIOS?|PANTEON(ES)?|INCINERA\w*|MEMORIAL)\b/;
 const BOUTIQUE = /\bBOUTIQUE\b/;
 const HOSPITAL = /\bHOSPITAL\b/;
 /** "24 horas" in a vet's name: a hint, unconfirmed until the owner says so. */
@@ -38,9 +56,19 @@ const OPEN_24H = /\b24 ?(HORAS|HRS|HR|H)\b/;
  * Names linked to animal cruelty, which Paw Mall never lists (docs/PLAN.md, "No animal cruelty"):
  * slaughterhouses and butchers, cockfighting and bullfighting. Checked against both the business
  * name and the legal name. "El Rastro" alone is a common place name, so it doesn't count.
+ * Cockfighting also shows up as its gear and breeders: blades (navajas), cages and accessories for
+ * roosters, galleros (fighting-cock breeders) and rooster fincas. A rooster in the name alone
+ * ("Veterinaria El Gallo de Oro") doesn't count, and neither does a spur ("La Espuela" is as
+ * likely about horses; listed for the owner's review).
  */
 export const CRUELTY =
-  /(\b(?<!\bEL )RASTROS?\b|\b(MATADEROS?|CARNICERIAS?|OBRADOR(ES)?|EMPACADORA DE CARNES?|GALLOS? DE (COMBATE|PELEA)|GALLOS FINOS|GALLERAS?|PALENQUES? DE GALLOS|PELEAS? DE (GALLOS|PERROS)|TAURIN[OA]S?|TOROS DE LIDIA|PUPPY MILLS?)\b)/;
+  /(\b(?<!\bEL )RASTROS?\b|\b(MATADEROS?|CARNICERIAS?|OBRADOR(ES)?|EMPACADORA DE CARNES?|GALLOS? DE (COMBATE|PELEA)|GALLOS FINOS|GALLERAS?|GALLEROS?|PALENQUES? DE GALLOS|PELEAS? DE (GALLOS|PERROS)|TAURIN[OA]S?|TOROS DE LIDIA|PUPPY MILLS?|NAVAJAS?|(ACCESORIOS|JAULAS|PRODUCTOS|ARTICULOS) PARA GALLOS?)\b|\bFINCA\b.*\bGALLOS?\b)/;
+
+/**
+ * Pet stores named in English after roosters sell for cockfighting ("Black Cock", rooster feed;
+ * owner's rule, 2026-10-05). Whole words only: "Cocker" (the dog breed) stays.
+ */
+const PET_STORE_COCK = /\bCOCKS?\b/;
 
 /**
  * Breeding operations for pets or fighting cocks: the puppy-mill risk. Raising farm animals
@@ -50,10 +78,14 @@ const BREEDING = /\b(CRIADEROS?|CRIANZA|CRIA DE)\b/;
 const BRED_ANIMALS =
   /\b(CANIN[AO]S?|PERR[OA]S?|CACHORR[OA]S?|GAT[OA]S?|FELIN[OA]S?|MASCOTAS?|GALLOS?)\b/;
 
-/** Whether a business's names tie it to animal cruelty. */
-export function isCrueltyLinked(names: string): boolean {
+/** Whether a business's names tie it to animal cruelty; some rules apply to one DENUE class. */
+export function isCrueltyLinked(names: string, activityCode = ''): boolean {
   const text = plain(names);
-  return CRUELTY.test(text) || (BREEDING.test(text) && BRED_ANIMALS.test(text));
+  return (
+    CRUELTY.test(text) ||
+    (BREEDING.test(text) && BRED_ANIMALS.test(text)) ||
+    (activityCode === '465911' && PET_STORE_COCK.test(text))
+  );
 }
 
 type Chain = { pattern: RegExp; chain: string };
@@ -111,12 +143,19 @@ export function categorize(activityCode: string, name: string): PlaceCategory[] 
   };
 
   const own = ACTIVITY_CATEGORIES[activityCode];
-  if (own) add(own, 'activity');
-  else if (activityCode !== NAME_ONLY_ACTIVITY) return [];
-
   const animal = ANIMAL.test(text);
+  const trainer = TRAINING.test(text) && (animal || TRAINED_ANIMALS.test(text));
+  if (own) add(own, 'activity');
+  else if (!NAME_ONLY_ACTIVITIES.has(activityCode)) {
+    // Outside the pet classes, only dog trainers are picked, by name (never gyms).
+    if (trainer && activityCode !== GYMS) add('dog_trainer', 'name');
+    return out;
+  }
+  if (trainer) add('dog_trainer', 'name');
+
   if (GROOMING_ALONE.test(text) || (GROOMING.test(text) && animal)) add('groomer', 'name');
   if (BOARDING.test(text) && animal && !SHELTER.test(text)) add('boarding', 'name');
+  if (FUNERAL.test(text) && animal) add('pet_funeral', 'name');
   if (own && BOUTIQUE.test(text)) add('boutique', 'name');
   if (HOSPITAL.test(text) && (VET_ACTIVITIES.has(activityCode) || animal)) {
     add('vet_hospital', 'name');
@@ -250,7 +289,8 @@ export function mapDenueRow(row: Record<string, string>): MappedRow | null {
   if (categories.length === 0) return null;
 
   const names = plain(`${clean(row.nom_estab)} | ${clean(row.raz_social)}`);
-  if (isCrueltyLinked(names)) return { kind: 'excluded', externalId: row.id, activityCode, name };
+  if (isCrueltyLinked(names, activityCode))
+    return { kind: 'excluded', externalId: row.id, activityCode, name };
 
   const chain = findChain(names);
   if (chain && NOT_A_PLACE.test(plain(name))) return null;

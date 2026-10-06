@@ -19,6 +19,7 @@ import postgres from 'postgres';
 
 import { importRuns, makePoint, places } from '../../../../apps/api/src/db/schema.ts';
 import { parseCsvRecords } from '../csv.ts';
+import { STATE_FILES } from './files.ts';
 import { databaseUrl } from '../db-url.ts';
 import {
   type DenuePlace,
@@ -30,16 +31,6 @@ import {
 
 const DOWNLOAD_BASE = 'https://www.inegi.org.mx/contenidos/masiva/denue';
 const BATCH_SIZE = 1000;
-
-/** The six states of docs/PLAN.md, by INEGI code. Large states come split into several files. */
-const STATE_FILES: Record<string, string[]> = {
-  '09': ['denue_09_csv.zip'], // Ciudad de México
-  '13': ['denue_13_csv.zip'], // Hidalgo
-  '15': ['denue_15_1_csv.zip', 'denue_15_2_csv.zip'], // Estado de México
-  '17': ['denue_17_csv.zip'], // Morelos
-  '21': ['denue_21_csv.zip'], // Puebla
-  '29': ['denue_29_csv.zip'], // Tlaxcala
-};
 
 const { values: args } = parseArgs({
   options: {

@@ -1,0 +1,107 @@
+[
+  {
+    "name": "Zócalo",
+    "aliases": ["Plaza de la Constitución", "Zócalo CDMX", "Centro Histórico"],
+    "lat": 19.4326,
+    "lng": -99.1332,
+    "match": "zocalo|plaza de la constitucion|catedral metropolitana|palacio nacional"
+  },
+  {
+    "name": "Palacio de Bellas Artes",
+    "aliases": ["Bellas Artes"],
+    "lat": 19.4352,
+    "lng": -99.1412,
+    "match": "bellas artes"
+  },
+  {
+    "name": "Torre Latinoamericana",
+    "aliases": [],
+    "lat": 19.4339,
+    "lng": -99.1405,
+    "match": "torre latinoamericana"
+  },
+  {
+    "name": "Plaza Garibaldi",
+    "aliases": ["Garibaldi"],
+    "lat": 19.4405,
+    "lng": -99.1394,
+    "match": "garibaldi"
+  },
+  {
+    "name": "Monumento a la Revolución",
+    "aliases": [],
+    "lat": 19.4361,
+    "lng": -99.1547,
+    "match": "monumento a la revolucion"
+  },
+  {
+    "name": "Ángel de la Independencia",
+    "aliases": ["El Ángel", "Ángel"],
+    "lat": 19.427,
+    "lng": -99.1676,
+    "match": "angel de la independencia"
+  },
+  {
+    "name": "Glorieta de Insurgentes",
+    "aliases": [],
+    "lat": 19.4234,
+    "lng": -99.163,
+    "match": "glorieta (de )?insurgentes"
+  },
+  {
+    "name": "Castillo de Chapultepec",
+    "aliases": ["Chapultepec"],
+    "lat": 19.4204,
+    "lng": -99.1819,
+    "match": "castillo de chapultepec"
+  },
+  {
+    "name": "Museo Nacional de Antropología",
+    "aliases": ["Museo de Antropología"],
+    "lat": 19.426,
+    "lng": -99.1863,
+    "match": "museo nacional de antropologia"
+  },
+  {
+    "name": "Parque México",
+    "aliases": [],
+    "lat": 19.4119,
+    "lng": -99.17,
+    "match": "parque mexico"
+  },
+  {
+    "name": "Basílica de Guadalupe",
+    "aliases": ["La Villa", "Basílica"],
+    "lat": 19.4848,
+    "lng": -99.1177,
+    "match": "basilica"
+  },
+  {
+    "name": "Estadio Banorte",
+    "aliases": ["Estadio Azteca"],
+    "lat": 19.3029,
+    "lng": -99.1505,
+    "match": "estadio (azteca|banorte)"
+  },
+  {
+    "name": "Ciudad Universitaria",
+    "aliases": ["CU", "UNAM"],
+    "lat": 19.3324,
+    "lng": -99.1876,
+    "match": "rectoria|ciudad universitaria|biblioteca central"
+  },
+  {
+    "name": "Jardín Centenario de Coyoacán",
+    "aliases": ["Centro de Coyoacán", "Zócalo de Coyoacán"],
+    "lat": 19.35,
+    "lng": -99.1626,
+    "match": "jardin centenario|coyoacan"
+  },
+  {
+    "name": "Aeropuerto Internacional de la Ciudad de México",
+    "aliases": ["Aeropuerto", "AICM"],
+    "lat": 19.4361,
+    "lng": -99.0719,
+    "match": "aeropuerto|terminal 1"
+  }
+]

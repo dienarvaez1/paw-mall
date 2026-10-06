@@ -10,6 +10,7 @@ describe('placeListQuerySchema', () => {
       lat: 19.4326,
       lng: -99.1332,
       radiusKm: DEFAULT_RADIUS_KM,
+      areaRadiusKm: 5,
       page: 1,
       pageSize: 20,
     });
@@ -30,8 +31,18 @@ describe('placeListQuerySchema', () => {
   });
 
   it('caps the radius and page size', () => {
-    expect(placeListQuerySchema.safeParse({ ...base, radiusKm: '101' }).success).toBe(false);
+    expect(placeListQuerySchema.safeParse({ ...base, radiusKm: '160.9344' }).success).toBe(true);
+    expect(placeListQuerySchema.safeParse({ ...base, radiusKm: '162' }).success).toBe(false);
     expect(placeListQuerySchema.safeParse({ ...base, pageSize: '201' }).success).toBe(false);
+  });
+});
+
+describe('areaRadiusKm', () => {
+  it('accepts a radius set by zooming the map, up to the largest radius', () => {
+    expect(placeListQuerySchema.parse({ ...base, q: 'x', areaRadiusKm: '42.5' }).areaRadiusKm).toBe(
+      42.5,
+    );
+    expect(placeListQuerySchema.safeParse({ ...base, areaRadiusKm: '162' }).success).toBe(false);
   });
 });
 

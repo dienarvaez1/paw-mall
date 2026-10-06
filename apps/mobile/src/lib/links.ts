@@ -14,7 +14,9 @@ export type DirectionsTarget = {
  * address alone.
  */
 export function directionsQuery(target: DirectionsTarget): string {
-  return [target.name, target.address, target.city, target.state, 'México']
+  // DENUE calls the Estado de México just "México", which reads as the country in a search.
+  const state = target.state === 'México' ? 'Estado de México' : target.state;
+  return [target.name, target.address, target.city, state, 'México']
     .map((part) => part?.trim())
     .filter(Boolean)
     .join(', ');
@@ -32,9 +34,11 @@ export function mapsAppsFor(platform: Platform): MapsApp[] {
 /**
  * Driving directions in each app's official link format; these open the app when it's installed
  * and its website otherwise, with no URL schemes to declare.
- * - Apple Maps and Google Maps search for the business by name and address (finding the listing);
- *   Apple's `sll` biases the search to the place's location.
- * - Waze navigates to the place's coordinates, the most reliable form of its links.
+ * - Apple Maps searches for the business by name and address (finding its listing), with `sll`
+ *   biasing the search to the place's location.
+ * - Google Maps and Waze navigate to the place's coordinates. Google's text search has no
+ *   location bias in these links and picked a same-name business in another city ("Peluditos",
+ *   Metepec), so it gets the exact point instead of the name.
  */
 export function directionsUrl(app: MapsApp, target: DirectionsTarget): string {
   const query = encodeURIComponent(directionsQuery(target));
@@ -43,7 +47,7 @@ export function directionsUrl(app: MapsApp, target: DirectionsTarget): string {
     case 'apple':
       return `https://maps.apple.com/?daddr=${query}&sll=${coords}&dirflg=d`;
     case 'google':
-      return `https://www.google.com/maps/dir/?api=1&destination=${query}&travelmode=driving`;
+      return `https://www.google.com/maps/dir/?api=1&destination=${coords}&travelmode=driving`;
     case 'waze':
       return `https://waze.com/ul?ll=${coords}&navigate=yes`;
   }

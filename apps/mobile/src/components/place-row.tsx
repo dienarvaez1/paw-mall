@@ -31,8 +31,19 @@ export function CategoryLine({ place, selected }: { place: Place; selected: Chip
   );
 }
 
-/** A place in a list. */
-export function PlaceRow({ place, selected }: { place: Place; selected: ChipCategory }) {
+/**
+ * A place in a list. Its distance reads "0.3 mi away" with `away` (Explorar's "Mi ubicación" on:
+ * distances from the user) and just "0.3 mi" otherwise (owner's rule).
+ */
+export function PlaceRow({
+  place,
+  selected,
+  away = true,
+}: {
+  place: Place;
+  selected: ChipCategory;
+  away?: boolean;
+}) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const { units } = useSettings();
@@ -49,9 +60,11 @@ export function PlaceRow({ place, selected }: { place: Place; selected: ChipCate
           </Text>
           {place.distanceKm !== null ? (
             <Text className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
-              {t('places.distanceKm', {
-                distance: formatDistance(place.distanceKm, locale, units),
-              })}
+              {!away
+                ? formatDistance(place.distanceKm, locale, units)
+                : t('places.distanceKm', {
+                    distance: formatDistance(place.distanceKm, locale, units),
+                  })}
             </Text>
           ) : null}
         </View>

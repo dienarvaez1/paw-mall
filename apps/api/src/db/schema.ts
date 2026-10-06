@@ -77,8 +77,9 @@ export const places = pgTable(
     registeredOn: date({ mode: 'string' }),
     /** Date of the source edition the place was last loaded from (e.g. DENUE 2026-05-20). */
     sourceUpdatedOn: date({ mode: 'string' }),
-    /** Set when shoppers reported the place closed (hidden pending review) or it was confirmed. */
+    /** Set when users reported the place (hidden pending review) or a report was confirmed. */
     hiddenAt: timestamp({ withTimezone: true }),
+    /** reported_closed, reported_cruelty, confirmed_closed or confirmed_cruelty. */
     hiddenReason: text(),
     /** Set when the owner's claim (checked against their SAT certificate) was approved. */
     ownerVerifiedAt: timestamp({ withTimezone: true }),
@@ -151,6 +152,78 @@ export const vetDetails = pgTable('vet_details', {
   /** Species treated, e.g. ['dog', 'cat']; null when unknown. */
   species: text().array(),
 });
+
+/**
+ * User reports about a place, one per reason and phone. Privacy (CLAUDE.md): only the reason, the
+ * date and a random id the app generates; never location, IP or personal information.
+ */
+export const placeReports = pgTable(
+  'place_reports',
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    placeId: integer()
+      .notNull()
+      .references(() => places.id, { onDelete: 'cascade' }),
+    /** 'closed' or 'cruelty'. */
+    reason: text().notNull(),
+    clientId: text().notNull(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('place_reports_place_reason_client_idx').on(t.placeId, t.reason, t.clientId)],
+);
+
+/**
+ * An owner's request to publish their place's details. The contact is deleted once the claim is
+ * approved or rejected; only the published fields stay. (No SAT check yet: deferred by the owner.)
+ */
+export const placeClaims = pgTable(
+  'place_claims',
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    placeId: integer()
+      .notNull()
+      .references(() => places.id, { onDelete: 'cascade' }),
+    /** pending | approved | rejected */
+    status: text().notNull().default('pending'),
+    phone: text(),
+    website: text(),
+    hours: jsonb().$type<PlaceHours>(),
+    open24h: boolean(),
+    acceptsEmergencies: boolean(),
+    contactName: text(),
+    contact: text(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    decidedAt: timestamp({ withTimezone: true }),
+  },
+  (t) => [index('place_claims_status_idx').on(t.status)],
+);
+
+/**
+ * Places a search can name instead of a business: landmarks (curated, data/landmarks.json),
+ * municipalities and towns, and colonias. Centers of municipalities, towns and colonias are the
+ * median position of all DENUE businesses there (`pnpm places:areas`).
+ */
+export const searchAreas = pgTable(
+  'search_areas',
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    /** landmark | municipality | town | colonia */
+    kind: text().notNull(),
+    name: text().notNull(),
+    /** Lower-case, accent-free name used for matching ("plaza de la constitucion"). */
+    nameKey: text().notNull(),
+    /** For colonias and towns: their municipality; null for landmarks and municipalities. */
+    municipality: text(),
+    state: text().notNull(),
+    location: geographyPoint().notNull(),
+    /** DENUE businesses behind the center (all kinds of business); 0 for landmarks. */
+    businessCount: integer().notNull().default(0),
+  },
+  (t) => [
+    index('search_areas_name_key_idx').using('gin', sql`${t.nameKey} gin_trgm_ops`),
+    index('search_areas_kind_idx').on(t.kind),
+  ],
+);
 
 /** Google requests per billing month (Pacific time) and SKU, to stay inside the free allowance. */
 export const googleUsage = pgTable(

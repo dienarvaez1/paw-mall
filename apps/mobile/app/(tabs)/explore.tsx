@@ -1,7 +1,7 @@
-import type { Place, PlaceCluster } from '@paw-mall/shared';
+import { MAX_RADIUS_KM, type Place, type PlaceCluster } from '@paw-mall/shared';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Keyboard,
@@ -19,12 +19,13 @@ import { PlaceRow, usePlaceName } from '@/components/place-row';
 import { SearchInput } from '@/components/search-input';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
+import { nextRadiusKm } from '@/features/settings/radius';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 import { CATEGORY_COLORS, CHIP_CATEGORIES, type ChipCategory, pinColor } from '@/lib/categories';
-import { regionForBounds, regionForRadius } from '@/lib/map-region';
+import { isAwayFrom, radiusForRegion, regionForBounds, regionForRadius } from '@/lib/map-region';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 
@@ -33,10 +34,22 @@ type Mode = (typeof MODES)[number];
 /** Wait for the map to settle before loading its places (keeps panning cheap). */
 const MAP_SETTLE_MS = 400;
 const SEARCH_DEBOUNCE_MS = 300;
-/** Cluster bubbles: light amber (amber-200) with dark amber numbers (amber-900). */
-const CLUSTER_COLORS = { fill: '#fde68a', text: '#78350f' };
+/**
+ * Cluster bubbles: lime green (lime-500) with dark lime numbers (lime-950), owner's choice. No
+ * category uses green, so clusters never look like pins.
+ */
+const CLUSTER_COLORS = { fill: '#84cc16', text: '#1a2e05' };
+// Explorar's controls (Lista/Mapa, Mi ubicación, the radius button, the selected chip) use the
+// clusters' greens when on: bg-lime-500 (#84cc16) with text-lime-950 (#1a2e05).
 /** How long the map takes to zoom to a new radius. */
 const MAP_FIT_MS = 500;
+/**
+ * A region change counts as the user's own while a finger is on the map or this soon after it
+ * lifts (a flick keeps gliding), unless the app itself is moving the map.
+ */
+const HAND_MOVE_GRACE_MS = 2500;
+/** Extra time after an automatic move during which region changes are still the app's own. */
+const AUTO_MOVE_GRACE_MS = 400;
 /** The radius circle in the brand teal (teal-700 / teal-400), lightly filled. */
 const RADIUS_COLORS = {
   light: { stroke: '#0f766e', fill: 'rgba(15, 118, 110, 0.10)' },
@@ -48,30 +61,27 @@ export default function ExploreScreen() {
   const location = useUserLocation();
   const [mode, setMode] = useState<Mode>('list');
   const [category, setCategory] = useState<ChipCategory>(null);
-  const [openNow, setOpenNow] = useState(false);
+  // "Mi ubicación": off, the search text names an area to search around; on, business names
+  // around the user within the Ajustes radius.
+  const [nearMe, setNearMe] = useState(false);
+  // A radius set by zooming the map by hand: it replaces the presets for the list and the map
+  // until the radius button is tapped (it's never saved to Ajustes).
+  const [customRadiusKm, setCustomRadiusKm] = useState<number | null>(null);
   const [text, setText] = useState('');
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
   useDismissKeyboardOnBlur();
 
   return (
     <View className="flex-1 bg-white dark:bg-neutral-950">
-      {/* Search is for the list; the map shows every place in view, so it's grayed out there. */}
       <View className="px-4 pt-3">
         <SearchInput
           value={text}
           onChangeText={setText}
-          placeholder={t('places.searchPlaceholder')}
+          placeholder={t(nearMe ? 'places.searchPlaceholderNearMe' : 'places.searchPlaceholder')}
           clearLabel={t('places.clearSearch')}
-          disabled={mode === 'map'}
         />
       </View>
-      <CategoryChips
-        selected={category}
-        onSelect={setCategory}
-        openNow={openNow}
-        onToggleOpenNow={() => setOpenNow((value) => !value)}
-      />
-      <View className="flex-row gap-2 border-b border-neutral-200 px-4 pb-3 pt-1 dark:border-neutral-800">
+      <View className="flex-row gap-2 px-4 pt-3">
         {MODES.map((value) => (
           <Pressable
             key={value}
@@ -82,45 +92,60 @@ export default function ExploreScreen() {
               setMode(value);
             }}
             className={`min-h-11 flex-1 items-center justify-center rounded-xl ${
-              mode === value ? 'bg-brand' : 'bg-neutral-100 dark:bg-neutral-800'
+              mode === value ? 'bg-lime-500' : 'bg-neutral-100 dark:bg-neutral-800'
             }`}
           >
             <Text
               className={`text-base font-semibold ${
-                mode === value ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
+                mode === value ? 'text-lime-950' : 'text-neutral-800 dark:text-neutral-200'
               }`}
             >
               {value === 'list' ? t('places.showList') : t('places.showMap')}
             </Text>
           </Pressable>
         ))}
+        <NearMeButton nearMe={nearMe} onToggle={() => setNearMe((value) => !value)} />
+        {/* The same row in both modes, so Lista and Mapa never resize. */}
+        <RadiusButton
+          className="min-h-11"
+          customRadiusKm={customRadiusKm}
+          onClearCustom={() => setCustomRadiusKm(null)}
+        />
+      </View>
+      <View className="border-b border-neutral-200 dark:border-neutral-800">
+        <CategoryChips selected={category} onSelect={setCategory} />
       </View>
       {location.ready && location.source === 'fallback' ? (
         <Notice text={t('common.approximateLocation')} />
       ) : null}
       {mode === 'list' ? (
-        <PlacesList name={name} category={category} openNow={openNow} />
+        <PlacesList
+          name={name}
+          category={category}
+          nearMe={nearMe}
+          customRadiusKm={customRadiusKm}
+        />
       ) : (
-        <PlacesMap category={category} openNow={openNow} />
+        <PlacesMap
+          category={category}
+          name={name}
+          nearMe={nearMe}
+          customRadiusKm={customRadiusKm}
+          onZoomByHand={setCustomRadiusKm}
+          onLeaveMyLocation={() => setNearMe(false)}
+        />
       )}
     </View>
   );
 }
 
-/**
- * "Abierto ahora" (a toggle), then one chip per category; the list and the map show only the
- * selected category, and only open places when the toggle is on.
- */
+/** One chip per category; the list and the map show only the selected one. */
 function CategoryChips({
   selected,
   onSelect,
-  openNow,
-  onToggleOpenNow,
 }: {
   selected: ChipCategory;
   onSelect: (category: ChipCategory) => void;
-  openNow: boolean;
-  onToggleOpenNow: () => void;
 }) {
   const { t } = useAppTranslation();
   return (
@@ -128,28 +153,11 @@ function CategoryChips({
       horizontal
       showsHorizontalScrollIndicator={false}
       accessibilityLabel={t('places.categoriesLabel')}
-      className="grow-0"
-      contentContainerClassName="gap-2 px-4 pb-4 pt-3"
+      // Its own height: a ScrollView grows and shrinks by default, which the list would squeeze.
+      style={{ flexGrow: 0, flexShrink: 0 }}
+      contentContainerClassName="gap-2 px-4 pb-2 pt-3"
       keyboardShouldPersistTaps="handled"
     >
-      <Pressable
-        accessibilityRole="switch"
-        accessibilityState={{ checked: openNow }}
-        onPress={onToggleOpenNow}
-        className={`min-h-10 flex-row items-center rounded-full border px-4 ${
-          openNow
-            ? 'border-emerald-700 bg-emerald-700'
-            : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
-        }`}
-      >
-        <Text
-          className={`text-sm font-semibold ${
-            openNow ? 'text-white' : 'text-emerald-800 dark:text-emerald-300'
-          }`}
-        >
-          {t('places.openNowChip')}
-        </Text>
-      </Pressable>
       {CHIP_CATEGORIES.map((slug) => {
         const active = selected === slug;
         const color = slug ? CATEGORY_COLORS[slug] : undefined;
@@ -161,7 +169,7 @@ function CategoryChips({
             onPress={() => onSelect(slug)}
             className={`min-h-10 flex-row items-center gap-2 rounded-full border px-4 ${
               active
-                ? 'border-brand bg-brand'
+                ? 'border-lime-500 bg-lime-500'
                 : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
             }`}
           >
@@ -173,7 +181,7 @@ function CategoryChips({
             ) : null}
             <Text
               className={`text-sm font-semibold ${
-                active ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
+                active ? 'text-lime-950' : 'text-neutral-800 dark:text-neutral-200'
               }`}
             >
               {t(`places.chips.${slug ?? 'all'}`)}
@@ -188,73 +196,120 @@ function CategoryChips({
 function PlacesList({
   name,
   category,
-  openNow,
+  nearMe,
+  customRadiusKm,
 }: {
   name: string;
   category: ChipCategory;
-  openNow: boolean;
+  nearMe: boolean;
+  customRadiusKm: number | null;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
-  const { units, radiusKm } = useSettings();
+  const { units, radiusKm, onlyOpenNow } = useSettings();
   const location = useUserLocation();
-  const places = usePlaces(location.coords, category, name, openNow);
+  const places = usePlaces(location.coords, category, name, nearMe, customRadiusKm);
+  const area = places.data?.pages[0]?.area ?? null;
   const items = useMemo(
     () => places.data?.pages.flatMap((page) => page.items) ?? [],
     [places.data],
   );
   const total = places.data?.pages[0]?.total ?? 0;
-  const distance = formatDistance(radiusKm, locale, units);
+  // Area searches use 5 km (3 mi); everything around the user uses the shared radius.
+  const distance = formatDistance(
+    area ? area.radiusKm : (customRadiusKm ?? radiusKm),
+    locale,
+    units,
+  );
 
   if (places.isPending) return <SkeletonList />;
   if (places.isError)
     return <ErrorState error={places.error} onRetry={() => void places.refetch()} />;
 
+  // The summary stays put above the list while it scrolls: "69 lugares a menos de 5 km de
+  // Tlaxcala", or "1,237 lugares a menos de 5 km" around the user.
+  const summary = area
+    ? t('places.areaCount', {
+        count: total,
+        total: formatCount(total, locale),
+        distance,
+        area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
+      })
+    : t('places.listCount', { count: total, total: formatCount(total, locale), distance });
+  // A keyword in the search picked the category ("tlaxcala vet"): say so up front, unless a chip
+  // is already showing it.
+  const searchCategory = places.data?.pages[0]?.searchCategory ?? null;
+  const chipSlug = searchCategory as Exclude<ChipCategory, null> | null;
+  const shownSummary =
+    chipSlug && !category && (CHIP_CATEGORIES as readonly ChipCategory[]).includes(chipSlug)
+      ? t('places.categorySummary', { category: t(`places.chips.${chipSlug}`), summary })
+      : summary;
+
   return (
-    <FlatList
-      data={items}
-      keyExtractor={(place) => String(place.id)}
-      renderItem={({ item }) => <PlaceRow place={item} selected={category} />}
-      ItemSeparatorComponent={() => <View className="h-px bg-neutral-100 dark:bg-neutral-900" />}
-      onEndReachedThreshold={0.5}
-      onEndReached={() => {
-        if (places.hasNextPage && !places.isFetchingNextPage) void places.fetchNextPage();
-      }}
-      ListHeaderComponent={
-        items.length > 0 ? (
-          <Text className="px-4 pb-1 pt-3 text-sm text-neutral-500 dark:text-neutral-400">
-            {t('places.listCount', { count: total, total: formatCount(total, locale), distance })}
-          </Text>
-        ) : null
-      }
-      keyboardShouldPersistTaps="handled"
-      keyboardDismissMode="on-drag"
-      ListEmptyComponent={
-        name ? (
-          <EmptyState
-            title={t('places.noMatchesNearby', { query: name, distance })}
-            hint={t('places.noMatchesHint')}
-          />
-        ) : openNow ? (
-          <EmptyState
-            title={t('places.noOpenPlaces', { distance })}
-            hint={t('places.noOpenPlacesHint')}
-          />
-        ) : (
-          <EmptyState title={t('places.noPlaces', { distance })} hint={t('places.noPlacesHint')} />
-        )
-      }
-      ListFooterComponent={
-        <>
-          {places.isFetchingNextPage ? <SkeletonList rows={2} /> : null}
-          <SourceNote places={items} />
-        </>
-      }
-    />
+    <View className="flex-1">
+      <Text
+        accessibilityRole="summary"
+        className="border-b border-neutral-100 px-4 py-2 text-sm font-bold text-neutral-900 dark:border-neutral-900 dark:text-white"
+      >
+        {shownSummary}
+      </Text>
+      <FlatList
+        data={items}
+        keyExtractor={(place) => String(place.id)}
+        renderItem={({ item }) => <PlaceRow place={item} selected={category} away={nearMe} />}
+        ItemSeparatorComponent={() => <View className="h-px bg-neutral-100 dark:bg-neutral-900" />}
+        onEndReachedThreshold={0.5}
+        onEndReached={() => {
+          if (places.hasNextPage && !places.isFetchingNextPage) void places.fetchNextPage();
+        }}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        ListEmptyComponent={
+          name ? (
+            <EmptyState
+              title={t('places.noMatchesNearby', { query: name, distance })}
+              hint={t('places.noMatchesHint')}
+            />
+          ) : onlyOpenNow ? (
+            <EmptyState
+              title={t('places.noOpenPlaces', { distance })}
+              hint={t('places.noOpenPlacesHint')}
+            />
+          ) : (
+            <EmptyState
+              title={t('places.noPlaces', { distance })}
+              hint={t('places.noPlacesHint')}
+            />
+          )
+        }
+        ListFooterComponent={
+          <>
+            {places.isFetchingNextPage ? <SkeletonList rows={2} /> : null}
+            <SourceNote places={items} />
+          </>
+        }
+      />
+    </View>
   );
 }
 
-function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boolean }) {
+function PlacesMap({
+  category,
+  name,
+  nearMe,
+  customRadiusKm,
+  onZoomByHand,
+  onLeaveMyLocation,
+}: {
+  category: ChipCategory;
+  name: string;
+  nearMe: boolean;
+  customRadiusKm: number | null;
+  /** The radius of the view after the user zoomed or panned the map by hand. */
+  onZoomByHand: (radiusKm: number) => void;
+  /** The user moved the map away from their location by hand: "Mi ubicación" turns off. */
+  onLeaveMyLocation: () => void;
+}) {
   const { t } = useAppTranslation();
   const { radiusKm } = useSettings();
   const router = useRouter();
@@ -263,8 +318,26 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
   // Opens showing the whole search radius from Settings, and refits when the radius or the user's
   // location changes (the tab stays mounted while Settings changes the radius).
   const mapRef = useRef<MapView>(null);
+  // Apple Maps (iOS) never tells whether a region change came from a gesture (react-native-maps
+  // sends isGesture only with Google Maps), so the app tells its own moves apart: every automatic
+  // move goes through moveMap, and a finger on the map marks the rest as the user's.
+  const autoMoveUntil = useRef(0);
+  const touch = useRef({ down: false, liftedAt: 0 });
+  const moveMap = useCallback((region: Region) => {
+    autoMoveUntil.current = Date.now() + MAP_FIT_MS + AUTO_MOVE_GRACE_MS;
+    mapRef.current?.animateToRegion(region, MAP_FIT_MS);
+  }, []);
+  const movedByHand = (isGesture: boolean | undefined) => {
+    const now = Date.now();
+    if (now < autoMoveUntil.current) return false;
+    return (
+      isGesture === true || touch.current.down || now - touch.current.liftedAt < HAND_MOVE_GRACE_MS
+    );
+  };
   const initialRegion: Region = regionForRadius(location.coords, radiusKm);
   const fitted = useRef({ radiusKm, ...location.coords });
+  // While a searched area is shown, its circle has its own radius: don't fly back to the user.
+  const showingArea = useRef(false);
   useEffect(() => {
     const last = fitted.current;
     if (
@@ -275,8 +348,28 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
       return;
     }
     fitted.current = { radiusKm, ...location.coords };
-    mapRef.current?.animateToRegion(regionForRadius(location.coords, radiusKm), MAP_FIT_MS);
-  }, [radiusKm, location.coords]);
+    if (showingArea.current) return;
+    moveMap(regionForRadius(location.coords, radiusKm));
+  }, [radiusKm, location.coords, moveMap]);
+  // Turning "Mi ubicación" on in map view: read the device's position again and fly back to it,
+  // with the circle fitted around it. Turning it off leaves the map where it is.
+  const wasNearMe = useRef(nearMe);
+  const { refresh } = location;
+  useEffect(() => {
+    const was = wasNearMe.current;
+    wasNearMe.current = nearMe;
+    if (!nearMe || was) return;
+    void refresh().then((coords) => moveMap(regionForRadius(coords, customRadiusKm ?? radiusKm)));
+  }, [nearMe, refresh, customRadiusKm, radiusKm, moveMap]);
+  // Back to the presets (the radius button): fit the preset circle again. A zoom by hand sets a
+  // custom radius without moving the map.
+  const hadCustom = useRef(customRadiusKm !== null);
+  useEffect(() => {
+    const had = hadCustom.current;
+    hadCustom.current = customRadiusKm !== null;
+    if (!had || customRadiusKm !== null || showingArea.current) return;
+    moveMap(regionForRadius(location.coords, radiusKm));
+  }, [customRadiusKm, location.coords, radiusKm, moveMap]);
   const [region, setRegion] = useState<Region>(initialRegion);
   const [area, setArea] = useState<MapArea | null>(null);
 
@@ -296,11 +389,29 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
 
   // Places inside the radius circle: up to 200 one by one; with more in view, clusters (counting
   // only places inside the circle) that zoom in when tapped.
-  const places = usePlacesMap(area, location.coords, category, openNow);
+  const places = usePlacesMap(area, location.coords, category, name, nearMe, customRadiusKm);
+  // A searched area ("Zócalo") moves the circle there with its own radius; otherwise the circle is
+  // the user's radius around the user.
+  const searchedArea = places.data?.area ?? null;
+  const circle = searchedArea
+    ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
+    : { center: location.coords, radiusKm: customRadiusKm ?? radiusKm };
+  // Fly to a newly searched area, and back to the user when the search no longer names one.
+  const shownArea = useRef<string | null>(null);
+  const loaded = places.data !== undefined;
+  const { lat: centerLat, lng: centerLng } = circle.center;
+  const circleKm = circle.radiusKm;
+  // By place only: a zoom by hand changes the radius but must not fly the map anywhere.
+  const areaKey = searchedArea ? `${centerLat},${centerLng}` : null;
+  useEffect(() => {
+    if (!loaded || areaKey === shownArea.current) return;
+    shownArea.current = areaKey;
+    showingArea.current = areaKey !== null;
+    moveMap(regionForRadius({ lat: centerLat, lng: centerLng }, circleKm));
+  }, [loaded, areaKey, centerLat, centerLng, circleKm, moveMap]);
   const items = places.data?.kind === 'places' ? places.data.items : [];
   const clusters = places.data?.kind === 'clusters' ? places.data.clusters : [];
-  const fitCircle = () =>
-    mapRef.current?.animateToRegion(regionForRadius(location.coords, radiusKm), MAP_FIT_MS);
+  const fitCircle = () => moveMap(regionForRadius(circle.center, circle.radiusKm));
   // The compass needle follows the map's rotation; tapping it turns the map north-up again.
   const [heading, setHeading] = useState(0);
   // getCamera() answers asynchronously; when the map closes first (e.g. switching to the list)
@@ -320,7 +431,10 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
       })
       .catch(() => {});
   };
-  const pointNorth = () => mapRef.current?.animateCamera({ heading: 0 }, { duration: MAP_FIT_MS });
+  const pointNorth = () => {
+    autoMoveUntil.current = Date.now() + MAP_FIT_MS + AUTO_MOVE_GRACE_MS;
+    mapRef.current?.animateCamera({ heading: 0 }, { duration: MAP_FIT_MS });
+  };
   // "My location": read the position again and fit the radius circle around it.
   const [locating, setLocating] = useState(false);
   const goToMyLocation = async () => {
@@ -328,7 +442,7 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
     setLocating(true);
     try {
       const coords = await location.refresh();
-      mapRef.current?.animateToRegion(regionForRadius(coords, radiusKm), MAP_FIT_MS);
+      moveMap(regionForRadius(coords, circle.radiusKm));
     } finally {
       setLocating(false);
     }
@@ -336,15 +450,36 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
 
   return (
     // Any touch on the map (pan, zoom, pin) hides the keyboard.
-    <View className="flex-1" onTouchStart={() => Keyboard.dismiss()}>
+    <View
+      className="flex-1"
+      onTouchStart={() => {
+        Keyboard.dismiss();
+        touch.current.down = true;
+      }}
+      onTouchEnd={() => {
+        touch.current = { down: false, liftedAt: Date.now() };
+      }}
+      onTouchCancel={() => {
+        touch.current = { down: false, liftedAt: Date.now() };
+      }}
+    >
       <MapView
         ref={mapRef}
         style={{ flex: 1 }}
         initialRegion={initialRegion}
         onRegionChange={readHeading}
-        onRegionChangeComplete={(next) => {
+        onRegionChangeComplete={(next, details) => {
           setRegion(next);
           readHeading();
+          // Only the user's own zooms and pans: the map's own moves (fitting a circle, a cluster,
+          // the location button) keep the radius as it is.
+          // A pan alone leaves the scale (and so the radius) as it was.
+          if (movedByHand(details?.isGesture)) {
+            const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
+            if (Math.abs(handRadiusKm - circle.radiusKm) >= 0.05) onZoomByHand(handRadiusKm);
+            // The center moved by hand off the user: no longer "at my location".
+            if (nearMe && isAwayFrom(next, location.coords)) onLeaveMyLocation();
+          }
         }}
         showsCompass={false}
         showsUserLocation={location.source === 'device'}
@@ -352,8 +487,8 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
       >
         {/* The search radius from Settings, around the user's location. */}
         <Circle
-          center={{ latitude: location.coords.lat, longitude: location.coords.lng }}
-          radius={radiusKm * 1000}
+          center={{ latitude: circle.center.lat, longitude: circle.center.lng }}
+          radius={circle.radiusKm * 1000}
           strokeWidth={2}
           strokeColor={scheme === 'dark' ? RADIUS_COLORS.dark.stroke : RADIUS_COLORS.light.stroke}
           fillColor={scheme === 'dark' ? RADIUS_COLORS.dark.fill : RADIUS_COLORS.light.fill}
@@ -370,9 +505,7 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
           <ClusterMarker
             key={`${cluster.location.lat},${cluster.location.lng},${cluster.count}`}
             cluster={cluster}
-            onPress={() =>
-              mapRef.current?.animateToRegion(regionForBounds(cluster.bounds), MAP_FIT_MS)
-            }
+            onPress={() => moveMap(regionForBounds(cluster.bounds))}
           />
         ))}
       </MapView>
@@ -380,6 +513,8 @@ function PlacesMap({ category, openNow }: { category: ChipCategory; openNow: boo
         <MapCountLegend
           inView={places.data.total}
           inRadius={places.data.radiusTotal}
+          radiusKm={circle.radiusKm}
+          areaName={searchedArea?.name ?? null}
           onPress={fitCircle}
         />
       ) : null}
@@ -472,12 +607,12 @@ function SourceNote({ places }: { places: Place[] }) {
   );
 }
 
-/** A small light-amber bubble with the number of places it groups; wider for longer numbers. */
+/** A small lime-green bubble with the number of places it groups; wider for longer numbers. */
 function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: () => void }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const label = formatCount(cluster.count, locale);
-  const size = 16 + Math.min(label.length, 5) * 4;
+  const size = 20 + Math.min(label.length, 5) * 4;
   return (
     <Marker
       coordinate={{ latitude: cluster.location.lat, longitude: cluster.location.lng }}
@@ -497,7 +632,7 @@ function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: (
           justifyContent: 'center',
         }}
       >
-        <Text style={{ color: CLUSTER_COLORS.text, fontWeight: '700', fontSize: 9 }}>{label}</Text>
+        <Text style={{ color: CLUSTER_COLORS.text, fontWeight: '700', fontSize: 10 }}>{label}</Text>
       </View>
     </Marker>
   );
@@ -510,26 +645,31 @@ function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: (
 function MapCountLegend({
   inView,
   inRadius,
+  radiusKm,
+  areaName,
   onPress,
 }: {
   inView: number;
   inRadius: number;
+  radiusKm: number;
+  /** The searched area ("Zócalo"), when the circle is around it. */
+  areaName: string | null;
   onPress: () => void;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
-  const { radiusKm, units } = useSettings();
+  const { units } = useSettings();
   const distance = formatDistance(radiusKm, locale, units);
   const total = formatCount(inRadius, locale);
+  const shown = formatCount(inView, locale);
   const partial = inView < inRadius;
-  const label = partial
-    ? t('places.mapCountPartial', {
-        count: inRadius,
-        shown: formatCount(inView, locale),
-        total,
-        distance,
-      })
-    : t('places.mapCount', { count: inRadius, total, distance });
+  const label = areaName
+    ? partial
+      ? t('places.mapAreaCountPartial', { count: inRadius, shown, total, distance, area: areaName })
+      : t('places.areaCount', { count: inRadius, total, distance, area: areaName })
+    : partial
+      ? t('places.mapCountPartial', { count: inRadius, shown, total, distance })
+      : t('places.mapCount', { count: inRadius, total, distance });
   return (
     <View pointerEvents="box-none" className="absolute left-3 right-3 top-3 items-center">
       <Pressable
@@ -549,5 +689,78 @@ function MapCountLegend({
         ) : null}
       </Pressable>
     </View>
+  );
+}
+
+/**
+ * The search radius, changed in place: each tap picks the next choice in the user's unit and
+ * saves it to the same setting as Ajustes, so the list, the map, "Mi ubicación" and Ajustes always
+ * agree.
+ */
+function RadiusButton({
+  className,
+  customRadiusKm,
+  onClearCustom,
+}: {
+  className: string;
+  /** A radius from zooming the map by hand: shown in amber; a tap goes back to the presets. */
+  customRadiusKm: number | null;
+  onClearCustom: () => void;
+}) {
+  const { t } = useAppTranslation();
+  const locale = useLocale();
+  const { radiusKm, units, setRadiusKm } = useSettings();
+  const custom = customRadiusKm !== null;
+  const distance = formatDistance(customRadiusKm ?? radiusKm, locale, units);
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={t(custom ? 'places.radiusButtonCustom' : 'places.radiusButton', {
+        distance,
+      })}
+      accessibilityHint={t(custom ? 'places.radiusButtonCustomHint' : 'places.radiusButtonHint')}
+      onPress={() => (custom ? onClearCustom() : setRadiusKm(nextRadiusKm(radiusKm, units)))}
+      className={`min-w-12 items-center justify-center rounded-full border px-3 active:bg-neutral-100 dark:active:bg-neutral-800 ${
+        custom ? 'border-amber-500 bg-amber-50 dark:bg-amber-950' : 'border-lime-500 bg-lime-500'
+      } ${className}`}
+    >
+      <Text
+        className={`text-sm font-bold ${
+          custom ? 'text-amber-900 dark:text-amber-200' : 'text-lime-950'
+        }`}
+      >
+        {distance}
+      </Text>
+    </Pressable>
+  );
+}
+
+/**
+ * "Mi ubicación": off, the search text names an area to search around ("Zócalo"); on, it
+ * searches business names around the user within the chosen radius.
+ */
+function NearMeButton({ nearMe, onToggle }: { nearMe: boolean; onToggle: () => void }) {
+  const { t } = useAppTranslation();
+  const scheme = useColorScheme();
+  // Just the icon; screen readers announce "Mi ubicación" and whether it's on.
+  return (
+    <Pressable
+      accessibilityRole="switch"
+      accessibilityLabel={t('places.nearMe')}
+      accessibilityState={{ checked: nearMe }}
+      accessibilityHint={t('places.nearMeHint')}
+      onPress={onToggle}
+      className={`h-11 w-11 items-center justify-center rounded-full border ${
+        nearMe
+          ? 'border-lime-500 bg-lime-500'
+          : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
+      }`}
+    >
+      <Image
+        source={ICONS.locate}
+        style={{ width: 22, height: 22 }}
+        tintColor={nearMe ? CLUSTER_COLORS.text : scheme === 'dark' ? '#e5e5e5' : '#262626'}
+      />
+    </Pressable>
   );
 }

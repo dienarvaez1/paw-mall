@@ -84,6 +84,12 @@ export default function SettingsScreen() {
           value={settings.hideUnnamed}
           onChange={settings.setHideUnnamed}
         />
+        <SwitchRow
+          label={t('settings.onlyOpenNow')}
+          hint={t('settings.onlyOpenNowHint')}
+          value={settings.onlyOpenNow}
+          onChange={settings.setOnlyOpenNow}
+        />
       </Section>
 
       <Section title={t('settings.about')}>

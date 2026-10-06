@@ -8,7 +8,7 @@ describe('parseSettings', () => {
   it('reads stored values', () => {
     expect(
       parseSettings(
-        '{"radiusKm":25,"units":"km","onlyWithPhone":true,"onlyWithWebsite":true,"onlyWithSocial":true,"hideUnnamed":true}',
+        '{"radiusKm":25,"units":"km","onlyWithPhone":true,"onlyWithWebsite":true,"onlyWithSocial":true,"hideUnnamed":true,"onlyOpenNow":true}',
       ),
     ).toEqual({
       radiusKm: 25,
@@ -17,6 +17,7 @@ describe('parseSettings', () => {
       onlyWithWebsite: true,
       onlyWithSocial: true,
       hideUnnamed: true,
+      onlyOpenNow: true,
     });
     const miles = parseSettings(`{"radiusKm":${10 * 1.609344},"units":"mi"}`);
     expect(miles.units).toBe('mi');
@@ -37,6 +38,7 @@ describe('parseSettings', () => {
       onlyWithWebsite: false,
       onlyWithSocial: false,
       hideUnnamed: false,
+      onlyOpenNow: false,
     };
     expect(parseSettings(null)).toEqual(defaults);
     expect(parseSettings('{"units":"ft","onlyWithPhone":"yes"}')).toEqual(defaults);

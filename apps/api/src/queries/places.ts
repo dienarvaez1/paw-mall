@@ -15,10 +15,12 @@ import {
   URGENT_LIMIT,
   type UrgentResponse,
   type ValueSource,
+  detectCategory,
 } from '@paw-mall/shared';
 import { type SQL, sql } from 'drizzle-orm';
 
 import type { Database } from '../db/client';
+import { resolveArea, resolveAreaInText, splitAreaSearch } from './areas';
 
 type Point = { lat: number; lng: number };
 
@@ -81,6 +83,7 @@ type PlaceRow = {
   website_source: ValueSource | null;
   source_updated_on: string | null;
   registered_on: string | null;
+  owner_verified_on: string | null;
 };
 
 /**
@@ -94,6 +97,7 @@ function placeColumnsSql(locale: Locale, point?: Point) {
     CASE WHEN ${deadWebsite} THEN NULL ELSE p.website END AS website,
     CASE WHEN ${deadWebsite} THEN NULL ELSE p.website_source END AS website_source,
     p.social_url, p.source, p.phone_source, p.source_updated_on::text, p.registered_on::text,
+    (p.owner_verified_at AT TIME ZONE 'America/Mexico_City')::date::text AS owner_verified_on,
     ST_Y(p.location::geometry) AS lat, ST_X(p.location::geometry) AS lng,
     ${point ? sql`round((ST_Distance(p.location, ${pointSql(point)}) / 1000)::numeric, 1)` : sql`NULL`} AS distance_km,
     v.open24h, v.open24h_source, p.hours, ${openNowSql} AS open_now,
@@ -131,20 +135,113 @@ function toPlace(row: PlaceRow): Place {
     websiteSource: row.website_source,
     sourceUpdatedOn: row.source_updated_on,
     registeredOn: row.registered_on,
+    ownerVerifiedOn: row.owner_verified_on,
   };
 }
 
 /**
  * Visible places within the radius, nearest first, optionally in one category, with the user's
- * filters. With `q`, every word must appear in the name, city or state (or nearly: a typo); if
- * nothing matches, names close to the whole text are tried, which catches a typo in a short word
- * ("huelitas" → Huellitas) but would add noise to every search.
+ * filters. When `q` names an area ("Zócalo", "Roma Norte", "veterinaria en Coyoacán"), the search
+ * moves there: places within areaRadiusKm of the area, nearest to it first, the rest of `q` (if
+ * any) searched in names. Otherwise `q` searches names, cities and states around the user.
  */
 export async function listPlaces(
   db: Database,
   query: PlaceListQuery,
   locale: Locale,
 ): Promise<PlaceListResponse> {
+  const search = await interpretSearch(db, query);
+  const result = await searchPlaces(
+    db,
+    {
+      ...query,
+      ...search.point,
+      radiusKm: search.radiusKm,
+      q: search.words || undefined,
+      category: query.category ?? search.category ?? undefined,
+    },
+    locale,
+  );
+  return { ...result, area: search.area, searchCategory: search.category };
+}
+
+type SearchQuery = {
+  q?: string;
+  namesOnly?: boolean;
+  lat: number;
+  lng: number;
+  radiusKm: number;
+  areaRadiusKm: number;
+};
+
+/**
+ * What a search box text asks for, for the list and the map: a place named in it (unless
+ * namesOnly, i.e. "Mi ubicación" on) moves the search there within areaRadiusKm; business
+ * keywords ("vet") become a category; the rest is searched in names. "tlaxcala vet" → the
+ * veterinarian category within 5 km of Tlaxcala.
+ */
+async function interpretSearch(db: Database, query: SearchQuery) {
+  let point = { lat: query.lat, lng: query.lng };
+  let radiusKm = query.radiusKm;
+  let area: PlaceListResponse['area'] = null;
+  let text = query.q ?? '';
+  if (text && !query.namesOnly) {
+    const found = await findAreaSearch(db, text, point);
+    if (found) {
+      point = found.area.location;
+      radiusKm = query.areaRadiusKm;
+      area = { ...found.area, radiusKm };
+      text = found.business ?? '';
+    }
+  }
+  const { category, words } = detectCategory(text);
+  return { point, radiusKm, area, category, words };
+}
+
+/**
+ * Every word of `q` in the name, city or state of places aliased `p`, letter for letter, ignoring
+ * only case and accents (owner's rule): "tlaxcala" never matches "Ixtacala".
+ */
+function allWordsSql(q: string): SQL {
+  const searchText = sql`place_search_text(p.name, p.city, p.state)`;
+  const words = sql.join(
+    searchWords(q).map((word) => {
+      const text = sql`lower(f_unaccent(${word}))`;
+      return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!')`;
+    }),
+    sql` AND `,
+  );
+  return sql`(${words})`;
+}
+
+/**
+ * The area a search names and the business words around it: the whole text ("Zócalo"), "X en Y"
+ * or "X cerca de Y", or a place name anywhere ("tlaxcala vet", "veterinario tlaxcala"). A place
+ * inside a longer search must match exactly, so ordinary business names stay name searches
+ * unless they contain a real place.
+ */
+async function findAreaSearch(db: Database, q: string, near: { lat: number; lng: number }) {
+  const { business, area: areaText } = splitAreaSearch(q);
+  if (business) {
+    const area = await resolveArea(db, areaText, near);
+    if (area) return { area, business };
+  }
+  // The whole text as a place, then a place inside it ("tlaxcala vet"); names match exactly.
+  const whole = await resolveArea(db, q, near);
+  if (whole) return { area: whole, business: null };
+  const inside = await resolveAreaInText(db, q, near);
+  return inside ? { area: inside.area, business: inside.rest || null } : null;
+}
+
+/**
+ * Places within the radius of lat/lng; with `q`, every word (but the vague ones) must appear in
+ * the name, city or state, letter for letter (case and accents aside).
+ */
+async function searchPlaces(
+  db: Database,
+  query: PlaceListQuery,
+  locale: Locale,
+): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory'>> {
   const point = { lat: query.lat, lng: query.lng };
   const conditions = [
     visibleSql,
@@ -153,20 +250,8 @@ export async function listPlaces(
   ];
   if (!query.q) return pageOfPlaces(db, query, locale, conditions);
 
-  const searchText = sql`place_search_text(p.name, p.city, p.state)`;
-  const allWords = sql.join(
-    searchWords(query.q).map((word) => {
-      const text = sql`lower(f_unaccent(${word}))`;
-      return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!' OR ${text} <% ${searchText})`;
-    }),
-    sql` AND `,
-  );
-  const found = await pageOfPlaces(db, query, locale, [...conditions, sql`(${allWords})`]);
-  if (found.total > 0) return found;
-
-  const phrase = sql`lower(f_unaccent(${query.q}))`;
-  const nameText = sql`lower(f_unaccent(coalesce(p.name, '')))`;
-  return pageOfPlaces(db, query, locale, [...conditions, sql`${phrase} <% ${nameText}`]);
+  // Every word must match, letter for letter; no looser fallback (owner's rules).
+  return pageOfPlaces(db, query, locale, [...conditions, allWordsSql(query.q)]);
 }
 
 async function pageOfPlaces(
@@ -174,7 +259,7 @@ async function pageOfPlaces(
   query: Pick<PlaceListQuery, 'lat' | 'lng' | 'page' | 'pageSize'>,
   locale: Locale,
   conditions: SQL[],
-): Promise<PlaceListResponse> {
+): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory'>> {
   const where = sql.join(conditions, sql` AND `);
   const rows = await db.execute<PlaceRow & { total: number }>(sql`
     SELECT ${placeColumnsSql(locale, query)}, count(*) OVER()::int AS total
@@ -200,28 +285,19 @@ function plain(text: string): string {
   return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
-/** Words any place here could be described with, or that join words ("veterinaria en Toluca"). */
-const OPTIONAL_WORDS = new Set([
-  'veterinaria',
-  'veterinarias',
-  'tienda',
-  'tiendas',
-  'mascotas',
-  'en',
-  'de',
-  'del',
-  'la',
-  'el',
-  'y',
-]);
+/**
+ * Words too vague to require (owner's rule): every other word of a search must match. Business
+ * keywords ("veterinaria", "tienda") never get here; they become a category first.
+ */
+const IGNORED_WORDS = new Set(['en', 'la', 'el', 'de', 'del', 'los', 'las', 'y', 'para']);
 
 /**
- * Up to 6 words that must each match ("Veterinaria Huellitas en Coyoacán" → ["Huellitas",
- * "Coyoacán"]). Optional words are dropped unless the search has nothing else.
+ * Up to 6 words that must each match the name, city or state ("Huellitas de Coyoacán" →
+ * ["Huellitas", "Coyoacán"]). The ignored words are only searched when there's nothing else.
  */
 export function searchWords(q: string): string[] {
   const words = q.split(/[\s,.;]+/).filter(Boolean);
-  const required = words.filter((word) => !OPTIONAL_WORDS.has(plain(word)));
+  const required = words.filter((word) => !IGNORED_WORDS.has(plain(word)));
   return (required.length > 0 ? required : words).slice(0, 6);
 }
 
@@ -252,16 +328,31 @@ export async function placesForMap(
   locale: Locale,
 ): Promise<PlaceMapResponse> {
   const { minLng, minLat, maxLng, maxLat } = query.bbox;
-  const point = { lat: query.lat, lng: query.lng };
+  // The search box, as in the list: a place moves the circle there, keywords pick a category,
+  // and other words must appear in the names.
+  const { point, radiusKm, area, category, words } = await interpretSearch(db, query);
+  const filters = { ...query, category: query.category ?? category ?? undefined };
   const inBox = sql`p.location && ST_MakeEnvelope(${minLng}, ${minLat}, ${maxLng}, ${maxLat}, 4326)::geography`;
-  const inRadius = [visibleSql, withinRadiusSql(point, query.radiusKm), ...filterConditions(query)];
+  const inRadius = [
+    visibleSql,
+    withinRadiusSql(point, radiusKm),
+    ...filterConditions(filters),
+    ...(words ? [allWordsSql(words)] : []),
+  ];
 
   const [places, radiusTotal] = await Promise.all([
     pageOfPlaces(db, { ...point, page: 1, pageSize: query.limit }, locale, [...inRadius, inBox]),
     countPlaces(db, inRadius),
   ]);
   if (places.total <= query.limit) {
-    return { kind: 'places', items: places.items, total: places.total, radiusTotal };
+    return {
+      kind: 'places',
+      area,
+      searchCategory: category,
+      items: places.items,
+      total: places.total,
+      radiusTotal,
+    };
   }
 
   const cell = (maxLng - minLng) / GRID_COLUMNS;
@@ -288,7 +379,14 @@ export async function placesForMap(
       Number,
     ) as PlaceCluster['bounds'],
   }));
-  return { kind: 'clusters', clusters, total: places.total, radiusTotal };
+  return {
+    kind: 'clusters',
+    area,
+    searchCategory: category,
+    clusters,
+    total: places.total,
+    radiusTotal,
+  };
 }
 
 /** Every category with its name in `locale` and its number of visible places. */

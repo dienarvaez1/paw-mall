@@ -9,6 +9,8 @@ export const CHIP_CATEGORIES = [
   'groomer',
   'boarding',
   'feed_store',
+  'dog_trainer',
+  'pet_funeral',
   'public_vet_service',
 ] as const satisfies readonly (CategorySlug | null)[];
 export type ChipCategory = (typeof CHIP_CATEGORIES)[number];
@@ -19,10 +21,13 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   veterinarian: '#2563eb',
   public_vet_service: '#475569',
   groomer: '#9333ea',
-  boarding: '#0d9488',
+  // Not green: green is for map clusters (owner's rule).
+  boarding: '#4f46e5',
   boutique: '#db2777',
   pet_store: '#ea580c',
-  feed_store: '#65a30d',
+  feed_store: '#ca8a04',
+  pet_funeral: '#854d0e',
+  dog_trainer: '#0369a1',
 };
 const DEFAULT_COLOR = '#525252';
 

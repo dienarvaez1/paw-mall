@@ -39,7 +39,7 @@ describe('more formatting', () => {
 
 describe('radius labels in miles', () => {
   it('shows each mile choice as a whole number of miles', () => {
-    for (const miles of [3, 5, 10, 15, 25, 50]) {
+    for (const miles of [3, 5, 10, 15, 25, 50, 100]) {
       expect(formatDistance(miles * 1.609344, 'en', 'mi')).toBe(`${miles} mi`);
     }
   });

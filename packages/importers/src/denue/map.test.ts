@@ -83,6 +83,18 @@ describe('mapDenueRow on the sample file', () => {
     expect(await mapSample('9')).toBeNull();
   });
 
+  it('imports pet crematoriums and funeral homes by name, never ones for people', async () => {
+    expect(slugs(await placeFromSample('22'))).toEqual(['pet_funeral:name']);
+    expect(slugs(await placeFromSample('23'))).toEqual(['pet_funeral:name']);
+    expect(await mapSample('24')).toBeNull();
+  });
+
+  it('picks dog trainers by name in any class, but never gyms or training without animals', async () => {
+    expect(slugs(await placeFromSample('25'))).toEqual(['dog_trainer:name']);
+    expect(slugs(await placeFromSample('26'))).toEqual(['dog_trainer:name']);
+    for (const id of ['27', '28', '29']) expect(await mapSample(id)).toBeNull();
+  });
+
   it('imports feed stores, including names that only look like cruelty', async () => {
     expect(slugs(await placeFromSample('10'))).toEqual(['feed_store:activity']);
     expect(slugs(await placeFromSample('14'))).toEqual(['feed_store:activity']);
@@ -132,6 +144,13 @@ describe('categorize', () => {
 });
 
 describe('isCrueltyLinked', () => {
+  it('excludes "cock" in pet store names only, as a whole word', () => {
+    expect(isCrueltyLinked('TIENDA DE ALIMENTOS PARA ANIMALES BLACK COCK', '465911')).toBe(true);
+    expect(isCrueltyLinked('IMPLEMENTOS PARA MASCOTAS COCK HOUSE', '465911')).toBe(true);
+    expect(isCrueltyLinked('ESTETICA PARA COCKERS', '465911')).toBe(false);
+    expect(isCrueltyLinked('CLINICA VETERINARIA COCK', '541941')).toBe(false);
+  });
+
   it.each([
     'VENTA DE GALLOS DE COMBATE',
     'PALENQUE DE GALLOS EL REY',
@@ -139,6 +158,11 @@ describe('isCrueltyLinked', () => {
     'CRIANZA DE GALLOS',
     'CARNICERÍA DON PEPE',
     'RASTRO MUNICIPAL',
+    'NAVAJAS',
+    'JAULAS PARA GALLOS',
+    'VENTA DE ACCESORIOS PARA GALLOS HIRAM',
+    'VETERINARIA LA CASA DEL GALLERO',
+    'FINCA Y GALLOS EL INFIERNO',
   ])('excludes %s', (name) => {
     expect(isCrueltyLinked(name)).toBe(true);
   });
@@ -149,6 +173,9 @@ describe('isCrueltyLinked', () => {
     'PRODUCTOS DE CRIANZA PARA AVES DE CORRAL',
     'BODEGA EL RASTRO FERTILIZANTES',
     'FORRAJERIA EL GALLO DE ORO',
+    'VETERINARIA EL TORO',
+    'FORRAJES LOS DOS GALLOS',
+    'VETERINARIA ESPUELA DE ORO',
   ])('keeps %s', (name) => {
     expect(isCrueltyLinked(name)).toBe(false);
   });

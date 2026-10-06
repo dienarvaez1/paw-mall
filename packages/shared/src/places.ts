@@ -52,14 +52,23 @@ export const placeSchema = z.object({
   sourceUpdatedOn: z.string().nullable(),
   /** When the source first registered the business (first of the month), if known. */
   registeredOn: z.string().nullable(),
+  /** Date the owner's claim was approved ("Verificado por el dueño"); null when not verified. */
+  ownerVerifiedOn: z.string().nullable(),
 });
 export type Place = z.infer<typeof placeSchema>;
 
 export const DEFAULT_RADIUS_KM = 5;
-/** The largest radius in Settings is 50 miles (80.5 km). */
-export const MAX_RADIUS_KM = 100;
+/** The largest radius in Settings is 100 miles (160.9 km), the owner's choice (2026-10-05). */
+export const MAX_RADIUS_KM = 161;
 export const DEFAULT_PAGE_SIZE = 20;
 export const MAX_PAGE_SIZE = 200;
+/**
+ * When a search names an area ("Zócalo", "Roma Norte", "Coyoacán"), places within this distance
+ * of it: 5 km, or 3 mi for users who chose miles (the app sends that). The radius in Ajustes is
+ * left alone.
+ */
+export const AREA_RADIUS_KM = 5;
+
 /** Most places the map shows one by one; with more in view it shows clusters. */
 export const MAP_MAX_PLACES = 200;
 
@@ -104,13 +113,34 @@ export const placeListQuerySchema = z.object({
    * typos ignored). CDMX, DF and Edomex work too.
    */
   q: z.string().trim().min(1).max(100).optional(),
+  /** Radius around an area named by `q`; the Settings radius (radiusKm) stays as it is. */
+  areaRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(AREA_RADIUS_KM),
+  /** "true" searches `q` in business names only, even when it names an area. */
+  namesOnly: z.stringbool().optional(),
   ...placeFilters,
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),
 });
 export type PlaceListQuery = z.infer<typeof placeListQuerySchema>;
 
+export const searchAreaSchema = z.object({
+  name: z.string(),
+  kind: z.enum(['landmark', 'municipality', 'town', 'colonia']),
+  municipality: z.string().nullable(),
+  state: z.string(),
+  location: z.object({ lat: z.number(), lng: z.number() }),
+  radiusKm: z.number(),
+});
+export type SearchArea = z.infer<typeof searchAreaSchema>;
+
 export const placeListResponseSchema = z.object({
+  /**
+   * The area `q` named, when it did: places are then within area.radiusKm of it, nearest to it
+   * first, and their distances are from it.
+   */
+  area: searchAreaSchema.nullable().default(null),
+  /** The category the search's keywords named ("vet" → veterinarian), applied as a filter. */
+  searchCategory: categorySlugSchema.nullable().default(null),
   items: z.array(placeSchema),
   total: z.number().int().nonnegative(),
   page: z.number().int(),
@@ -124,6 +154,10 @@ export const placeMapQuerySchema = z.object({
   lat: latitude,
   lng: longitude,
   radiusKm,
+  /** The search box, as in the list: an area moves the map's search there; other text filters names. */
+  q: z.string().trim().min(1).max(100).optional(),
+  areaRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(AREA_RADIUS_KM),
+  namesOnly: z.stringbool().optional(),
   ...placeFilters,
   /** Most places to return one by one before clustering (tests use a small number). */
   limit: z.coerce.number().int().min(1).max(MAP_MAX_PLACES).default(MAP_MAX_PLACES),
@@ -140,6 +174,9 @@ export const placeClusterSchema = z.object({
 export type PlaceCluster = z.infer<typeof placeClusterSchema>;
 
 const mapCounts = {
+  /** The area the search named, as in the list: the circle is then around it. */
+  area: searchAreaSchema.nullable().default(null),
+  searchCategory: categorySlugSchema.nullable().default(null),
   /** Places in view (inside the box and the radius). */
   total: z.number().int(),
   /** Every place within radiusKm, in view or not. */

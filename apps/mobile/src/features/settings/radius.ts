@@ -3,10 +3,10 @@ import { KM_PER_MILE } from '@paw-mall/shared';
 export const UNIT_OPTIONS = ['km', 'mi'] as const;
 export type DistanceUnit = (typeof UNIT_OPTIONS)[number];
 
-/** Search radius choices in each unit's own round numbers, up to 50 miles. */
+/** Search radius choices in each unit's own round numbers, up to 100 miles (160 km). */
 export const RADIUS_OPTIONS = {
-  km: [5, 10, 15, 25, 50, 80],
-  mi: [3, 5, 10, 15, 25, 50],
+  km: [5, 10, 15, 25, 50, 80, 160],
+  mi: [3, 5, 10, 15, 25, 50, 100],
 } as const satisfies Record<DistanceUnit, readonly number[]>;
 
 export function toKm(value: number, unit: DistanceUnit): number {
@@ -29,4 +29,11 @@ export function closestRadiusKm(radiusKm: number, unit: DistanceUnit): number {
 /** True when the radius is one of the unit's choices (allowing for float rounding). */
 export function isRadiusOption(radiusKm: number, unit: DistanceUnit): boolean {
   return radiusOptionsKm(unit).some((option) => Math.abs(option - radiusKm) < 1e-6);
+}
+
+/** The map's radius button: the next choice in the unit, back to the smallest after the largest. */
+export function nextRadiusKm(radiusKm: number, unit: DistanceUnit): number {
+  const options = radiusOptionsKm(unit);
+  const current = options.findIndex((option) => Math.abs(option - radiusKm) < 1e-6);
+  return options[(current + 1) % options.length] ?? options[0] ?? radiusKm;
 }

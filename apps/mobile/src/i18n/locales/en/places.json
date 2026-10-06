@@ -18,7 +18,7 @@
   "registeredSince": "Registered by INEGI in {{year}}",
   "listCount_one": "{{total}} place within {{distance}}",
   "listCount_other": "{{total}} places within {{distance}}",
-  "searchPlaceholder": "Search by name, municipality or state",
+  "searchPlaceholder": "Search a colonia, city or landmark (e.g. Zócalo)",
   "clearSearch": "Clear search",
   "noMatchesNearby": "No places matching “{{query}}” within {{distance}}.",
   "noMatchesHint": "Check the spelling or try fewer words. Search covers your radius; you can widen it in Settings.",
@@ -41,11 +41,12 @@
     "groomer": "Grooming",
     "boarding": "Boarding",
     "feed_store": "Feed stores",
+    "dog_trainer": "Dog training",
+    "pet_funeral": "Pet funerals",
     "public_vet_service": "Public services"
   },
-  "openNowChip": "Open now",
   "noOpenPlaces": "No places open now with confirmed hours within {{distance}}.",
-  "noOpenPlacesHint": "Few businesses have confirmed hours yet. Turn off “Open now” to see them all, or check each one with “See hours”.",
+  "noOpenPlacesHint": "Few businesses have confirmed hours yet. Turn off “Only places open now” in Settings to see them all, or check each one with “See hours”.",
   "hours": {
     "title": "Hours",
     "openNow": "Open now",
@@ -70,5 +71,60 @@
     "unavailable": "Hours aren't available right now. Try again later.",
     "limit_reached": "You've reached today's lookup limit. Try again tomorrow.",
     "credit": "Hours, phone and website: Google Maps"
-  }
+  },
+  "ownerVerified": "Verified by the owner on {{date}}",
+  "report": {
+    "closed": {
+      "button": "Has this place closed?",
+      "confirm": "Report that this place is no longer open?",
+      "thanks": "Thanks. We'll review this place."
+    },
+    "cruelty": {
+      "button": "Report animal cruelty",
+      "confirm": "Report that this place is linked to animal cruelty (for example, a puppy mill, animal fights or slaughter)?",
+      "thanks": "Thanks for your report. We'll review it."
+    },
+    "privacy": "Your report is anonymous: we don't send your location or your details.",
+    "yes": "Yes, report"
+  },
+  "claim": {
+    "title": "Your business details",
+    "button": "Do you own this business?",
+    "intro": "Publish your business's phone, hours and website. We'll review your request before publishing and contact you if needed.",
+    "storeSection": "What will be published",
+    "phone": "Phone",
+    "website": "Website (optional)",
+    "vetSection": "Veterinary care",
+    "open24h": "Open 24 hours, every day",
+    "acceptsEmergencies": "Takes emergencies",
+    "hoursSection": "Hours",
+    "hoursHint": "If you close after midnight, write the closing time as is (for example, 20:00 to 02:00).",
+    "weekdays": "Monday to Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "open": "Opens",
+    "close": "Closes",
+    "closedDay": "Closed",
+    "timePlaceholder": "08:00",
+    "contactSection": "How do we reach you?",
+    "contactHint": "Only to review your request; it isn't published and is deleted after the review.",
+    "contactName": "Your name",
+    "contact": "Phone or email",
+    "consent": "I agree that Paw Mall uses these details to review my request. My contact details are deleted after the review.",
+    "submit": "Send request",
+    "invalid": "Check the details: you need at least a phone, hours, a website or a veterinary detail, plus your contact and your consent.",
+    "thanks": "We received your request. We'll review it and, if everything is right, publish your business's details."
+  },
+  "areaCount_one": "{{total}} place within {{distance}} of {{area}}",
+  "areaCount_other": "{{total}} places within {{distance}} of {{area}}",
+  "nearMe": "My location",
+  "nearMeHint": "On: searches business names near you, within the chosen radius. Off: searches around a colonia, city or landmark.",
+  "searchPlaceholderNearMe": "Search a business near you",
+  "radiusButton": "Search radius: {{distance}}",
+  "radiusButtonHint": "Tap for the next radius. It's used by the list, the map and “My location”, and saved in Settings.",
+  "mapAreaCountPartial_one": "{{shown}} of {{total}} place within {{distance}} of {{area}}",
+  "mapAreaCountPartial_other": "{{shown}} of {{total}} places within {{distance}} of {{area}}",
+  "categorySummary": "{{category}}: {{summary}}",
+  "radiusButtonCustom": "Custom radius: {{distance}}",
+  "radiusButtonCustomHint": "Set by zooming the map. Tap to go back to the Settings radius."
 }

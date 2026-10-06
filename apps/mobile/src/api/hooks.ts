@@ -6,6 +6,7 @@ import {
 } from '@paw-mall/shared';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
+import { toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
 import type { ChipCategory } from '@/lib/categories';
@@ -16,17 +17,37 @@ type Coords = { lat: number; lng: number };
 
 const PLACES_PAGE_SIZE = 50;
 
+/** Around an area the search names ("Zócalo"): 5 km, or 3 mi for users who chose miles. */
+const AREA_RADIUS = { km: 5, mi: 3 } as const;
+
+export function useAreaRadiusKm(): number {
+  const { units } = useSettings();
+  return toKm(AREA_RADIUS[units], units);
+}
+
 /**
- * Places within the search radius chosen in Settings, nearest first, loaded page by page; `name`
- * searches by name, city or state. Every key includes the locale, so switching language refetches
- * category names.
+ * Places within the search radius (Ajustes, or the radius button on the list and the map) of the
+ * user, nearest first, loaded page by page. With `nearMe` ("Mi ubicación" on), `name` searches
+ * business names only. Without it, a `name` that names an area (a colonia, a city or a landmark
+ * like the Zócalo) moves the search there within AREA_RADIUS; other text searches names, cities
+ * and states. Every key includes the locale, so switching language refetches category names.
  */
-export function usePlaces(coords: Coords, category: ChipCategory, name = '', openNow = false) {
+export function usePlaces(
+  coords: Coords,
+  category: ChipCategory,
+  name = '',
+  nearMe = false,
+  /** A radius the user set by zooming the map by hand; replaces the presets while set. */
+  customRadiusKm: number | null = null,
+) {
   const locale = useLocale();
-  const { radiusKm } = useSettings();
+  const settings = useSettings();
   const filters = usePlaceFilters();
+  const presetAreaRadiusKm = useAreaRadiusKm();
+  const radiusKm = customRadiusKm ?? settings.radiusKm;
+  const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
   return useInfiniteQuery({
-    queryKey: ['places', locale, radiusKm, filters, coords, category, name, openNow],
+    queryKey: ['places', locale, radiusKm, filters, coords, category, name, nearMe, areaRadiusKm],
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
       apiGet(
@@ -36,7 +57,8 @@ export function usePlaces(coords: Coords, category: ChipCategory, name = '', ope
           radiusKm,
           category: category ?? undefined,
           q: name || undefined,
-          openNow: openNow || undefined,
+          areaRadiusKm: name ? areaRadiusKm : undefined,
+          namesOnly: (name && nearMe) || undefined,
           ...filters,
           pageSize: PLACES_PAGE_SIZE,
           page: pageParam,
@@ -59,13 +81,29 @@ export function usePlacesMap(
   area: MapArea | null,
   coords: Coords,
   category: ChipCategory,
-  openNow = false,
+  name = '',
+  nearMe = false,
+  customRadiusKm: number | null = null,
 ) {
   const locale = useLocale();
-  const { radiusKm } = useSettings();
+  const settings = useSettings();
   const filters = usePlaceFilters();
+  const presetAreaRadiusKm = useAreaRadiusKm();
+  const radiusKm = customRadiusKm ?? settings.radiusKm;
+  const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
   return useQuery({
-    queryKey: ['places-map', locale, filters, area, coords, radiusKm, category, openNow],
+    queryKey: [
+      'places-map',
+      locale,
+      filters,
+      area,
+      coords,
+      radiusKm,
+      areaRadiusKm,
+      category,
+      name,
+      nearMe,
+    ],
     enabled: area !== null,
     placeholderData: (previous) => previous,
     queryFn: () => {
@@ -77,7 +115,10 @@ export function usePlacesMap(
           ...coords,
           radiusKm,
           category: category ?? undefined,
-          openNow: openNow || undefined,
+          // The search box, as in the list (see usePlaces).
+          q: name || undefined,
+          areaRadiusKm: name ? areaRadiusKm : undefined,
+          namesOnly: (name && nearMe) || undefined,
           ...filters,
         },
         locale,

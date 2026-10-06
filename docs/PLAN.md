@@ -29,7 +29,8 @@ Principles:
   shoppers can report a listing that slips through.
 
 Region: the same six states as Ferre Mall (Ciudad de México, Estado de México, Morelos, Hidalgo,
-Puebla, Tlaxcala), so the data work is known.
+Puebla, Tlaxcala), so the data work is known, plus Guerrero, Michoacán and Querétaro, added on
+2026-10-05 when the owner extended the search radius to 100 miles (160 km).
 
 ## Relationship to Ferre Mall
 
@@ -219,7 +220,7 @@ Copy these rules into `CLAUDE.md` at the repo root.
 | ------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
 | Repo visibility                 | Private                                      | Public exposes plans and data work                                                   |
 | App name and bundle ID          | "Paw Mall" as a working name                 | Hard to change after store release                                                   |
-| Region                          | Ferre Mall's six states                      | Data volume and the map center                                                       |
+| Region                          | Ferre Mall's six states + Gro., Mich., Qro.  | Data volume and the map center                                                       |
 | Shared code with Ferre Mall     | Copy now, extract a package later            | Avoids coupling two young projects                                                   |
 | Who uses it                     | Pet owners, no login                         | Owner claims and policy confirmations work without accounts; reviews would need them |
 | Pet-friendly coverage at launch | Curated CDMX restaurants and lodging         | Quality over breadth; the data is user-sourced                                       |

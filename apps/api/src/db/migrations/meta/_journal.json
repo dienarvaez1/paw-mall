@@ -50,6 +50,34 @@
       "when": 1791237844916,
       "tag": "0006_place_open_now",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791240619211,
+      "tag": "0007_trust",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791244237858,
+      "tag": "0008_pet_funeral_category",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1791249175509,
+      "tag": "0009_search_areas",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1791263949866,
+      "tag": "0010_dog_trainer_category",
+      "breakpoints": true
     }
   ]
 }

@@ -23,6 +23,9 @@ phase at a time. The rollout of each phase (branch, pull request, status, checks
 - Credit every data source where its data appears (INEGI, Overture Maps Foundation, Google Maps,
   cultural sources).
 - No scraping of sites whose terms forbid it; no CAPTCHA bypassing.
+- **Reporter privacy:** user reports (closed, animal cruelty) are stored only in the app's own
+  tables. Never record location or personal information from the reporting phone (no
+  coordinates, IP, name or contact); only a random id the app generates, to count each phone once.
 - **No animal cruelty:** never list puppy mills, kill shelters, slaughterhouses or butchers.
   Pet stores that sell animals, and vets and feed stores that serve farm animals, are fine.
 
@@ -40,7 +43,8 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 
 - Repo visibility: private.
 - App name and bundle ID: "Paw Mall" is a working name; don't set a store bundle ID.
-- Region: Ciudad de México, Estado de México, Morelos, Hidalgo, Puebla, Tlaxcala; locale `es-MX`.
+- Region: Ciudad de México, Estado de México, Morelos, Hidalgo, Puebla, Tlaxcala, plus Guerrero,
+  Michoacán and Querétaro (added 2026-10-05 with the 100-mile radius); locale `es-MX`.
 - Shared code with Ferre Mall: copy now, extract a package later.
 - Audience: pet owners, no login.
 - Pet-friendly coverage at launch: curated CDMX restaurants and lodging.
@@ -55,6 +59,12 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 - App: `pnpm --filter mobile start`, then scan the QR code with Expo Go.
 - Data: `pnpm places:import` (DENUE, about 15 s from the cached zips), then
   `pnpm places:enrich-overture` and `pnpm places:check-websites` (visits each business website
-  once). Each is safe to re-run; `pnpm places:import --dry-run` reports without writing.
+  once), then `pnpm places:areas` (colonias, cities and landmarks for the search box). Each is
+  safe to re-run; `pnpm places:import --dry-run` reports without writing.
+- Landmarks: `pnpm places:landmarks` refreshes the committed Wikidata snapshot
+  (`packages/importers/data/landmarks-wikidata.json`); run `pnpm places:areas` after it. The
+  curated `data/landmarks.json` wins over Wikidata on the same name.
+- Owner review: `pnpm places:claims` (owner claims) and `pnpm places:reports` (closed and
+  animal-cruelty reports); see each command's header for options.
 - Google "Ver horario": Paw Mall's own Google Cloud project; setup and limits in
   `docs/GOOGLE-PLACES.md`. The key lives only in `apps/api/.dev.vars`; never print or commit it.

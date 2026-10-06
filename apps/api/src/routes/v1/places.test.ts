@@ -131,15 +131,32 @@ describe('GET /v1/categories', () => {
 });
 
 describe('GET /v1/places search and filters', () => {
-  it('finds every word in the name or city, ignoring accents and small typos', async () => {
+  it('finds every word in the name or city, letter for letter, ignoring case and accents', async () => {
     const byName = placeListResponseSchema.parse((await getPlaces('q=lejana')).body);
     expect(byName.items.map((p) => p.name)).toEqual(['Veterinaria Lejana']);
     const byCity = placeListResponseSchema.parse(
-      (await getPlaces('q=veterinaria%20coyoacan')).body,
+      (await getPlaces('q=veterinaria%20coyoacan&namesOnly=true')).body,
     );
     expect(byCity.items.map((p) => p.name)).toEqual(['Veterinaria Lejana']);
+    const accents = placeListResponseSchema.parse((await getPlaces('q=CERCÁNA')).body);
+    expect(accents.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);
+    // A typo or a word that only sounds alike matches nothing ("tlaxcala" is not "Ixtacala").
     const typo = placeListResponseSchema.parse((await getPlaces('q=cercanna')).body);
-    expect(typo.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);
+    expect(typo.total).toBe(0);
+  });
+
+  it('requires every word, except en, la, el, de, del, los, las, y and para', async () => {
+    const both = await getPlaces('q=lejana%20coyoacan&namesOnly=true');
+    expect(placeListResponseSchema.parse(both.body).items.map((p) => p.name)).toEqual([
+      'Veterinaria Lejana',
+    ]);
+    // "tlalpan" matches nothing, so nothing is listed, not just the "lejana" matches.
+    const missing = await getPlaces('q=lejana%20tlalpan&namesOnly=true');
+    expect(placeListResponseSchema.parse(missing.body).total).toBe(0);
+    const vague = await getPlaces('q=la%20lejana%20de%20los%20y%20para%20del%20las&namesOnly=true');
+    expect(placeListResponseSchema.parse(vague.body).items.map((p) => p.name)).toEqual([
+      'Veterinaria Lejana',
+    ]);
   });
 
   it('keeps only places with a phone or a live website', async () => {

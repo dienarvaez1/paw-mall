@@ -28,6 +28,10 @@ function RootStack() {
         name="place/[id]"
         options={{ title: t('places.title'), headerBackButtonDisplayMode: 'minimal' }}
       />
+      <Stack.Screen
+        name="claim/[placeId]"
+        options={{ title: t('places.claim.title'), headerBackButtonDisplayMode: 'minimal' }}
+      />
     </Stack>
   );
 }

@@ -9,7 +9,11 @@
     "check-websites": "node src/websites/cli.ts",
     "lint": "eslint .",
     "typecheck": "tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "claims": "node src/review/claims-cli.ts",
+    "reports": "node src/review/reports-cli.ts",
+    "areas": "node src/areas/cli.ts",
+    "landmarks": "node src/areas/wikidata-cli.ts"
   },
   "dependencies": {
     "@duckdb/node-api": "1.5.6-r.1",

@@ -32,19 +32,26 @@ checked) · **Blocked**.
 | 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
 | 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
 | 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | In progress | 2026-10-05 | —          |
-| 5     | Trust               | `phase-5/trust`           | —   | Not started | —          | —          |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done        | 2026-10-05 | 2026-10-05 |
+| 5     | Trust               | `phase-5/trust`           | #6  | In review   | 2026-10-05 | —          |
 | 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
 | 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
 
 ## Pending owner reviews
 
-Decisions the owner will make after seeing the data in the app. Each one becomes a rule in the
-importers (and a note in the phase that applies it).
+Decisions and discussions the owner has left for later. Each one, once decided, becomes a rule or
+a task (and a note in the phase that applies it).
 
-| Opened     | Review                                                                                                                                                                                                                                                                                                                               | Status                                |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
-| 2026-10-05 | **Which other businesses aren't suitable for Paw Mall.** The owner accepted Phase 2's data as is and will list unsuitable businesses once they can browse it in the app (Phase 3). Candidates raised so far: Petland (sells puppies), wholesale vet-medicine distributors in 434112, live-animal sellers, municipal control centers. | Open: review in the app after Phase 3 |
+| Opened     | Review                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Status                                |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| 2026-10-05 | **Which other businesses aren't suitable for Paw Mall.** The owner accepted Phase 2's data as is and will list unsuitable businesses once they can browse it in the app (Phase 3). Candidates raised so far: Petland (sells puppies), wholesale vet-medicine distributors in 434112, live-animal sellers, municipal control centers, the 29 pet businesses inside Mercado Sonora (known for live animal sales; reported in the press for illegal wildlife trade), and rooster names that may or may not be cockfighting: "Alimento para gallos", "Gallo giro", "Galleritos", "Forrajería El Jaripeo" (a rodeo), "La Espuela" / "Espuela de Oro" (a spur: horses or fighting cocks), all kept for now; and "Navajas y afilación" (excluded as cockfighting blades, possibly a knife sharpener). | Open: review in the app after Phase 3 |
+| 2026-10-05 | **SAT check for owner claims (RFC + idCIF), deferred by the owner.** Phase 5 was planned with Ferre Mall's check of the owner's Constancia de Situación Fiscal through SAT's public QR validation page. The owner deferred it on 2026-10-05; decide whether and when to add it before claims are opened to real owners.                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Open: deferred from Phase 5           |
+| 2026-10-05 | **An admin page for Paw Mall.** Reviewing claims and reports is command-line only (`pnpm places:claims`, `pnpm places:reports`). The owner wants to discuss an admin page later, probably after all phases are completed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Open: after Phase 7                   |
+| 2026-10-05 | **How to show "sin nombre" businesses and INEGI's dates.** 1,689 places (about 7%) are named "… Sin Nombre" in DENUE: real, still-listed businesses without a trade name, not a sign of closure. Options: hide them by default (Ajustes switch on), show "(sin nombre comercial)", or both. Also whether "Registrado por INEGI en 2010" should read "En el directorio del INEGI desde 2010" (July 2010 is DENUE's first edition, not an opening date).                                                                                                                                                                                                                                                                                                                                         | Open: owner to choose                 |
+| 2026-10-05 | **More DENUE fields to use.** Market or plaza and stall number (1,938 places, e.g. Mercado Sonora), interior numbers missing from addresses (1,504), staff size for ranking Urgencias (960 with 6+ people), business email (2,883), semi-fixed stalls (187). Suggested: market/stall and interior numbers in addresses first.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Open: owner to choose                 |
+| 2026-10-05 | **Area search on the map, and more landmarks.** Area search works in the list; the map still shows the area around the user (search is off in map mode, as in Ferre Mall). Options: center the map on a searched area; add landmarks outside Mexico City (Puebla, Cuernavaca, Toluca, Querétaro…) to `data/landmarks.json`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Open: owner to choose                 |
+| 2026-10-05 | **Dog walkers and pet sitters.** No category: DENUE has 4. Options: import Overture's dog walkers and pet sitters as listings (about 105 in CDMX; many are individuals, so review privacy first), or a "register your business" flow so walkers can add themselves.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Open: owner to choose                 |
+| 2026-10-05 | **Import neighboring states for the 100-mile radius?** Guerrero, Michoacán and Querétaro are now imported (owner's decision, 2026-10-05).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Done in Phase 5 (#6)                  |
 
 ## Phase details
 
@@ -203,7 +210,7 @@ importers (and a note in the phase that applies it).
 - **Done when:** Urgencias shows the nearest open vet with call and directions in one tap, and
   says clearly when hours are unconfirmed.
 - **Branch / PR:** `phase-4/emergency-vets` / #5
-- **Status:** In review
+- **Status:** Done. Squash-merged into `main` as `c30d151` on 2026-10-05; branch deleted.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 122 tests (shared 15, api 31, importers 39, mobile 37), including Ferre
@@ -251,18 +258,285 @@ importers (and a note in the phase that applies it).
 
 ### Phase 5 — Trust
 
-- **Scope:** owner claims with the SAT check, closed-business reports, owner-verified badges;
-  optional cédula profesional check only after confirming the registry's terms.
+- **Scope:** owner claims (SAT check deferred by the owner), closed-business and animal-cruelty
+  reports, owner-verified badges; optional cédula profesional check only after confirming the
+  registry's terms.
 - **Done when:** an approved claim shows "Verificado por el dueño" and its hours drive "open now".
-- **Branch / PR:** `phase-5/trust` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-5/trust` / #6
+- **Status:** In review (owner asked to merge on 2026-10-06)
 - **Checks:**
-  - [ ] `pnpm lint`
-  - [ ] `pnpm typecheck`
-  - [ ] `pnpm test`
-  - [ ] Done-when check on device
-- **Notes:** —
-- **Follow-ups:** —
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 141 tests (shared 18, api 37, importers 44, mobile 42), including report
+        thresholds, the privacy rule (reports with location or personal fields are rejected;
+        `place_reports` holds only id, place, reason, random id and date), and claim
+        approval/rejection against the database
+  - [x] Migrations build a fresh database; schema and migrations in sync
+  - [x] Done-when check, end to end on real data then reverted: a claim for Hospital Veterinaria
+        Rampu sent through the API (as the app does), listed by `pnpm places:claims`, approved
+        with `--approve`. The API and the iOS simulator showed "Verificado por el dueño el 5 de
+        octubre de 2026", the owner's hours, "Abierto ahora" (Mon 16:53, hours 09:00–21:00), and
+        Rampu first in Urgencias; the contact was deleted. Rampu was then restored exactly (0
+        verified places, 0 claims left).
+  - [x] Owner check on a phone: open a place, try "¿Eres el dueño?" and the two report buttons.
+        The owner tested many of this phase's changes on an iPhone and Android while asking for
+        them, and asked to merge on 2026-10-06 without reporting open problems; these two flows
+        weren't reported on specifically.
+- **Notes:**
+  - **Deferred by the owner (2026-10-05):** the SAT check of owner claims (RFC and idCIF from the
+    Constancia de Situación Fiscal, validated on SAT's public QR page as in Ferre Mall). Tracked
+    in "Pending owner reviews" so it isn't forgotten. Claims are reviewed by hand meanwhile.
+  - **Owner decisions (2026-10-05):** users can report "Maltrato animal" as well as "¿Cerró?".
+    Reports are stored only in an internal table of the app and reviewed with
+    `pnpm places:reports`; nothing is emailed or sent to third parties. **Privacy rule:** never
+    record location or personal information from the reporting phone (no coordinates, IP, name or
+    contact), only a random id the app generates to count each phone once (now in CLAUDE.md). An
+    admin page is to be discussed after all phases (see "Pending owner reviews").
+  - Vet details owners can send: open 24 hours and takes emergencies (the default proposed;
+    species treated can come later).
+  - Adopted from Ferre Mall: the claim form (without the SAT section), claim review command,
+    closed reports with the 3-phones-in-90-days rule, report review command, verified badge.
+  - New for Paw Mall: "Reportar maltrato animal" (hides after 2 phones, pending review); vet
+    answers in claims (open 24 hours replaces the name hint with an owner answer; takes
+    emergencies), shown only for vets; overnight hours in the claim form; a privacy line on every
+    report confirm ("no enviamos tu ubicación ni tus datos"); API rejects any extra field on a
+    report.
+  - Review commands: `pnpm places:claims [--approve N | --reject N]` and
+    `pnpm places:reports [--restore N | --confirm N --reason closed|cruelty]`. Confirmed reports
+    keep a place hidden across re-imports.
+  - Cédula profesional check: off, as planned (registry terms not confirmed).
+  - **Owner decision (2026-10-05): pet crematoriums and funeral homes** are a new category
+    (`pet_funeral`, "Crematorio y funeraria para mascotas", chip "Funerarias"). The importer picks
+    them by name (a funeral word plus an animal word) from 812990 and 812310 (servicios
+    funerarios), so the 4,295 funeral homes for people stay out: 20 places, e.g. "Crematorio de
+    Mascotas Memorial Pets", "Mictlan Crematorio para Mascotas", "Pets In The Sky". Migration 0008.
+  - DENUE findings while reviewing the data with the owner: "sin nombre" businesses (1,689) come
+    from DENUE itself and look active (74.6% registered 2019 or later vs 67.2% of named ones);
+    the oldest registration date is July 2010, shared by 4,555 places (DENUE's first edition);
+    unused DENUE fields with value are listed in "Pending owner reviews".
+  - **Owner decision (2026-10-05): search radius up to 100 miles (160 km)** "for more coverage
+    on data". Ajustes adds 160 km and 100 mi; the API accepts up to 161 km (was 100). From the
+    Zócalo, 100 mi covers 20,225 places (95% of those imported) vs 15,386 at 50 mi; list, map and
+    search requests at that radius take under 0.15 s locally. The circle's edge reaches states
+    that aren't imported. Urgencias keeps its own 25 km radius.
+  - **Owner decision (2026-10-05): import Guerrero, Michoacán and Querétaro** (DENUE
+    `denue_12`, `denue_16`, `denue_22`; 15.6, 26.9 and 10.4 MB). The plan's region is now nine
+    states (PLAN.md and CLAUDE.md updated). Import: 25,443 places (+4,205); Guerrero 1,058,
+    Michoacán 2,182, Querétaro 982. Within 100 mi of the Zócalo: 20,902 places (was 20,225).
+    Overture's download box now covers the nine states: 16,398 pet-type places, 3,347 matched
+    (1,410 phones, 650 websites filled). Website checks: 1,279 sites, 568 working, 662 dead.
+  - **Cockfighting rule widened** after reviewing the new states' rooster names (57 in the three
+    states): gear and breeders are now excluded too (navajas, cages/accessories/products for
+    roosters, galleros, rooster fincas). Exclusions went from 8 to 39, including 17 places in the
+    original six states that the old patterns missed (removed on re-import). Rooster or bull names
+    alone stay ("Veterinaria El Gallo de Oro", "Veterinaria El Toro"); ambiguous names are listed
+    for the owner in "Pending owner reviews".
+  - **Owner rule (2026-10-05): "cock" in pet store names** (DENUE 465911, whole word) is excluded,
+    after the owner found "Black Cock", a store selling feed for fighting cocks. It removed 2:
+    "Tienda de alimentos para animales Black Cock" and "Implementos para mascotas Cock House".
+    "Cocker"/"Cockers" (the dog breed, in a vet and a groomer) stay. Exclusions: 41; places:
+    25,441.
+  - **Owner request (2026-10-05): "Abierto ahora" moved to Ajustes.** The chip added to
+    Explorar in Phase 4 is now a saved switch, "Solo lugares abiertos ahora", after the other
+    switches in Ajustes → Lugares. It filters the list and the map like the other place filters;
+    Urgencias is unchanged (it already puts open places first).
+  - **Owner request (2026-10-05): search by colonia, landmark and city.** Typing an area in
+    Explorar's search box ("Zócalo", "Roma Norte", "Coyoacán", "Toluca") moves the search there:
+    places within **5 km (3 mi for users who chose miles)** of the area, nearest to it first,
+    with distances from it. The radius in Ajustes is left alone. "Veterinaria en Coyoacán" (or
+    "cerca de") searches business words near the area; a link under the header searches the same
+    text in business names instead. Names shared by several areas ("Centro") resolve to the one
+    nearest the user; one-letter typos are tolerated (trigram similarity 0.65, chosen so everyday
+    pet words such as "animalia" stay business searches).
+  - Where the areas come from (`pnpm places:areas`, new `search_areas` table, migration 0009):
+    municipalities (754), towns (1,635) and colonias (23,332) are centered on the median position
+    of **all** 2.65 million DENUE businesses in the nine states (not only pet ones; colonias need
+    5+ businesses, towns 20+). Landmarks (15, plus aliases: 33 names) are a curated list in
+    `packages/importers/data/landmarks.json`; each was checked against Overture Maps (matching
+    listings within 60 m). Overture's own landmark points were too scattered to use directly
+    (e.g. "Zócalo" entries 2–11 km off). Rebuild the areas after each DENUE import.
+  - Tested: API (area resolution, 5 km vs 3 mi, "X en Y", nearest of duplicate names, names-only,
+    typo threshold), importer (median centers, minimum counts, landmark list). Checked with curl
+    from Polanco: "Zocalo" → 1,237 places within 5 km of the Zócalo; "Roma Norte", "col. condesa",
+    "Toluca", "Bellas Artes" resolve as expected; "huellitas" stays a name search. Typing can't be
+    automated in the simulator; the owner checks it on a phone.
+  - **Owner request (2026-10-05): "Mi ubicación" toggle**, a chip left of "Todos", off by
+    default. Off: the search text names an area (landmark, colonia, city) and the search
+    centers there within 5 km (3 mi); text that names no area still searches business names
+    around the user. On: the text searches business names only, around the user, within the
+    Ajustes radius. The placeholder follows the toggle ("Busca una colonia, ciudad o lugar (ej.
+    Zócalo)" / "Busca un negocio cerca de ti"). It replaces the "Buscar en nombres" link added
+    with area search; the area header now points to the toggle instead.
+  - **Owner change (2026-10-05): "Mi ubicación" on always searches 3 mi (5 km) around the
+    user**, the same distance as area searches, ignoring the Ajustes radius (first built with the
+    Ajustes radius). The Ajustes radius still applies to plain browsing (toggle off, empty search)
+    and to the map. Example: "huellitas" near the Zócalo finds 7 places within 3 mi vs 216 within
+    100 mi.
+  - **Owner request (2026-10-05): a radius button on the map**, above the compass and location
+    buttons, showing the current radius ("5 km"). Each tap picks the next choice in the user's
+    unit (5 → 10 → 15 → 25 → 50 → 80 → 160 km, or 3 → … → 100 mi, then back), saved to the same
+    setting as Ajustes, so both always agree; the map then refits the circle around the user, as
+    the location button does. The "Mi ubicación" chip keeps its fixed 3 mi (5 km) for name
+    searches. Not seen on the simulator (switching to the map needs a tap); cycling is unit
+    tested.
+  - **Owner request (2026-10-05): distance wording in the list.** When a search names an area
+    ("Zócalo", "Mi ubicación" off), distances are from that area and read just "0.3 mi" /
+    "0.3 km". When they're from the user ("Mi ubicación" on, plain browsing, or a name that isn't
+    an area), they read "0.3 mi away" / "a 0.3 km". Urgencias and the map are always from the
+    user and unchanged.
+  - **Owner request (2026-10-05): one radius for the list, the map and "Mi ubicación".** The
+    map's radius button also appears in list view, next to Lista/Mapa (on the map it stays over
+    the map); both change the same saved radius as Ajustes. "Mi ubicación" searches use that
+    radius again instead of the fixed 3 mi (5 km) set earlier. Area searches ("Zócalo") keep
+    5 km (3 mi) around the area. Seen on the simulator in list view.
+  - **Owner rule (2026-10-05), replacing the earlier distance wording: tied to "Mi ubicación".**
+    Off: list distances read just "0.3 mi" / "0.3 km", whatever the search. On: "0.3 mi away" /
+    "a 0.3 km". Seen on the simulator (off).
+  - **A place name at the end of a search** now counts as an area search when "Mi ubicación" is
+    off: "Veterinario Tlaxcala" searches "veterinario" within 5 km (3 mi) of Tlaxcala (69 places,
+    nearest "Centro Veterinario Tlaxcala"; before, it searched names around the user and found 1
+    unrelated place). Only an exact area name counts at the end. Consequence: "veterinaria la paz"
+    searches vets near La Paz (Edomex) rather than a business called "Veterinaria La Paz"; with
+    "Mi ubicación" on, text is always a business-name search.
+  - **Owner request (2026-10-05): a fixed results summary.** The line "69 lugares a menos de
+    5 km de Tlaxcala" / "1,237 lugares a menos de 5 km" now stays above the list while it scrolls
+    (it used to scroll away with the first rows). It's a single line; the hint under area results
+    ("activa «Mi ubicación»…") was dropped, since the placeholder and the chip explain the toggle.
+    The category chips also keep their own height now (the list used to squeeze them).
+  - **Owner request (2026-10-05):** the summary line is bold, in the darkest text color.
+  - **Owner request (2026-10-05): Explorar's top rows reordered.** 1) search box; 2) Lista,
+    Mapa, "Mi ubicación" and the radius button ("5 km"; on the map it stays over the map); 3)
+    category chips; then the bold summary. Seen on the simulator: row 2 fits on an iPhone 17 Pro
+    Max in Spanish.
+  - **Owner request (2026-10-05): a steady second row.** "Mi ubicación" is icon-only (location
+    icon; screen readers still say "Mi ubicación" and on/off). The radius button stays in the
+    row on the map too, so Lista and Mapa no longer resize when switching; the radius button that
+    floated over the map was removed as a duplicate (the compass and location buttons remain).
+  - **Owner request (2026-10-05): search on the map.** The search box is no longer grayed out in
+    map view, and it works there as in the list: with "Mi ubicación" off, a place ("Zócalo",
+    "Veterinario Tlaxcala") flies the map to it, draws its 5 km (3 mi) circle, and the legend
+    reads "N de M lugares a menos de 5 km de Tlaxcala"; other text, or "Mi ubicación" on, keeps
+    the circle around the user and shows only matching names. Clearing the search flies back to
+    the user. API: `GET /v1/places/map` takes `q`, `areaRadiusKm`, `namesOnly` and returns `area`
+    (tested). Not seen on the simulator (the map needs a tap); the owner checks it on a phone.
+  - **Owner request (2026-10-05): place and keyword in any order.** The search finds a place
+    name anywhere in the text (longest exact match wins; keywords and fillers are never taken for
+    places) and turns business keywords into a category (`detectCategory` in packages/shared:
+    vet/veterinario → Veterinarias, hospital/urgencias → Hospitales, tienda/pet shop → Tiendas,
+    estética/groomer → Estéticas, pensión → Pensiones, forrajería → Forrajerías,
+    crematorio/funeraria → Funerarias, antirrábico → Servicios públicos). "tlaxcala vet",
+    "vet tlaxcala", "Veterinario Tlaxcala" and "veterinario en tlaxcala" all list the 54 vets
+    within 3 mi of Tlaxcala, including vets whose names don't say "veterinario". Remaining words
+    search names ("roma norte huellitas"). A selected chip wins over a keyword. Keywords also
+    work around the user ("vet" → vets near me). The list summary names the detected category:
+    "Veterinarias: 54 lugares a menos de 5 km de Tlaxcala". List and map share one search
+    interpretation in the API. Order of matching: "X en Y"; the whole text as an exact place; a
+    place inside the text; the whole text as a place with a small typo ("zocallo").
+  - Fixed along the way: with `fetch_types` off (needed on Workers), postgres.js can't send text
+    arrays, so candidate place names go in an `IN (…)` list.
+  - **Owner rule (2026-10-05): every word must match.** A name search requires all of its words
+    (in the name, city or state, each tolerating a small typo), except the vague ones: en, la, el,
+    de, los, y, para. The looser fallback (the whole text as one fuzzy name when nothing matched
+    every word) was removed, and "veterinaria", "tienda" and "mascotas" are no longer skipped
+    (they're category keywords now). Within 100 mi of the Zócalo: "huellitas" 216, "huellitas
+    felices" 2, "huellitas zzzz" 0, "la huellita" 212, "huelitas" (typo) 204. The owner then
+    added "del" and "las" to the ignored words.
+  - **Owner request (2026-10-05): the map's zoom sets the radius.** When the user zooms the map
+    by hand, the radius becomes the largest circle that fits the view, in true scale (e.g.
+    "3.4 km"), around the user or the searched place; pins, counts, the list and "Mi ubicación"
+    searches all use it. Only the user's gestures count (the map's own moves, such as fitting a
+    circle or opening a cluster, don't), and a pan that keeps the scale changes nothing. The
+    radius button shows a custom radius in amber; tapping it is the only way back to the presets
+    (to the saved Ajustes radius first, then cycling as before). A custom radius is never saved to
+    Ajustes. Area searches accept radii up to 161 km now (was 10). Tested: `radiusForRegion` (the
+    reverse of `regionForRadius`), schema limits. Not seen on the simulator (zooming needs a
+    gesture); the owner checks it on a phone.
+  - **Owner rule (2026-10-05): words match letter for letter.** "tlaxcala" (with "Mi ubicación"
+    on, near Tlalnepantla) listed "Veterinaria Ixtacala" and "Hospital para Mascotas Ixtacala",
+    because each word was allowed to match approximately (trigram word similarity). Now business
+    words and place names must match every letter, ignoring only case and accents ("queretaro"
+    still finds Querétaro). The fuzzy matching for place names (similarity 0.65, and 0.6 in "X en
+    Y") is gone too, so typos no longer match: "huelitas" and "zocallo" find nothing. Earlier notes
+    about typo tolerance in this phase no longer apply.
+  - **Dog walkers: no category yet.** DENUE has only 4 (walking is mostly informal work); Overture
+    lists about 105 dog walkers and pet sitters in CDMX, but importing Overture places as listings
+    would be a new kind of source, and many are individuals (privacy). Added to "Pending owner
+    reviews".
+  - **Owner decision (2026-10-05): dog training** is a new category (`dog_trainer`,
+    "Adiestramiento canino", chip "Adiestramiento"; migration 0010). Picked by name in **any**
+    DENUE class (trainers appear under sports, social work, associations…): a training word
+    (adiestramiento, entrenamiento, cinotecnia, escuela canina, dog training…) plus an animal word;
+    "K9" alone and training without animals ("adiestramiento táctico") don't count, and gyms
+    (713943, e.g. "Black Dog Cross Training") are excluded. 54 trainers, 33 of them new places
+    (25,474 places in total); e.g. "Escuela para Entrenamiento de Perros Guía para Ciegos IAP".
+    Search keywords: adiestramiento, adiestrador, entrenador/entrenamiento canino, escuela canina,
+    dog trainer/training ("adiestramiento" within 25 km of the Zócalo: 22).
+  - **Owner request (2026-10-05): "Mi ubicación" on recenters the map.** In map view, turning it
+    on reads the device's position again and flies the map back to it, with the radius circle
+    (preset or zoomed) fitted around it. Turning it off leaves the map where it is. Not seen on
+    the simulator (needs a tap); the owner checks it on a phone.
+  - **Owner request (2026-10-05): "Mi ubicación" turns itself off when the map's center moves off
+    the user.** Any hand move that takes the center more than 5% of the view off the user's
+    position switches it off (first built with "outside the middle half"; the owner asked for the
+    center). Searches then go back to reading places. A pinch that isn't centered on the user
+    also moves the center, so it switches off too; the map's own moves never do. Helper
+    `isAwayFrom` (tested). Not seen on the simulator (needs gestures).
+  - **Fixed (2026-10-05): hand moves weren't detected on iPhone.** The owner reported "Mi
+    ubicación" didn't turn off on an iPhone. Cause: both the zoom-sets-the-radius feature and the
+    auto-off relied on react-native-maps' `isGesture`, which Apple Maps (the iOS map) never sends
+    in 1.27.2 (`AIRMapManager.m` builds the event without it; only Google Maps sets it), so on
+    iPhone every move looked automatic and neither feature worked there. Now the app tells moves
+    apart itself: every automatic move (fitting a circle, opening a cluster, the location and
+    compass buttons, "Mi ubicación") goes through one `moveMap` helper that marks it, and a move
+    counts as the user's while a finger is on the map or within 2.5 s after it lifts (a flick
+    glides). Works the same on iOS and Android. Gestures can't be driven on the simulator, so
+    the owner verifies on the iPhone.
+  - **Owner request (2026-10-05): lime-green clusters.** Map clusters are lime green (lime-500
+    with dark lime numbers; were light amber), then made a hair bigger (bubbles 4 pt wider,
+    numbers 10 pt) and a shade darker (lime-400 → lime-500). No category may be green, so Forrajerías moved from
+    lime green to yellow-gold (#ca8a04) and Pensiones from teal (blue-green) to indigo (#4f46e5),
+    colors no other category uses.
+  - **Owner request (2026-10-05): Explorar's controls in the cluster greens.** The selected
+    Lista/Mapa button, "Mi ubicación" when on (dark green icon), the radius button and the
+    selected category chip use the clusters' palette: lime-500 (#84cc16) with lime-950 (#1a2e05)
+    text, replacing the brand teal there. A radius set by zooming stays amber so it stands out.
+    The radius circle on the map and other screens keep the brand teal. Seen on the simulator.
+  - **Fixed (2026-10-06): Google Maps directions went to the wrong business.** The owner searched
+    "Metepec Peluditos", opened "Estética Canina Peluditos Spa" (Metepec, coordinates correct) and
+    "Cómo llegar" → Google Maps routed to a different place in another city; Apple Maps and Waze
+    were right. Cause: the Google link (copied from Ferre Mall) sent only the name and address as
+    text, and Google's text search has no location bias there; the address also ended "Metepec,
+    México, México" (DENUE's name for the Estado de México reads as the country). Fix: Google Maps
+    now gets the exact coordinates (like Waze), and directions spell out "Estado de México".
+    Trade-off: Google shows a pin at the point instead of opening the business's Google listing.
+    Ferre Mall has the same Google link (it's hibernating; noted for if it resumes).
+  - **Owner request (2026-10-06): a full landmark list.** Source: **Wikidata** (CC0, so no
+    conditions; credited in Ajustes anyway). Landmark types: museums, metro and train stations,
+    churches, cathedrals, convents, universities, archaeological sites, monuments, sculptures,
+    parks, plazas, stadiums, airports, theaters, hospitals, shopping centers, libraries, cultural
+    centers, palaces, skyscrapers, zoos, markets and more, only items with a Spanish Wikipedia
+    article (a notability filter) and located in the nine states (via their P131 "located in"
+    chain, so e.g. a Colima cathedral inside the box is dropped). Result: **1,102 landmarks**
+    (CDMX 615, Edomex 110, Puebla 101, Hidalgo 98, Querétaro 45, Michoacán 42, Guerrero 37,
+    Tlaxcala 28, Morelos 26), 1,989 searchable names with aliases ("La Latino", "Perisur",
+    "MNA"). Coordinates checked against the curated ones (within ~50 m). Rules: stations answer
+    only to "Metro X" / "Estación X" (so "Hidalgo" and "Insurgentes" stay a municipality and a
+    colonia); generic one-word names and category keywords are skipped; items without a Spanish
+    name are skipped; the 15 curated landmarks win on the same name (Wikidata lacks the Zócalo,
+    the Ángel and the Monumento a la Revolución under these types). `pnpm places:landmarks`
+    refreshes the committed snapshot (`data/landmarks-wikidata.json`, 290 KB, ~30 s; two queries,
+    because following "located in" to any depth for every item timed out on Wikidata).
+    Checked: "Teotihuacan" (53 places within 5 km), "perisur vet", "Metro Insurgentes",
+    "Torre Latino"/"La Latino", "Acueducto de Queretaro", "Catedral de Puebla estetica".
+    Note: a bare "Hidalgo" resolves to the municipality of Hidalgo (Michoacán), as before; states
+    aren't search areas.
+  - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
+    places; migration 0007 (`place_reports`, `place_claims`).
+- **Follow-ups:**
+  - SAT check for claims: deferred (see "Pending owner reviews").
+  - No notifications: the owner sees new claims and reports only by running the review commands;
+    an admin page is to be discussed after Phase 7.
+  - Reports have no rate limit beyond one per phone and reason; a deployed API would add Ferre
+    Mall's per-IP rate limit (without storing IPs).
 
 ### Phase 6 — Pet-friendly layer
 
@@ -314,3 +588,5 @@ Play readiness").
 | 2026-10-05 | Phase 3 started            | #4  |
 | 2026-10-05 | Phase 3 merged (`df26ef2`) | #4  |
 | 2026-10-05 | Phase 4 started            | #5  |
+| 2026-10-05 | Phase 4 merged (`c30d151`) | #5  |
+| 2026-10-05 | Phase 5 started            | #6  |
