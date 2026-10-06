@@ -488,6 +488,11 @@ a task (and a note in the phase that applies it).
     counts as the user's while a finger is on the map or within 2.5 s after it lifts (a flick
     glides). Works the same on iOS and Android. Gestures can't be driven on the simulator, so
     the owner verifies on the iPhone.
+  - **Owner request (2026-10-05): lime-green clusters.** Map clusters are lime green (lime-400
+    with dark lime numbers; were light amber). No category may be green, so Forrajerías moved from
+    lime green to yellow-gold (#ca8a04) and Pensiones from teal (blue-green) to indigo (#4f46e5),
+    colors no other category uses. The app's brand teal (selected chips, the radius circle) is
+    unchanged.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

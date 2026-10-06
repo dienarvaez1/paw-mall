@@ -34,8 +34,11 @@ type Mode = (typeof MODES)[number];
 /** Wait for the map to settle before loading its places (keeps panning cheap). */
 const MAP_SETTLE_MS = 400;
 const SEARCH_DEBOUNCE_MS = 300;
-/** Cluster bubbles: light amber (amber-200) with dark amber numbers (amber-900). */
-const CLUSTER_COLORS = { fill: '#fde68a', text: '#78350f' };
+/**
+ * Cluster bubbles: lime green (lime-400) with dark lime numbers (lime-950), owner's choice. No
+ * category uses green, so clusters never look like pins.
+ */
+const CLUSTER_COLORS = { fill: '#a3e635', text: '#1a2e05' };
 /** How long the map takes to zoom to a new radius. */
 const MAP_FIT_MS = 500;
 /**
@@ -602,7 +605,7 @@ function SourceNote({ places }: { places: Place[] }) {
   );
 }
 
-/** A small light-amber bubble with the number of places it groups; wider for longer numbers. */
+/** A small lime-green bubble with the number of places it groups; wider for longer numbers. */
 function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: () => void }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
