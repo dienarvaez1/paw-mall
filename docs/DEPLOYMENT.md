@@ -498,6 +498,15 @@ a task (and a note in the phase that applies it).
     selected category chip use the clusters' palette: lime-500 (#84cc16) with lime-950 (#1a2e05)
     text, replacing the brand teal there. A radius set by zooming stays amber so it stands out.
     The radius circle on the map and other screens keep the brand teal. Seen on the simulator.
+  - **Fixed (2026-10-06): Google Maps directions went to the wrong business.** The owner searched
+    "Metepec Peluditos", opened "Estética Canina Peluditos Spa" (Metepec, coordinates correct) and
+    "Cómo llegar" → Google Maps routed to a different place in another city; Apple Maps and Waze
+    were right. Cause: the Google link (copied from Ferre Mall) sent only the name and address as
+    text, and Google's text search has no location bias there; the address also ended "Metepec,
+    México, México" (DENUE's name for the Estado de México reads as the country). Fix: Google Maps
+    now gets the exact coordinates (like Waze), and directions spell out "Estado de México".
+    Trade-off: Google shows a pin at the point instead of opening the business's Google listing.
+    Ferre Mall has the same Google link (it's hibernating; noted for if it resumes).
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
