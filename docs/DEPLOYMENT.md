@@ -492,8 +492,12 @@ a task (and a note in the phase that applies it).
     with dark lime numbers; were light amber), then made a hair bigger (bubbles 4 pt wider,
     numbers 10 pt) and a shade darker (lime-400 → lime-500). No category may be green, so Forrajerías moved from
     lime green to yellow-gold (#ca8a04) and Pensiones from teal (blue-green) to indigo (#4f46e5),
-    colors no other category uses. The app's brand teal (selected chips, the radius circle) is
-    unchanged.
+    colors no other category uses.
+  - **Owner request (2026-10-05): Explorar's controls in the cluster greens.** The selected
+    Lista/Mapa button, "Mi ubicación" when on (dark green icon), the radius button and the
+    selected category chip use the clusters' palette: lime-500 (#84cc16) with lime-950 (#1a2e05)
+    text, replacing the brand teal there. A radius set by zooming stays amber so it stands out.
+    The radius circle on the map and other screens keep the brand teal. Seen on the simulator.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
