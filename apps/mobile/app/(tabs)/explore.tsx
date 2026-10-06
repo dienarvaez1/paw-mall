@@ -35,10 +35,10 @@ type Mode = (typeof MODES)[number];
 const MAP_SETTLE_MS = 400;
 const SEARCH_DEBOUNCE_MS = 300;
 /**
- * Cluster bubbles: lime green (lime-400) with dark lime numbers (lime-950), owner's choice. No
+ * Cluster bubbles: lime green (lime-500) with dark lime numbers (lime-950), owner's choice. No
  * category uses green, so clusters never look like pins.
  */
-const CLUSTER_COLORS = { fill: '#a3e635', text: '#1a2e05' };
+const CLUSTER_COLORS = { fill: '#84cc16', text: '#1a2e05' };
 /** How long the map takes to zoom to a new radius. */
 const MAP_FIT_MS = 500;
 /**
@@ -610,7 +610,7 @@ function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: (
   const { t } = useAppTranslation();
   const locale = useLocale();
   const label = formatCount(cluster.count, locale);
-  const size = 16 + Math.min(label.length, 5) * 4;
+  const size = 20 + Math.min(label.length, 5) * 4;
   return (
     <Marker
       coordinate={{ latitude: cluster.location.lat, longitude: cluster.location.lng }}
@@ -630,7 +630,7 @@ function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: (
           justifyContent: 'center',
         }}
       >
-        <Text style={{ color: CLUSTER_COLORS.text, fontWeight: '700', fontSize: 9 }}>{label}</Text>
+        <Text style={{ color: CLUSTER_COLORS.text, fontWeight: '700', fontSize: 10 }}>{label}</Text>
       </View>
     </Marker>
   );
