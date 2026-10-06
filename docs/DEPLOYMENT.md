@@ -400,6 +400,10 @@ a task (and a note in the phase that applies it).
     ("activa «Mi ubicación»…") was dropped, since the placeholder and the chip explain the toggle.
     The category chips also keep their own height now (the list used to squeeze them).
   - **Owner request (2026-10-05):** the summary line is bold, in the darkest text color.
+  - **Owner request (2026-10-05): Explorar's top rows reordered.** 1) search box; 2) Lista,
+    Mapa, "Mi ubicación" and the radius button ("5 km"; on the map it stays over the map); 3)
+    category chips; then the bold summary. Seen on the simulator: row 2 fits on an iPhone 17 Pro
+    Max in Spanish.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

@@ -68,13 +68,7 @@ export default function ExploreScreen() {
           disabled={mode === 'map'}
         />
       </View>
-      <CategoryChips
-        selected={category}
-        onSelect={setCategory}
-        nearMe={nearMe}
-        onToggleNearMe={() => setNearMe((value) => !value)}
-      />
-      <View className="flex-row gap-2 border-b border-neutral-200 px-4 pb-3 pt-1 dark:border-neutral-800">
+      <View className="flex-row gap-2 px-4 pt-3">
         {MODES.map((value) => (
           <Pressable
             key={value}
@@ -97,8 +91,12 @@ export default function ExploreScreen() {
             </Text>
           </Pressable>
         ))}
+        <NearMeButton nearMe={nearMe} onToggle={() => setNearMe((value) => !value)} />
         {/* On the map the same button sits over the map, next to the other map buttons. */}
         {mode === 'list' ? <RadiusButton className="min-h-11" /> : null}
+      </View>
+      <View className="border-b border-neutral-200 dark:border-neutral-800">
+        <CategoryChips selected={category} onSelect={setCategory} />
       </View>
       {location.ready && location.source === 'fallback' ? (
         <Notice text={t('common.approximateLocation')} />
@@ -116,16 +114,11 @@ export default function ExploreScreen() {
 function CategoryChips({
   selected,
   onSelect,
-  nearMe,
-  onToggleNearMe,
 }: {
   selected: ChipCategory;
   onSelect: (category: ChipCategory) => void;
-  nearMe: boolean;
-  onToggleNearMe: () => void;
 }) {
   const { t } = useAppTranslation();
-  const scheme = useColorScheme();
   return (
     <ScrollView
       horizontal
@@ -136,30 +129,6 @@ function CategoryChips({
       contentContainerClassName="gap-2 px-4 pb-2 pt-3"
       keyboardShouldPersistTaps="handled"
     >
-      <Pressable
-        accessibilityRole="switch"
-        accessibilityState={{ checked: nearMe }}
-        accessibilityHint={t('places.nearMeHint')}
-        onPress={onToggleNearMe}
-        className={`min-h-10 flex-row items-center gap-2 rounded-full border px-4 ${
-          nearMe
-            ? 'border-brand bg-brand'
-            : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
-        }`}
-      >
-        <Image
-          source={ICONS.locate}
-          style={{ width: 16, height: 16 }}
-          tintColor={nearMe ? '#ffffff' : scheme === 'dark' ? '#e5e5e5' : '#262626'}
-        />
-        <Text
-          className={`text-sm font-semibold ${
-            nearMe ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
-          }`}
-        >
-          {t('places.nearMe')}
-        </Text>
-      </Pressable>
       {CHIP_CATEGORIES.map((slug) => {
         const active = selected === slug;
         const color = slug ? CATEGORY_COLORS[slug] : undefined;
@@ -600,6 +569,41 @@ function RadiusButton({ className }: { className: string }) {
       className={`min-w-12 items-center justify-center rounded-full bg-white px-3 active:bg-neutral-100 dark:bg-neutral-900 dark:active:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 ${className}`}
     >
       <Text className="text-sm font-bold text-teal-800 dark:text-teal-300">{distance}</Text>
+    </Pressable>
+  );
+}
+
+/**
+ * "Mi ubicación": off, the search text names an area to search around ("Zócalo"); on, it
+ * searches business names around the user within the chosen radius.
+ */
+function NearMeButton({ nearMe, onToggle }: { nearMe: boolean; onToggle: () => void }) {
+  const { t } = useAppTranslation();
+  const scheme = useColorScheme();
+  return (
+    <Pressable
+      accessibilityRole="switch"
+      accessibilityState={{ checked: nearMe }}
+      accessibilityHint={t('places.nearMeHint')}
+      onPress={onToggle}
+      className={`min-h-11 flex-row items-center gap-1.5 rounded-full border px-3 ${
+        nearMe
+          ? 'border-brand bg-brand'
+          : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
+      }`}
+    >
+      <Image
+        source={ICONS.locate}
+        style={{ width: 16, height: 16 }}
+        tintColor={nearMe ? '#ffffff' : scheme === 'dark' ? '#e5e5e5' : '#262626'}
+      />
+      <Text
+        className={`text-sm font-semibold ${
+          nearMe ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
+        }`}
+      >
+        {t('places.nearMe')}
+      </Text>
     </Pressable>
   );
 }
