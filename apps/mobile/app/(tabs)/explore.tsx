@@ -19,6 +19,7 @@ import { PlaceRow, usePlaceName } from '@/components/place-row';
 import { SearchInput } from '@/components/search-input';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
+import { nextRadiusKm } from '@/features/settings/radius';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -283,7 +284,8 @@ function PlacesList({
 
 function PlacesMap({ category }: { category: ChipCategory }) {
   const { t } = useAppTranslation();
-  const { radiusKm } = useSettings();
+  const locale = useLocale();
+  const { radiusKm, units, setRadiusKm } = useSettings();
   const router = useRouter();
   const location = useUserLocation();
   const scheme = useColorScheme();
@@ -410,6 +412,23 @@ function PlacesMap({ category }: { category: ChipCategory }) {
           onPress={fitCircle}
         />
       ) : null}
+      {/*
+        The radius from Ajustes, changed in place: each tap picks the next choice (and saves it,
+        so Ajustes shows it); the map then refits the circle around the user.
+      */}
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('places.radiusButton', {
+          distance: formatDistance(radiusKm, locale, units),
+        })}
+        accessibilityHint={t('places.radiusButtonHint')}
+        onPress={() => setRadiusKm(nextRadiusKm(radiusKm, units))}
+        className="absolute bottom-[144px] right-3 h-12 min-w-12 items-center justify-center rounded-full bg-white px-3 shadow active:bg-neutral-100 dark:bg-neutral-900 dark:active:bg-neutral-800"
+      >
+        <Text className="text-sm font-bold text-teal-800 dark:text-teal-300">
+          {formatDistance(radiusKm, locale, units)}
+        </Text>
+      </Pressable>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('places.compass')}

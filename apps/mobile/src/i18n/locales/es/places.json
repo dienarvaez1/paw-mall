@@ -119,5 +119,7 @@
   "nearMe": "Mi ubicación",
   "nearMeHint": "Activado: busca nombres de negocios a menos de 5 km (3 mi) de ti. Desactivado: busca alrededor de una colonia, ciudad o lugar.",
   "searchPlaceholderNearMe": "Busca un negocio cerca de ti",
-  "areaHint": "Para buscar «{{query}}» en nombres de negocios cerca de ti, activa «Mi ubicación»."
+  "areaHint": "Para buscar «{{query}}» en nombres de negocios cerca de ti, activa «Mi ubicación».",
+  "radiusButton": "Radio de búsqueda: {{distance}}",
+  "radiusButtonHint": "Toca para cambiar al siguiente radio; también se guarda en Ajustes."
 }

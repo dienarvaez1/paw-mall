@@ -368,6 +368,13 @@ a task (and a note in the phase that applies it).
     Ajustes radius). The Ajustes radius still applies to plain browsing (toggle off, empty search)
     and to the map. Example: "huellitas" near the Zócalo finds 7 places within 3 mi vs 216 within
     100 mi.
+  - **Owner request (2026-10-05): a radius button on the map**, above the compass and location
+    buttons, showing the current radius ("5 km"). Each tap picks the next choice in the user's
+    unit (5 → 10 → 15 → 25 → 50 → 80 → 160 km, or 3 → … → 100 mi, then back), saved to the same
+    setting as Ajustes, so both always agree; the map then refits the circle around the user, as
+    the location button does. The "Mi ubicación" chip keeps its fixed 3 mi (5 km) for name
+    searches. Not seen on the simulator (switching to the map needs a tap); cycling is unit
+    tested.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

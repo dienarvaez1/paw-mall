@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { closestRadiusKm, isRadiusOption, radiusOptionsKm, toKm } from './radius';
+import { closestRadiusKm, isRadiusOption, nextRadiusKm, radiusOptionsKm, toKm } from './radius';
 
 describe('search radius by unit', () => {
   it('keeps km choices as they are', () => {
@@ -38,5 +38,19 @@ describe('radius labels match the Settings choices', () => {
         expect(formatDistance(toKm(value, unit), 'es', unit)).toBe(`${value} ${unit}`);
       }
     }
+  });
+});
+
+describe('nextRadiusKm', () => {
+  it('cycles through the choices in the unit and wraps around', () => {
+    expect(nextRadiusKm(5, 'km')).toBe(10);
+    expect(nextRadiusKm(80, 'km')).toBe(160);
+    expect(nextRadiusKm(160, 'km')).toBe(5);
+    expect(nextRadiusKm(toKm(50, 'mi'), 'mi')).toBeCloseTo(toKm(100, 'mi'));
+    expect(nextRadiusKm(toKm(100, 'mi'), 'mi')).toBeCloseTo(toKm(3, 'mi'));
+  });
+
+  it('starts from the smallest when the radius is not a choice', () => {
+    expect(nextRadiusKm(7, 'km')).toBe(5);
   });
 });

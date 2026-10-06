@@ -30,3 +30,10 @@ export function closestRadiusKm(radiusKm: number, unit: DistanceUnit): number {
 export function isRadiusOption(radiusKm: number, unit: DistanceUnit): boolean {
   return radiusOptionsKm(unit).some((option) => Math.abs(option - radiusKm) < 1e-6);
 }
+
+/** The map's radius button: the next choice in the unit, back to the smallest after the largest. */
+export function nextRadiusKm(radiusKm: number, unit: DistanceUnit): number {
+  const options = radiusOptionsKm(unit);
+  const current = options.findIndex((option) => Math.abs(option - radiusKm) < 1e-6);
+  return options[(current + 1) % options.length] ?? options[0] ?? radiusKm;
+}
