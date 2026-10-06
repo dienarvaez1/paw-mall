@@ -1,7 +1,7 @@
 import { MAX_RADIUS_KM, type Place, type PlaceCluster } from '@paw-mall/shared';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Keyboard,
@@ -38,6 +38,13 @@ const SEARCH_DEBOUNCE_MS = 300;
 const CLUSTER_COLORS = { fill: '#fde68a', text: '#78350f' };
 /** How long the map takes to zoom to a new radius. */
 const MAP_FIT_MS = 500;
+/**
+ * A region change counts as the user's own while a finger is on the map or this soon after it
+ * lifts (a flick keeps gliding), unless the app itself is moving the map.
+ */
+const HAND_MOVE_GRACE_MS = 2500;
+/** Extra time after an automatic move during which region changes are still the app's own. */
+const AUTO_MOVE_GRACE_MS = 400;
 /** The radius circle in the brand teal (teal-700 / teal-400), lightly filled. */
 const RADIUS_COLORS = {
   light: { stroke: '#0f766e', fill: 'rgba(15, 118, 110, 0.10)' },
@@ -306,6 +313,22 @@ function PlacesMap({
   // Opens showing the whole search radius from Settings, and refits when the radius or the user's
   // location changes (the tab stays mounted while Settings changes the radius).
   const mapRef = useRef<MapView>(null);
+  // Apple Maps (iOS) never tells whether a region change came from a gesture (react-native-maps
+  // sends isGesture only with Google Maps), so the app tells its own moves apart: every automatic
+  // move goes through moveMap, and a finger on the map marks the rest as the user's.
+  const autoMoveUntil = useRef(0);
+  const touch = useRef({ down: false, liftedAt: 0 });
+  const moveMap = useCallback((region: Region) => {
+    autoMoveUntil.current = Date.now() + MAP_FIT_MS + AUTO_MOVE_GRACE_MS;
+    mapRef.current?.animateToRegion(region, MAP_FIT_MS);
+  }, []);
+  const movedByHand = (isGesture: boolean | undefined) => {
+    const now = Date.now();
+    if (now < autoMoveUntil.current) return false;
+    return (
+      isGesture === true || touch.current.down || now - touch.current.liftedAt < HAND_MOVE_GRACE_MS
+    );
+  };
   const initialRegion: Region = regionForRadius(location.coords, radiusKm);
   const fitted = useRef({ radiusKm, ...location.coords });
   // While a searched area is shown, its circle has its own radius: don't fly back to the user.
@@ -321,8 +344,8 @@ function PlacesMap({
     }
     fitted.current = { radiusKm, ...location.coords };
     if (showingArea.current) return;
-    mapRef.current?.animateToRegion(regionForRadius(location.coords, radiusKm), MAP_FIT_MS);
-  }, [radiusKm, location.coords]);
+    moveMap(regionForRadius(location.coords, radiusKm));
+  }, [radiusKm, location.coords, moveMap]);
   // Turning "Mi ubicación" on in map view: read the device's position again and fly back to it,
   // with the circle fitted around it. Turning it off leaves the map where it is.
   const wasNearMe = useRef(nearMe);
@@ -331,13 +354,8 @@ function PlacesMap({
     const was = wasNearMe.current;
     wasNearMe.current = nearMe;
     if (!nearMe || was) return;
-    void refresh().then((coords) =>
-      mapRef.current?.animateToRegion(
-        regionForRadius(coords, customRadiusKm ?? radiusKm),
-        MAP_FIT_MS,
-      ),
-    );
-  }, [nearMe, refresh, customRadiusKm, radiusKm]);
+    void refresh().then((coords) => moveMap(regionForRadius(coords, customRadiusKm ?? radiusKm)));
+  }, [nearMe, refresh, customRadiusKm, radiusKm, moveMap]);
   // Back to the presets (the radius button): fit the preset circle again. A zoom by hand sets a
   // custom radius without moving the map.
   const hadCustom = useRef(customRadiusKm !== null);
@@ -345,8 +363,8 @@ function PlacesMap({
     const had = hadCustom.current;
     hadCustom.current = customRadiusKm !== null;
     if (!had || customRadiusKm !== null || showingArea.current) return;
-    mapRef.current?.animateToRegion(regionForRadius(location.coords, radiusKm), MAP_FIT_MS);
-  }, [customRadiusKm, location.coords, radiusKm]);
+    moveMap(regionForRadius(location.coords, radiusKm));
+  }, [customRadiusKm, location.coords, radiusKm, moveMap]);
   const [region, setRegion] = useState<Region>(initialRegion);
   const [area, setArea] = useState<MapArea | null>(null);
 
@@ -384,15 +402,11 @@ function PlacesMap({
     if (!loaded || areaKey === shownArea.current) return;
     shownArea.current = areaKey;
     showingArea.current = areaKey !== null;
-    mapRef.current?.animateToRegion(
-      regionForRadius({ lat: centerLat, lng: centerLng }, circleKm),
-      MAP_FIT_MS,
-    );
-  }, [loaded, areaKey, centerLat, centerLng, circleKm]);
+    moveMap(regionForRadius({ lat: centerLat, lng: centerLng }, circleKm));
+  }, [loaded, areaKey, centerLat, centerLng, circleKm, moveMap]);
   const items = places.data?.kind === 'places' ? places.data.items : [];
   const clusters = places.data?.kind === 'clusters' ? places.data.clusters : [];
-  const fitCircle = () =>
-    mapRef.current?.animateToRegion(regionForRadius(circle.center, circle.radiusKm), MAP_FIT_MS);
+  const fitCircle = () => moveMap(regionForRadius(circle.center, circle.radiusKm));
   // The compass needle follows the map's rotation; tapping it turns the map north-up again.
   const [heading, setHeading] = useState(0);
   // getCamera() answers asynchronously; when the map closes first (e.g. switching to the list)
@@ -412,7 +426,10 @@ function PlacesMap({
       })
       .catch(() => {});
   };
-  const pointNorth = () => mapRef.current?.animateCamera({ heading: 0 }, { duration: MAP_FIT_MS });
+  const pointNorth = () => {
+    autoMoveUntil.current = Date.now() + MAP_FIT_MS + AUTO_MOVE_GRACE_MS;
+    mapRef.current?.animateCamera({ heading: 0 }, { duration: MAP_FIT_MS });
+  };
   // "My location": read the position again and fit the radius circle around it.
   const [locating, setLocating] = useState(false);
   const goToMyLocation = async () => {
@@ -420,7 +437,7 @@ function PlacesMap({
     setLocating(true);
     try {
       const coords = await location.refresh();
-      mapRef.current?.animateToRegion(regionForRadius(coords, circle.radiusKm), MAP_FIT_MS);
+      moveMap(regionForRadius(coords, circle.radiusKm));
     } finally {
       setLocating(false);
     }
@@ -428,7 +445,19 @@ function PlacesMap({
 
   return (
     // Any touch on the map (pan, zoom, pin) hides the keyboard.
-    <View className="flex-1" onTouchStart={() => Keyboard.dismiss()}>
+    <View
+      className="flex-1"
+      onTouchStart={() => {
+        Keyboard.dismiss();
+        touch.current.down = true;
+      }}
+      onTouchEnd={() => {
+        touch.current = { down: false, liftedAt: Date.now() };
+      }}
+      onTouchCancel={() => {
+        touch.current = { down: false, liftedAt: Date.now() };
+      }}
+    >
       <MapView
         ref={mapRef}
         style={{ flex: 1 }}
@@ -440,7 +469,7 @@ function PlacesMap({
           // Only the user's own zooms and pans: the map's own moves (fitting a circle, a cluster,
           // the location button) keep the radius as it is.
           // A pan alone leaves the scale (and so the radius) as it was.
-          if (details?.isGesture) {
+          if (movedByHand(details?.isGesture)) {
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
             if (Math.abs(handRadiusKm - circle.radiusKm) >= 0.05) onZoomByHand(handRadiusKm);
             // The center moved by hand off the user: no longer "at my location".
@@ -471,9 +500,7 @@ function PlacesMap({
           <ClusterMarker
             key={`${cluster.location.lat},${cluster.location.lng},${cluster.count}`}
             cluster={cluster}
-            onPress={() =>
-              mapRef.current?.animateToRegion(regionForBounds(cluster.bounds), MAP_FIT_MS)
-            }
+            onPress={() => moveMap(regionForBounds(cluster.bounds))}
           />
         ))}
       </MapView>

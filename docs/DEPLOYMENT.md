@@ -478,6 +478,16 @@ a task (and a note in the phase that applies it).
     center). Searches then go back to reading places. A pinch that isn't centered on the user
     also moves the center, so it switches off too; the map's own moves never do. Helper
     `isAwayFrom` (tested). Not seen on the simulator (needs gestures).
+  - **Fixed (2026-10-05): hand moves weren't detected on iPhone.** The owner reported "Mi
+    ubicación" didn't turn off on an iPhone. Cause: both the zoom-sets-the-radius feature and the
+    auto-off relied on react-native-maps' `isGesture`, which Apple Maps (the iOS map) never sends
+    in 1.27.2 (`AIRMapManager.m` builds the event without it; only Google Maps sets it), so on
+    iPhone every move looked automatic and neither feature worked there. Now the app tells moves
+    apart itself: every automatic move (fitting a circle, opening a cluster, the location and
+    compass buttons, "Mi ubicación") goes through one `moveMap` helper that marks it, and a move
+    counts as the user's while a finger is on the map or within 2.5 s after it lifts (a flick
+    glides). Works the same on iOS and Android. Gestures can't be driven on the simulator, so
+    the owner verifies on the iPhone.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
