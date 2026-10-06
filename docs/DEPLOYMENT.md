@@ -399,6 +399,7 @@ a task (and a note in the phase that applies it).
     (it used to scroll away with the first rows). It's a single line; the hint under area results
     ("activa «Mi ubicación»…") was dropped, since the placeholder and the chip explain the toggle.
     The category chips also keep their own height now (the list used to squeeze them).
+  - **Owner request (2026-10-05):** the summary line is bold, in the darkest text color.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

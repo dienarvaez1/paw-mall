@@ -237,7 +237,7 @@ function PlacesList({
     <View className="flex-1">
       <Text
         accessibilityRole="summary"
-        className="border-b border-neutral-100 px-4 py-2 text-sm font-semibold text-neutral-700 dark:border-neutral-900 dark:text-neutral-200"
+        className="border-b border-neutral-100 px-4 py-2 text-sm font-bold text-neutral-900 dark:border-neutral-900 dark:text-white"
       >
         {summary}
       </Text>
