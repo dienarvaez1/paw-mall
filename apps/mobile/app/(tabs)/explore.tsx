@@ -48,6 +48,9 @@ export default function ExploreScreen() {
   const location = useUserLocation();
   const [mode, setMode] = useState<Mode>('list');
   const [category, setCategory] = useState<ChipCategory>(null);
+  // "Mi ubicación": off, the search text names an area to search around; on, business names
+  // around the user within the Ajustes radius.
+  const [nearMe, setNearMe] = useState(false);
   const [text, setText] = useState('');
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
   useDismissKeyboardOnBlur();
@@ -59,12 +62,17 @@ export default function ExploreScreen() {
         <SearchInput
           value={text}
           onChangeText={setText}
-          placeholder={t('places.searchPlaceholder')}
+          placeholder={t(nearMe ? 'places.searchPlaceholderNearMe' : 'places.searchPlaceholder')}
           clearLabel={t('places.clearSearch')}
           disabled={mode === 'map'}
         />
       </View>
-      <CategoryChips selected={category} onSelect={setCategory} />
+      <CategoryChips
+        selected={category}
+        onSelect={setCategory}
+        nearMe={nearMe}
+        onToggleNearMe={() => setNearMe((value) => !value)}
+      />
       <View className="flex-row gap-2 border-b border-neutral-200 px-4 pb-3 pt-1 dark:border-neutral-800">
         {MODES.map((value) => (
           <Pressable
@@ -93,7 +101,7 @@ export default function ExploreScreen() {
         <Notice text={t('common.approximateLocation')} />
       ) : null}
       {mode === 'list' ? (
-        <PlacesList name={name} category={category} />
+        <PlacesList name={name} category={category} nearMe={nearMe} />
       ) : (
         <PlacesMap category={category} />
       )}
@@ -105,11 +113,16 @@ export default function ExploreScreen() {
 function CategoryChips({
   selected,
   onSelect,
+  nearMe,
+  onToggleNearMe,
 }: {
   selected: ChipCategory;
   onSelect: (category: ChipCategory) => void;
+  nearMe: boolean;
+  onToggleNearMe: () => void;
 }) {
   const { t } = useAppTranslation();
+  const scheme = useColorScheme();
   return (
     <ScrollView
       horizontal
@@ -119,6 +132,30 @@ function CategoryChips({
       contentContainerClassName="gap-2 px-4 pb-4 pt-3"
       keyboardShouldPersistTaps="handled"
     >
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: nearMe }}
+        accessibilityHint={t('places.nearMeHint')}
+        onPress={onToggleNearMe}
+        className={`min-h-10 flex-row items-center gap-2 rounded-full border px-4 ${
+          nearMe
+            ? 'border-brand bg-brand'
+            : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
+        }`}
+      >
+        <Image
+          source={ICONS.locate}
+          style={{ width: 16, height: 16 }}
+          tintColor={nearMe ? '#ffffff' : scheme === 'dark' ? '#e5e5e5' : '#262626'}
+        />
+        <Text
+          className={`text-sm font-semibold ${
+            nearMe ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
+          }`}
+        >
+          {t('places.nearMe')}
+        </Text>
+      </Pressable>
       {CHIP_CATEGORIES.map((slug) => {
         const active = selected === slug;
         const color = slug ? CATEGORY_COLORS[slug] : undefined;
@@ -154,15 +191,20 @@ function CategoryChips({
   );
 }
 
-function PlacesList({ name, category }: { name: string; category: ChipCategory }) {
+function PlacesList({
+  name,
+  category,
+  nearMe,
+}: {
+  name: string;
+  category: ChipCategory;
+  nearMe: boolean;
+}) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const { units, radiusKm, onlyOpenNow } = useSettings();
   const location = useUserLocation();
-  // "Buscar en nombres": this search text as a business name instead of an area. A new text
-  // starts over as an area search.
-  const [namesOnlyFor, setNamesOnlyFor] = useState<string | null>(null);
-  const places = usePlaces(location.coords, category, name, namesOnlyFor === name);
+  const places = usePlaces(location.coords, category, name, nearMe);
   const area = places.data?.pages[0]?.area ?? null;
   const items = useMemo(
     () => places.data?.pages.flatMap((page) => page.items) ?? [],
@@ -196,11 +238,9 @@ function PlacesList({ name, category }: { name: string; category: ChipCategory }
                 area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
               })}
             </Text>
-            <Pressable accessibilityRole="button" onPress={() => setNamesOnlyFor(name)}>
-              <Text className="text-sm text-teal-800 underline dark:text-teal-300">
-                {t('places.searchNamesInstead', { query: name })}
-              </Text>
-            </Pressable>
+            <Text className="text-sm text-neutral-500 dark:text-neutral-400">
+              {t('places.areaHint', { query: name })}
+            </Text>
           </View>
         ) : items.length > 0 ? (
           <Text className="px-4 pb-1 pt-3 text-sm text-neutral-500 dark:text-neutral-400">

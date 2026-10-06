@@ -18,7 +18,7 @@
   "registeredSince": "Registrado por INEGI en {{year}}",
   "listCount_one": "{{total}} lugar a menos de {{distance}}",
   "listCount_other": "{{total}} lugares a menos de {{distance}}",
-  "searchPlaceholder": "Busca un negocio, colonia, ciudad o lugar (ej. Zócalo)",
+  "searchPlaceholder": "Busca una colonia, ciudad o lugar (ej. Zócalo)",
   "clearSearch": "Borrar búsqueda",
   "noMatchesNearby": "No encontramos lugares que coincidan con «{{query}}» a menos de {{distance}}.",
   "noMatchesHint": "Revisa cómo lo escribiste o prueba con menos palabras. La búsqueda llega hasta tu radio; puedes ampliarlo en Ajustes.",
@@ -116,5 +116,8 @@
   },
   "areaCount_one": "{{total}} lugar a menos de {{distance}} de {{area}}",
   "areaCount_other": "{{total}} lugares a menos de {{distance}} de {{area}}",
-  "searchNamesInstead": "Buscar «{{query}}» en nombres de negocios"
+  "nearMe": "Mi ubicación",
+  "nearMeHint": "Activado: busca nombres de negocios cerca de ti, dentro del radio de Ajustes. Desactivado: busca alrededor de una colonia, ciudad o lugar.",
+  "searchPlaceholderNearMe": "Busca un negocio cerca de ti",
+  "areaHint": "Para buscar «{{query}}» en nombres de negocios cerca de ti, activa «Mi ubicación»."
 }

@@ -18,7 +18,7 @@
   "registeredSince": "Registered by INEGI in {{year}}",
   "listCount_one": "{{total}} place within {{distance}}",
   "listCount_other": "{{total}} places within {{distance}}",
-  "searchPlaceholder": "Search a business, colonia, city or landmark (e.g. Zócalo)",
+  "searchPlaceholder": "Search a colonia, city or landmark (e.g. Zócalo)",
   "clearSearch": "Clear search",
   "noMatchesNearby": "No places matching “{{query}}” within {{distance}}.",
   "noMatchesHint": "Check the spelling or try fewer words. Search covers your radius; you can widen it in Settings.",
@@ -116,5 +116,8 @@
   },
   "areaCount_one": "{{total}} place within {{distance}} of {{area}}",
   "areaCount_other": "{{total}} places within {{distance}} of {{area}}",
-  "searchNamesInstead": "Search “{{query}}” in business names"
+  "nearMe": "My location",
+  "nearMeHint": "On: searches business names near you, within the Settings radius. Off: searches around a colonia, city or landmark.",
+  "searchPlaceholderNearMe": "Search a business near you",
+  "areaHint": "To search “{{query}}” in business names near you, turn on “My location”."
 }

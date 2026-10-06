@@ -356,6 +356,13 @@ a task (and a note in the phase that applies it).
     from Polanco: "Zocalo" → 1,237 places within 5 km of the Zócalo; "Roma Norte", "col. condesa",
     "Toluca", "Bellas Artes" resolve as expected; "huellitas" stays a name search. Typing can't be
     automated in the simulator; the owner checks it on a phone.
+  - **Owner request (2026-10-05): "Mi ubicación" toggle**, a chip left of "Todos", off by
+    default. Off: the search text names an area (landmark, colonia, city) and the search
+    centers there within 5 km (3 mi); text that names no area still searches business names
+    around the user. On: the text searches business names only, around the user, within the
+    Ajustes radius. The placeholder follows the toggle ("Busca una colonia, ciudad o lugar (ej.
+    Zócalo)" / "Busca un negocio cerca de ti"). It replaces the "Buscar en nombres" link added
+    with area search; the area header now points to the toggle instead.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
