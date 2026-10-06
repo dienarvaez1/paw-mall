@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { regionForBounds, regionForRadius } from './map-region';
+import { radiusForRegion, regionForBounds, regionForRadius } from './map-region';
 
 describe('regionForRadius', () => {
   it('fits the circle with a margin, wider in longitude away from the equator', () => {
@@ -23,5 +23,29 @@ describe('regionForBounds', () => {
       longitudeDelta: expect.closeTo(0.13, 5) as number,
     });
     expect(regionForBounds([-99.13, 19.43, -99.13, 19.43]).latitudeDelta).toBe(0.004);
+  });
+});
+
+describe('radiusForRegion', () => {
+  it('reverses regionForRadius', () => {
+    for (const km of [0.5, 5, 25, 160]) {
+      expect(
+        radiusForRegion(regionForRadius({ lat: 19.4326, lng: -99.1332 }, km), 200),
+      ).toBeCloseTo(km, 1);
+    }
+  });
+
+  it('uses the narrower side of the view, and stays within limits', () => {
+    const tall = { latitude: 19.4, longitude: -99.1, latitudeDelta: 0.5, longitudeDelta: 0.1 };
+    expect(radiusForRegion(tall, 200)).toBe(4.6);
+    const world = { latitude: 19.4, longitude: -99.1, latitudeDelta: 40, longitudeDelta: 40 };
+    expect(radiusForRegion(world, 161)).toBe(161);
+    const tiny = {
+      latitude: 19.4,
+      longitude: -99.1,
+      latitudeDelta: 0.0001,
+      longitudeDelta: 0.0001,
+    };
+    expect(radiusForRegion(tiny, 161)).toBe(0.1);
   });
 });

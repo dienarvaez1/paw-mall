@@ -32,11 +32,20 @@ export function useAreaRadiusKm(): number {
  * like the Zócalo) moves the search there within AREA_RADIUS; other text searches names, cities
  * and states. Every key includes the locale, so switching language refetches category names.
  */
-export function usePlaces(coords: Coords, category: ChipCategory, name = '', nearMe = false) {
+export function usePlaces(
+  coords: Coords,
+  category: ChipCategory,
+  name = '',
+  nearMe = false,
+  /** A radius the user set by zooming the map by hand; replaces the presets while set. */
+  customRadiusKm: number | null = null,
+) {
   const locale = useLocale();
-  const { radiusKm } = useSettings();
+  const settings = useSettings();
   const filters = usePlaceFilters();
-  const areaRadiusKm = useAreaRadiusKm();
+  const presetAreaRadiusKm = useAreaRadiusKm();
+  const radiusKm = customRadiusKm ?? settings.radiusKm;
+  const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
   return useInfiniteQuery({
     queryKey: ['places', locale, radiusKm, filters, coords, category, name, nearMe, areaRadiusKm],
     initialPageParam: 1,
@@ -74,13 +83,27 @@ export function usePlacesMap(
   category: ChipCategory,
   name = '',
   nearMe = false,
+  customRadiusKm: number | null = null,
 ) {
   const locale = useLocale();
-  const { radiusKm } = useSettings();
+  const settings = useSettings();
   const filters = usePlaceFilters();
-  const areaRadiusKm = useAreaRadiusKm();
+  const presetAreaRadiusKm = useAreaRadiusKm();
+  const radiusKm = customRadiusKm ?? settings.radiusKm;
+  const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
   return useQuery({
-    queryKey: ['places-map', locale, filters, area, coords, radiusKm, category, name, nearMe],
+    queryKey: [
+      'places-map',
+      locale,
+      filters,
+      area,
+      coords,
+      radiusKm,
+      areaRadiusKm,
+      category,
+      name,
+      nearMe,
+    ],
     enabled: area !== null,
     placeholderData: (previous) => previous,
     queryFn: () => {

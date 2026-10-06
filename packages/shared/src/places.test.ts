@@ -37,6 +37,15 @@ describe('placeListQuerySchema', () => {
   });
 });
 
+describe('areaRadiusKm', () => {
+  it('accepts a radius set by zooming the map, up to the largest radius', () => {
+    expect(placeListQuerySchema.parse({ ...base, q: 'x', areaRadiusKm: '42.5' }).areaRadiusKm).toBe(
+      42.5,
+    );
+    expect(placeListQuerySchema.safeParse({ ...base, areaRadiusKm: '162' }).success).toBe(false);
+  });
+});
+
 describe('placeMapQuerySchema', () => {
   it('parses the visible box', () => {
     expect(placeMapQuerySchema.parse({ ...base, bbox: '-99.2,19.3,-99.0,19.5' }).bbox).toEqual({

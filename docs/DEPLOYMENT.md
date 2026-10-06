@@ -437,6 +437,16 @@ a task (and a note in the phase that applies it).
     (they're category keywords now). Within 100 mi of the Zócalo: "huellitas" 216, "huellitas
     felices" 2, "huellitas zzzz" 0, "la huellita" 212, "huelitas" (typo) 204. The owner then
     added "del" and "las" to the ignored words.
+  - **Owner request (2026-10-05): the map's zoom sets the radius.** When the user zooms the map
+    by hand, the radius becomes the largest circle that fits the view, in true scale (e.g.
+    "3.4 km"), around the user or the searched place; pins, counts, the list and "Mi ubicación"
+    searches all use it. Only the user's gestures count (the map's own moves, such as fitting a
+    circle or opening a cluster, don't), and a pan that keeps the scale changes nothing. The
+    radius button shows a custom radius in amber; tapping it is the only way back to the presets
+    (to the saved Ajustes radius first, then cycling as before). A custom radius is never saved to
+    Ajustes. Area searches accept radii up to 161 km now (was 10). Tested: `radiusForRegion` (the
+    reverse of `regionForRadius`), schema limits. Not seen on the simulator (zooming needs a
+    gesture); the owner checks it on a phone.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
