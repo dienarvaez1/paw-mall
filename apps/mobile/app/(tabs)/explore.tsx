@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import MapView, { Circle, Marker, type Region } from 'react-native-maps';
 
-import { type MapArea, useAreaRadiusKm, usePlaces, usePlacesMap } from '@/api/hooks';
+import { type MapArea, usePlaces, usePlacesMap } from '@/api/hooks';
 import { ICONS } from '@/components/icons';
 import { PlaceRow, usePlaceName } from '@/components/place-row';
 import { SearchInput } from '@/components/search-input';
@@ -97,6 +97,8 @@ export default function ExploreScreen() {
             </Text>
           </Pressable>
         ))}
+        {/* On the map the same button sits over the map, next to the other map buttons. */}
+        {mode === 'list' ? <RadiusButton className="min-h-11" /> : null}
       </View>
       {location.ready && location.source === 'fallback' ? (
         <Notice text={t('common.approximateLocation')} />
@@ -205,7 +207,6 @@ function PlacesList({
   const locale = useLocale();
   const { units, radiusKm, onlyOpenNow } = useSettings();
   const location = useUserLocation();
-  const areaRadiusKm = useAreaRadiusKm();
   const places = usePlaces(location.coords, category, name, nearMe);
   const area = places.data?.pages[0]?.area ?? null;
   const items = useMemo(
@@ -213,12 +214,8 @@ function PlacesList({
     [places.data],
   );
   const total = places.data?.pages[0]?.total ?? 0;
-  // "Mi ubicación" and area searches use 5 km (3 mi); plain browsing uses the Ajustes radius.
-  const distance = formatDistance(
-    area ? area.radiusKm : nearMe ? areaRadiusKm : radiusKm,
-    locale,
-    units,
-  );
+  // Area searches use 5 km (3 mi); everything around the user uses the shared radius.
+  const distance = formatDistance(area ? area.radiusKm : radiusKm, locale, units);
 
   if (places.isPending) return <SkeletonList />;
   if (places.isError)
@@ -286,8 +283,7 @@ function PlacesList({
 
 function PlacesMap({ category }: { category: ChipCategory }) {
   const { t } = useAppTranslation();
-  const locale = useLocale();
-  const { radiusKm, units, setRadiusKm } = useSettings();
+  const { radiusKm } = useSettings();
   const router = useRouter();
   const location = useUserLocation();
   const scheme = useColorScheme();
@@ -414,23 +410,8 @@ function PlacesMap({ category }: { category: ChipCategory }) {
           onPress={fitCircle}
         />
       ) : null}
-      {/*
-        The radius from Ajustes, changed in place: each tap picks the next choice (and saves it,
-        so Ajustes shows it); the map then refits the circle around the user.
-      */}
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('places.radiusButton', {
-          distance: formatDistance(radiusKm, locale, units),
-        })}
-        accessibilityHint={t('places.radiusButtonHint')}
-        onPress={() => setRadiusKm(nextRadiusKm(radiusKm, units))}
-        className="absolute bottom-[144px] right-3 h-12 min-w-12 items-center justify-center rounded-full bg-white px-3 shadow active:bg-neutral-100 dark:bg-neutral-900 dark:active:bg-neutral-800"
-      >
-        <Text className="text-sm font-bold text-teal-800 dark:text-teal-300">
-          {formatDistance(radiusKm, locale, units)}
-        </Text>
-      </Pressable>
+      {/* Changing the radius refits the circle around the user (see the effect above). */}
+      <RadiusButton className="absolute bottom-[144px] right-3 h-12 shadow" />
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('places.compass')}
@@ -597,5 +578,28 @@ function MapCountLegend({
         ) : null}
       </Pressable>
     </View>
+  );
+}
+
+/**
+ * The search radius, changed in place: each tap picks the next choice in the user's unit and
+ * saves it to the same setting as Ajustes, so the list, the map, "Mi ubicación" and Ajustes always
+ * agree.
+ */
+function RadiusButton({ className }: { className: string }) {
+  const { t } = useAppTranslation();
+  const locale = useLocale();
+  const { radiusKm, units, setRadiusKm } = useSettings();
+  const distance = formatDistance(radiusKm, locale, units);
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={t('places.radiusButton', { distance })}
+      accessibilityHint={t('places.radiusButtonHint')}
+      onPress={() => setRadiusKm(nextRadiusKm(radiusKm, units))}
+      className={`min-w-12 items-center justify-center rounded-full bg-white px-3 active:bg-neutral-100 dark:bg-neutral-900 dark:active:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 ${className}`}
+    >
+      <Text className="text-sm font-bold text-teal-800 dark:text-teal-300">{distance}</Text>
+    </Pressable>
   );
 }

@@ -380,6 +380,11 @@ a task (and a note in the phase that applies it).
     "0.3 km". When they're from the user ("Mi ubicación" on, plain browsing, or a name that isn't
     an area), they read "0.3 mi away" / "a 0.3 km". Urgencias and the map are always from the
     user and unchanged.
+  - **Owner request (2026-10-05): one radius for the list, the map and "Mi ubicación".** The
+    map's radius button also appears in list view, next to Lista/Mapa (on the map it stays over
+    the map); both change the same saved radius as Ajustes. "Mi ubicación" searches use that
+    radius again instead of the fixed 3 mi (5 km) set earlier. Area searches ("Zócalo") keep
+    5 km (3 mi) around the area. Seen on the simulator in list view.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

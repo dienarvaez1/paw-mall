@@ -17,10 +17,7 @@ type Coords = { lat: number; lng: number };
 
 const PLACES_PAGE_SIZE = 50;
 
-/**
- * Around an area the search names ("Zócalo"), and around the user with "Mi ubicación" on: 5 km,
- * or 3 mi for users who chose miles. The Ajustes radius isn't used for either.
- */
+/** Around an area the search names ("Zócalo"): 5 km, or 3 mi for users who chose miles. */
 const AREA_RADIUS = { km: 5, mi: 3 } as const;
 
 export function useAreaRadiusKm(): number {
@@ -29,18 +26,17 @@ export function useAreaRadiusKm(): number {
 }
 
 /**
- * Places near the user, nearest first, loaded page by page: within the Ajustes radius, or within
- * AREA_RADIUS with `nearMe` ("Mi ubicación" on), where `name` searches business names only.
- * Without `nearMe`, a `name` that names an area (a colonia, a city or a landmark like the Zócalo)
- * moves the search there within AREA_RADIUS; other text searches names, cities and states.
- * Every key includes the locale, so switching language refetches category names.
+ * Places within the search radius (Ajustes, or the radius button on the list and the map) of the
+ * user, nearest first, loaded page by page. With `nearMe` ("Mi ubicación" on), `name` searches
+ * business names only. Without it, a `name` that names an area (a colonia, a city or a landmark
+ * like the Zócalo) moves the search there within AREA_RADIUS; other text searches names, cities
+ * and states. Every key includes the locale, so switching language refetches category names.
  */
 export function usePlaces(coords: Coords, category: ChipCategory, name = '', nearMe = false) {
   const locale = useLocale();
-  const { radiusKm: settingsRadiusKm } = useSettings();
+  const { radiusKm } = useSettings();
   const filters = usePlaceFilters();
   const areaRadiusKm = useAreaRadiusKm();
-  const radiusKm = nearMe ? areaRadiusKm : settingsRadiusKm;
   return useInfiniteQuery({
     queryKey: ['places', locale, radiusKm, filters, coords, category, name, nearMe, areaRadiusKm],
     initialPageParam: 1,
