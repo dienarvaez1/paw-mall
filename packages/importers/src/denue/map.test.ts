@@ -145,6 +145,11 @@ describe('isCrueltyLinked', () => {
     'CRIANZA DE GALLOS',
     'CARNICERÍA DON PEPE',
     'RASTRO MUNICIPAL',
+    'NAVAJAS',
+    'JAULAS PARA GALLOS',
+    'VENTA DE ACCESORIOS PARA GALLOS HIRAM',
+    'VETERINARIA LA CASA DEL GALLERO',
+    'FINCA Y GALLOS EL INFIERNO',
   ])('excludes %s', (name) => {
     expect(isCrueltyLinked(name)).toBe(true);
   });
@@ -155,6 +160,9 @@ describe('isCrueltyLinked', () => {
     'PRODUCTOS DE CRIANZA PARA AVES DE CORRAL',
     'BODEGA EL RASTRO FERTILIZANTES',
     'FORRAJERIA EL GALLO DE ORO',
+    'VETERINARIA EL TORO',
+    'FORRAJES LOS DOS GALLOS',
+    'VETERINARIA ESPUELA DE ORO',
   ])('keeps %s', (name) => {
     expect(isCrueltyLinked(name)).toBe(false);
   });

@@ -45,9 +45,13 @@ const OPEN_24H = /\b24 ?(HORAS|HRS|HR|H)\b/;
  * Names linked to animal cruelty, which Paw Mall never lists (docs/PLAN.md, "No animal cruelty"):
  * slaughterhouses and butchers, cockfighting and bullfighting. Checked against both the business
  * name and the legal name. "El Rastro" alone is a common place name, so it doesn't count.
+ * Cockfighting also shows up as its gear and breeders: blades (navajas), cages and accessories for
+ * roosters, galleros (fighting-cock breeders) and rooster fincas. A rooster in the name alone
+ * ("Veterinaria El Gallo de Oro") doesn't count, and neither does a spur ("La Espuela" is as
+ * likely about horses; listed for the owner's review).
  */
 export const CRUELTY =
-  /(\b(?<!\bEL )RASTROS?\b|\b(MATADEROS?|CARNICERIAS?|OBRADOR(ES)?|EMPACADORA DE CARNES?|GALLOS? DE (COMBATE|PELEA)|GALLOS FINOS|GALLERAS?|PALENQUES? DE GALLOS|PELEAS? DE (GALLOS|PERROS)|TAURIN[OA]S?|TOROS DE LIDIA|PUPPY MILLS?)\b)/;
+  /(\b(?<!\bEL )RASTROS?\b|\b(MATADEROS?|CARNICERIAS?|OBRADOR(ES)?|EMPACADORA DE CARNES?|GALLOS? DE (COMBATE|PELEA)|GALLOS FINOS|GALLERAS?|GALLEROS?|PALENQUES? DE GALLOS|PELEAS? DE (GALLOS|PERROS)|TAURIN[OA]S?|TOROS DE LIDIA|PUPPY MILLS?|NAVAJAS?|(ACCESORIOS|JAULAS|PRODUCTOS|ARTICULOS) PARA GALLOS?)\b|\bFINCA\b.*\bGALLOS?\b)/;
 
 /**
  * Breeding operations for pets or fighting cocks: the puppy-mill risk. Raising farm animals

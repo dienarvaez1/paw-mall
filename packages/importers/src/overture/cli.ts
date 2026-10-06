@@ -20,8 +20,11 @@ import { PET_CATEGORIES, contributions, findMatches } from './match.ts';
 const STAC_CATALOG = 'https://stac.overturemaps.org/catalog.json';
 const PLACES = (release: string) =>
   `s3://overturemaps-us-west-2/release/${release}/theme=places/type=place/*`;
-/** The six states of docs/PLAN.md (CDMX, Edomex, Morelos, Hidalgo, Puebla, Tlaxcala). */
-const REGION = { minLng: -100.62, maxLng: -96.72, minLat: 17.85, maxLat: 21.4 };
+/**
+ * A box around the states of docs/PLAN.md: CDMX, Edomex, Morelos, Hidalgo, Puebla, Tlaxcala,
+ * Guerrero, Michoacán and Querétaro.
+ */
+const REGION = { minLng: -103.8, maxLng: -96.7, minLat: 16.3, maxLat: 21.7 };
 const BATCH_SIZE = 500;
 
 const { values: args } = parseArgs({
@@ -42,7 +45,9 @@ async function latestRelease(): Promise<string> {
 const release = args.release === 'latest' ? await latestRelease() : args.release;
 const cacheDir = join(import.meta.dirname, '../../.cache/overture');
 mkdirSync(cacheDir, { recursive: true });
-const placesFile = join(cacheDir, `pet-places-${release}.parquet`);
+// The region is part of the name, so a wider region downloads again instead of reusing a smaller box.
+const regionKey = `${REGION.minLng}_${REGION.minLat}_${REGION.maxLng}_${REGION.maxLat}`;
+const placesFile = join(cacheDir, `pet-places-${release}-${regionKey}.parquet`);
 
 const duck = await (await DuckDBInstance.create(':memory:')).connect();
 await duck.run('INSTALL httpfs; LOAD httpfs; INSTALL spatial; LOAD spatial;');

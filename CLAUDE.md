@@ -43,7 +43,8 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 
 - Repo visibility: private.
 - App name and bundle ID: "Paw Mall" is a working name; don't set a store bundle ID.
-- Region: Ciudad de México, Estado de México, Morelos, Hidalgo, Puebla, Tlaxcala; locale `es-MX`.
+- Region: Ciudad de México, Estado de México, Morelos, Hidalgo, Puebla, Tlaxcala, plus Guerrero,
+  Michoacán and Querétaro (added 2026-10-05 with the 100-mile radius); locale `es-MX`.
 - Shared code with Ferre Mall: copy now, extract a package later.
 - Audience: pet owners, no login.
 - Pet-friendly coverage at launch: curated CDMX restaurants and lodging.
