@@ -54,6 +54,12 @@ export const CRUELTY =
   /(\b(?<!\bEL )RASTROS?\b|\b(MATADEROS?|CARNICERIAS?|OBRADOR(ES)?|EMPACADORA DE CARNES?|GALLOS? DE (COMBATE|PELEA)|GALLOS FINOS|GALLERAS?|GALLEROS?|PALENQUES? DE GALLOS|PELEAS? DE (GALLOS|PERROS)|TAURIN[OA]S?|TOROS DE LIDIA|PUPPY MILLS?|NAVAJAS?|(ACCESORIOS|JAULAS|PRODUCTOS|ARTICULOS) PARA GALLOS?)\b|\bFINCA\b.*\bGALLOS?\b)/;
 
 /**
+ * Pet stores named in English after roosters sell for cockfighting ("Black Cock", rooster feed;
+ * owner's rule, 2026-10-05). Whole words only: "Cocker" (the dog breed) stays.
+ */
+const PET_STORE_COCK = /\bCOCKS?\b/;
+
+/**
  * Breeding operations for pets or fighting cocks: the puppy-mill risk. Raising farm animals
  * ("forrajera la crianza", poultry supplies) is fine.
  */
@@ -61,10 +67,14 @@ const BREEDING = /\b(CRIADEROS?|CRIANZA|CRIA DE)\b/;
 const BRED_ANIMALS =
   /\b(CANIN[AO]S?|PERR[OA]S?|CACHORR[OA]S?|GAT[OA]S?|FELIN[OA]S?|MASCOTAS?|GALLOS?)\b/;
 
-/** Whether a business's names tie it to animal cruelty. */
-export function isCrueltyLinked(names: string): boolean {
+/** Whether a business's names tie it to animal cruelty; some rules apply to one DENUE class. */
+export function isCrueltyLinked(names: string, activityCode = ''): boolean {
   const text = plain(names);
-  return CRUELTY.test(text) || (BREEDING.test(text) && BRED_ANIMALS.test(text));
+  return (
+    CRUELTY.test(text) ||
+    (BREEDING.test(text) && BRED_ANIMALS.test(text)) ||
+    (activityCode === '465911' && PET_STORE_COCK.test(text))
+  );
 }
 
 type Chain = { pattern: RegExp; chain: string };
@@ -262,7 +272,8 @@ export function mapDenueRow(row: Record<string, string>): MappedRow | null {
   if (categories.length === 0) return null;
 
   const names = plain(`${clean(row.nom_estab)} | ${clean(row.raz_social)}`);
-  if (isCrueltyLinked(names)) return { kind: 'excluded', externalId: row.id, activityCode, name };
+  if (isCrueltyLinked(names, activityCode))
+    return { kind: 'excluded', externalId: row.id, activityCode, name };
 
   const chain = findChain(names);
   if (chain && NOT_A_PLACE.test(plain(name))) return null;

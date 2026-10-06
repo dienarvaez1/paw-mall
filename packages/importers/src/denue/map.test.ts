@@ -138,6 +138,13 @@ describe('categorize', () => {
 });
 
 describe('isCrueltyLinked', () => {
+  it('excludes "cock" in pet store names only, as a whole word', () => {
+    expect(isCrueltyLinked('TIENDA DE ALIMENTOS PARA ANIMALES BLACK COCK', '465911')).toBe(true);
+    expect(isCrueltyLinked('IMPLEMENTOS PARA MASCOTAS COCK HOUSE', '465911')).toBe(true);
+    expect(isCrueltyLinked('ESTETICA PARA COCKERS', '465911')).toBe(false);
+    expect(isCrueltyLinked('CLINICA VETERINARIA COCK', '541941')).toBe(false);
+  });
+
   it.each([
     'VENTA DE GALLOS DE COMBATE',
     'PALENQUE DE GALLOS EL REY',

@@ -326,6 +326,11 @@ a task (and a note in the phase that applies it).
     original six states that the old patterns missed (removed on re-import). Rooster or bull names
     alone stay ("Veterinaria El Gallo de Oro", "Veterinaria El Toro"); ambiguous names are listed
     for the owner in "Pending owner reviews".
+  - **Owner rule (2026-10-05): "cock" in pet store names** (DENUE 465911, whole word) is excluded,
+    after the owner found "Black Cock", a store selling feed for fighting cocks. It removed 2:
+    "Tienda de alimentos para animales Black Cock" and "Implementos para mascotas Cock House".
+    "Cocker"/"Cockers" (the dog breed, in a vet and a groomer) stay. Exclusions: 41; places:
+    25,441.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
