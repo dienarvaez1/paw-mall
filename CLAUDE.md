@@ -61,6 +61,9 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
   `pnpm places:enrich-overture` and `pnpm places:check-websites` (visits each business website
   once), then `pnpm places:areas` (colonias, cities and landmarks for the search box). Each is
   safe to re-run; `pnpm places:import --dry-run` reports without writing.
+- Landmarks: `pnpm places:landmarks` refreshes the committed Wikidata snapshot
+  (`packages/importers/data/landmarks-wikidata.json`); run `pnpm places:areas` after it. The
+  curated `data/landmarks.json` wins over Wikidata on the same name.
 - Owner review: `pnpm places:claims` (owner claims) and `pnpm places:reports` (closed and
   animal-cruelty reports); see each command's header for options.
 - Google "Ver horario": Paw Mall's own Google Cloud project; setup and limits in

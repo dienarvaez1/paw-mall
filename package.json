@@ -22,7 +22,8 @@
     "places:check-websites": "pnpm --filter @paw-mall/importers check-websites",
     "places:claims": "pnpm --filter @paw-mall/importers claims",
     "places:reports": "pnpm --filter @paw-mall/importers reports",
-    "places:areas": "pnpm --filter @paw-mall/importers areas"
+    "places:areas": "pnpm --filter @paw-mall/importers areas",
+    "places:landmarks": "pnpm --filter @paw-mall/importers landmarks"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

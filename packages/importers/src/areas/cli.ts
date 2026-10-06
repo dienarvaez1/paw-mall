@@ -3,8 +3,9 @@
 //
 //   pnpm places:areas
 //
-// Reads every business in the cached DENUE files (run pnpm places:import first) and the curated
-// landmarks in data/landmarks.json, and replaces the search_areas table.
+// Reads every business in the cached DENUE files (run pnpm places:import first), the curated
+// landmarks in data/landmarks.json and the Wikidata landmarks snapshot in
+// data/landmarks-wikidata.json (pnpm places:landmarks), and replaces the search_areas table.
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -16,6 +17,7 @@ import { parseCsvRecords } from '../csv.ts';
 import { databaseUrl } from '../db-url.ts';
 import { STATE_FILES } from '../denue/files.ts';
 import { AreaCollector, type Landmark, landmarkAreas } from './build.ts';
+import { type WikidataLandmark, wikidataLandmarkAreas } from './wikidata.ts';
 
 const cacheDir = join(import.meta.dirname, '../../.cache/denue');
 const collector = new AreaCollector();
@@ -34,10 +36,15 @@ for (const file of Object.values(STATE_FILES).flat()) {
     throw new Error(`unzip failed (${code}) for ${file}; run pnpm places:import first`);
 }
 
-const landmarks = JSON.parse(
-  readFileSync(join(import.meta.dirname, '../../data/landmarks.json'), 'utf8'),
-) as Landmark[];
-const areas = [...landmarkAreas(landmarks), ...collector.areas()];
+const dataDir = join(import.meta.dirname, '../../data');
+const landmarks = JSON.parse(readFileSync(join(dataDir, 'landmarks.json'), 'utf8')) as Landmark[];
+const curated = landmarkAreas(landmarks);
+// Wikidata's landmarks (pnpm places:landmarks); the curated ones win on the same name.
+const wikidata = wikidataLandmarkAreas(
+  JSON.parse(readFileSync(join(dataDir, 'landmarks-wikidata.json'), 'utf8')) as WikidataLandmark[],
+  new Set(curated.map((area) => area.nameKey)),
+);
+const areas = [...curated, ...wikidata, ...collector.areas()];
 const byKind = areas.reduce<Record<string, number>>((acc, a) => {
   acc[a.kind] = (acc[a.kind] ?? 0) + 1;
   return acc;

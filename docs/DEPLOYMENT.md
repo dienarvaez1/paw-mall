@@ -507,6 +507,26 @@ a task (and a note in the phase that applies it).
     now gets the exact coordinates (like Waze), and directions spell out "Estado de México".
     Trade-off: Google shows a pin at the point instead of opening the business's Google listing.
     Ferre Mall has the same Google link (it's hibernating; noted for if it resumes).
+  - **Owner request (2026-10-06): a full landmark list.** Source: **Wikidata** (CC0, so no
+    conditions; credited in Ajustes anyway). Landmark types: museums, metro and train stations,
+    churches, cathedrals, convents, universities, archaeological sites, monuments, sculptures,
+    parks, plazas, stadiums, airports, theaters, hospitals, shopping centers, libraries, cultural
+    centers, palaces, skyscrapers, zoos, markets and more, only items with a Spanish Wikipedia
+    article (a notability filter) and located in the nine states (via their P131 "located in"
+    chain, so e.g. a Colima cathedral inside the box is dropped). Result: **1,102 landmarks**
+    (CDMX 615, Edomex 110, Puebla 101, Hidalgo 98, Querétaro 45, Michoacán 42, Guerrero 37,
+    Tlaxcala 28, Morelos 26), 1,989 searchable names with aliases ("La Latino", "Perisur",
+    "MNA"). Coordinates checked against the curated ones (within ~50 m). Rules: stations answer
+    only to "Metro X" / "Estación X" (so "Hidalgo" and "Insurgentes" stay a municipality and a
+    colonia); generic one-word names and category keywords are skipped; items without a Spanish
+    name are skipped; the 15 curated landmarks win on the same name (Wikidata lacks the Zócalo,
+    the Ángel and the Monumento a la Revolución under these types). `pnpm places:landmarks`
+    refreshes the committed snapshot (`data/landmarks-wikidata.json`, 290 KB, ~30 s; two queries,
+    because following "located in" to any depth for every item timed out on Wikidata).
+    Checked: "Teotihuacan" (53 places within 5 km), "perisur vet", "Metro Insurgentes",
+    "Torre Latino"/"La Latino", "Acueducto de Queretaro", "Catedral de Puebla estetica".
+    Note: a bare "Hidalgo" resolves to the municipality of Hidalgo (Michoacán), as before; states
+    aren't search areas.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
