@@ -131,15 +131,18 @@ describe('GET /v1/categories', () => {
 });
 
 describe('GET /v1/places search and filters', () => {
-  it('finds every word in the name or city, ignoring accents and small typos', async () => {
+  it('finds every word in the name or city, letter for letter, ignoring case and accents', async () => {
     const byName = placeListResponseSchema.parse((await getPlaces('q=lejana')).body);
     expect(byName.items.map((p) => p.name)).toEqual(['Veterinaria Lejana']);
     const byCity = placeListResponseSchema.parse(
       (await getPlaces('q=veterinaria%20coyoacan&namesOnly=true')).body,
     );
     expect(byCity.items.map((p) => p.name)).toEqual(['Veterinaria Lejana']);
+    const accents = placeListResponseSchema.parse((await getPlaces('q=CERCÁNA')).body);
+    expect(accents.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);
+    // A typo or a word that only sounds alike matches nothing ("tlaxcala" is not "Ixtacala").
     const typo = placeListResponseSchema.parse((await getPlaces('q=cercanna')).body);
-    expect(typo.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);
+    expect(typo.total).toBe(0);
   });
 
   it('requires every word, except en, la, el, de, del, los, las, y and para', async () => {

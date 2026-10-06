@@ -198,13 +198,16 @@ async function interpretSearch(db: Database, query: SearchQuery) {
   return { point, radiusKm, area, category, words };
 }
 
-/** Every word of `q` (or nearly: a typo) in the name, city or state of places aliased `p`. */
+/**
+ * Every word of `q` in the name, city or state of places aliased `p`, letter for letter, ignoring
+ * only case and accents (owner's rule): "tlaxcala" never matches "Ixtacala".
+ */
 function allWordsSql(q: string): SQL {
   const searchText = sql`place_search_text(p.name, p.city, p.state)`;
   const words = sql.join(
     searchWords(q).map((word) => {
       const text = sql`lower(f_unaccent(${word}))`;
-      return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!' OR ${text} <% ${searchText})`;
+      return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!')`;
     }),
     sql` AND `,
   );
@@ -220,22 +223,19 @@ function allWordsSql(q: string): SQL {
 async function findAreaSearch(db: Database, q: string, near: { lat: number; lng: number }) {
   const { business, area: areaText } = splitAreaSearch(q);
   if (business) {
-    const area = await resolveArea(db, areaText, near, 0.6);
+    const area = await resolveArea(db, areaText, near);
     if (area) return { area, business };
   }
-  // Exact names first, whole or inside the text, so "tlaxcala vet" keeps its "vet"; a small typo
-  // in a search that is only a place name ("zocallo") last.
-  const exact = await resolveArea(db, q, near, 1);
-  if (exact) return { area: exact, business: null };
+  // The whole text as a place, then a place inside it ("tlaxcala vet"); names match exactly.
+  const whole = await resolveArea(db, q, near);
+  if (whole) return { area: whole, business: null };
   const inside = await resolveAreaInText(db, q, near);
-  if (inside) return { area: inside.area, business: inside.rest || null };
-  const typo = await resolveArea(db, q, near);
-  return typo ? { area: typo, business: null } : null;
+  return inside ? { area: inside.area, business: inside.rest || null } : null;
 }
 
 /**
  * Places within the radius of lat/lng; with `q`, every word (but the vague ones) must appear in
- * the name, city or state, or nearly: a typo ("huelitas" → Huellitas).
+ * the name, city or state, letter for letter (case and accents aside).
  */
 async function searchPlaces(
   db: Database,
@@ -250,7 +250,7 @@ async function searchPlaces(
   ];
   if (!query.q) return pageOfPlaces(db, query, locale, conditions);
 
-  // Every word must match (each tolerating a small typo); no looser fallback (owner's rule).
+  // Every word must match, letter for letter; no looser fallback (owner's rules).
   return pageOfPlaces(db, query, locale, [...conditions, allWordsSql(query.q)]);
 }
 

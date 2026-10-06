@@ -68,14 +68,14 @@ describe('searching an area', () => {
     ]);
   });
 
-  it('uses 3 miles when the app asks for it, and ignores accents, case and small typos', async () => {
+  it('uses 3 miles when the app asks for it, and ignores accents and case, not letters', async () => {
     const result = await search('PLAZA PRÚEBA PAW', '&areaRadiusKm=4.828');
     expect(result.area?.radiusKm).toBe(4.828);
     expect(result.items.map((p) => p.name)).toEqual([
       'Veterinaria de la Plaza',
       'Estetica Cerca de la Plaza',
     ]);
-    expect((await search('plaza prueva paw')).area?.name).toBe('Plaza Prueba Paw');
+    expect((await search('plaza prueva paw')).area).toBeNull();
   });
 
   it('searches business words near the area with "X en Y"', async () => {
@@ -88,7 +88,7 @@ describe('searching an area', () => {
     const result = await search('estetica plaza prueba paw');
     expect(result.area?.name).toBe('Plaza Prueba Paw');
     expect(result.items.map((p) => p.name)).toEqual(['Estetica Cerca de la Plaza']);
-    // Only an exact area name counts at the end; a misspelled one stays a name search.
+    // A misspelled place name is no place.
     expect((await search('estetica plaza prueva paw')).area).toBeNull();
   });
 
@@ -124,6 +124,14 @@ describe('searching an area', () => {
     const result = await search('gemela paw');
     expect(result.area?.location.lng).toBeCloseTo(kmEast(1), 4);
     expect(result.items.map((p) => p.name)).toEqual(['Veterinaria Junto al Usuario']);
+  });
+
+  it('never takes a name that sounds alike for the place ("tlaxcala" is not "Ixtacala")', async () => {
+    await addArea('colonia', 'Ixtacala Paw', 3);
+    await addPlace('ixtacala', 'Veterinaria Ixtacala Paw', 3);
+    const result = await search('tlaxcala paw', '&namesOnly=true');
+    expect(result.items.map((p) => p.name)).not.toContain('Veterinaria Ixtacala Paw');
+    expect((await search('tlaxcala paw')).area?.name).not.toBe('Ixtacala Paw');
   });
 
   it('keeps everyday pet words as business searches', async () => {

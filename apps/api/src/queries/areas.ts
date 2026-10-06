@@ -27,22 +27,15 @@ export function nameKey(text: string): string {
 }
 
 /**
- * How close a misspelled area name must be (trigram similarity) to count: one-letter typos
- * ("zocallo", 0.67) pass; everyday pet words stay business searches ("animalia" vs the colonia
- * "Animal" is 0.60).
- */
-const MIN_SIMILARITY = 0.65;
-
-/**
  * The area a search names, if any: a landmark first, then a municipality, a town, a colonia.
- * Names shared by several areas ("Centro") resolve to the one nearest the user. A whole search
- * must name an area exactly or nearly; "X en Y" lets Y be a bit looser.
+ * Names shared by several areas ("Centro") resolve to the one nearest the user. The name must
+ * match every letter, ignoring only case and accents (owner's rule): "tlaxcala" is never
+ * "Ixtacala", and a typo ("zocallo") names no area.
  */
 export async function resolveArea(
   db: Database,
   text: string,
   near: Point,
-  minSimilarity = MIN_SIMILARITY,
 ): Promise<Omit<SearchArea, 'radiusKm'> | null> {
   const key = nameKey(text);
   if (key.length < 3) return null;
@@ -58,10 +51,7 @@ export async function resolveArea(
            ST_Y(location::geometry) AS lat, ST_X(location::geometry) AS lng
     FROM search_areas
     WHERE name_key = ${key}
-       OR (name_key % ${key} AND similarity(name_key, ${key}) >= ${minSimilarity})
-    ORDER BY name_key = ${key} DESC,
-             similarity(name_key, ${key}) DESC,
-             CASE kind WHEN 'landmark' THEN 0 WHEN 'municipality' THEN 1 WHEN 'town' THEN 2 ELSE 3 END,
+    ORDER BY CASE kind WHEN 'landmark' THEN 0 WHEN 'municipality' THEN 1 WHEN 'town' THEN 2 ELSE 3 END,
              ST_Distance(location, ST_SetSRID(ST_MakePoint(${near.lng}, ${near.lat}), 4326)::geography),
              business_count DESC
     LIMIT 1`);

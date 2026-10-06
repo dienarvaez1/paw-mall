@@ -447,6 +447,13 @@ a task (and a note in the phase that applies it).
     Ajustes. Area searches accept radii up to 161 km now (was 10). Tested: `radiusForRegion` (the
     reverse of `regionForRadius`), schema limits. Not seen on the simulator (zooming needs a
     gesture); the owner checks it on a phone.
+  - **Owner rule (2026-10-05): words match letter for letter.** "tlaxcala" (with "Mi ubicación"
+    on, near Tlalnepantla) listed "Veterinaria Ixtacala" and "Hospital para Mascotas Ixtacala",
+    because each word was allowed to match approximately (trigram word similarity). Now business
+    words and place names must match every letter, ignoring only case and accents ("queretaro"
+    still finds Querétaro). The fuzzy matching for place names (similarity 0.65, and 0.6 in "X en
+    Y") is gone too, so typos no longer match: "huelitas" and "zocallo" find nothing. Earlier notes
+    about typo tolerance in this phase no longer apply.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
