@@ -159,13 +159,17 @@ function PlacesList({ name, category }: { name: string; category: ChipCategory }
   const locale = useLocale();
   const { units, radiusKm, onlyOpenNow } = useSettings();
   const location = useUserLocation();
-  const places = usePlaces(location.coords, category, name);
+  // "Buscar en nombres": this search text as a business name instead of an area. A new text
+  // starts over as an area search.
+  const [namesOnlyFor, setNamesOnlyFor] = useState<string | null>(null);
+  const places = usePlaces(location.coords, category, name, namesOnlyFor === name);
+  const area = places.data?.pages[0]?.area ?? null;
   const items = useMemo(
     () => places.data?.pages.flatMap((page) => page.items) ?? [],
     [places.data],
   );
   const total = places.data?.pages[0]?.total ?? 0;
-  const distance = formatDistance(radiusKm, locale, units);
+  const distance = formatDistance(area ? area.radiusKm : radiusKm, locale, units);
 
   if (places.isPending) return <SkeletonList />;
   if (places.isError)
@@ -182,7 +186,23 @@ function PlacesList({ name, category }: { name: string; category: ChipCategory }
         if (places.hasNextPage && !places.isFetchingNextPage) void places.fetchNextPage();
       }}
       ListHeaderComponent={
-        items.length > 0 ? (
+        area ? (
+          <View className="gap-1 px-4 pb-1 pt-3">
+            <Text className="text-sm font-semibold text-neutral-800 dark:text-neutral-100">
+              {t('places.areaCount', {
+                count: total,
+                total: formatCount(total, locale),
+                distance,
+                area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
+              })}
+            </Text>
+            <Pressable accessibilityRole="button" onPress={() => setNamesOnlyFor(name)}>
+              <Text className="text-sm text-teal-800 underline dark:text-teal-300">
+                {t('places.searchNamesInstead', { query: name })}
+              </Text>
+            </Pressable>
+          </View>
+        ) : items.length > 0 ? (
           <Text className="px-4 pb-1 pt-3 text-sm text-neutral-500 dark:text-neutral-400">
             {t('places.listCount', { count: total, total: formatCount(total, locale), distance })}
           </Text>

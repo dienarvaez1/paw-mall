@@ -21,7 +21,8 @@
     "places:enrich-overture": "pnpm --filter @paw-mall/importers enrich-overture",
     "places:check-websites": "pnpm --filter @paw-mall/importers check-websites",
     "places:claims": "pnpm --filter @paw-mall/importers claims",
-    "places:reports": "pnpm --filter @paw-mall/importers reports"
+    "places:reports": "pnpm --filter @paw-mall/importers reports",
+    "places:areas": "pnpm --filter @paw-mall/importers areas"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

@@ -6,6 +6,7 @@ import {
 } from '@paw-mall/shared';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
+import { toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
 import type { ChipCategory } from '@/lib/categories';
@@ -16,17 +17,32 @@ type Coords = { lat: number; lng: number };
 
 const PLACES_PAGE_SIZE = 50;
 
+/** Around an area the search names ("Zócalo"): 5 km, or 3 mi for users who chose miles. */
+const AREA_RADIUS = { km: 5, mi: 3 } as const;
+
 /**
- * Places within the search radius chosen in Settings, nearest first, loaded page by page; `name`
- * searches by name, city or state. Every key includes the locale, so switching language refetches
- * category names.
+ * Places within the search radius chosen in Settings, nearest first, loaded page by page. `name`
+ * searches business names, cities and states, or, when it names an area (a colonia, a city or a
+ * landmark like the Zócalo), moves the search there within AREA_RADIUS; `namesOnly` keeps it on
+ * business names. Every key includes the locale, so switching language refetches category names.
  */
-export function usePlaces(coords: Coords, category: ChipCategory, name = '') {
+export function usePlaces(coords: Coords, category: ChipCategory, name = '', namesOnly = false) {
   const locale = useLocale();
-  const { radiusKm } = useSettings();
+  const { radiusKm, units } = useSettings();
   const filters = usePlaceFilters();
+  const areaRadiusKm = toKm(AREA_RADIUS[units], units);
   return useInfiniteQuery({
-    queryKey: ['places', locale, radiusKm, filters, coords, category, name],
+    queryKey: [
+      'places',
+      locale,
+      radiusKm,
+      filters,
+      coords,
+      category,
+      name,
+      namesOnly,
+      areaRadiusKm,
+    ],
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
       apiGet(
@@ -36,6 +52,8 @@ export function usePlaces(coords: Coords, category: ChipCategory, name = '') {
           radiusKm,
           category: category ?? undefined,
           q: name || undefined,
+          areaRadiusKm: name ? areaRadiusKm : undefined,
+          namesOnly: (name && namesOnly) || undefined,
           ...filters,
           pageSize: PLACES_PAGE_SIZE,
           page: pageParam,

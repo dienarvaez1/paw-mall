@@ -198,6 +198,33 @@ export const placeClaims = pgTable(
   (t) => [index('place_claims_status_idx').on(t.status)],
 );
 
+/**
+ * Places a search can name instead of a business: landmarks (curated, data/landmarks.json),
+ * municipalities and towns, and colonias. Centers of municipalities, towns and colonias are the
+ * median position of all DENUE businesses there (`pnpm places:areas`).
+ */
+export const searchAreas = pgTable(
+  'search_areas',
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    /** landmark | municipality | town | colonia */
+    kind: text().notNull(),
+    name: text().notNull(),
+    /** Lower-case, accent-free name used for matching ("plaza de la constitucion"). */
+    nameKey: text().notNull(),
+    /** For colonias and towns: their municipality; null for landmarks and municipalities. */
+    municipality: text(),
+    state: text().notNull(),
+    location: geographyPoint().notNull(),
+    /** DENUE businesses behind the center (all kinds of business); 0 for landmarks. */
+    businessCount: integer().notNull().default(0),
+  },
+  (t) => [
+    index('search_areas_name_key_idx').using('gin', sql`${t.nameKey} gin_trgm_ops`),
+    index('search_areas_kind_idx').on(t.kind),
+  ],
+);
+
 /** Google requests per billing month (Pacific time) and SKU, to stay inside the free allowance. */
 export const googleUsage = pgTable(
   'google_usage',

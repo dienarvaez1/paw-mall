@@ -64,6 +64,13 @@
       "when": 1791244237858,
       "tag": "0008_pet_funeral_category",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1791249175509,
+      "tag": "0009_search_areas",
+      "breakpoints": true
     }
   ]
 }

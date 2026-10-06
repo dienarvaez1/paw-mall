@@ -49,6 +49,7 @@ a task (and a note in the phase that applies it).
 | 2026-10-05 | **An admin page for Paw Mall.** Reviewing claims and reports is command-line only (`pnpm places:claims`, `pnpm places:reports`). The owner wants to discuss an admin page later, probably after all phases are completed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Open: after Phase 7                   |
 | 2026-10-05 | **How to show "sin nombre" businesses and INEGI's dates.** 1,689 places (about 7%) are named "… Sin Nombre" in DENUE: real, still-listed businesses without a trade name, not a sign of closure. Options: hide them by default (Ajustes switch on), show "(sin nombre comercial)", or both. Also whether "Registrado por INEGI en 2010" should read "En el directorio del INEGI desde 2010" (July 2010 is DENUE's first edition, not an opening date).                                                                                                                                                                                                                                                                                                                                         | Open: owner to choose                 |
 | 2026-10-05 | **More DENUE fields to use.** Market or plaza and stall number (1,938 places, e.g. Mercado Sonora), interior numbers missing from addresses (1,504), staff size for ranking Urgencias (960 with 6+ people), business email (2,883), semi-fixed stalls (187). Suggested: market/stall and interior numbers in addresses first.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Open: owner to choose                 |
+| 2026-10-05 | **Area search on the map, and more landmarks.** Area search works in the list; the map still shows the area around the user (search is off in map mode, as in Ferre Mall). Options: center the map on a searched area; add landmarks outside Mexico City (Puebla, Cuernavaca, Toluca, Querétaro…) to `data/landmarks.json`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Open: owner to choose                 |
 | 2026-10-05 | **Import neighboring states for the 100-mile radius?** Guerrero, Michoacán and Querétaro are now imported (owner's decision, 2026-10-05).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Done in Phase 5 (#6)                  |
 
 ## Phase details
@@ -335,6 +336,26 @@ a task (and a note in the phase that applies it).
     Explorar in Phase 4 is now a saved switch, "Solo lugares abiertos ahora", after the other
     switches in Ajustes → Lugares. It filters the list and the map like the other place filters;
     Urgencias is unchanged (it already puts open places first).
+  - **Owner request (2026-10-05): search by colonia, landmark and city.** Typing an area in
+    Explorar's search box ("Zócalo", "Roma Norte", "Coyoacán", "Toluca") moves the search there:
+    places within **5 km (3 mi for users who chose miles)** of the area, nearest to it first,
+    with distances from it. The radius in Ajustes is left alone. "Veterinaria en Coyoacán" (or
+    "cerca de") searches business words near the area; a link under the header searches the same
+    text in business names instead. Names shared by several areas ("Centro") resolve to the one
+    nearest the user; one-letter typos are tolerated (trigram similarity 0.65, chosen so everyday
+    pet words such as "animalia" stay business searches).
+  - Where the areas come from (`pnpm places:areas`, new `search_areas` table, migration 0009):
+    municipalities (754), towns (1,635) and colonias (23,332) are centered on the median position
+    of **all** 2.65 million DENUE businesses in the nine states (not only pet ones; colonias need
+    5+ businesses, towns 20+). Landmarks (15, plus aliases: 33 names) are a curated list in
+    `packages/importers/data/landmarks.json`; each was checked against Overture Maps (matching
+    listings within 60 m). Overture's own landmark points were too scattered to use directly
+    (e.g. "Zócalo" entries 2–11 km off). Rebuild the areas after each DENUE import.
+  - Tested: API (area resolution, 5 km vs 3 mi, "X en Y", nearest of duplicate names, names-only,
+    typo threshold), importer (median centers, minimum counts, landmark list). Checked with curl
+    from Polanco: "Zocalo" → 1,237 places within 5 km of the Zócalo; "Roma Norte", "col. condesa",
+    "Toluca", "Bellas Artes" resolve as expected; "huellitas" stays a name search. Typing can't be
+    automated in the simulator; the owner checks it on a phone.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

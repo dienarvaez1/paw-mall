@@ -19,6 +19,7 @@ import {
 import { type SQL, sql } from 'drizzle-orm';
 
 import type { Database } from '../db/client';
+import { resolveArea, splitAreaSearch } from './areas';
 
 type Point = { lat: number; lng: number };
 
@@ -139,15 +140,40 @@ function toPlace(row: PlaceRow): Place {
 
 /**
  * Visible places within the radius, nearest first, optionally in one category, with the user's
- * filters. With `q`, every word must appear in the name, city or state (or nearly: a typo); if
- * nothing matches, names close to the whole text are tried, which catches a typo in a short word
- * ("huelitas" → Huellitas) but would add noise to every search.
+ * filters. When `q` names an area ("Zócalo", "Roma Norte", "veterinaria en Coyoacán"), the search
+ * moves there: places within areaRadiusKm of the area, nearest to it first, the rest of `q` (if
+ * any) searched in names. Otherwise `q` searches names, cities and states around the user.
  */
 export async function listPlaces(
   db: Database,
   query: PlaceListQuery,
   locale: Locale,
 ): Promise<PlaceListResponse> {
+  if (query.q && !query.namesOnly) {
+    const { business, area: areaText } = splitAreaSearch(query.q);
+    const area = await resolveArea(db, areaText, query, business ? 0.6 : undefined);
+    if (area) {
+      const result = await searchPlaces(
+        db,
+        { ...query, ...area.location, radiusKm: query.areaRadiusKm, q: business ?? undefined },
+        locale,
+      );
+      return { ...result, area: { ...area, radiusKm: query.areaRadiusKm } };
+    }
+  }
+  return { ...(await searchPlaces(db, query, locale)), area: null };
+}
+
+/**
+ * Places within the radius of lat/lng; with `q`, every word must appear in the name, city or
+ * state (or nearly: a typo); if nothing matches, names close to the whole text are tried, which
+ * catches a typo in a short word ("huelitas" → Huellitas) but would add noise to every search.
+ */
+async function searchPlaces(
+  db: Database,
+  query: PlaceListQuery,
+  locale: Locale,
+): Promise<Omit<PlaceListResponse, 'area'>> {
   const point = { lat: query.lat, lng: query.lng };
   const conditions = [
     visibleSql,
@@ -177,7 +203,7 @@ async function pageOfPlaces(
   query: Pick<PlaceListQuery, 'lat' | 'lng' | 'page' | 'pageSize'>,
   locale: Locale,
   conditions: SQL[],
-): Promise<PlaceListResponse> {
+): Promise<Omit<PlaceListResponse, 'area'>> {
   const where = sql.join(conditions, sql` AND `);
   const rows = await db.execute<PlaceRow & { total: number }>(sql`
     SELECT ${placeColumnsSql(locale, query)}, count(*) OVER()::int AS total

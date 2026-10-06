@@ -10,6 +10,7 @@ describe('placeListQuerySchema', () => {
       lat: 19.4326,
       lng: -99.1332,
       radiusKm: DEFAULT_RADIUS_KM,
+      areaRadiusKm: 5,
       page: 1,
       pageSize: 20,
     });

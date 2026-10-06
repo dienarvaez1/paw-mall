@@ -18,7 +18,7 @@
   "registeredSince": "Registrado por INEGI en {{year}}",
   "listCount_one": "{{total}} lugar a menos de {{distance}}",
   "listCount_other": "{{total}} lugares a menos de {{distance}}",
-  "searchPlaceholder": "Busca por nombre, municipio o estado",
+  "searchPlaceholder": "Busca un negocio, colonia, ciudad o lugar (ej. Zócalo)",
   "clearSearch": "Borrar búsqueda",
   "noMatchesNearby": "No encontramos lugares que coincidan con «{{query}}» a menos de {{distance}}.",
   "noMatchesHint": "Revisa cómo lo escribiste o prueba con menos palabras. La búsqueda llega hasta tu radio; puedes ampliarlo en Ajustes.",
@@ -113,5 +113,8 @@
     "submit": "Enviar solicitud",
     "invalid": "Revisa los datos: necesitas al menos un teléfono, un horario, un sitio web o un dato de atención veterinaria, además de tu contacto y tu aceptación.",
     "thanks": "Recibimos tu solicitud. La revisaremos y, si todo está bien, publicaremos los datos de tu negocio."
-  }
+  },
+  "areaCount_one": "{{total}} lugar a menos de {{distance}} de {{area}}",
+  "areaCount_other": "{{total}} lugares a menos de {{distance}} de {{area}}",
+  "searchNamesInstead": "Buscar «{{query}}» en nombres de negocios"
 }
