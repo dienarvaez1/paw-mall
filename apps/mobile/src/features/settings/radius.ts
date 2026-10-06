@@ -3,10 +3,10 @@ import { KM_PER_MILE } from '@paw-mall/shared';
 export const UNIT_OPTIONS = ['km', 'mi'] as const;
 export type DistanceUnit = (typeof UNIT_OPTIONS)[number];
 
-/** Search radius choices in each unit's own round numbers, up to 50 miles. */
+/** Search radius choices in each unit's own round numbers, up to 100 miles (160 km). */
 export const RADIUS_OPTIONS = {
-  km: [5, 10, 15, 25, 50, 80],
-  mi: [3, 5, 10, 15, 25, 50],
+  km: [5, 10, 15, 25, 50, 80, 160],
+  mi: [3, 5, 10, 15, 25, 50, 100],
 } as const satisfies Record<DistanceUnit, readonly number[]>;
 
 export function toKm(value: number, unit: DistanceUnit): number {

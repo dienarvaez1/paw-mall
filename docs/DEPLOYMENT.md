@@ -49,6 +49,7 @@ a task (and a note in the phase that applies it).
 | 2026-10-05 | **An admin page for Paw Mall.** Reviewing claims and reports is command-line only (`pnpm places:claims`, `pnpm places:reports`). The owner wants to discuss an admin page later, probably after all phases are completed.                                                                                                                                                                                                                                             | Open: after Phase 7                   |
 | 2026-10-05 | **How to show "sin nombre" businesses and INEGI's dates.** 1,689 places (about 7%) are named "… Sin Nombre" in DENUE: real, still-listed businesses without a trade name, not a sign of closure. Options: hide them by default (Ajustes switch on), show "(sin nombre comercial)", or both. Also whether "Registrado por INEGI en 2010" should read "En el directorio del INEGI desde 2010" (July 2010 is DENUE's first edition, not an opening date).                | Open: owner to choose                 |
 | 2026-10-05 | **More DENUE fields to use.** Market or plaza and stall number (1,938 places, e.g. Mercado Sonora), interior numbers missing from addresses (1,504), staff size for ranking Urgencias (960 with 6+ people), business email (2,883), semi-fixed stalls (187). Suggested: market/stall and interior numbers in addresses first.                                                                                                                                         | Open: owner to choose                 |
+| 2026-10-05 | **Import neighboring states for the 100-mile radius?** The new largest radius (160 km) reaches into Guerrero (Taxco 109 km, Iguala 128 km), Michoacán (Zitácuaro 128 km) and Querétaro (San Juan del Río 139 km), which aren't imported (PLAN.md's region is six states), so those parts of the circle look empty. Adding their DENUE files is a small importer change.                                                                                               | Open: owner to choose                 |
 
 ## Phase details
 
@@ -308,6 +309,11 @@ a task (and a note in the phase that applies it).
     from DENUE itself and look active (74.6% registered 2019 or later vs 67.2% of named ones);
     the oldest registration date is July 2010, shared by 4,555 places (DENUE's first edition);
     unused DENUE fields with value are listed in "Pending owner reviews".
+  - **Owner decision (2026-10-05): search radius up to 100 miles (160 km)** "for more coverage
+    on data". Ajustes adds 160 km and 100 mi; the API accepts up to 161 km (was 100). From the
+    Zócalo, 100 mi covers 20,225 places (95% of those imported) vs 15,386 at 50 mi; list, map and
+    search requests at that radius take under 0.15 s locally. The circle's edge reaches states
+    that aren't imported (see "Pending owner reviews"). Urgencias keeps its own 25 km radius.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

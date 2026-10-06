@@ -30,7 +30,8 @@ describe('placeListQuerySchema', () => {
   });
 
   it('caps the radius and page size', () => {
-    expect(placeListQuerySchema.safeParse({ ...base, radiusKm: '101' }).success).toBe(false);
+    expect(placeListQuerySchema.safeParse({ ...base, radiusKm: '160.9344' }).success).toBe(true);
+    expect(placeListQuerySchema.safeParse({ ...base, radiusKm: '162' }).success).toBe(false);
     expect(placeListQuerySchema.safeParse({ ...base, pageSize: '201' }).success).toBe(false);
   });
 });

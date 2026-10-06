@@ -58,8 +58,8 @@ export const placeSchema = z.object({
 export type Place = z.infer<typeof placeSchema>;
 
 export const DEFAULT_RADIUS_KM = 5;
-/** The largest radius in Settings is 50 miles (80.5 km). */
-export const MAX_RADIUS_KM = 100;
+/** The largest radius in Settings is 100 miles (160.9 km), the owner's choice (2026-10-05). */
+export const MAX_RADIUS_KM = 161;
 export const DEFAULT_PAGE_SIZE = 20;
 export const MAX_PAGE_SIZE = 200;
 /** Most places the map shows one by one; with more in view it shows clusters. */
