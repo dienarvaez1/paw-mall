@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { radiusForRegion, regionForBounds, regionForRadius } from './map-region';
+import { isAwayFrom, radiusForRegion, regionForBounds, regionForRadius } from './map-region';
 
 describe('regionForRadius', () => {
   it('fits the circle with a margin, wider in longitude away from the equator', () => {
@@ -47,5 +47,20 @@ describe('radiusForRegion', () => {
       longitudeDelta: 0.0001,
     };
     expect(radiusForRegion(tiny, 161)).toBe(0.1);
+  });
+});
+
+describe('isAwayFrom', () => {
+  const me = { lat: 19.4326, lng: -99.1332 };
+  const around = regionForRadius(me, 5);
+
+  it('stays near when zoomed in place or nudged a little', () => {
+    expect(isAwayFrom(regionForRadius(me, 1), me)).toBe(false);
+    expect(isAwayFrom({ ...around, latitude: me.lat + around.latitudeDelta / 5 }, me)).toBe(false);
+  });
+
+  it('is away once the point leaves the middle half of the view', () => {
+    expect(isAwayFrom({ ...around, latitude: me.lat + around.latitudeDelta / 3 }, me)).toBe(true);
+    expect(isAwayFrom({ ...around, longitude: me.lng - around.longitudeDelta }, me)).toBe(true);
   });
 });

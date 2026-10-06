@@ -472,6 +472,11 @@ a task (and a note in the phase that applies it).
     on reads the device's position again and flies the map back to it, with the radius circle
     (preset or zoomed) fitted around it. Turning it off leaves the map where it is. Not seen on
     the simulator (needs a tap); the owner checks it on a phone.
+  - **Owner request (2026-10-05): "Mi ubicación" turns itself off when the map is moved away.**
+    When the user pans the map by hand so their position leaves the middle half of the view, the
+    toggle switches off (and with it, searches go back to reading places). Zooming in place or
+    nudging the map keeps it on; the map's own moves never switch it off. Helper `isAwayFrom`
+    (tested). Not seen on the simulator (needs gestures).
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

@@ -47,3 +47,14 @@ export function regionForBounds([minLng, minLat, maxLng, maxLat]: readonly [
     longitudeDelta: Math.max((maxLng - minLng) * 1.3, MIN_DELTA),
   };
 }
+
+/**
+ * Whether the user has moved the map away from a point: it's no longer in the middle half of the
+ * view. Zooming in place or nudging the map keeps it there; panning to another area doesn't.
+ */
+export function isAwayFrom(region: MapRegion, point: { lat: number; lng: number }): boolean {
+  return (
+    Math.abs(point.lat - region.latitude) > region.latitudeDelta / 4 ||
+    Math.abs(point.lng - region.longitude) > region.longitudeDelta / 4
+  );
+}

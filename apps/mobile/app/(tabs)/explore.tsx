@@ -25,7 +25,7 @@ import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 import { CATEGORY_COLORS, CHIP_CATEGORIES, type ChipCategory, pinColor } from '@/lib/categories';
-import { radiusForRegion, regionForBounds, regionForRadius } from '@/lib/map-region';
+import { isAwayFrom, radiusForRegion, regionForBounds, regionForRadius } from '@/lib/map-region';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 
@@ -120,6 +120,7 @@ export default function ExploreScreen() {
           nearMe={nearMe}
           customRadiusKm={customRadiusKm}
           onZoomByHand={setCustomRadiusKm}
+          onLeaveMyLocation={() => setNearMe(false)}
         />
       )}
     </View>
@@ -286,6 +287,7 @@ function PlacesMap({
   nearMe,
   customRadiusKm,
   onZoomByHand,
+  onLeaveMyLocation,
 }: {
   category: ChipCategory;
   name: string;
@@ -293,6 +295,8 @@ function PlacesMap({
   customRadiusKm: number | null;
   /** The radius of the view after the user zoomed or panned the map by hand. */
   onZoomByHand: (radiusKm: number) => void;
+  /** The user moved the map away from their location by hand: "Mi ubicación" turns off. */
+  onLeaveMyLocation: () => void;
 }) {
   const { t } = useAppTranslation();
   const { radiusKm } = useSettings();
@@ -439,6 +443,8 @@ function PlacesMap({
           if (details?.isGesture) {
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
             if (Math.abs(handRadiusKm - circle.radiusKm) >= 0.05) onZoomByHand(handRadiusKm);
+            // Moved by hand away from the user: no longer "at my location".
+            if (nearMe && isAwayFrom(next, location.coords)) onLeaveMyLocation();
           }
         }}
         showsCompass={false}
