@@ -319,6 +319,21 @@ function PlacesMap({
     if (showingArea.current) return;
     mapRef.current?.animateToRegion(regionForRadius(location.coords, radiusKm), MAP_FIT_MS);
   }, [radiusKm, location.coords]);
+  // Turning "Mi ubicación" on in map view: read the device's position again and fly back to it,
+  // with the circle fitted around it. Turning it off leaves the map where it is.
+  const wasNearMe = useRef(nearMe);
+  const { refresh } = location;
+  useEffect(() => {
+    const was = wasNearMe.current;
+    wasNearMe.current = nearMe;
+    if (!nearMe || was) return;
+    void refresh().then((coords) =>
+      mapRef.current?.animateToRegion(
+        regionForRadius(coords, customRadiusKm ?? radiusKm),
+        MAP_FIT_MS,
+      ),
+    );
+  }, [nearMe, refresh, customRadiusKm, radiusKm]);
   // Back to the presets (the radius button): fit the preset circle again. A zoom by hand sets a
   // custom radius without moving the map.
   const hadCustom = useRef(customRadiusKm !== null);

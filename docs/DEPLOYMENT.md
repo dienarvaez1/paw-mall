@@ -468,6 +468,10 @@ a task (and a note in the phase that applies it).
     (25,474 places in total); e.g. "Escuela para Entrenamiento de Perros Guía para Ciegos IAP".
     Search keywords: adiestramiento, adiestrador, entrenador/entrenamiento canino, escuela canina,
     dog trainer/training ("adiestramiento" within 25 km of the Zócalo: 22).
+  - **Owner request (2026-10-05): "Mi ubicación" on recenters the map.** In map view, turning it
+    on reads the device's position again and flies the map back to it, with the radius circle
+    (preset or zoomed) fitted around it. Turning it off leaves the map where it is. Not seen on
+    the simulator (needs a tap); the owner checks it on a phone.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
