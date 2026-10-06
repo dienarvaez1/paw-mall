@@ -404,6 +404,10 @@ a task (and a note in the phase that applies it).
     Mapa, "Mi ubicación" and the radius button ("5 km"; on the map it stays over the map); 3)
     category chips; then the bold summary. Seen on the simulator: row 2 fits on an iPhone 17 Pro
     Max in Spanish.
+  - **Owner request (2026-10-05): a steady second row.** "Mi ubicación" is icon-only (location
+    icon; screen readers still say "Mi ubicación" and on/off). The radius button stays in the
+    row on the map too, so Lista and Mapa no longer resize when switching; the radius button that
+    floated over the map was removed as a duplicate (the compass and location buttons remain).
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

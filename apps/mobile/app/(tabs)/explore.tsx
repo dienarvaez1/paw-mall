@@ -92,8 +92,8 @@ export default function ExploreScreen() {
           </Pressable>
         ))}
         <NearMeButton nearMe={nearMe} onToggle={() => setNearMe((value) => !value)} />
-        {/* On the map the same button sits over the map, next to the other map buttons. */}
-        {mode === 'list' ? <RadiusButton className="min-h-11" /> : null}
+        {/* The same row in both modes, so Lista and Mapa never resize. */}
+        <RadiusButton className="min-h-11" />
       </View>
       <View className="border-b border-neutral-200 dark:border-neutral-800">
         <CategoryChips selected={category} onSelect={setCategory} />
@@ -379,8 +379,6 @@ function PlacesMap({ category }: { category: ChipCategory }) {
           onPress={fitCircle}
         />
       ) : null}
-      {/* Changing the radius refits the circle around the user (see the effect above). */}
-      <RadiusButton className="absolute bottom-[144px] right-3 h-12 shadow" />
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('places.compass')}
@@ -580,13 +578,15 @@ function RadiusButton({ className }: { className: string }) {
 function NearMeButton({ nearMe, onToggle }: { nearMe: boolean; onToggle: () => void }) {
   const { t } = useAppTranslation();
   const scheme = useColorScheme();
+  // Just the icon; screen readers announce "Mi ubicación" and whether it's on.
   return (
     <Pressable
       accessibilityRole="switch"
+      accessibilityLabel={t('places.nearMe')}
       accessibilityState={{ checked: nearMe }}
       accessibilityHint={t('places.nearMeHint')}
       onPress={onToggle}
-      className={`min-h-11 flex-row items-center gap-1.5 rounded-full border px-3 ${
+      className={`h-11 w-11 items-center justify-center rounded-full border ${
         nearMe
           ? 'border-brand bg-brand'
           : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
@@ -594,16 +594,9 @@ function NearMeButton({ nearMe, onToggle }: { nearMe: boolean; onToggle: () => v
     >
       <Image
         source={ICONS.locate}
-        style={{ width: 16, height: 16 }}
+        style={{ width: 22, height: 22 }}
         tintColor={nearMe ? '#ffffff' : scheme === 'dark' ? '#e5e5e5' : '#262626'}
       />
-      <Text
-        className={`text-sm font-semibold ${
-          nearMe ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
-        }`}
-      >
-        {t('places.nearMe')}
-      </Text>
     </Pressable>
   );
 }
