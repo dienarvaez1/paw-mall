@@ -89,6 +89,12 @@ describe('mapDenueRow on the sample file', () => {
     expect(await mapSample('24')).toBeNull();
   });
 
+  it('picks dog trainers by name in any class, but never gyms or training without animals', async () => {
+    expect(slugs(await placeFromSample('25'))).toEqual(['dog_trainer:name']);
+    expect(slugs(await placeFromSample('26'))).toEqual(['dog_trainer:name']);
+    for (const id of ['27', '28', '29']) expect(await mapSample(id)).toBeNull();
+  });
+
   it('imports feed stores, including names that only look like cruelty', async () => {
     expect(slugs(await placeFromSample('10'))).toEqual(['feed_store:activity']);
     expect(slugs(await placeFromSample('14'))).toEqual(['feed_store:activity']);

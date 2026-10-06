@@ -71,6 +71,13 @@
       "when": 1791249175509,
       "tag": "0009_search_areas",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1791263949866,
+      "tag": "0010_dog_trainer_category",
+      "breakpoints": true
     }
   ]
 }

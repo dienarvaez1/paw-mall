@@ -9,6 +9,7 @@ describe('detectCategory', () => {
     expect(detectCategory('estética canina')).toEqual({ category: 'groomer', words: '' });
     expect(detectCategory('pet shop')).toEqual({ category: 'pet_store', words: '' });
     expect(detectCategory('Crematorio')).toEqual({ category: 'pet_funeral', words: '' });
+    expect(detectCategory('adiestramiento canino')).toEqual({ category: 'dog_trainer', words: '' });
   });
 
   it('keeps other words for the name search and drops fillers left alone', () => {

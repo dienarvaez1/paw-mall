@@ -33,6 +33,17 @@ const BOARDING =
   /\b(PENSION(ES)?|HOTEL(ES)?|GUARDERIAS?|HOSPEDAJE|ESTANCIAS?|RESORT|DAYCARE|KINDER|INN|CAMP|HOUSING|HOSTAL)\b/;
 /** Shelters and rescues: a "hotel para perros abandonados" isn't a boarding business. */
 const SHELTER = /\b(ABANDONAD[OA]S?|REFUGIOS?|ALBERGUES?|ADOPCION(ES)?|RESCATES?)\b/;
+/**
+ * Dog training (owner's decision, 2026-10-05): a training word plus an animal word, in any DENUE
+ * class (trainers turn up under sports, social work, associations…). "K9" alone isn't enough
+ * ("Abarrotes K9"), and training without an animal ("adiestramiento táctico") isn't dog training.
+ */
+const TRAINING =
+  /\b(ADIESTRA\w*|ENTRENA\w*|DOG ?TRAIN\w*|TRAINING|ESCUELA CANINA|EDUCACION CANINA|CINOTECNIA|OBEDIENCIA)\b/;
+const TRAINED_ANIMALS = /\b(K ?9)\b/;
+/** Gyms (centros de acondicionamiento físico): "Black Dog Cross Training" trains people. */
+const GYMS = '713943';
+
 /** Pet crematoriums and funeral homes (owner's decision, 2026-10-05), with an animal word too. */
 const FUNERAL =
   /\b(CREMATORIOS?|CREMACION(ES)?|FUNERARI[AO]S?|FUNERAL(ES)?|CEMENTERIOS?|PANTEON(ES)?|INCINERA\w*|MEMORIAL)\b/;
@@ -132,10 +143,16 @@ export function categorize(activityCode: string, name: string): PlaceCategory[] 
   };
 
   const own = ACTIVITY_CATEGORIES[activityCode];
-  if (own) add(own, 'activity');
-  else if (!NAME_ONLY_ACTIVITIES.has(activityCode)) return [];
-
   const animal = ANIMAL.test(text);
+  const trainer = TRAINING.test(text) && (animal || TRAINED_ANIMALS.test(text));
+  if (own) add(own, 'activity');
+  else if (!NAME_ONLY_ACTIVITIES.has(activityCode)) {
+    // Outside the pet classes, only dog trainers are picked, by name (never gyms).
+    if (trainer && activityCode !== GYMS) add('dog_trainer', 'name');
+    return out;
+  }
+  if (trainer) add('dog_trainer', 'name');
+
   if (GROOMING_ALONE.test(text) || (GROOMING.test(text) && animal)) add('groomer', 'name');
   if (BOARDING.test(text) && animal && !SHELTER.test(text)) add('boarding', 'name');
   if (FUNERAL.test(text) && animal) add('pet_funeral', 'name');

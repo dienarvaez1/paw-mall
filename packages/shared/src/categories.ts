@@ -9,6 +9,7 @@ export const PET_BUSINESS_CATEGORIES = [
   'boarding',
   'feed_store',
   'pet_funeral',
+  'dog_trainer',
 ] as const;
 
 /** Pet-friendly venues: filled from Phase 6 on. */

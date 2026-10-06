@@ -54,6 +54,16 @@ const KEYWORDS: Record<string, CategorySlug> = {
   funeraria: 'pet_funeral',
   funerarias: 'pet_funeral',
   cremacion: 'pet_funeral',
+  // Dog training
+  adiestramiento: 'dog_trainer',
+  adiestrador: 'dog_trainer',
+  adiestradores: 'dog_trainer',
+  'adiestramiento canino': 'dog_trainer',
+  'entrenamiento canino': 'dog_trainer',
+  'entrenador canino': 'dog_trainer',
+  'escuela canina': 'dog_trainer',
+  'dog trainer': 'dog_trainer',
+  'dog training': 'dog_trainer',
   // Public services
   antirrabico: 'public_vet_service',
   'control canino': 'public_vet_service',

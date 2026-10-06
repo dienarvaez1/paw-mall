@@ -9,6 +9,7 @@ export const CHIP_CATEGORIES = [
   'groomer',
   'boarding',
   'feed_store',
+  'dog_trainer',
   'pet_funeral',
   'public_vet_service',
 ] as const satisfies readonly (CategorySlug | null)[];
@@ -25,6 +26,7 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   pet_store: '#ea580c',
   feed_store: '#65a30d',
   pet_funeral: '#854d0e',
+  dog_trainer: '#0369a1',
 };
 const DEFAULT_COLOR = '#525252';
 
