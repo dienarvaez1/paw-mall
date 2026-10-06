@@ -408,6 +408,13 @@ a task (and a note in the phase that applies it).
     icon; screen readers still say "Mi ubicación" and on/off). The radius button stays in the
     row on the map too, so Lista and Mapa no longer resize when switching; the radius button that
     floated over the map was removed as a duplicate (the compass and location buttons remain).
+  - **Owner request (2026-10-05): search on the map.** The search box is no longer grayed out in
+    map view, and it works there as in the list: with "Mi ubicación" off, a place ("Zócalo",
+    "Veterinario Tlaxcala") flies the map to it, draws its 5 km (3 mi) circle, and the legend
+    reads "N de M lugares a menos de 5 km de Tlaxcala"; other text, or "Mi ubicación" on, keeps
+    the circle around the user and shows only matching names. Clearing the search flies back to
+    the user. API: `GET /v1/places/map` takes `q`, `areaRadiusKm`, `namesOnly` and returns `area`
+    (tested). Not seen on the simulator (the map needs a tap); the owner checks it on a phone.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

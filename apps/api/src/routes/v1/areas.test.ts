@@ -1,4 +1,4 @@
-import { placeListResponseSchema } from '@paw-mall/shared';
+import { placeListResponseSchema, placeMapResponseSchema } from '@paw-mall/shared';
 import postgres from 'postgres';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
@@ -109,6 +109,33 @@ describe('searching an area', () => {
     expect(names.area).toBeNull();
     expect(names.items.map((p) => p.name)).toEqual(['Veterinaria Junto al Usuario']);
     expect((await search('plaza prueba paw', '&namesOnly=true')).area).toBeNull();
+  });
+});
+
+describe('searching on the map', () => {
+  const map = async (q: string) => {
+    // A box around both the user and the plaza.
+    const bbox = `${USER.lng - 0.1},${USER.lat - 0.2},${kmEast(70)},${USER.lat + 0.2}`;
+    const res = await app.request(
+      `/v1/places/map?bbox=${bbox}&lat=${USER.lat}&lng=${USER.lng}&radiusKm=1&q=${encodeURIComponent(q)}`,
+      {},
+      testEnv,
+    );
+    return placeMapResponseSchema.parse(await res.json());
+  };
+
+  it('moves the circle to a named area, as the list does', async () => {
+    const result = await map('plaza prueba paw');
+    expect(result.area).toMatchObject({ name: 'Plaza Prueba Paw', radiusKm: 5 });
+    expect(result).toMatchObject({ kind: 'places', total: 2, radiusTotal: 2 });
+  });
+
+  it('keeps only matching names around the user otherwise', async () => {
+    const result = await map('junto al usuario');
+    expect(result.area).toBeNull();
+    expect(result.kind === 'places' && result.items.map((p) => p.name)).toEqual([
+      'Veterinaria Junto al Usuario',
+    ]);
   });
 });
 

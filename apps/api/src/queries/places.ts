@@ -164,6 +164,19 @@ export async function listPlaces(
   return { ...(await searchPlaces(db, query, locale)), area: null };
 }
 
+/** Every word of `q` (or nearly: a typo) in the name, city or state of places aliased `p`. */
+function allWordsSql(q: string): SQL {
+  const searchText = sql`place_search_text(p.name, p.city, p.state)`;
+  const words = sql.join(
+    searchWords(q).map((word) => {
+      const text = sql`lower(f_unaccent(${word}))`;
+      return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!' OR ${text} <% ${searchText})`;
+    }),
+    sql` AND `,
+  );
+  return sql`(${words})`;
+}
+
 /** Most words an area name at the end of a search can have ("san juan del rio"). */
 const MAX_AREA_WORDS = 4;
 
@@ -204,15 +217,7 @@ async function searchPlaces(
   ];
   if (!query.q) return pageOfPlaces(db, query, locale, conditions);
 
-  const searchText = sql`place_search_text(p.name, p.city, p.state)`;
-  const allWords = sql.join(
-    searchWords(query.q).map((word) => {
-      const text = sql`lower(f_unaccent(${word}))`;
-      return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!' OR ${text} <% ${searchText})`;
-    }),
-    sql` AND `,
-  );
-  const found = await pageOfPlaces(db, query, locale, [...conditions, sql`(${allWords})`]);
+  const found = await pageOfPlaces(db, query, locale, [...conditions, allWordsSql(query.q)]);
   if (found.total > 0) return found;
 
   const phrase = sql`lower(f_unaccent(${query.q}))`;
@@ -303,16 +308,35 @@ export async function placesForMap(
   locale: Locale,
 ): Promise<PlaceMapResponse> {
   const { minLng, minLat, maxLng, maxLat } = query.bbox;
-  const point = { lat: query.lat, lng: query.lng };
+  // The search box, as in the list: an area moves the circle there (areaRadiusKm), and other
+  // text, or the words before an area, must appear in the names.
+  let point = { lat: query.lat, lng: query.lng };
+  let radiusKm = query.radiusKm;
+  let words: string | null = query.q ?? null;
+  let area: PlaceMapResponse['area'] = null;
+  if (query.q && !query.namesOnly) {
+    const found = await findAreaSearch(db, query.q, point);
+    if (found) {
+      point = found.area.location;
+      radiusKm = query.areaRadiusKm;
+      words = found.business;
+      area = { ...found.area, radiusKm };
+    }
+  }
   const inBox = sql`p.location && ST_MakeEnvelope(${minLng}, ${minLat}, ${maxLng}, ${maxLat}, 4326)::geography`;
-  const inRadius = [visibleSql, withinRadiusSql(point, query.radiusKm), ...filterConditions(query)];
+  const inRadius = [
+    visibleSql,
+    withinRadiusSql(point, radiusKm),
+    ...filterConditions(query),
+    ...(words ? [allWordsSql(words)] : []),
+  ];
 
   const [places, radiusTotal] = await Promise.all([
     pageOfPlaces(db, { ...point, page: 1, pageSize: query.limit }, locale, [...inRadius, inBox]),
     countPlaces(db, inRadius),
   ]);
   if (places.total <= query.limit) {
-    return { kind: 'places', items: places.items, total: places.total, radiusTotal };
+    return { kind: 'places', area, items: places.items, total: places.total, radiusTotal };
   }
 
   const cell = (maxLng - minLng) / GRID_COLUMNS;
@@ -339,7 +363,7 @@ export async function placesForMap(
       Number,
     ) as PlaceCluster['bounds'],
   }));
-  return { kind: 'clusters', clusters, total: places.total, radiusTotal };
+  return { kind: 'clusters', area, clusters, total: places.total, radiusTotal };
 }
 
 /** Every category with its name in `locale` and its number of visible places. */

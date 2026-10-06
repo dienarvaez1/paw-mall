@@ -152,6 +152,10 @@ export const placeMapQuerySchema = z.object({
   lat: latitude,
   lng: longitude,
   radiusKm,
+  /** The search box, as in the list: an area moves the map's search there; other text filters names. */
+  q: z.string().trim().min(1).max(100).optional(),
+  areaRadiusKm: z.coerce.number().positive().max(10).default(AREA_RADIUS_KM),
+  namesOnly: z.stringbool().optional(),
   ...placeFilters,
   /** Most places to return one by one before clustering (tests use a small number). */
   limit: z.coerce.number().int().min(1).max(MAP_MAX_PLACES).default(MAP_MAX_PLACES),
@@ -168,6 +172,8 @@ export const placeClusterSchema = z.object({
 export type PlaceCluster = z.infer<typeof placeClusterSchema>;
 
 const mapCounts = {
+  /** The area the search named, as in the list: the circle is then around it. */
+  area: searchAreaSchema.nullable().default(null),
   /** Places in view (inside the box and the radius). */
   total: z.number().int(),
   /** Every place within radiusKm, in view or not. */

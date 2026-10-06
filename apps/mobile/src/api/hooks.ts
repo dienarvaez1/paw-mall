@@ -68,12 +68,19 @@ export type MapArea = { minLng: number; minLat: number; maxLng: number; maxLat: 
  * Places in the visible map area and within the Settings radius of the user (the circle on the
  * map), one by one or as clusters when too many are in view.
  */
-export function usePlacesMap(area: MapArea | null, coords: Coords, category: ChipCategory) {
+export function usePlacesMap(
+  area: MapArea | null,
+  coords: Coords,
+  category: ChipCategory,
+  name = '',
+  nearMe = false,
+) {
   const locale = useLocale();
   const { radiusKm } = useSettings();
   const filters = usePlaceFilters();
+  const areaRadiusKm = useAreaRadiusKm();
   return useQuery({
-    queryKey: ['places-map', locale, filters, area, coords, radiusKm, category],
+    queryKey: ['places-map', locale, filters, area, coords, radiusKm, category, name, nearMe],
     enabled: area !== null,
     placeholderData: (previous) => previous,
     queryFn: () => {
@@ -85,6 +92,10 @@ export function usePlacesMap(area: MapArea | null, coords: Coords, category: Chi
           ...coords,
           radiusKm,
           category: category ?? undefined,
+          // The search box, as in the list (see usePlaces).
+          q: name || undefined,
+          areaRadiusKm: name ? areaRadiusKm : undefined,
+          namesOnly: (name && nearMe) || undefined,
           ...filters,
         },
         locale,

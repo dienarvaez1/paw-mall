@@ -58,14 +58,12 @@ export default function ExploreScreen() {
 
   return (
     <View className="flex-1 bg-white dark:bg-neutral-950">
-      {/* Search is for the list; the map shows every place in view, so it's grayed out there. */}
       <View className="px-4 pt-3">
         <SearchInput
           value={text}
           onChangeText={setText}
           placeholder={t(nearMe ? 'places.searchPlaceholderNearMe' : 'places.searchPlaceholder')}
           clearLabel={t('places.clearSearch')}
-          disabled={mode === 'map'}
         />
       </View>
       <View className="flex-row gap-2 px-4 pt-3">
@@ -104,7 +102,7 @@ export default function ExploreScreen() {
       {mode === 'list' ? (
         <PlacesList name={name} category={category} nearMe={nearMe} />
       ) : (
-        <PlacesMap category={category} />
+        <PlacesMap category={category} name={name} nearMe={nearMe} />
       )}
     </View>
   );
@@ -250,7 +248,15 @@ function PlacesList({
   );
 }
 
-function PlacesMap({ category }: { category: ChipCategory }) {
+function PlacesMap({
+  category,
+  name,
+  nearMe,
+}: {
+  category: ChipCategory;
+  name: string;
+  nearMe: boolean;
+}) {
   const { t } = useAppTranslation();
   const { radiusKm } = useSettings();
   const router = useRouter();
@@ -261,6 +267,8 @@ function PlacesMap({ category }: { category: ChipCategory }) {
   const mapRef = useRef<MapView>(null);
   const initialRegion: Region = regionForRadius(location.coords, radiusKm);
   const fitted = useRef({ radiusKm, ...location.coords });
+  // While a searched area is shown, its circle has its own radius: don't fly back to the user.
+  const showingArea = useRef(false);
   useEffect(() => {
     const last = fitted.current;
     if (
@@ -271,6 +279,7 @@ function PlacesMap({ category }: { category: ChipCategory }) {
       return;
     }
     fitted.current = { radiusKm, ...location.coords };
+    if (showingArea.current) return;
     mapRef.current?.animateToRegion(regionForRadius(location.coords, radiusKm), MAP_FIT_MS);
   }, [radiusKm, location.coords]);
   const [region, setRegion] = useState<Region>(initialRegion);
@@ -292,11 +301,32 @@ function PlacesMap({ category }: { category: ChipCategory }) {
 
   // Places inside the radius circle: up to 200 one by one; with more in view, clusters (counting
   // only places inside the circle) that zoom in when tapped.
-  const places = usePlacesMap(area, location.coords, category);
+  const places = usePlacesMap(area, location.coords, category, name, nearMe);
+  // A searched area ("Zócalo") moves the circle there with its own radius; otherwise the circle is
+  // the user's radius around the user.
+  const searchedArea = places.data?.area ?? null;
+  const circle = searchedArea
+    ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
+    : { center: location.coords, radiusKm };
+  // Fly to a newly searched area, and back to the user when the search no longer names one.
+  const shownArea = useRef<string | null>(null);
+  const loaded = places.data !== undefined;
+  const { lat: centerLat, lng: centerLng } = circle.center;
+  const circleKm = circle.radiusKm;
+  const areaKey = searchedArea ? `${centerLat},${centerLng},${circleKm}` : null;
+  useEffect(() => {
+    if (!loaded || areaKey === shownArea.current) return;
+    shownArea.current = areaKey;
+    showingArea.current = areaKey !== null;
+    mapRef.current?.animateToRegion(
+      regionForRadius({ lat: centerLat, lng: centerLng }, circleKm),
+      MAP_FIT_MS,
+    );
+  }, [loaded, areaKey, centerLat, centerLng, circleKm]);
   const items = places.data?.kind === 'places' ? places.data.items : [];
   const clusters = places.data?.kind === 'clusters' ? places.data.clusters : [];
   const fitCircle = () =>
-    mapRef.current?.animateToRegion(regionForRadius(location.coords, radiusKm), MAP_FIT_MS);
+    mapRef.current?.animateToRegion(regionForRadius(circle.center, circle.radiusKm), MAP_FIT_MS);
   // The compass needle follows the map's rotation; tapping it turns the map north-up again.
   const [heading, setHeading] = useState(0);
   // getCamera() answers asynchronously; when the map closes first (e.g. switching to the list)
@@ -348,8 +378,8 @@ function PlacesMap({ category }: { category: ChipCategory }) {
       >
         {/* The search radius from Settings, around the user's location. */}
         <Circle
-          center={{ latitude: location.coords.lat, longitude: location.coords.lng }}
-          radius={radiusKm * 1000}
+          center={{ latitude: circle.center.lat, longitude: circle.center.lng }}
+          radius={circle.radiusKm * 1000}
           strokeWidth={2}
           strokeColor={scheme === 'dark' ? RADIUS_COLORS.dark.stroke : RADIUS_COLORS.light.stroke}
           fillColor={scheme === 'dark' ? RADIUS_COLORS.dark.fill : RADIUS_COLORS.light.fill}
@@ -376,6 +406,8 @@ function PlacesMap({ category }: { category: ChipCategory }) {
         <MapCountLegend
           inView={places.data.total}
           inRadius={places.data.radiusTotal}
+          radiusKm={circle.radiusKm}
+          areaName={searchedArea?.name ?? null}
           onPress={fitCircle}
         />
       ) : null}
@@ -506,26 +538,31 @@ function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: (
 function MapCountLegend({
   inView,
   inRadius,
+  radiusKm,
+  areaName,
   onPress,
 }: {
   inView: number;
   inRadius: number;
+  radiusKm: number;
+  /** The searched area ("Zócalo"), when the circle is around it. */
+  areaName: string | null;
   onPress: () => void;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
-  const { radiusKm, units } = useSettings();
+  const { units } = useSettings();
   const distance = formatDistance(radiusKm, locale, units);
   const total = formatCount(inRadius, locale);
+  const shown = formatCount(inView, locale);
   const partial = inView < inRadius;
-  const label = partial
-    ? t('places.mapCountPartial', {
-        count: inRadius,
-        shown: formatCount(inView, locale),
-        total,
-        distance,
-      })
-    : t('places.mapCount', { count: inRadius, total, distance });
+  const label = areaName
+    ? partial
+      ? t('places.mapAreaCountPartial', { count: inRadius, shown, total, distance, area: areaName })
+      : t('places.areaCount', { count: inRadius, total, distance, area: areaName })
+    : partial
+      ? t('places.mapCountPartial', { count: inRadius, shown, total, distance })
+      : t('places.mapCount', { count: inRadius, total, distance });
   return (
     <View pointerEvents="box-none" className="absolute left-3 right-3 top-3 items-center">
       <Pressable
