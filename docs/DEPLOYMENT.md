@@ -375,6 +375,11 @@ a task (and a note in the phase that applies it).
     the location button does. The "Mi ubicación" chip keeps its fixed 3 mi (5 km) for name
     searches. Not seen on the simulator (switching to the map needs a tap); cycling is unit
     tested.
+  - **Owner request (2026-10-05): distance wording in the list.** When a search names an area
+    ("Zócalo", "Mi ubicación" off), distances are from that area and read just "0.3 mi" /
+    "0.3 km". When they're from the user ("Mi ubicación" on, plain browsing, or a name that isn't
+    an area), they read "0.3 mi away" / "a 0.3 km". Urgencias and the map are always from the
+    user and unchanged.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**
