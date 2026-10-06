@@ -415,6 +415,21 @@ a task (and a note in the phase that applies it).
     the circle around the user and shows only matching names. Clearing the search flies back to
     the user. API: `GET /v1/places/map` takes `q`, `areaRadiusKm`, `namesOnly` and returns `area`
     (tested). Not seen on the simulator (the map needs a tap); the owner checks it on a phone.
+  - **Owner request (2026-10-05): place and keyword in any order.** The search finds a place
+    name anywhere in the text (longest exact match wins; keywords and fillers are never taken for
+    places) and turns business keywords into a category (`detectCategory` in packages/shared:
+    vet/veterinario → Veterinarias, hospital/urgencias → Hospitales, tienda/pet shop → Tiendas,
+    estética/groomer → Estéticas, pensión → Pensiones, forrajería → Forrajerías,
+    crematorio/funeraria → Funerarias, antirrábico → Servicios públicos). "tlaxcala vet",
+    "vet tlaxcala", "Veterinario Tlaxcala" and "veterinario en tlaxcala" all list the 54 vets
+    within 3 mi of Tlaxcala, including vets whose names don't say "veterinario". Remaining words
+    search names ("roma norte huellitas"). A selected chip wins over a keyword. Keywords also
+    work around the user ("vet" → vets near me). The list summary names the detected category:
+    "Veterinarias: 54 lugares a menos de 5 km de Tlaxcala". List and map share one search
+    interpretation in the API. Order of matching: "X en Y"; the whole text as an exact place; a
+    place inside the text; the whole text as a place with a small typo ("zocallo").
+  - Fixed along the way: with `fetch_types` off (needed on Workers), postgres.js can't send text
+    arrays, so candidate place names go in an `IN (…)` list.
   - API: `POST /v1/places/:id/reports`, `POST /v1/places/:id/claims`, `ownerVerifiedOn` on
     places; migration 0007 (`place_reports`, `place_claims`).
 - **Follow-ups:**

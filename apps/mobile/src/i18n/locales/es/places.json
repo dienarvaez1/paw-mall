@@ -122,5 +122,6 @@
   "radiusButton": "Radio de búsqueda: {{distance}}",
   "radiusButtonHint": "Toca para cambiar al siguiente radio. Se usa en la lista, el mapa y «Mi ubicación», y se guarda en Ajustes.",
   "mapAreaCountPartial_one": "{{shown}} de {{total}} lugar a menos de {{distance}} de {{area}}",
-  "mapAreaCountPartial_other": "{{shown}} de {{total}} lugares a menos de {{distance}} de {{area}}"
+  "mapAreaCountPartial_other": "{{shown}} de {{total}} lugares a menos de {{distance}} de {{area}}",
+  "categorySummary": "{{category}}: {{summary}}"
 }

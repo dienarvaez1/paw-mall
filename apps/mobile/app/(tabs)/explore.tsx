@@ -199,6 +199,14 @@ function PlacesList({
         area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
       })
     : t('places.listCount', { count: total, total: formatCount(total, locale), distance });
+  // A keyword in the search picked the category ("tlaxcala vet"): say so up front, unless a chip
+  // is already showing it.
+  const searchCategory = places.data?.pages[0]?.searchCategory ?? null;
+  const chipSlug = searchCategory as Exclude<ChipCategory, null> | null;
+  const shownSummary =
+    chipSlug && !category && (CHIP_CATEGORIES as readonly ChipCategory[]).includes(chipSlug)
+      ? t('places.categorySummary', { category: t(`places.chips.${chipSlug}`), summary })
+      : summary;
 
   return (
     <View className="flex-1">
@@ -206,7 +214,7 @@ function PlacesList({
         accessibilityRole="summary"
         className="border-b border-neutral-100 px-4 py-2 text-sm font-bold text-neutral-900 dark:border-neutral-900 dark:text-white"
       >
-        {summary}
+        {shownSummary}
       </Text>
       <FlatList
         data={items}

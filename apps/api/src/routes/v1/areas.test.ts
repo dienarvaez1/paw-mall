@@ -12,14 +12,14 @@ const USER = { lat: 2, lng: -160 };
 const kmEast = (km: number) => USER.lng + km / 111.32;
 const sql = postgres(TEST_DATABASE_URL, { max: 1, onnotice: () => {} });
 
-async function addPlace(id: string, name: string, km: number) {
+async function addPlace(id: string, name: string, km: number, slug = 'veterinarian') {
   const [row] = await sql<{ id: number }[]>`
     INSERT INTO places (source, external_id, name, address, city, state, location)
     VALUES ('curated', ${`test-area-${id}`}, ${name}, 'Calle 1', 'Ciudad', 'Estado',
             ST_SetSRID(ST_MakePoint(${kmEast(km)}, ${USER.lat}), 4326)::geography)
     RETURNING id`;
   await sql`INSERT INTO place_categories (place_id, category_id, source)
-            SELECT ${row!.id}, id, 'activity' FROM categories WHERE slug = 'veterinarian'`;
+            SELECT ${row!.id}, id, 'activity' FROM categories WHERE slug = ${slug}`;
 }
 
 async function addArea(kind: string, name: string, km: number) {
@@ -34,7 +34,7 @@ beforeAll(async () => {
   await sql`DELETE FROM search_areas WHERE state = 'Estado de Prueba'`;
   await addPlace('near-user', 'Veterinaria Junto al Usuario', 0.5);
   await addPlace('at-plaza', 'Veterinaria de la Plaza', 50.3);
-  await addPlace('plaza-4km', 'Estetica Cerca de la Plaza', 54);
+  await addPlace('plaza-4km', 'Estetica Cerca de la Plaza', 54, 'groomer');
   await addPlace('plaza-8km', 'Veterinaria Lejos de la Plaza', 58);
   await addArea('landmark', 'Plaza Prueba Paw', 50);
   // The same colonia name twice: the one near the user wins.
@@ -90,6 +90,34 @@ describe('searching an area', () => {
     expect(result.items.map((p) => p.name)).toEqual(['Estetica Cerca de la Plaza']);
     // Only an exact area name counts at the end; a misspelled one stays a name search.
     expect((await search('estetica plaza prueva paw')).area).toBeNull();
+  });
+
+  it('finds the place anywhere in the text and turns keywords into a category', async () => {
+    for (const q of [
+      'plaza prueba paw estetica',
+      'estetica plaza prueba paw',
+      'groomer en plaza prueba paw',
+    ]) {
+      const result = await search(q);
+      expect([q, result.area?.name, result.searchCategory]).toEqual([
+        q,
+        'Plaza Prueba Paw',
+        'groomer',
+      ]);
+      expect(result.items.map((p) => p.name)).toEqual(['Estetica Cerca de la Plaza']);
+    }
+    // "vet" finds vets by category, whatever their names say.
+    const vets = await search('vet plaza prueba paw');
+    expect(vets.searchCategory).toBe('veterinarian');
+    expect(vets.items.map((p) => p.name)).toEqual(['Veterinaria de la Plaza']);
+  });
+
+  it('applies keywords around the user too, and lets a selected chip win', async () => {
+    const near = await search('vet', '&radiusKm=1');
+    expect(near).toMatchObject({ area: null, searchCategory: 'veterinarian' });
+    expect(near.items.map((p) => p.name)).toEqual(['Veterinaria Junto al Usuario']);
+    const chip = await search('estetica plaza prueba paw', '&category=veterinarian');
+    expect(chip.items.map((p) => p.name)).toEqual(['Veterinaria de la Plaza']);
   });
 
   it('picks the nearest of several areas with the same name', async () => {

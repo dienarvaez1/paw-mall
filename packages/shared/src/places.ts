@@ -139,6 +139,8 @@ export const placeListResponseSchema = z.object({
    * first, and their distances are from it.
    */
   area: searchAreaSchema.nullable().default(null),
+  /** The category the search's keywords named ("vet" → veterinarian), applied as a filter. */
+  searchCategory: categorySlugSchema.nullable().default(null),
   items: z.array(placeSchema),
   total: z.number().int().nonnegative(),
   page: z.number().int(),
@@ -174,6 +176,7 @@ export type PlaceCluster = z.infer<typeof placeClusterSchema>;
 const mapCounts = {
   /** The area the search named, as in the list: the circle is then around it. */
   area: searchAreaSchema.nullable().default(null),
+  searchCategory: categorySlugSchema.nullable().default(null),
   /** Places in view (inside the box and the radius). */
   total: z.number().int(),
   /** Every place within radiusKm, in view or not. */

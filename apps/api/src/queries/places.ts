@@ -15,11 +15,12 @@ import {
   URGENT_LIMIT,
   type UrgentResponse,
   type ValueSource,
+  detectCategory,
 } from '@paw-mall/shared';
 import { type SQL, sql } from 'drizzle-orm';
 
 import type { Database } from '../db/client';
-import { resolveArea, splitAreaSearch } from './areas';
+import { resolveArea, resolveAreaInText, splitAreaSearch } from './areas';
 
 type Point = { lat: number; lng: number };
 
@@ -149,19 +150,52 @@ export async function listPlaces(
   query: PlaceListQuery,
   locale: Locale,
 ): Promise<PlaceListResponse> {
-  if (query.q && !query.namesOnly) {
-    const found = await findAreaSearch(db, query.q, query);
+  const search = await interpretSearch(db, query);
+  const result = await searchPlaces(
+    db,
+    {
+      ...query,
+      ...search.point,
+      radiusKm: search.radiusKm,
+      q: search.words || undefined,
+      category: query.category ?? search.category ?? undefined,
+    },
+    locale,
+  );
+  return { ...result, area: search.area, searchCategory: search.category };
+}
+
+type SearchQuery = {
+  q?: string;
+  namesOnly?: boolean;
+  lat: number;
+  lng: number;
+  radiusKm: number;
+  areaRadiusKm: number;
+};
+
+/**
+ * What a search box text asks for, for the list and the map: a place named in it (unless
+ * namesOnly, i.e. "Mi ubicación" on) moves the search there within areaRadiusKm; business
+ * keywords ("vet") become a category; the rest is searched in names. "tlaxcala vet" → the
+ * veterinarian category within 5 km of Tlaxcala.
+ */
+async function interpretSearch(db: Database, query: SearchQuery) {
+  let point = { lat: query.lat, lng: query.lng };
+  let radiusKm = query.radiusKm;
+  let area: PlaceListResponse['area'] = null;
+  let text = query.q ?? '';
+  if (text && !query.namesOnly) {
+    const found = await findAreaSearch(db, text, point);
     if (found) {
-      const { area, business } = found;
-      const result = await searchPlaces(
-        db,
-        { ...query, ...area.location, radiusKm: query.areaRadiusKm, q: business ?? undefined },
-        locale,
-      );
-      return { ...result, area: { ...area, radiusKm: query.areaRadiusKm } };
+      point = found.area.location;
+      radiusKm = query.areaRadiusKm;
+      area = { ...found.area, radiusKm };
+      text = found.business ?? '';
     }
   }
-  return { ...(await searchPlaces(db, query, locale)), area: null };
+  const { category, words } = detectCategory(text);
+  return { point, radiusKm, area, category, words };
 }
 
 /** Every word of `q` (or nearly: a typo) in the name, city or state of places aliased `p`. */
@@ -177,26 +211,26 @@ function allWordsSql(q: string): SQL {
   return sql`(${words})`;
 }
 
-/** Most words an area name at the end of a search can have ("san juan del rio"). */
-const MAX_AREA_WORDS = 4;
-
 /**
  * The area a search names and the business words around it: the whole text ("Zócalo"), "X en Y"
- * or "X cerca de Y", or an area name at the end ("veterinario tlaxcala": "veterinario" near
- * Tlaxcala). An area at the end must match exactly, so ordinary business names stay name
- * searches unless their last words are a real place.
+ * or "X cerca de Y", or a place name anywhere ("tlaxcala vet", "veterinario tlaxcala"). A place
+ * inside a longer search must match exactly, so ordinary business names stay name searches
+ * unless they contain a real place.
  */
 async function findAreaSearch(db: Database, q: string, near: { lat: number; lng: number }) {
   const { business, area: areaText } = splitAreaSearch(q);
-  const area = await resolveArea(db, areaText, near, business ? 0.6 : undefined);
-  if (area) return { area, business };
-
-  const words = q.trim().split(/\s+/);
-  for (let n = Math.min(MAX_AREA_WORDS, words.length - 1); n >= 1; n--) {
-    const suffix = await resolveArea(db, words.slice(-n).join(' '), near, 1);
-    if (suffix) return { area: suffix, business: words.slice(0, -n).join(' ') };
+  if (business) {
+    const area = await resolveArea(db, areaText, near, 0.6);
+    if (area) return { area, business };
   }
-  return null;
+  // Exact names first, whole or inside the text, so "tlaxcala vet" keeps its "vet"; a small typo
+  // in a search that is only a place name ("zocallo") last.
+  const exact = await resolveArea(db, q, near, 1);
+  if (exact) return { area: exact, business: null };
+  const inside = await resolveAreaInText(db, q, near);
+  if (inside) return { area: inside.area, business: inside.rest || null };
+  const typo = await resolveArea(db, q, near);
+  return typo ? { area: typo, business: null } : null;
 }
 
 /**
@@ -208,7 +242,7 @@ async function searchPlaces(
   db: Database,
   query: PlaceListQuery,
   locale: Locale,
-): Promise<Omit<PlaceListResponse, 'area'>> {
+): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory'>> {
   const point = { lat: query.lat, lng: query.lng };
   const conditions = [
     visibleSql,
@@ -230,7 +264,7 @@ async function pageOfPlaces(
   query: Pick<PlaceListQuery, 'lat' | 'lng' | 'page' | 'pageSize'>,
   locale: Locale,
   conditions: SQL[],
-): Promise<Omit<PlaceListResponse, 'area'>> {
+): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory'>> {
   const where = sql.join(conditions, sql` AND `);
   const rows = await db.execute<PlaceRow & { total: number }>(sql`
     SELECT ${placeColumnsSql(locale, query)}, count(*) OVER()::int AS total
@@ -308,26 +342,15 @@ export async function placesForMap(
   locale: Locale,
 ): Promise<PlaceMapResponse> {
   const { minLng, minLat, maxLng, maxLat } = query.bbox;
-  // The search box, as in the list: an area moves the circle there (areaRadiusKm), and other
-  // text, or the words before an area, must appear in the names.
-  let point = { lat: query.lat, lng: query.lng };
-  let radiusKm = query.radiusKm;
-  let words: string | null = query.q ?? null;
-  let area: PlaceMapResponse['area'] = null;
-  if (query.q && !query.namesOnly) {
-    const found = await findAreaSearch(db, query.q, point);
-    if (found) {
-      point = found.area.location;
-      radiusKm = query.areaRadiusKm;
-      words = found.business;
-      area = { ...found.area, radiusKm };
-    }
-  }
+  // The search box, as in the list: a place moves the circle there, keywords pick a category,
+  // and other words must appear in the names.
+  const { point, radiusKm, area, category, words } = await interpretSearch(db, query);
+  const filters = { ...query, category: query.category ?? category ?? undefined };
   const inBox = sql`p.location && ST_MakeEnvelope(${minLng}, ${minLat}, ${maxLng}, ${maxLat}, 4326)::geography`;
   const inRadius = [
     visibleSql,
     withinRadiusSql(point, radiusKm),
-    ...filterConditions(query),
+    ...filterConditions(filters),
     ...(words ? [allWordsSql(words)] : []),
   ];
 
@@ -336,7 +359,14 @@ export async function placesForMap(
     countPlaces(db, inRadius),
   ]);
   if (places.total <= query.limit) {
-    return { kind: 'places', area, items: places.items, total: places.total, radiusTotal };
+    return {
+      kind: 'places',
+      area,
+      searchCategory: category,
+      items: places.items,
+      total: places.total,
+      radiusTotal,
+    };
   }
 
   const cell = (maxLng - minLng) / GRID_COLUMNS;
@@ -363,7 +393,14 @@ export async function placesForMap(
       Number,
     ) as PlaceCluster['bounds'],
   }));
-  return { kind: 'clusters', area, clusters, total: places.total, radiusTotal };
+  return {
+    kind: 'clusters',
+    area,
+    searchCategory: category,
+    clusters,
+    total: places.total,
+    radiusTotal,
+  };
 }
 
 /** Every category with its name in `locale` and its number of visible places. */
