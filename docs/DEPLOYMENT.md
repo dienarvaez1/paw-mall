@@ -33,8 +33,8 @@ checked) · **Blocked**.
 | 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
 | 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
 | 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done        | 2026-10-05 | 2026-10-05 |
-| 5     | Trust               | `phase-5/trust`           | #6  | In review   | 2026-10-05 | —          |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | —   | Not started | —          | —          |
+| 5     | Trust               | `phase-5/trust`           | #6  | Done        | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | In progress | 2026-10-10 | —          |
 | 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
 
 ## Pending owner reviews
@@ -263,7 +263,7 @@ a task (and a note in the phase that applies it).
   registry's terms.
 - **Done when:** an approved claim shows "Verificado por el dueño" and its hours drive "open now".
 - **Branch / PR:** `phase-5/trust` / #6
-- **Status:** In review (owner asked to merge on 2026-10-06)
+- **Status:** Done, merged 2026-10-06 (`80118ac`)
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 141 tests (shared 18, api 37, importers 44, mobile 42), including report
@@ -544,8 +544,8 @@ a task (and a note in the phase that applies it).
   lodging, pet-friendly toggle and policy filters, pet profile in Settings.
 - **Done when:** with a "perro grande" profile, the map shows only places whose policy allows
   large dogs, each with its policy source and last confirmation.
-- **Branch / PR:** `phase-6/pet-friendly` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-6/pet-friendly` / #8
+- **Status:** In progress
 - **Checks:**
   - [ ] `pnpm lint`
   - [ ] `pnpm typecheck`
@@ -590,3 +590,6 @@ Play readiness").
 | 2026-10-05 | Phase 4 started            | #5  |
 | 2026-10-05 | Phase 4 merged (`c30d151`) | #5  |
 | 2026-10-05 | Phase 5 started            | #6  |
+| 2026-10-06 | Phase 5 merged (`80118ac`) | #6  |
+| 2026-10-10 | Diary files git-ignored    | #7  |
+| 2026-10-10 | Phase 6 started            | #8  |
