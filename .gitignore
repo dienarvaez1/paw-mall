@@ -40,3 +40,6 @@ pnpm-debug.log*
 
 # downloaded source data (DENUE zips, Overture extracts)
 **/.cache/
+
+# Local work diary
+docs/diary_*.md
