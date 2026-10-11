@@ -521,7 +521,10 @@ export async function urgentPlaces(
   query: UrgentQuery,
   locale: Locale,
 ): Promise<UrgentResponse> {
-  const point = { lat: query.lat, lng: query.lng };
+  // The search box naming an area ("Xochimilco", "vet en Xochimilco"): the radius goes around it.
+  const found = query.q ? await findAreaSearch(db, query.q, query) : null;
+  const point = found ? found.area.location : { lat: query.lat, lng: query.lng };
+  const area = found ? { ...found.area, radiusKm: query.radiusKm } : null;
   const rows = await db.execute<PlaceRow>(sql`
     SELECT ${placeColumnsSql(locale, point)}
     FROM places p
@@ -532,5 +535,5 @@ export async function urgentPlaces(
         WHERE pc.place_id = p.id AND c.slug = 'vet_hospital'))
     ORDER BY distance_km, p.id
     LIMIT ${URGENT_LIMIT}`);
-  return { items: rows.map(toPlace) };
+  return { area, items: rows.map(toPlace) };
 }

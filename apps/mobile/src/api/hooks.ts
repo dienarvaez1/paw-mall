@@ -161,19 +161,22 @@ export function usePlace(id: number) {
 /** "Open now" changes by the minute, so Urgencias refreshes while it's on screen. */
 const URGENT_REFRESH_MS = 60 * 1000;
 
-/** Urgencias: the nearest vet hospitals and 24-hour vets, open ones first. */
-/** Urgencias, within the radius set on the Explorar and Pet-friendly maps, and with the Ajustes place switches. */
-export function useUrgentPlaces(coords: Coords) {
+/**
+ * Urgencias: the nearest vet hospitals and 24-hour vets, within the radius set on the Explorar and
+ * Pet-friendly maps and with the Ajustes place switches; around the area the search box names
+ * ("Xochimilco"), if it does, else around the user.
+ */
+export function useUrgentPlaces(coords: Coords, q = '') {
   const locale = useLocale();
   const { radiusKm } = useSettings();
   const { withPhone, withWebsite, withSocial, named, openNow } = usePlaceFilters();
   const filters = { withPhone, withWebsite, withSocial, named, openNow };
   return useQuery({
-    queryKey: ['urgent', locale, coords, radiusKm, filters],
+    queryKey: ['urgent', locale, coords, radiusKm, filters, q],
     queryFn: () =>
       apiGet(
         '/v1/places/urgent',
-        { ...coords, radiusKm, ...filters },
+        { ...coords, radiusKm, ...filters, q: q || undefined },
         locale,
         urgentResponseSchema,
       ),

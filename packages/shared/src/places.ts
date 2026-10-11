@@ -231,13 +231,17 @@ export const urgentQuerySchema = z.object({
   withSocial: placeFilters.withSocial,
   named: placeFilters.named,
   openNow: placeFilters.openNow,
+  /** The search box: when it names an area ("Xochimilco"), the radius is around it instead. */
+  q: z.string().trim().min(1).max(100).optional(),
 });
 export type UrgentQuery = z.infer<typeof urgentQuerySchema>;
 
 export const URGENT_LIMIT = 20;
 
 export const urgentResponseSchema = z.object({
-  /** Open now (confirmed) first, then unconfirmed, then closed; nearest first within each. */
+  /** The area the search named, when it did: distances are then from it. */
+  area: searchAreaSchema.nullable().default(null),
+  /** Closest first. */
   items: z.array(placeSchema),
 });
 export type UrgentResponse = z.infer<typeof urgentResponseSchema>;

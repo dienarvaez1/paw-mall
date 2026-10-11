@@ -9,6 +9,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { TEST_DATABASE_URL, testEnv } from '../../../test/env';
 import app from '../../index';
+import { nameKey } from '../../queries/areas';
 
 // Test places sit in the open Pacific (away from places.test.ts too) and are removed afterwards.
 const ORIGIN = { lat: -0.5, lng: -140 };
@@ -67,10 +68,18 @@ beforeAll(async () => {
   await addPlace('hospital-open', 3, ['veterinarian', 'vet_hospital'], { hours: ALWAYS });
   await addPlace('plain-vet', 0.1, ['veterinarian']);
   await addPlace('store-open', 0.3, ['pet_store'], { hours: ALWAYS });
+  // An area 100 km east with a hospital next to it, far outside the user's radius.
+  await sql`DELETE FROM search_areas WHERE name = 'Pueblo Urgente Paw'`;
+  await sql`
+    INSERT INTO search_areas (kind, name, name_key, state, location)
+    VALUES ('town', 'Pueblo Urgente Paw', ${nameKey('Pueblo Urgente Paw')}, 'Estado',
+            ST_SetSRID(ST_MakePoint(${ORIGIN.lng + 100 / 111.32}, ${ORIGIN.lat}), 4326)::geography)`;
+  await addPlace('hospital-in-town', 100.4, ['veterinarian', 'vet_hospital']);
 });
 
 afterAll(async () => {
   await sql`DELETE FROM places WHERE external_id LIKE 'test-urgent-%'`;
+  await sql`DELETE FROM search_areas WHERE name = 'Pueblo Urgente Paw'`;
   await sql.end();
 });
 
@@ -94,6 +103,30 @@ describe('GET /v1/places/urgent', () => {
       value: true,
       source: 'name',
     });
+  });
+});
+
+describe('GET /v1/places/urgent with a searched area', () => {
+  it('moves the radius to the area the search names', async () => {
+    const res = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10&q=pueblo%20urgente%20paw`,
+      {},
+      testEnv,
+    );
+    const { area, items } = urgentResponseSchema.parse(await res.json());
+    expect(area).toMatchObject({ name: 'Pueblo Urgente Paw', radiusKm: 10 });
+    expect(items.map((p) => [p.name, p.distanceKm])).toEqual([['hospital-in-town', 0.4]]);
+  });
+
+  it('stays around the user when the text names no area', async () => {
+    const res = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10&q=zzzz`,
+      {},
+      testEnv,
+    );
+    const { area, items } = urgentResponseSchema.parse(await res.json());
+    expect(area).toBeNull();
+    expect(items).toHaveLength(5);
   });
 });
 

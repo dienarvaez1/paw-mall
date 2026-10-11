@@ -1,9 +1,10 @@
 {
   "tabTitle": "Urgencias",
-  "intro": "Hospitales veterinarios y veterinarias 24 horas más cercanos. Primero los que sabemos que están abiertos.",
+  "intro": "Hospitales veterinarios y veterinarias 24 horas, del más cercano al más lejano. Si buscas un lugar en Explorar (como Xochimilco), aquí verás los de esa zona.",
   "none": "No encontramos hospitales veterinarios cerca.",
   "noneHint": "Busca veterinarias en Explorar o llama a tu veterinario de confianza.",
   "checkHours": "Ver horario y detalles",
   "details": "Ver detalles",
-  "disclaimer": "La mayoría de los horarios aún no están confirmados. Llama antes de ir si puedes."
+  "disclaimer": "La mayoría de los horarios aún no están confirmados. Llama antes de ir si puedes.",
+  "nearArea": "Cerca de {{area}}"
 }

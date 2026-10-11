@@ -9,6 +9,7 @@ import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useExploreView } from '@/features/explore/explore-view';
 import { useUserLocation } from '@/features/location/location-context';
+import { useDebounced } from '@/lib/use-debounced';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -16,17 +17,22 @@ import { useLocale } from '@/i18n/use-locale';
 import { phoneUrl } from '@/lib/links';
 import { useOpenDirections } from '@/lib/open-url';
 
+/** As on Explorar: wait for the typing to pause. */
+const SEARCH_DEBOUNCE_MS = 300;
+
 /**
- * Urgencias: the nearest vet hospitals and 24-hour vets from the device's location, closest
- * first, each with call and directions up front. The closest is highlighted only while "Mi
- * ubicación" is on (owner's rule). Most hours aren't confirmed yet, and each card
- * says so.
+ * Urgencias: the nearest vet hospitals and 24-hour vets from the device's location (or the area
+ * the search box names), closest first, each with call and directions up front. The closest is
+ * highlighted only while "Mi ubicación" is on and no searched area moved the list (owner's
+ * rules). Most hours aren't confirmed yet, and each card says so.
  */
 export default function UrgentScreen() {
   const { t } = useAppTranslation();
   const location = useUserLocation();
-  const urgent = useUrgentPlaces(location.coords);
-  const { nearMe } = useExploreView();
+  // The search box of Explorar and Pet-friendly: a place it names moves Urgencias there.
+  const { nearMe, text } = useExploreView();
+  const urgent = useUrgentPlaces(location.coords, useDebounced(text.trim(), SEARCH_DEBOUNCE_MS));
+  const area = urgent.data?.area ?? null;
 
   return (
     <View className="flex-1 bg-white dark:bg-neutral-950">
@@ -42,10 +48,19 @@ export default function UrgentScreen() {
           data={urgent.data.items}
           keyExtractor={(place) => String(place.id)}
           renderItem={({ item, index }) => (
-            <UrgentCard place={item} first={nearMe && index === 0} />
+            <UrgentCard place={item} first={nearMe && !area && index === 0} />
           )}
           ItemSeparatorComponent={() => <View className="h-3" />}
           contentContainerClassName="p-4"
+          ListHeaderComponent={
+            area ? (
+              <Text className="pb-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
+                {t('urgent.nearArea', {
+                  area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
+                })}
+              </Text>
+            ) : null
+          }
           ListEmptyComponent={<EmptyState title={t('urgent.none')} hint={t('urgent.noneHint')} />}
           ListFooterComponent={
             urgent.data.items.length > 0 ? (
