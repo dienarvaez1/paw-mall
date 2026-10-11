@@ -29,8 +29,8 @@ export const CHIP_CATEGORIES = [...EXPLORE_CHIPS, ...PET_FRIENDLY_CHIPS.slice(1)
 export type ChipCategory = (typeof CHIP_CATEGORIES)[number];
 
 /** Pin and chip colors by category; the first match in this order wins for a place's pin. */
-// Owner's rules: only hospitals get the bright red; no turquoise, orange, blue, pink, maroon or
-// brown. Colors repeat only across tabs: Explorar
+// Owner's rules: only hospitals get the bright red; no turquoise, orange, blue, pink, maroon,
+// brown or yellow. Colors repeat only across tabs: Explorar
 // shows pet businesses, Pet-friendly shows venues.
 export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   vet_hospital: '#dc2626', // red-600: hospitals only
@@ -40,11 +40,11 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   boarding: '#84cc16', // lime-500
   boutique: '#c026d3', // fuchsia-600
   pet_store: '#5b21b6', // violet-800
-  feed_store: '#ca8a04', // yellow-600
+  feed_store: '#14532d', // green-900 (forest)
   pet_funeral: '#6b7280', // gray-500
   dog_trainer: '#262626', // neutral-800
   restaurant: '#262626', // neutral-800
-  cafe: '#eab308', // yellow-500
+  cafe: '#a855f7', // purple-500
   lodging: '#6d28d9', // violet-700
   museum: '#c026d3', // fuchsia-600
   park: '#15803d', // green-700
