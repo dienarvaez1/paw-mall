@@ -6,6 +6,7 @@ export const EXPLORE_CHIPS = [
   'veterinarian',
   'vet_hospital',
   'pet_store',
+  'boutique',
   'groomer',
   'boarding',
   'feed_store',
