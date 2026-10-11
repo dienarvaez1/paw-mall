@@ -17,7 +17,7 @@ export function Button({ label, onPress, accessibilityLabel, variant = 'primary'
       className={`min-h-12 flex-1 items-center justify-center rounded-xl border px-4 ${
         primary
           ? 'border-paw bg-paw active:bg-paw-dark'
-          : 'active:bg-amber-100 border-amber-500 bg-amber-50 dark:bg-amber-950'
+          : 'active:bg-off-pressed border-off-border bg-off-bg dark:bg-off-bg-dark'
       }`}
     >
       <Text

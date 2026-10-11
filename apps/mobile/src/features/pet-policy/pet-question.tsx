@@ -46,7 +46,7 @@ export function PetQuestion({ placeId, published }: { placeId: number; published
               key={size ?? 'unknown'}
               accessibilityRole="button"
               onPress={() => send(true, size)}
-              className="min-h-11 justify-center rounded-full border px-4 active:bg-amber-100 border-amber-500 bg-amber-50 dark:bg-amber-950"
+              className="min-h-11 justify-center rounded-full border px-4 active:bg-off-pressed border-off-border bg-off-bg dark:bg-off-bg-dark"
             >
               <Text className="text-sm font-semibold text-amber-900 dark:text-amber-200">
                 {t(`places.pets.ask.size.${size ?? 'unknown'}`)}

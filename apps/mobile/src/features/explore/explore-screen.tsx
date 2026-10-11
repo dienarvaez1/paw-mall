@@ -49,12 +49,12 @@ const SEARCH_DEBOUNCE_MS = 300;
  * Cluster bubbles: the buttons' turquoise (bg-paw, tailwind.config.js) with dark teal numbers
  * (teal-950), owner's choice. Keep in step with the paw color.
  */
-const CLUSTER_COLORS = { fill: '#31cdcc', text: '#042f2e' };
+const CLUSTER_COLORS = { fill: '#46d2d1', text: '#042f2e' };
 // Explorar's controls (Lista/Mapa, Mi ubicación, the radius button, the selected chip) use the
-// logo's turquoise, lightened, when on: bg-paw (#31cdcc) with text-teal-950 (#042f2e).
+// logo's turquoise, lightened, when on: bg-paw (#46d2d1) with text-teal-950 (#042f2e).
 const ON_TEXT = '#042f2e';
-// Off, they look like the radius button after zooming by hand: amber-500 border, amber-50 (dark:
-// amber-950) background, amber-900 (dark: amber-200) labels.
+// Off, they look like the radius button after zooming by hand: the `off` colors (tailwind.config.js)
+// with amber-900 (dark: amber-200) labels.
 const OFF_TEXT_LIGHT = '#78350f';
 const OFF_TEXT_DARK = '#fde68a';
 /** How long the map takes to zoom to a new radius. */
@@ -126,7 +126,7 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
             className={`min-h-11 flex-1 items-center justify-center rounded-xl border ${
               mode === value
                 ? 'border-paw bg-paw'
-                : 'border-amber-500 bg-amber-50 dark:bg-amber-950'
+                : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
             }`}
           >
             <Text
@@ -221,7 +221,7 @@ function CategoryChips({
             accessibilityState={{ checked: active }}
             onPress={() => onSelect(slug)}
             className={`min-h-10 flex-row items-center gap-2 rounded-full border px-4 ${
-              active ? 'border-paw bg-paw' : 'border-amber-500 bg-amber-50 dark:bg-amber-950'
+              active ? 'border-paw bg-paw' : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
             }`}
           >
             {color ? (
@@ -848,7 +848,7 @@ function RadiusButton({
       accessibilityHint={t(custom ? 'places.radiusButtonCustomHint' : 'places.radiusButtonHint')}
       onPress={() => (custom ? onClearCustom() : setRadiusKm(nextRadiusKm(radiusKm, units)))}
       className={`min-w-12 items-center justify-center rounded-full border px-3 active:bg-neutral-100 dark:active:bg-neutral-800 ${
-        custom ? 'border-amber-500 bg-amber-50 dark:bg-amber-950' : 'border-paw bg-paw'
+        custom ? 'border-off-border bg-off-bg dark:bg-off-bg-dark' : 'border-paw bg-paw'
       } ${className}`}
     >
       <Text
@@ -878,7 +878,7 @@ function NearMeButton({ nearMe, onToggle }: { nearMe: boolean; onToggle: () => v
       accessibilityHint={t('places.nearMeHint')}
       onPress={onToggle}
       className={`h-11 w-11 items-center justify-center rounded-full border ${
-        nearMe ? 'border-paw bg-paw' : 'border-amber-500 bg-amber-50 dark:bg-amber-950'
+        nearMe ? 'border-paw bg-paw' : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
       }`}
     >
       <Image

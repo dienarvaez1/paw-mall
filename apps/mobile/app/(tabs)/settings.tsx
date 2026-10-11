@@ -169,7 +169,7 @@ function SwitchRow(props: {
         value={props.value}
         onValueChange={props.onChange}
         accessibilityLabel={props.label}
-        trackColor={{ true: '#31cdcc' }}
+        trackColor={{ true: '#46d2d1' }}
       />
     </View>
   );
