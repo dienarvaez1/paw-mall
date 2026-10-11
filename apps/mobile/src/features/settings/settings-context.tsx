@@ -114,10 +114,14 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
 
   // Ajustes has the last word (owner's rule): what's saved here holds across launches and every
-  // page follows it; a first launch starts at 3 miles (5 km).
+  // page follows it, except the radius, which every launch resets to the 3 mi preset (5 km in
+  // km) (owner's rule; the map's radius button and zoom change it during the session).
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
-      .then((raw) => setSettings(parseSettings(raw)))
+      .then((raw) => {
+        const saved = parseSettings(raw);
+        setSettings({ ...saved, radiusKm: startRadiusKm(saved.units) });
+      })
       .catch(() => {});
   }, []);
 
