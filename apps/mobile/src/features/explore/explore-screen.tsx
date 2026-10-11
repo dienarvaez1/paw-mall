@@ -51,7 +51,7 @@ const SEARCH_DEBOUNCE_MS = 300;
  */
 const CLUSTER_COLORS = { fill: '#84cc16', text: '#1a2e05' };
 // Explorar's controls (Lista/Mapa, Mi ubicación, the radius button, the selected chip) use the
-// logo's turquoise when on: bg-paw (#00c1c0) with text-teal-950 (#042f2e).
+// logo's turquoise, 10% lighter, when on: bg-paw (#1ac7c6) with text-teal-950 (#042f2e).
 const ON_TEXT = '#042f2e';
 /** How long the map takes to zoom to a new radius. */
 const MAP_FIT_MS = 500;
