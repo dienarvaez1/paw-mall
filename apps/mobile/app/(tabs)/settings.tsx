@@ -1,4 +1,4 @@
-import { SUPPORTED_LOCALES } from '@paw-mall/shared';
+import { DOG_SIZES, PET_SPECIES, SUPPORTED_LOCALES } from '@paw-mall/shared';
 import Constants from 'expo-constants';
 import type { ReactNode } from 'react';
 import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
@@ -58,6 +58,30 @@ export default function SettingsScreen() {
           />
         ))}
       </Section>
+
+      <Section title={t('settings.pet.title')} hint={t('settings.pet.hint')}>
+        {[null, ...PET_SPECIES].map((species) => (
+          <Option
+            key={species ?? 'none'}
+            label={t(`settings.pet.species.${species ?? 'none'}`)}
+            selected={settings.petSpecies === species}
+            onPress={() => settings.setPetSpecies(species)}
+          />
+        ))}
+      </Section>
+
+      {settings.petSpecies === 'dog' ? (
+        <Section title={t('settings.pet.dogSize')}>
+          {DOG_SIZES.map((size) => (
+            <Option
+              key={size}
+              label={t(`settings.pet.size.${size}`)}
+              selected={settings.dogSize === size}
+              onPress={() => settings.setDogSize(size)}
+            />
+          ))}
+        </Section>
+      ) : null}
 
       <Section title={t('settings.placesTitle')}>
         <SwitchRow

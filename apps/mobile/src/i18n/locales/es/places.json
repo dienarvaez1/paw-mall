@@ -43,7 +43,10 @@
     "feed_store": "Forrajerías",
     "dog_trainer": "Adiestramiento",
     "pet_funeral": "Funerarias",
-    "public_vet_service": "Servicios públicos"
+    "public_vet_service": "Servicios públicos",
+    "restaurant": "Restaurantes",
+    "cafe": "Cafés",
+    "lodging": "Hospedaje"
   },
   "noOpenPlaces": "No hay lugares abiertos ahora con horario confirmado a menos de {{distance}}.",
   "noOpenPlacesHint": "Todavía pocos negocios tienen su horario confirmado. Desactiva «Solo lugares abiertos ahora» en Ajustes para ver todos, o revisa el horario de cada uno con «Ver horario».",
@@ -113,7 +116,17 @@
     "consent": "Acepto que Paw Mall use estos datos para revisar mi solicitud. Mis datos de contacto se borran al terminar la revisión.",
     "submit": "Enviar solicitud",
     "invalid": "Revisa los datos: necesitas al menos un teléfono, un horario, un sitio web o un dato de atención veterinaria, además de tu contacto y tu aceptación.",
-    "thanks": "Recibimos tu solicitud. La revisaremos y, si todo está bien, publicaremos los datos de tu negocio."
+    "thanks": "Recibimos tu solicitud. La revisaremos y, si todo está bien, publicaremos los datos de tu negocio.",
+    "petSection": "Política de mascotas",
+    "petHint": "Dinos qué mascotas aceptan. La mostraremos como «Declarada por el dueño».",
+    "petDeclare": "Declarar la política de mascotas",
+    "petDogs": "Aceptamos perros",
+    "petMaxSize": "Tamaño máximo de perro",
+    "petMaxWeight": "Peso máximo en kg (opcional)",
+    "petCats": "Aceptamos gatos",
+    "petOther": "Aceptamos otras mascotas",
+    "petAreas": "Dónde pueden estar",
+    "petRules": "Reglas (opcional)"
   },
   "areaCount_one": "{{total}} lugar a menos de {{distance}} de {{area}}",
   "areaCount_other": "{{total}} lugares a menos de {{distance}} de {{area}}",
@@ -126,5 +139,81 @@
   "mapAreaCountPartial_other": "{{shown}} de {{total}} lugares a menos de {{distance}} de {{area}}",
   "categorySummary": "{{category}}: {{summary}}",
   "radiusButtonCustom": "Radio a mano: {{distance}}",
-  "radiusButtonCustomHint": "Lo elegiste con el zoom del mapa. Toca para volver a los radios de Ajustes."
+  "radiusButtonCustomHint": "Lo elegiste con el zoom del mapa. Toca para volver a los radios de Ajustes.",
+  "petFriendly": {
+    "toggle": "Pet-friendly",
+    "withProfile": "Pet-friendly: {{profile}}",
+    "hint": "Muestra solo lugares que aceptan mascotas, según tu mascota en Ajustes."
+  },
+  "noPetFriendlyPlaces": "No hay lugares pet-friendly a menos de {{distance}} para tu mascota",
+  "noPetFriendlyPlacesHint": "Por ahora tenemos restaurantes, cafés y hoteles de la Ciudad de México. Prueba un radio mayor o cambia tu mascota en Ajustes.",
+  "sourceCurated": "Política de mascotas: reunida por Paw Mall de la fuente indicada. Ubicación y teléfono: Overture Maps Foundation.",
+  "pets": {
+    "title": "Política de mascotas",
+    "underReview": "Varias personas dicen que esta política cambió. La estamos revisando.",
+    "underReviewShort": "En revisión · {{summary}}",
+    "petFriendly": "Acepta mascotas",
+    "summary": "{{allows}} · {{source}}, {{date}}",
+    "dogs": {
+      "no": "No acepta perros",
+      "upToWeight": "Perros de hasta {{weight}}",
+      "sizeUnknown": "Acepta perros (tamaño sin confirmar)",
+      "upToSize": {
+        "small": "Solo perros pequeños",
+        "medium": "Perros pequeños y medianos",
+        "large": "Perros de cualquier tamaño"
+      }
+    },
+    "cats": {
+      "yes": "Acepta gatos",
+      "no": "No acepta gatos"
+    },
+    "otherPets": {
+      "yes": "Acepta otras mascotas",
+      "no": "No acepta otras mascotas"
+    },
+    "maxPets_one": "Hasta {{count}} mascota",
+    "maxPets_other": "Hasta {{count}} mascotas",
+    "fee": {
+      "free": "Sin costo extra",
+      "amount": "Costo: {{amount}}",
+      "per": {
+        "night": "Costo: {{amount}} por noche",
+        "stay": "Costo: {{amount}} por estancia",
+        "visit": "Costo: {{amount}} por visita"
+      }
+    },
+    "areas": {
+      "label": "Dónde: {{areas}}",
+      "indoor": "Interior",
+      "terrace": "Terraza",
+      "outdoor": "Al aire libre"
+    },
+    "source": {
+      "owner": "Declarada por el dueño",
+      "ownerShort": "Dueño",
+      "curated": "Fuente: {{name}}"
+    },
+    "lastConfirmed": "Última confirmación: {{date}}",
+    "confirmations_one": "confirmada por {{count}} persona",
+    "confirmations_other": "confirmada por {{count}} personas",
+    "viewSource": "Ver la fuente",
+    "answer": {
+      "question": "¿Sigue siendo así?",
+      "confirm": "Sí, sigue igual",
+      "dispute": "Cambió",
+      "privacy": "Tu respuesta es anónima: no enviamos tu ubicación ni tus datos.",
+      "thanks": {
+        "confirm": "Gracias por confirmar.",
+        "dispute": "Gracias. Si más personas lo dicen, revisaremos esta política."
+      }
+    },
+    "profile": {
+      "cat": "gato",
+      "dog": "perro",
+      "dog_small": "perro pequeño",
+      "dog_medium": "perro mediano",
+      "dog_large": "perro grande"
+    }
+  }
 }

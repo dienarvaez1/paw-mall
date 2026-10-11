@@ -1,0 +1,794 @@
+{
+  "about": "Curated pet-friendly restaurants, cafés and lodging in Mexico City (docs/PLAN.md, Phase 6). Hotel policies come from each hotel's own website; restaurant and café policies from the food press (Time Out México, Chilango, Ciudad de México Secreta) where the venue publishes none. Locations and phones from Overture Maps (release 2026-09-23.1). Sizes: pequeño up to 10 kg, mediano 10–25 kg, grande over 25 kg. Load with `pnpm places:curated`.",
+  "places": [
+    {
+      "id": "four-seasons-mexico-city",
+      "name": "Four Seasons Hotel Mexico City",
+      "categories": ["lodging"],
+      "address": "Paseo de la Reforma 500, Col. Juárez, C.P. 06600",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.423211,
+        "lng": -99.174231
+      },
+      "phone": "+52 55 5230 1818",
+      "website": "https://www.fourseasons.com/mexico/",
+      "policy": {
+        "dogs": true,
+        "cats": true,
+        "otherPets": null,
+        "noSizeLimit": true,
+        "maxWeightKg": null,
+        "maxPets": 1,
+        "fee": {
+          "amount": 0
+        },
+        "areas": ["indoor"],
+        "rules": "Sin restricción de tamaño ni raza. Vacunas al día; con correa fuera de la habitación."
+      },
+      "source": {
+        "name": "Four Seasons",
+        "url": "https://www.fourseasons.com/mexico/services-and-amenities/pet-friendly-stays/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "andaz-mexico-city-condesa",
+      "name": "Andaz Mexico City Condesa",
+      "categories": ["lodging"],
+      "address": "Calle Aguascalientes 158, Col. Hipódromo, C.P. 06100",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.407889,
+        "lng": -99.169039
+      },
+      "phone": "+52 55 5977 1234",
+      "website": "https://www.hyatt.com/andaz/en-US/mexaz-andaz-mexico-city-condesa",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": 1,
+        "fee": {
+          "amount": 100,
+          "currency": "USD",
+          "per": "stay"
+        },
+        "areas": ["indoor", "terrace"],
+        "rules": "Una mascota por habitación, siempre acompañada en habitaciones y áreas comunes."
+      },
+      "source": {
+        "name": "Hyatt",
+        "url": "https://www.hyatt.com/andaz/en-US/mexaz-andaz-mexico-city-condesa/faqs",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "wooftop-andaz-condesa",
+      "name": "Wooftop Beer Garden & Canine Club",
+      "categories": ["restaurant"],
+      "address": "Calle Aguascalientes 158, 2.º piso, Col. Hipódromo, C.P. 06100",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.407889,
+        "lng": -99.169039
+      },
+      "phone": "+52 55 5977 1234",
+      "website": "https://www.hyatt.com/andaz/en-US/mexaz-andaz-mexico-city-condesa/dining",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": ["indoor", "terrace"],
+        "rules": "Terraza del Andaz con área de juego y menú para perros."
+      },
+      "source": {
+        "name": "Hyatt",
+        "url": "https://www.hyatt.com/andaz/en-US/mexaz-andaz-mexico-city-condesa/faqs",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "hyatt-house-santa-fe",
+      "name": "Hyatt House Mexico City/Santa Fe",
+      "categories": ["lodging"],
+      "address": "Avenida Vasco de Quiroga 4001, Col. Santa Fe, C.P. 05370",
+      "city": "Cuajimalpa de Morelos",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.357347,
+        "lng": -99.283566
+      },
+      "phone": "+52 55 5282 1234",
+      "website": "https://www.hyatt.com/hyatt-house/en-US/mexxs-hyatt-house-mexico-city-santa-fe",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": 22.7,
+        "maxPets": 2,
+        "fee": {
+          "amount": 100,
+          "currency": "USD",
+          "per": "stay"
+        },
+        "areas": ["indoor"],
+        "rules": "Un perro de hasta 22.7 kg (50 lb), o dos que juntos no pasen de 34 kg (75 lb). USD 100 por 1 a 6 noches; USD 200 por estancias más largas."
+      },
+      "source": {
+        "name": "Hyatt",
+        "url": "https://www.hyatt.com/hyatt-house/en-US/mexxs-hyatt-house-mexico-city-santa-fe/policies",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "hyatt-regency-insurgentes",
+      "name": "Hyatt Regency Mexico City Insurgentes",
+      "categories": ["lodging"],
+      "address": "Avenida Insurgentes Sur 724, Col. Del Valle, C.P. 03100",
+      "city": "Benito Juárez",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.392791,
+        "lng": -99.172566
+      },
+      "phone": "+52 55 5724 7700",
+      "website": "https://www.hyatt.com/hyatt-regency/en-US/mexrm-hyatt-regency-mexico-city-insurgentes",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": 15,
+        "maxPets": 2,
+        "fee": null,
+        "areas": ["indoor"],
+        "rules": "Una mascota de hasta 15 kg, o dos que juntas no pasen de 32 kg."
+      },
+      "source": {
+        "name": "Hyatt",
+        "url": "https://www.hyatt.com/hyatt-regency/en-US/mexrm-hyatt-regency-mexico-city-insurgentes/policies",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "city-centro-cdmx",
+      "name": "City Centro by Marriott Ciudad de México",
+      "categories": ["lodging"],
+      "address": "República de Uruguay 45, Col. Centro, C.P. 06000",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.430567,
+        "lng": -99.137916
+      },
+      "phone": "+52 55 8852 5000",
+      "website": "https://www.marriott.com/en-us/hotels/mexcm-city-centro-ciudad-de-mexico/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": false,
+        "otherPets": false,
+        "maxWeightKg": 15,
+        "maxPets": 1,
+        "fee": null,
+        "areas": ["indoor"],
+        "rules": "Solo perros. Cartilla de vacunación y correa durante la estancia."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexcm-city-centro-ciudad-de-mexico/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "city-express-junior-sullivan",
+      "name": "City Express Junior by Marriott Ciudad de México Sullivan",
+      "categories": ["lodging"],
+      "address": "James Sullivan 35, Col. San Rafael, C.P. 06470",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.433279,
+        "lng": -99.16108
+      },
+      "phone": "+52 55 8311 8400",
+      "website": "https://www.marriott.com/en-us/hotels/mexjs-city-express-junior-ciudad-de-mexico-sullivan/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": false,
+        "otherPets": false,
+        "maxWeightKg": 15,
+        "maxPets": 1,
+        "fee": {
+          "amount": 350,
+          "currency": "MXN",
+          "per": "night"
+        },
+        "areas": ["indoor"],
+        "rules": "Solo perros. Cartilla de vacunación y correa durante la estancia."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexjs-city-express-junior-ciudad-de-mexico-sullivan/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "city-express-aeropuerto",
+      "name": "City Express by Marriott Ciudad de México Aeropuerto",
+      "categories": ["lodging"],
+      "address": "Boulevard Puerto Aéreo 90, Col. Santa Cruz Aviación, C.P. 15540",
+      "city": "Venustiano Carranza",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.422742,
+        "lng": -99.095109
+      },
+      "phone": "+52 55 2598 5700",
+      "website": "https://www.marriott.com/en-us/hotels/mexxo-city-express-ciudad-de-mexico-aeropuerto/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": false,
+        "otherPets": false,
+        "maxWeightKg": 15,
+        "maxPets": 1,
+        "fee": {
+          "amount": 850,
+          "currency": "MXN",
+          "per": "night"
+        },
+        "areas": ["indoor"],
+        "rules": "Solo perros. Cartilla de vacunación y correa durante la estancia."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexxo-city-express-ciudad-de-mexico-aeropuerto/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "city-express-suites-anzures",
+      "name": "City Express Suites by Marriott Ciudad de México Anzures",
+      "categories": ["lodging"],
+      "address": "Leibnitz 120, Col. Anzures, C.P. 11590",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.429489,
+        "lng": -99.178561
+      },
+      "phone": "+52 55 1101 1370",
+      "website": "https://www.marriott.com/en-us/hotels/mexsa-city-express-suites-ciudad-de-mexico-anzures/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": false,
+        "otherPets": false,
+        "maxWeightKg": 15,
+        "maxPets": 1,
+        "fee": {
+          "amount": 350,
+          "currency": "MXN",
+          "per": "night"
+        },
+        "areas": ["indoor"],
+        "rules": "Solo perros. Cartilla de vacunación y correa durante la estancia."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexsa-city-express-suites-ciudad-de-mexico-anzures/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "city-express-plaza-central",
+      "name": "City Express by Marriott CDMX Plaza Central",
+      "categories": ["lodging"],
+      "address": "Eje 6 Sur 540, Col. Central de Abasto, C.P. 09040",
+      "city": "Iztapalapa",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.36856,
+        "lng": -99.099075
+      },
+      "phone": "+52 55 5640 0990",
+      "website": "https://www.marriott.com/en-us/hotels/mexxz-city-express-ciudad-de-mexico-plaza-central/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": false,
+        "otherPets": false,
+        "maxWeightKg": 15,
+        "maxPets": 1,
+        "fee": null,
+        "areas": ["indoor"],
+        "rules": "Solo perros. Cartilla de vacunación y correa durante la estancia."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexxz-city-express-ciudad-de-mexico-plaza-central/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "city-express-plus-reforma-el-angel",
+      "name": "City Express Plus by Marriott Ciudad de México Reforma El Ángel",
+      "categories": ["lodging"],
+      "address": "Paseo de la Reforma 334, Col. Juárez, C.P. 06600",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.426478,
+        "lng": -99.166884
+      },
+      "phone": "+52 55 5228 7800",
+      "website": "https://www.marriott.com/en-us/hotels/mexpg-city-express-plus-ciudad-de-mexico-reforma-el-angel/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": false,
+        "otherPets": false,
+        "maxWeightKg": 15,
+        "maxPets": 1,
+        "fee": null,
+        "areas": ["indoor"],
+        "rules": "Solo perros. Cartilla de vacunación y correa durante la estancia."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexpg-city-express-plus-ciudad-de-mexico-reforma-el-angel/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "four-points-colonia-roma",
+      "name": "Four Points by Sheraton Mexico City, Colonia Roma",
+      "categories": ["lodging"],
+      "address": "Avenida Álvaro Obregón 38, Col. Roma Norte, C.P. 06700",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.418703,
+        "lng": -99.156434
+      },
+      "phone": "+52 55 1085 9500",
+      "website": "https://www.marriott.com/en-us/hotels/mexfp-four-points-mexico-city-colonia-roma/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": false,
+        "otherPets": false,
+        "maxWeightKg": 20,
+        "maxPets": 1,
+        "fee": null,
+        "areas": ["indoor"],
+        "rules": "Solo perros. Cartilla de vacunación y correa durante la estancia."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexfp-four-points-mexico-city-colonia-roma/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "courtyard-mexico-city-airport",
+      "name": "Courtyard by Marriott Mexico City Airport",
+      "categories": ["lodging"],
+      "address": "Sinaloa 31, Col. Peñón de los Baños, C.P. 15520",
+      "city": "Venustiano Carranza",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.436923,
+        "lng": -99.082289
+      },
+      "phone": "+52 55 4631 4000",
+      "website": "https://www.marriott.com/en-us/hotels/mexcy-courtyard-mexico-city-airport/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": false,
+        "otherPets": false,
+        "maxWeightKg": 35,
+        "maxPets": 2,
+        "fee": null,
+        "areas": ["indoor"],
+        "rules": "Solo perros, hasta dos de 35 kg cada uno. Cartilla de vacunación y correa durante la estancia."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexcy-courtyard-mexico-city-airport/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "intercontinental-presidente-mexico-city",
+      "name": "InterContinental Presidente Mexico City",
+      "categories": ["lodging"],
+      "address": "Campos Elíseos 218, Col. Polanco, C.P. 11560",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.427583,
+        "lng": -99.193391
+      },
+      "phone": "+52 55 5327 7700",
+      "website": "https://www.ihg.com/intercontinental/hotels/us/en/mexico/mexha/hoteldetail",
+      "policy": {
+        "dogs": true,
+        "cats": true,
+        "otherPets": true,
+        "maxWeightKg": 5,
+        "maxPets": 2,
+        "fee": {
+          "amount": 30,
+          "currency": "USD",
+          "per": "stay"
+        },
+        "areas": ["indoor"],
+        "rules": "Perros, gatos y animales pequeños en jaula, hasta dos de 5 kg. Con correa o cargados en áreas comunes; no en restaurantes ni bares."
+      },
+      "source": {
+        "name": "IHG",
+        "url": "https://www.ihg.com/intercontinental/hotels/us/en/mexico/mexha/hoteldetail/amenities",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "jw-marriott-polanco",
+      "name": "JW Marriott Hotel Mexico City Polanco",
+      "categories": ["lodging"],
+      "address": "Andrés Bello 29, Col. Polanco, C.P. 11560",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.427187,
+        "lng": -99.194768
+      },
+      "phone": "+52 55 5999 0000",
+      "website": "https://www.marriott.com/en-us/hotels/mexjw-jw-marriott-hotel-mexico-city-polanco/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": true,
+        "otherPets": true,
+        "maxWeightKg": 20,
+        "maxPets": 1,
+        "fee": null,
+        "areas": ["indoor"],
+        "rules": "Perros, gatos, aves y peces; una mascota de hasta 20 kg."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexjw-jw-marriott-hotel-mexico-city-polanco/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "w-mexico-city",
+      "name": "W Mexico City",
+      "categories": ["lodging"],
+      "address": "Avenida Campos Elíseos 252, Col. Polanco, C.P. 11550",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.427373,
+        "lng": -99.195348
+      },
+      "phone": "+52 55 9138 1800",
+      "website": "https://www.marriott.com/en-us/hotels/mexwm-w-mexico-city/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": 25,
+        "maxPets": 1,
+        "fee": {
+          "amount": 20,
+          "currency": "USD",
+          "per": "night"
+        },
+        "areas": ["indoor"],
+        "rules": "Una mascota de hasta 25 kg. USD 20 por noche más USD 50 de limpieza (no reembolsable)."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexwm-w-mexico-city/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "st-regis-mexico-city",
+      "name": "The St. Regis Mexico City",
+      "categories": ["lodging"],
+      "address": "Paseo de la Reforma 439, Col. Cuauhtémoc, C.P. 06500",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.4256,
+        "lng": -99.172092
+      },
+      "phone": "+52 55 5228 1818",
+      "website": "https://www.marriott.com/en-us/hotels/mexxr-the-st-regis-mexico-city/overview/",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": 8,
+        "maxPets": 2,
+        "fee": {
+          "amount": 25,
+          "currency": "USD",
+          "per": "night"
+        },
+        "areas": ["indoor"],
+        "rules": "Hasta dos mascotas de 8 kg cada una; no en áreas comunes. USD 100 por estancia más USD 25 por noche."
+      },
+      "source": {
+        "name": "Marriott",
+        "url": "https://www.marriott.com/en-us/hotels/mexxr-the-st-regis-mexico-city/overview/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "greenway-polanco",
+      "name": "Greenway Restaurante 100% Pet Friendly",
+      "categories": ["restaurant", "cafe"],
+      "address": "Avenida Homero 530, Col. Polanco, C.P. 11560",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.435315,
+        "lng": -99.190038
+      },
+      "phone": "+52 55 6721 3066",
+      "website": "http://www.greenwayfood.com.mx/",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": [],
+        "rules": "Menú para perros y bolsas para recoger sus desechos."
+      },
+      "source": {
+        "name": "Time Out México",
+        "url": "https://www.timeoutmexico.mx/ciudad-de-mexico/restaurantes-cafes/greenway-cafe",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "cardinal-condesa",
+      "name": "Cardinal Casa de Café Condesa",
+      "categories": ["cafe"],
+      "address": "Campeche 346, Col. Hipódromo Condesa, C.P. 06100",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.409165,
+        "lng": -99.173801
+      },
+      "phone": "+52 55 5068 0071",
+      "website": "http://casacardinal.mx",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": [],
+        "rules": null
+      },
+      "source": {
+        "name": "Time Out México",
+        "url": "https://www.timeoutmexico.mx/ciudad-de-mexico/restaurantes/cardinal-casa-de-cafe-condesa",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "cardinal-roma",
+      "name": "Cardinal Casa de Café",
+      "categories": ["cafe"],
+      "address": "Córdoba 132, Col. Roma Norte, C.P. 06700",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.417285,
+        "lng": -99.158171
+      },
+      "phone": "+52 55 6721 8874",
+      "website": "http://casacardinal.mx",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": [],
+        "rules": null
+      },
+      "source": {
+        "name": "Chilango",
+        "url": "https://www.chilango.com/restaurantes/roma-1/cardinal-casa-de-cafe/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "milos-condesa",
+      "name": "Milo's",
+      "categories": ["restaurant"],
+      "address": "Ámsterdam 308, esq. Celaya, Col. Hipódromo, C.P. 06100",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.41432,
+        "lng": -99.166953
+      },
+      "phone": "+52 55 5564 8712",
+      "website": "http://www.milosbistrot.com.mx",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": ["terrace"],
+        "rules": null
+      },
+      "source": {
+        "name": "Ciudad de México Secreta",
+        "url": "https://cdmxsecreta.com/restaurantes-pet-friendly-cdmx/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "q-pedro-pablo-roma",
+      "name": "Q' Pedro Pablo",
+      "categories": ["restaurant"],
+      "address": "Durango 108, Col. Roma Norte, C.P. 06700",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.420764,
+        "lng": -99.161667
+      },
+      "phone": "+52 55 6973 1821",
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": ["terrace"],
+        "rules": null
+      },
+      "source": {
+        "name": "Ciudad de México Secreta",
+        "url": "https://cdmxsecreta.com/restaurantes-pet-friendly-cdmx/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "juana-juana-juarez",
+      "name": "Juana Juana",
+      "categories": ["restaurant"],
+      "address": "Dinamarca 47, Col. Juárez, C.P. 06600",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.42754,
+        "lng": -99.158801
+      },
+      "phone": "+52 55 5162 3854",
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": ["terrace"],
+        "rules": null
+      },
+      "source": {
+        "name": "Ciudad de México Secreta",
+        "url": "https://cdmxsecreta.com/restaurantes-pet-friendly-cdmx/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "pinche-gringo-narvarte",
+      "name": "Pinche Gringo BBQ Narvarte",
+      "categories": ["restaurant"],
+      "address": "Cumbres de Maltrata 360, Col. Narvarte, C.P. 03020",
+      "city": "Benito Juárez",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.393107,
+        "lng": -99.152162
+      },
+      "phone": "+52 55 6389 1129",
+      "website": "http://www.pgbbq.mx",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": ["outdoor"],
+        "rules": "Solo esta sucursal (el patio de la Narvarte) es pet friendly."
+      },
+      "source": {
+        "name": "Ciudad de México Secreta",
+        "url": "https://cdmxsecreta.com/restaurantes-pet-friendly-cdmx/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "le-petit-lola-san-angel",
+      "name": "Le Petit Lola",
+      "categories": ["restaurant"],
+      "address": "Calle de la Amargura 14, Col. San Ángel, C.P. 01000",
+      "city": "Álvaro Obregón",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.34605,
+        "lng": -99.190856
+      },
+      "phone": "+52 55 5550 8429",
+      "website": "http://www.lepetitlola.com/",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": ["terrace"],
+        "rules": null
+      },
+      "source": {
+        "name": "Ciudad de México Secreta",
+        "url": "https://cdmxsecreta.com/restaurantes-pet-friendly-cdmx/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "mog-roma",
+      "name": "MOG",
+      "categories": ["restaurant"],
+      "address": "Avenida Álvaro Obregón 40, Col. Roma Norte, C.P. 06700",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.418658,
+        "lng": -99.156627
+      },
+      "phone": "+52 55 5264 0016",
+      "website": "http://mogmexico.com",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": [],
+        "rules": "Perros con correa junto a la mesa."
+      },
+      "source": {
+        "name": "Time Out México",
+        "url": "https://www.timeoutmexico.mx/ciudad-de-mexico/restaurantes-cafes/restaurantes-y-cafes-pet-friendly",
+        "checkedOn": "2026-10-10"
+      }
+    }
+  ]
+}

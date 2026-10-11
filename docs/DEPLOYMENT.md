@@ -51,6 +51,7 @@ a task (and a note in the phase that applies it).
 | 2026-10-05 | **More DENUE fields to use.** Market or plaza and stall number (1,938 places, e.g. Mercado Sonora), interior numbers missing from addresses (1,504), staff size for ranking Urgencias (960 with 6+ people), business email (2,883), semi-fixed stalls (187). Suggested: market/stall and interior numbers in addresses first.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Open: owner to choose                 |
 | 2026-10-05 | **Area search on the map, and more landmarks.** Area search works in the list; the map still shows the area around the user (search is off in map mode, as in Ferre Mall). Options: center the map on a searched area; add landmarks outside Mexico City (Puebla, Cuernavaca, Toluca, Querétaro…) to `data/landmarks.json`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Open: owner to choose                 |
 | 2026-10-05 | **Dog walkers and pet sitters.** No category: DENUE has 4. Options: import Overture's dog walkers and pet sitters as listings (about 105 in CDMX; many are individuals, so review privacy first), or a "register your business" flow so walkers can add themselves.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Open: owner to choose                 |
+| 2026-10-10 | **Press sources for pet-friendly restaurants.** Restaurants and cafés rarely publish a pet policy, so Phase 6's 11 come from Time Out México, Chilango and Ciudad de México Secreta (credited, with links); hotels come from their own sites. Keep press sources, replace them as venues confirm, or show only venue and owner statements?                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Open: owner to choose                 |
 | 2026-10-05 | **Import neighboring states for the 100-mile radius?** Guerrero, Michoacán and Querétaro are now imported (owner's decision, 2026-10-05).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Done in Phase 5 (#6)                  |
 
 ## Phase details
@@ -547,12 +548,51 @@ a task (and a note in the phase that applies it).
 - **Branch / PR:** `phase-6/pet-friendly` / #8
 - **Status:** In progress
 - **Checks:**
-  - [ ] `pnpm lint`
-  - [ ] `pnpm typecheck`
-  - [ ] `pnpm test`
-  - [ ] Done-when check on device
-- **Notes:** —
-- **Follow-ups:** —
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 216 tests (shared 27, api 59, importers 73, mobile 57), including the
+        pet-friendly filter by species and dog size, confirm/dispute answers (one per phone, review
+        after 3 disputes outnumbering confirmations, extra fields rejected), curated import (owner
+        policies kept, answers cleared when a curated policy changes) and the claim's pet policy
+  - [x] Migration 0011 applies on the local database; schema and migrations in sync
+  - [x] API check on real data: `petFriendly=true` within 30 km of the Zócalo returns the 26
+        curated places; with `petSpecies=dog&dogSize=large`, only Four Seasons Hotel Mexico City
+        (any size) and Courtyard by Marriott Mexico City Airport (up to 35 kg), each with source
+        and last confirmation
+  - [ ] Done-when check on a phone: Ajustes → Mi mascota → Perro → Grande; Explorar →
+        Pet-friendly → Mapa
+- **Notes:**
+  - **Owner decisions (2026-10-10):** Claude researches the curated list from the venues' public
+    statements (source URL and check date per entry); dog sizes are pequeño up to 10 kg, mediano
+    10–25 kg, grande over 25 kg.
+  - **Curated data** (`packages/importers/data/pet-friendly-cdmx.json`, `pnpm places:curated`):
+    26 places in CDMX: 16 lodging, 8 restaurants, 3 cafés (Greenway counts as both). Hotel
+    policies come from each hotel's own site (Four Seasons, Hyatt, Marriott, IHG), read through
+    the search index because those sites block automated fetches; restaurants and cafés rarely
+    publish a policy, so theirs come from the food press (Time Out México, Chilango, Ciudad de
+    México Secreta, 2024 article), credited on the card. Locations and phones from Overture Maps
+    (release 2026-09-23.1, credited). Left out: places whose Overture location was ambiguous
+    (Hyatt Regency Mexico City, Sheraton María Isabel, City Express Plus Santa Fe, Guau Tap,
+    Q' Pedro Pablo Juárez), hotels that don't take pets (Camino Real Polanco, Marriott Reforma),
+    and press lists older than 2024.
+  - Weight limits map to the largest size they let in (15 kg → mediano, 35 kg → grande); the
+    card shows the exact limit. Unknown sizes never match a size filter.
+  - The Pet-friendly toggle (and the Restaurantes, Cafés and Hospedaje chips) show only places
+    with a policy that takes pets and isn't under review, narrowed by the pet profile.
+  - Shoppers: "¿Sigue siendo así?" (Sí, sigue igual / Cambió). A confirmation moves "Última
+    confirmación" to today; 3 phones saying it changed, more than confirm it in 90 days, put it
+    under review (hidden from the filters, warning on the card). Same privacy rule as reports:
+    only the answer, the date and the app's random id. Review with `pnpm places:policies
+[--keep N | --remove N]`.
+  - Owners: the claim form of restaurants, cafés and lodging has a pet policy section; approving
+    it publishes "Declarada por el dueño" and replaces any curated policy (owner wins on
+    re-import).
+  - API: `petPolicy` on places; `petFriendly`, `petSpecies`, `dogSize` filters;
+    `POST /v1/places/:id/policy-answers`; migration 0011 (`pet_policies`, `policy_answers`,
+    `place_claims.pet_policy`). `zod` added to the importers (already in the stack).
+- **Follow-ups:**
+  - Ask the owner whether press sources are acceptable for restaurants (see "Pending owner
+    reviews"), and whether to widen the curated set (more colonias, other cities).
+  - Fees: restaurants' fees are left unknown; hotels' fees are as published.
 
 ### Phase 7 — Tourism and museums
 

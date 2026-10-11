@@ -19,7 +19,22 @@
   "hideUnnamedHint": "Hides businesses registered as “sin nombre” or without a trade name.",
   "about": "About",
   "version": "Version {{version}}",
-  "dataSources": "Business data: INEGI, National Statistical Directory of Economic Units (DENUE). Phones, websites and social media: Overture Maps Foundation. Search landmarks: Wikidata.",
+  "dataSources": "Business data: INEGI, National Statistical Directory of Economic Units (DENUE). Phones, websites and social media: Overture Maps Foundation. Search landmarks: Wikidata. Pet policies: each hotel's website and the food press (Time Out México, Chilango, Ciudad de México Secreta).",
   "onlyOpenNow": "Only places open now",
-  "onlyOpenNowHint": "Shows only places with confirmed hours that are open right now. Very few have confirmed hours for now."
+  "onlyOpenNowHint": "Shows only places with confirmed hours that are open right now. Very few have confirmed hours for now.",
+  "pet": {
+    "title": "My pet",
+    "hint": "With \"Pet-friendly\" on in Explore, you only see places that take it.",
+    "species": {
+      "none": "Not chosen",
+      "dog": "Dog",
+      "cat": "Cat"
+    },
+    "dogSize": "Your dog's size",
+    "size": {
+      "small": "Small (up to 10 kg)",
+      "medium": "Medium (10 to 25 kg)",
+      "large": "Large (over 25 kg)"
+    }
+  }
 }

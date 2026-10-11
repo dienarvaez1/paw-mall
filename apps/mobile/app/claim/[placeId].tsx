@@ -1,10 +1,17 @@
-import { placeClaimSchema, receivedResponseSchema } from '@paw-mall/shared';
+import {
+  DOG_SIZES,
+  PET_AREAS,
+  type PetArea,
+  placeClaimSchema,
+  receivedResponseSchema,
+} from '@paw-mall/shared';
 import { useMutation } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { type ReactNode, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   Switch,
   Text,
@@ -23,6 +30,12 @@ import {
   type HoursForm,
   buildHours,
 } from '@/features/claims/claim-hours';
+import {
+  EMPTY_PET_POLICY,
+  type PetPolicyForm,
+  buildPetPolicy,
+} from '@/features/claims/claim-pet-policy';
+import { isPetFriendlyCategory } from '@/lib/categories';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 
@@ -31,7 +44,8 @@ const INPUT =
 
 /**
  * "¿Eres el dueño?": the owner sends the details to publish and a contact for the review. Vets can
- * also say they're open 24 hours and take emergencies. (The SAT certificate check is deferred.)
+ * also say they're open 24 hours and take emergencies; restaurants, cafés and lodging can declare
+ * their pet policy. (The SAT certificate check is deferred.)
  */
 export default function ClaimScreen() {
   const { placeId } = useLocalSearchParams<{ placeId: string }>();
@@ -42,6 +56,9 @@ export default function ClaimScreen() {
   const isVet = (place.data?.categories ?? []).some((c) =>
     ['veterinarian', 'vet_hospital', 'public_vet_service'].includes(c.slug),
   );
+  const isPetFriendly = (place.data?.categories ?? []).some((c) => isPetFriendlyCategory(c.slug));
+  const [declarePolicy, setDeclarePolicy] = useState(false);
+  const [policy, setPolicy] = useState<PetPolicyForm>(EMPTY_PET_POLICY);
   const [open24h, setOpen24h] = useState(false);
   const [acceptsEmergencies, setAcceptsEmergencies] = useState(false);
   const [phone, setPhone] = useState('');
@@ -58,7 +75,13 @@ export default function ClaimScreen() {
   });
 
   function send() {
+    const petPolicy = isPetFriendly && declarePolicy ? buildPetPolicy(policy) : undefined;
+    if (petPolicy === null) {
+      setInvalid(true);
+      return;
+    }
     const parsed = placeClaimSchema.safeParse({
+      petPolicy,
       phone: phone.trim() || undefined,
       website: website.trim() ? withScheme(website.trim()) : undefined,
       hours: open24h ? undefined : buildHours(hours),
@@ -129,6 +152,17 @@ export default function ClaimScreen() {
               value={acceptsEmergencies}
               onChange={setAcceptsEmergencies}
             />
+          </Section>
+        ) : null}
+
+        {isPetFriendly ? (
+          <Section title={t('places.claim.petSection')} hint={t('places.claim.petHint')}>
+            <SwitchRow
+              label={t('places.claim.petDeclare')}
+              value={declarePolicy}
+              onChange={setDeclarePolicy}
+            />
+            {declarePolicy ? <PetPolicyFields value={policy} onChange={setPolicy} /> : null}
           </Section>
         ) : null}
 
@@ -279,6 +313,123 @@ function DayRow({
         </View>
       ) : null}
     </View>
+  );
+}
+
+/** Which pets the place takes, the largest dog, an optional weight limit, areas and rules. */
+function PetPolicyFields({
+  value,
+  onChange,
+}: {
+  value: PetPolicyForm;
+  onChange: (value: PetPolicyForm) => void;
+}) {
+  const { t } = useAppTranslation();
+  const set = (patch: Partial<PetPolicyForm>) => onChange({ ...value, ...patch });
+  const toggleArea = (area: PetArea) =>
+    set({
+      areas: value.areas.includes(area)
+        ? value.areas.filter((a) => a !== area)
+        : [...value.areas, area],
+    });
+  return (
+    <View className="gap-3">
+      <SwitchRow
+        label={t('places.claim.petDogs')}
+        value={value.dogs}
+        onChange={(dogs) => set({ dogs })}
+      />
+      {value.dogs ? (
+        <>
+          <Text className="text-sm text-neutral-600 dark:text-neutral-300">
+            {t('places.claim.petMaxSize')}
+          </Text>
+          <View className="flex-row flex-wrap gap-2">
+            {DOG_SIZES.map((size) => (
+              <Choice
+                key={size}
+                label={t(`settings.pet.size.${size}`)}
+                selected={value.maxDogSize === size}
+                onPress={() => set({ maxDogSize: value.maxDogSize === size ? null : size })}
+              />
+            ))}
+          </View>
+          <Field label={t('places.claim.petMaxWeight')}>
+            <TextInput
+              className={INPUT}
+              value={value.maxWeightKg}
+              onChangeText={(maxWeightKg) => set({ maxWeightKg })}
+              keyboardType="decimal-pad"
+              accessibilityLabel={t('places.claim.petMaxWeight')}
+            />
+          </Field>
+        </>
+      ) : null}
+      <SwitchRow
+        label={t('places.claim.petCats')}
+        value={value.cats}
+        onChange={(cats) => set({ cats })}
+      />
+      <SwitchRow
+        label={t('places.claim.petOther')}
+        value={value.otherPets}
+        onChange={(otherPets) => set({ otherPets })}
+      />
+      <Text className="text-sm text-neutral-600 dark:text-neutral-300">
+        {t('places.claim.petAreas')}
+      </Text>
+      <View className="flex-row flex-wrap gap-2">
+        {PET_AREAS.map((area) => (
+          <Choice
+            key={area}
+            label={t(`places.pets.areas.${area}`)}
+            selected={value.areas.includes(area)}
+            onPress={() => toggleArea(area)}
+          />
+        ))}
+      </View>
+      <Field label={t('places.claim.petRules')}>
+        <TextInput
+          className={`${INPUT} py-2`}
+          value={value.rules}
+          onChangeText={(rules) => set({ rules })}
+          multiline
+          maxLength={300}
+          accessibilityLabel={t('places.claim.petRules')}
+        />
+      </Field>
+    </View>
+  );
+}
+
+function Choice({
+  label,
+  selected,
+  onPress,
+}: {
+  label: string;
+  selected: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked: selected }}
+      onPress={onPress}
+      className={`min-h-10 justify-center rounded-full border px-4 ${
+        selected
+          ? 'border-teal-700 bg-teal-700'
+          : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
+      }`}
+    >
+      <Text
+        className={`text-sm font-semibold ${
+          selected ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
+        }`}
+      >
+        {label}
+      </Text>
+    </Pressable>
   );
 }
 

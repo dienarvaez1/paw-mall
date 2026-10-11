@@ -3,6 +3,7 @@ import { Link } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
 import { OpenStatus } from '@/components/open-status';
+import { usePolicySummary } from '@/features/pet-policy/policy-text';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -33,21 +34,25 @@ export function CategoryLine({ place, selected }: { place: Place; selected: Chip
 
 /**
  * A place in a list. Its distance reads "0.3 mi away" with `away` (Explorar's "Mi ubicación" on:
- * distances from the user) and just "0.3 mi" otherwise (owner's rule).
+ * distances from the user) and just "0.3 mi" otherwise (owner's rule). With `showPolicy`
+ * (pet-friendly mode), a line tells the pet policy, its source and last confirmation.
  */
 export function PlaceRow({
   place,
   selected,
   away = true,
+  showPolicy = false,
 }: {
   place: Place;
   selected: ChipCategory;
   away?: boolean;
+  showPolicy?: boolean;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const { units } = useSettings();
   const name = usePlaceName(place);
+  const policy = usePolicySummary(showPolicy ? place.petPolicy : null);
   return (
     <Link href={{ pathname: '/place/[id]', params: { id: place.id } }} asChild>
       <Pressable
@@ -75,6 +80,11 @@ export function PlaceRow({
         <Text className="text-sm text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
           {placeLine(place)}
         </Text>
+        {policy ? (
+          <Text className="text-sm font-medium text-teal-800 dark:text-teal-300" numberOfLines={2}>
+            {policy}
+          </Text>
+        ) : null}
         <OpenStatus place={place} />
       </Pressable>
     </Link>

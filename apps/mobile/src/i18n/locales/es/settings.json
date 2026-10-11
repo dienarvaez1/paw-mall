@@ -19,7 +19,22 @@
   "hideUnnamedHint": "Oculta los negocios registrados como «sin nombre» o sin nombre comercial.",
   "about": "Acerca de",
   "version": "Versión {{version}}",
-  "dataSources": "Datos de negocios: INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE). Teléfonos, sitios web y redes sociales: Overture Maps Foundation. Lugares de referencia para la búsqueda: Wikidata.",
+  "dataSources": "Datos de negocios: INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE). Teléfonos, sitios web y redes sociales: Overture Maps Foundation. Lugares de referencia para la búsqueda: Wikidata. Políticas de mascotas: sitios de cada hotel y prensa gastronómica (Time Out México, Chilango, Ciudad de México Secreta).",
   "onlyOpenNow": "Solo lugares abiertos ahora",
-  "onlyOpenNowHint": "Muestra solo los lugares con horario confirmado que están abiertos en este momento. Por ahora muy pocos tienen su horario confirmado."
+  "onlyOpenNowHint": "Muestra solo los lugares con horario confirmado que están abiertos en este momento. Por ahora muy pocos tienen su horario confirmado.",
+  "pet": {
+    "title": "Mi mascota",
+    "hint": "Con «Pet-friendly» en Explorar, solo verás lugares que la aceptan.",
+    "species": {
+      "none": "Sin elegir",
+      "dog": "Perro",
+      "cat": "Gato"
+    },
+    "dogSize": "Tamaño de tu perro",
+    "size": {
+      "small": "Pequeño (hasta 10 kg)",
+      "medium": "Mediano (10 a 25 kg)",
+      "large": "Grande (más de 25 kg)"
+    }
+  }
 }

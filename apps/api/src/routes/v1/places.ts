@@ -5,6 +5,7 @@ import {
   placeListQuerySchema,
   placeMapQuerySchema,
   placeReportSchema,
+  policyAnswerSchema,
   type receivedResponseSchema,
   urgentQuerySchema,
 } from '@paw-mall/shared';
@@ -16,7 +17,7 @@ import { GoogleError } from '../../lib/google-places';
 import { errorResponse, parseInput } from '../../lib/http';
 import { lookupGoogleDetails, userKey } from '../../queries/google';
 import { getPlace, listPlaces, placesForMap, urgentPlaces } from '../../queries/places';
-import { createClaim, reportPlace } from '../../queries/trust';
+import { answerPolicy, createClaim, reportPlace } from '../../queries/trust';
 
 type Received = z.infer<typeof receivedResponseSchema>;
 
@@ -66,6 +67,20 @@ export const placesRoute = new Hono<AppEnv>()
       return errorResponse(c, 404, 'PLACE_NOT_FOUND');
     }
     await createClaim(c.var.db, params.data.id, claim.data);
+    return c.json<Received>({ received: true }, 201);
+  })
+  // Confirm or dispute a pet policy: only the answer and the app's random id are read or kept.
+  .post('/:id/policy-answers', async (c) => {
+    const params = parseInput(c, idParamSchema, c.req.param());
+    if (!params.ok) return params.response;
+    const answer = parseInput(c, policyAnswerSchema, await c.req.json().catch(() => null));
+    if (!answer.ok) return answer.response;
+    if (!(await getPlace(c.var.db, params.data.id, c.var.locale))) {
+      return errorResponse(c, 404, 'PLACE_NOT_FOUND');
+    }
+    if (!(await answerPolicy(c.var.db, params.data.id, answer.data))) {
+      return errorResponse(c, 404, 'POLICY_NOT_FOUND');
+    }
     return c.json<Received>({ received: true }, 201);
   })
   // POST, not GET: each call can spend from the monthly Google allowance, so nothing may prefetch it.

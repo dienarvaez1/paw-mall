@@ -17,7 +17,7 @@ export function randomClientId(random: () => number = Math.random): string {
   return Array.from({ length: 32 }, () => Math.floor(random() * 16).toString(16)).join('');
 }
 
-async function getClientId(): Promise<string> {
+export async function getClientId(): Promise<string> {
   const saved = await AsyncStorage.getItem(CLIENT_ID_KEY).catch(() => null);
   if (saved) return saved;
   const id = randomClientId();

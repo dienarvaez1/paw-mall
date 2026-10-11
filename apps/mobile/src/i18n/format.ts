@@ -56,3 +56,30 @@ export function formatMonthYear(isoDate: string, language: Locale): string {
     timeZone: 'UTC',
   }).format(new Date(`${isoDate}T12:00:00Z`));
 }
+
+/** An ISO date ("2026-10-10") in the medium local format: "10 oct 2026" / "Oct 10, 2026". */
+export function formatShortDate(isoDate: string, language: Locale): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    dateStyle: 'medium',
+    timeZone: 'UTC',
+  }).format(new Date(`${isoDate}T12:00:00Z`));
+}
+
+/** A weight in kg ("22.7 kg"); only the number goes through Intl, as in formatDistance. */
+export function formatWeightKg(kg: number, language: Locale): string {
+  const number = new Intl.NumberFormat(intlLocale(language), { maximumFractionDigits: 1 }).format(
+    kg,
+  );
+  return `${number} kg`;
+}
+
+/** An amount of money in its currency ("$350.00", "USD 100.00"), whole amounts without cents. */
+export function formatMoney(amount: number, currency: string, language: Locale): string {
+  return new Intl.NumberFormat(intlLocale(language), {
+    style: 'currency',
+    currency,
+    currencyDisplay: 'code',
+    maximumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+    minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+  }).format(amount);
+}

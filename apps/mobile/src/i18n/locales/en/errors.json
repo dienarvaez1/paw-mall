@@ -6,6 +6,7 @@
     "BAD_REQUEST": "The request isn't valid.",
     "NOT_FOUND": "We couldn't find what you're looking for.",
     "PLACE_NOT_FOUND": "We couldn't find this place.",
+    "POLICY_NOT_FOUND": "We couldn't find this place's pet policy.",
     "INTERNAL_ERROR": "Something went wrong on the server."
   }
 }

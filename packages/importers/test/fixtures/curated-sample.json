@@ -1,0 +1,76 @@
+{
+  "about": "Test sample: three curated places.",
+  "places": [
+    {
+      "id": "hotel-any-size",
+      "name": "Hotel Todos Bienvenidos",
+      "categories": ["lodging"],
+      "address": "Calle 1, Col. Centro, C.P. 06000",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": { "lat": 19.43, "lng": -99.13 },
+      "phone": "+52 55 0000 0000",
+      "website": "https://example.com/hotel",
+      "policy": {
+        "dogs": true,
+        "cats": true,
+        "otherPets": null,
+        "noSizeLimit": true,
+        "maxWeightKg": null,
+        "maxPets": 1,
+        "fee": { "amount": 0 },
+        "areas": ["indoor"],
+        "rules": null
+      },
+      "source": {
+        "name": "Hotel",
+        "url": "https://example.com/hotel/pets",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "hotel-15-kg",
+      "name": "Hotel Perros Medianos",
+      "categories": ["lodging"],
+      "address": "Calle 2, Col. Centro, C.P. 06000",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": { "lat": 19.431, "lng": -99.131 },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": false,
+        "otherPets": false,
+        "maxWeightKg": 15,
+        "maxPets": 1,
+        "fee": { "amount": 350, "currency": "MXN", "per": "night" },
+        "areas": ["indoor"],
+        "rules": "Solo perros."
+      },
+      "source": { "name": "Cadena", "url": "https://example.com/chain", "checkedOn": "2026-10-09" }
+    },
+    {
+      "id": "gallos-de-pelea",
+      "name": "Palenque Gallos de Pelea",
+      "categories": ["restaurant"],
+      "address": "Calle 3",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": { "lat": 19.432, "lng": -99.132 },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": ["terrace"],
+        "rules": null
+      },
+      "source": { "name": "Prensa", "url": "https://example.com/press", "checkedOn": "2026-10-10" }
+    }
+  ]
+}

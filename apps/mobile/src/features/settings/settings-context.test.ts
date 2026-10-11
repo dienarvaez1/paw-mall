@@ -2,13 +2,13 @@ import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@react-native-async-storage/async-storage', () => ({ default: {} }));
 
-const { parseSettings } = await import('./settings-context');
+const { parseSettings, petProfileFilters } = await import('./settings-context');
 
 describe('parseSettings', () => {
   it('reads stored values', () => {
     expect(
       parseSettings(
-        '{"radiusKm":25,"units":"km","onlyWithPhone":true,"onlyWithWebsite":true,"onlyWithSocial":true,"hideUnnamed":true,"onlyOpenNow":true}',
+        '{"radiusKm":25,"units":"km","onlyWithPhone":true,"onlyWithWebsite":true,"onlyWithSocial":true,"hideUnnamed":true,"onlyOpenNow":true,"petSpecies":"dog","dogSize":"large"}',
       ),
     ).toEqual({
       radiusKm: 25,
@@ -18,6 +18,8 @@ describe('parseSettings', () => {
       onlyWithSocial: true,
       hideUnnamed: true,
       onlyOpenNow: true,
+      petSpecies: 'dog',
+      dogSize: 'large',
     });
     const miles = parseSettings(`{"radiusKm":${10 * 1.609344},"units":"mi"}`);
     expect(miles.units).toBe('mi');
@@ -39,9 +41,32 @@ describe('parseSettings', () => {
       onlyWithSocial: false,
       hideUnnamed: false,
       onlyOpenNow: false,
+      petSpecies: null,
+      dogSize: null,
     };
     expect(parseSettings(null)).toEqual(defaults);
-    expect(parseSettings('{"units":"ft","onlyWithPhone":"yes"}')).toEqual(defaults);
+    expect(
+      parseSettings('{"units":"ft","onlyWithPhone":"yes","petSpecies":"fish","dogSize":"huge"}'),
+    ).toEqual(defaults);
     expect(parseSettings('not json')).toEqual(defaults);
+  });
+});
+
+describe('petProfileFilters', () => {
+  it('sends the profile only with the pet-friendly filter on', () => {
+    expect(petProfileFilters(false, 'dog', 'large')).toEqual({});
+    expect(petProfileFilters(true, null, null)).toEqual({ petFriendly: true });
+    expect(petProfileFilters(true, 'dog', 'large')).toEqual({
+      petFriendly: true,
+      petSpecies: 'dog',
+      dogSize: 'large',
+    });
+  });
+
+  it('ignores a dog size kept from before the profile changed to a cat', () => {
+    expect(petProfileFilters(true, 'cat', 'large')).toEqual({
+      petFriendly: true,
+      petSpecies: 'cat',
+    });
   });
 });

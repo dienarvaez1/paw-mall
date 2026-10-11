@@ -43,7 +43,10 @@
     "feed_store": "Feed stores",
     "dog_trainer": "Dog training",
     "pet_funeral": "Pet funerals",
-    "public_vet_service": "Public services"
+    "public_vet_service": "Public services",
+    "restaurant": "Restaurants",
+    "cafe": "Cafés",
+    "lodging": "Lodging"
   },
   "noOpenPlaces": "No places open now with confirmed hours within {{distance}}.",
   "noOpenPlacesHint": "Few businesses have confirmed hours yet. Turn off “Only places open now” in Settings to see them all, or check each one with “See hours”.",
@@ -113,7 +116,17 @@
     "consent": "I agree that Paw Mall uses these details to review my request. My contact details are deleted after the review.",
     "submit": "Send request",
     "invalid": "Check the details: you need at least a phone, hours, a website or a veterinary detail, plus your contact and your consent.",
-    "thanks": "We received your request. We'll review it and, if everything is right, publish your business's details."
+    "thanks": "We received your request. We'll review it and, if everything is right, publish your business's details.",
+    "petSection": "Pet policy",
+    "petHint": "Tell us which pets you take. We will show it as \"Declared by the owner\".",
+    "petDeclare": "Declare the pet policy",
+    "petDogs": "We take dogs",
+    "petMaxSize": "Largest dog size",
+    "petMaxWeight": "Weight limit in kg (optional)",
+    "petCats": "We take cats",
+    "petOther": "We take other pets",
+    "petAreas": "Where they can be",
+    "petRules": "Rules (optional)"
   },
   "areaCount_one": "{{total}} place within {{distance}} of {{area}}",
   "areaCount_other": "{{total}} places within {{distance}} of {{area}}",
@@ -126,5 +139,81 @@
   "mapAreaCountPartial_other": "{{shown}} of {{total}} places within {{distance}} of {{area}}",
   "categorySummary": "{{category}}: {{summary}}",
   "radiusButtonCustom": "Custom radius: {{distance}}",
-  "radiusButtonCustomHint": "Set by zooming the map. Tap to go back to the Settings radius."
+  "radiusButtonCustomHint": "Set by zooming the map. Tap to go back to the Settings radius.",
+  "petFriendly": {
+    "toggle": "Pet-friendly",
+    "withProfile": "Pet-friendly: {{profile}}",
+    "hint": "Shows only places that take pets, for your pet in Settings."
+  },
+  "noPetFriendlyPlaces": "No pet-friendly places within {{distance}} for your pet",
+  "noPetFriendlyPlacesHint": "For now we have restaurants, cafés and hotels in Mexico City. Try a larger radius or change your pet in Settings.",
+  "sourceCurated": "Pet policy: collected by Paw Mall from the source shown. Location and phone: Overture Maps Foundation.",
+  "pets": {
+    "title": "Pet policy",
+    "underReview": "Several people say this policy changed. We are reviewing it.",
+    "underReviewShort": "Under review · {{summary}}",
+    "petFriendly": "Takes pets",
+    "summary": "{{allows}} · {{source}}, {{date}}",
+    "dogs": {
+      "no": "No dogs",
+      "upToWeight": "Dogs up to {{weight}}",
+      "sizeUnknown": "Takes dogs (size not confirmed)",
+      "upToSize": {
+        "small": "Small dogs only",
+        "medium": "Small and medium dogs",
+        "large": "Dogs of any size"
+      }
+    },
+    "cats": {
+      "yes": "Takes cats",
+      "no": "No cats"
+    },
+    "otherPets": {
+      "yes": "Takes other pets",
+      "no": "No other pets"
+    },
+    "maxPets_one": "Up to {{count}} pet",
+    "maxPets_other": "Up to {{count}} pets",
+    "fee": {
+      "free": "No extra charge",
+      "amount": "Fee: {{amount}}",
+      "per": {
+        "night": "Fee: {{amount}} per night",
+        "stay": "Fee: {{amount}} per stay",
+        "visit": "Fee: {{amount}} per visit"
+      }
+    },
+    "areas": {
+      "label": "Where: {{areas}}",
+      "indoor": "Indoors",
+      "terrace": "Terrace",
+      "outdoor": "Outdoors"
+    },
+    "source": {
+      "owner": "Declared by the owner",
+      "ownerShort": "Owner",
+      "curated": "Source: {{name}}"
+    },
+    "lastConfirmed": "Last confirmed: {{date}}",
+    "confirmations_one": "confirmed by {{count}} person",
+    "confirmations_other": "confirmed by {{count}} people",
+    "viewSource": "View the source",
+    "answer": {
+      "question": "Is this still right?",
+      "confirm": "Yes, still the same",
+      "dispute": "It changed",
+      "privacy": "Your answer is anonymous: we don't send your location or your details.",
+      "thanks": {
+        "confirm": "Thanks for confirming.",
+        "dispute": "Thanks. If more people say so, we will review this policy."
+      }
+    },
+    "profile": {
+      "cat": "cat",
+      "dog": "dog",
+      "dog_small": "small dog",
+      "dog_medium": "medium dog",
+      "dog_large": "large dog"
+    }
+  }
 }

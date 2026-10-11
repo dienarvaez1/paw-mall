@@ -24,7 +24,14 @@ import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
-import { CATEGORY_COLORS, CHIP_CATEGORIES, type ChipCategory, pinColor } from '@/lib/categories';
+import { usePetProfileLabel, usePolicySummary } from '@/features/pet-policy/policy-text';
+import {
+  CATEGORY_COLORS,
+  CHIP_CATEGORIES,
+  type ChipCategory,
+  isPetFriendlyCategory,
+  pinColor,
+} from '@/lib/categories';
 import { isAwayFrom, radiusForRegion, regionForBounds, regionForRadius } from '@/lib/map-region';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
@@ -61,6 +68,8 @@ export default function ExploreScreen() {
   const location = useUserLocation();
   const [mode, setMode] = useState<Mode>('list');
   const [category, setCategory] = useState<ChipCategory>(null);
+  // "Pet-friendly": only places whose pet policy takes pets, narrowed by the pet profile.
+  const [petFriendly, setPetFriendly] = useState(false);
   // "Mi ubicación": off, the search text names an area to search around; on, business names
   // around the user within the Ajustes radius.
   const [nearMe, setNearMe] = useState(false);
@@ -113,7 +122,12 @@ export default function ExploreScreen() {
         />
       </View>
       <View className="border-b border-neutral-200 dark:border-neutral-800">
-        <CategoryChips selected={category} onSelect={setCategory} />
+        <CategoryChips
+          selected={category}
+          onSelect={setCategory}
+          petFriendly={petFriendly}
+          onTogglePetFriendly={() => setPetFriendly((value) => !value)}
+        />
       </View>
       {location.ready && location.source === 'fallback' ? (
         <Notice text={t('common.approximateLocation')} />
@@ -124,6 +138,7 @@ export default function ExploreScreen() {
           category={category}
           nearMe={nearMe}
           customRadiusKm={customRadiusKm}
+          petFriendly={petFriendly}
         />
       ) : (
         <PlacesMap
@@ -131,6 +146,7 @@ export default function ExploreScreen() {
           name={name}
           nearMe={nearMe}
           customRadiusKm={customRadiusKm}
+          petFriendly={petFriendly}
           onZoomByHand={setCustomRadiusKm}
           onLeaveMyLocation={() => setNearMe(false)}
         />
@@ -139,15 +155,23 @@ export default function ExploreScreen() {
   );
 }
 
-/** One chip per category; the list and the map show only the selected one. */
+/**
+ * The pet-friendly toggle, then one chip per category; the list and the map show only the
+ * selected one.
+ */
 function CategoryChips({
   selected,
   onSelect,
+  petFriendly,
+  onTogglePetFriendly,
 }: {
   selected: ChipCategory;
   onSelect: (category: ChipCategory) => void;
+  petFriendly: boolean;
+  onTogglePetFriendly: () => void;
 }) {
   const { t } = useAppTranslation();
+  const profile = usePetProfileLabel();
   return (
     <ScrollView
       horizontal
@@ -158,6 +182,27 @@ function CategoryChips({
       contentContainerClassName="gap-2 px-4 pb-2 pt-3"
       keyboardShouldPersistTaps="handled"
     >
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: petFriendly }}
+        accessibilityHint={t('places.petFriendly.hint')}
+        onPress={onTogglePetFriendly}
+        className={`min-h-10 flex-row items-center gap-2 rounded-full border px-4 ${
+          petFriendly
+            ? 'border-lime-500 bg-lime-500'
+            : 'border-teal-700 bg-white dark:border-teal-400 dark:bg-neutral-900'
+        }`}
+      >
+        <Text
+          className={`text-sm font-semibold ${
+            petFriendly ? 'text-lime-950' : 'text-teal-800 dark:text-teal-300'
+          }`}
+        >
+          {petFriendly && profile
+            ? t('places.petFriendly.withProfile', { profile })
+            : t('places.petFriendly.toggle')}
+        </Text>
+      </Pressable>
       {CHIP_CATEGORIES.map((slug) => {
         const active = selected === slug;
         const color = slug ? CATEGORY_COLORS[slug] : undefined;
@@ -198,17 +243,20 @@ function PlacesList({
   category,
   nearMe,
   customRadiusKm,
+  petFriendly,
 }: {
   name: string;
   category: ChipCategory;
   nearMe: boolean;
   customRadiusKm: number | null;
+  petFriendly: boolean;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const { units, radiusKm, onlyOpenNow } = useSettings();
   const location = useUserLocation();
-  const places = usePlaces(location.coords, category, name, nearMe, customRadiusKm);
+  const places = usePlaces(location.coords, category, name, nearMe, customRadiusKm, petFriendly);
+  const petMode = petFriendly || isPetFriendlyCategory(category);
   const area = places.data?.pages[0]?.area ?? null;
   const items = useMemo(
     () => places.data?.pages.flatMap((page) => page.items) ?? [],
@@ -256,7 +304,9 @@ function PlacesList({
       <FlatList
         data={items}
         keyExtractor={(place) => String(place.id)}
-        renderItem={({ item }) => <PlaceRow place={item} selected={category} away={nearMe} />}
+        renderItem={({ item }) => (
+          <PlaceRow place={item} selected={category} away={nearMe} showPolicy={petMode} />
+        )}
         ItemSeparatorComponent={() => <View className="h-px bg-neutral-100 dark:bg-neutral-900" />}
         onEndReachedThreshold={0.5}
         onEndReached={() => {
@@ -269,6 +319,11 @@ function PlacesList({
             <EmptyState
               title={t('places.noMatchesNearby', { query: name, distance })}
               hint={t('places.noMatchesHint')}
+            />
+          ) : petMode ? (
+            <EmptyState
+              title={t('places.noPetFriendlyPlaces', { distance })}
+              hint={t('places.noPetFriendlyPlacesHint')}
             />
           ) : onlyOpenNow ? (
             <EmptyState
@@ -298,6 +353,7 @@ function PlacesMap({
   name,
   nearMe,
   customRadiusKm,
+  petFriendly,
   onZoomByHand,
   onLeaveMyLocation,
 }: {
@@ -305,6 +361,7 @@ function PlacesMap({
   name: string;
   nearMe: boolean;
   customRadiusKm: number | null;
+  petFriendly: boolean;
   /** The radius of the view after the user zoomed or panned the map by hand. */
   onZoomByHand: (radiusKm: number) => void;
   /** The user moved the map away from their location by hand: "Mi ubicación" turns off. */
@@ -389,7 +446,16 @@ function PlacesMap({
 
   // Places inside the radius circle: up to 200 one by one; with more in view, clusters (counting
   // only places inside the circle) that zoom in when tapped.
-  const places = usePlacesMap(area, location.coords, category, name, nearMe, customRadiusKm);
+  const places = usePlacesMap(
+    area,
+    location.coords,
+    category,
+    name,
+    nearMe,
+    customRadiusKm,
+    petFriendly,
+  );
+  const petMode = petFriendly || isPetFriendlyCategory(category);
   // A searched area ("Zócalo") moves the circle there with its own radius; otherwise the circle is
   // the user's radius around the user.
   const searchedArea = places.data?.area ?? null;
@@ -498,6 +564,7 @@ function PlacesMap({
             key={place.id}
             place={place}
             category={category}
+            showPolicy={petMode}
             onOpen={() => router.push({ pathname: '/place/[id]', params: { id: place.id } })}
           />
         ))}
@@ -551,20 +618,26 @@ function PlacesMap({
   );
 }
 
-/** A pin in its category's color; tapping its callout opens the place. */
+/**
+ * A pin in its category's color; tapping its callout opens the place. In pet-friendly mode the
+ * callout tells the pet policy, its source and last confirmation.
+ */
 function PlaceMarker({
   place,
   category,
+  showPolicy,
   onOpen,
 }: {
   place: Place;
   category: ChipCategory;
+  showPolicy: boolean;
   onOpen: () => void;
 }) {
   const locale = useLocale();
   const { units } = useSettings();
   const name = usePlaceName(place);
-  const kinds = place.categories.map((c) => c.name).join(' · ');
+  const policy = usePolicySummary(place.petPolicy);
+  const kinds = showPolicy && policy ? policy : place.categories.map((c) => c.name).join(' · ');
   return (
     <Marker
       coordinate={{ latitude: place.location.lat, longitude: place.location.lng }}
