@@ -146,8 +146,7 @@
   "categorySummary": "{{category}}: {{summary}}",
   "petFriendly": {
     "tabTitle": "Pet-friendly",
-    "forProfile": "Para tu mascota: {{profile}}. Cámbiala en Ajustes.",
-    "noProfile": "Elige tu mascota en Ajustes para ver solo los lugares que la aceptan."
+    "forProfile": "Para tu mascota: {{profile}}. Cámbiala en Ajustes."
   },
   "noPetFriendlyPlaces": "No hay lugares pet-friendly a menos de {{distance}} para tu mascota",
   "noPetFriendlyPlacesHint": "Por ahora tenemos restaurantes, cafés, hoteles, museos y parques de la Ciudad de México. Prueba un radio mayor o cambia tu mascota en Ajustes.",

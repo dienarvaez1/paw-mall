@@ -678,15 +678,14 @@ function UnconfirmedLink({ onPress }: { onPress: () => void }) {
   );
 }
 
-/** Pet-friendly: whose pet the places are for, set in Ajustes. */
+/** Pet-friendly: whose pet the places are for, when one is set in Ajustes (nothing otherwise). */
 function PetProfileLine() {
   const { t } = useAppTranslation();
   const profile = usePetProfileLabel();
+  if (!profile) return null;
   return (
     <Text className="px-4 pb-2 text-sm text-neutral-600 dark:text-neutral-300">
-      {profile
-        ? t('places.petFriendly.forProfile', { profile })
-        : t('places.petFriendly.noProfile')}
+      {t('places.petFriendly.forProfile', { profile })}
     </Text>
   );
 }

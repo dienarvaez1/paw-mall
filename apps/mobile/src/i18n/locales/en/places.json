@@ -146,8 +146,7 @@
   "categorySummary": "{{category}}: {{summary}}",
   "petFriendly": {
     "tabTitle": "Pet-friendly",
-    "forProfile": "For your pet: {{profile}}. Change it in Settings.",
-    "noProfile": "Choose your pet in Settings to see only the places that take it."
+    "forProfile": "For your pet: {{profile}}. Change it in Settings."
   },
   "noPetFriendlyPlaces": "No pet-friendly places within {{distance}} for your pet",
   "noPetFriendlyPlacesHint": "For now we have restaurants, cafés, hotels, museums and parks in Mexico City. Try a larger radius or change your pet in Settings.",
