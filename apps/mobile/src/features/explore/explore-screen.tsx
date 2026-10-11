@@ -192,7 +192,7 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           group={section}
           withUnconfirmed={withUnconfirmed}
           focus={focus}
-          onFocusCluster={setFocus}
+          onMoveCircle={setFocus}
           onLeaveMyLocation={() => setNearMe(false)}
         />
       )}
@@ -396,7 +396,7 @@ function PlacesMap({
   group,
   withUnconfirmed,
   focus,
-  onFocusCluster,
+  onMoveCircle,
   onLeaveMyLocation,
 }: {
   category: ChipCategory;
@@ -406,8 +406,11 @@ function PlacesMap({
   group: CategoryGroup;
   withUnconfirmed: boolean;
   focus: { lat: number; lng: number } | null;
-  /** A cluster was tapped: its center becomes the search circle's (its radius goes to Ajustes). */
-  onFocusCluster: (center: { lat: number; lng: number }) => void;
+  /**
+   * The search circle moves: to a tapped cluster's center (its radius goes to Ajustes), or to the
+   * map's center after a pan by hand.
+   */
+  onMoveCircle: (center: { lat: number; lng: number }) => void;
   /** The user moved the map away from their location by hand: "Mi ubicación" turns off. */
   onLeaveMyLocation: () => void;
 }) {
@@ -584,7 +587,11 @@ function PlacesMap({
               // Exactly as zoomed, even between the presets (owner's rule).
               saveRadius(handRadiusKm);
             }
-            // The center moved by hand off the user: no longer "at my location".
+            // Panned by hand: the circle follows to the map's new center (owner's rule), and off
+            // the user it's no longer "at my location".
+            if (!searchedArea && isAwayFrom(next, circle.center)) {
+              onMoveCircle({ lat: next.latitude, lng: next.longitude });
+            }
             if (nearMe && isAwayFrom(next, location.coords)) onLeaveMyLocation();
           }
         }}
@@ -595,7 +602,7 @@ function PlacesMap({
         showsMyLocationButton={false}
         userInterfaceStyle={scheme === 'dark' ? 'dark' : 'light'}
       >
-        {/* The search radius from Settings, around the user's location. */}
+        {/* The search radius: around the user, a tapped cluster or where the map was panned. */}
         <Circle
           center={{ latitude: circle.center.lat, longitude: circle.center.lng }}
           radius={circle.radiusKm * 1000}
@@ -623,7 +630,7 @@ function PlacesMap({
               const covering = circleForBounds(cluster.bounds);
               const clusterKm = coveringRadiusKm(covering.radiusKm, units);
               saveRadius(clusterKm);
-              onFocusCluster(covering.center);
+              onMoveCircle(covering.center);
               moveMap(regionForRadius(covering.center, clusterKm));
             }}
           />
