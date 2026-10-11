@@ -5,7 +5,7 @@ import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 import { usePlace } from '@/api/hooks';
-import { Button } from '@/components/button';
+import { BUTTON_HIT_SLOP, Button } from '@/components/button';
 import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { ErrorState, SkeletonList } from '@/components/states';
@@ -121,9 +121,10 @@ function PlaceDetail({ place: p }: { place: Place }) {
           <Link href={{ pathname: '/claim/[placeId]', params: { placeId: p.id } }} asChild>
             <Pressable
               accessibilityRole="link"
-              className="min-h-12 flex-1 items-center justify-center rounded-xl px-4 active:bg-neutral-100 dark:active:bg-neutral-900"
+              hitSlop={BUTTON_HIT_SLOP}
+              className="min-h-[38px] flex-1 items-center justify-center rounded-xl px-3 active:bg-neutral-100 dark:active:bg-neutral-900"
             >
-              <Text className="text-base font-semibold text-teal-800 dark:text-teal-300">
+              <Text className="text-[13px] font-semibold text-teal-800 dark:text-teal-300">
                 {t('places.claim.button')}
               </Text>
             </Pressable>

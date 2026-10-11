@@ -17,6 +17,7 @@ import { type MapArea, usePlaces, usePlacesMap } from '@/api/hooks';
 import { ICONS } from '@/components/icons';
 import { PlaceRow, usePlaceName } from '@/components/place-row';
 import { SearchInput } from '@/components/search-input';
+import { BUTTON_HIT_SLOP } from '@/components/button';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
 import { nextRadiusKm } from '@/features/settings/radius';
@@ -126,14 +127,15 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
               Keyboard.dismiss();
               setMode(value);
             }}
-            className={`min-h-11 flex-1 items-center justify-center rounded-xl border ${
+            hitSlop={BUTTON_HIT_SLOP}
+            className={`min-h-[35px] flex-1 items-center justify-center rounded-xl border ${
               mode === value
                 ? 'border-paw bg-paw'
                 : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
             }`}
           >
             <Text
-              className={`text-base font-semibold ${
+              className={`text-[13px] font-semibold ${
                 mode === value ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'
               }`}
             >
@@ -144,7 +146,7 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
         <NearMeButton nearMe={nearMe} onToggle={() => setNearMe((value) => !value)} />
         {/* The same row in both modes, so Lista and Mapa never resize. */}
         <RadiusButton
-          className="min-h-11"
+          className="min-h-[35px]"
           customRadiusKm={customRadiusKm}
           onClearCustom={() => setCustomRadiusKm(null)}
         />
@@ -223,18 +225,19 @@ function CategoryChips({
             accessibilityRole="radio"
             accessibilityState={{ checked: active }}
             onPress={() => onSelect(slug)}
-            className={`min-h-10 flex-row items-center gap-2 rounded-full border px-4 ${
+            hitSlop={BUTTON_HIT_SLOP}
+            className={`min-h-8 flex-row items-center gap-1.5 rounded-full border px-3 ${
               active ? 'border-paw bg-paw' : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
             }`}
           >
             {color ? (
               <View
-                className="h-2.5 w-2.5 rounded-full border border-white"
+                className="h-2 w-2 rounded-full border border-white"
                 style={{ backgroundColor: color }}
               />
             ) : null}
             <Text
-              className={`text-sm font-semibold ${
+              className={`text-xs font-semibold ${
                 active ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'
               }`}
             >
@@ -850,12 +853,13 @@ function RadiusButton({
       })}
       accessibilityHint={t(custom ? 'places.radiusButtonCustomHint' : 'places.radiusButtonHint')}
       onPress={() => (custom ? onClearCustom() : setRadiusKm(nextRadiusKm(radiusKm, units)))}
-      className={`min-w-12 items-center justify-center rounded-full border px-3 active:bg-neutral-100 dark:active:bg-neutral-800 ${
+      hitSlop={BUTTON_HIT_SLOP}
+      className={`min-w-[38px] items-center justify-center rounded-full border px-2.5 active:bg-neutral-100 dark:active:bg-neutral-800 ${
         custom ? 'border-off-border bg-off-bg dark:bg-off-bg-dark' : 'border-paw bg-paw'
       } ${className}`}
     >
       <Text
-        className={`text-sm font-bold ${
+        className={`text-xs font-bold ${
           custom ? 'text-amber-900 dark:text-amber-200' : 'text-teal-950'
         }`}
       >
@@ -880,13 +884,14 @@ function NearMeButton({ nearMe, onToggle }: { nearMe: boolean; onToggle: () => v
       accessibilityState={{ checked: nearMe }}
       accessibilityHint={t('places.nearMeHint')}
       onPress={onToggle}
-      className={`h-11 w-11 items-center justify-center rounded-full border ${
+      hitSlop={BUTTON_HIT_SLOP}
+      className={`h-[35px] w-[35px] items-center justify-center rounded-full border ${
         nearMe ? 'border-paw bg-paw' : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
       }`}
     >
       <Image
         source={ICONS.locate}
-        style={{ width: 22, height: 22 }}
+        style={{ width: 18, height: 18 }}
         tintColor={nearMe ? ON_TEXT : scheme === 'dark' ? OFF_TEXT_DARK : OFF_TEXT_LIGHT}
       />
     </Pressable>

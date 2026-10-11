@@ -2,7 +2,7 @@ import { DOG_SIZES, type DogSize, PET_ANSWERS_TO_PUBLISH } from '@paw-mall/share
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-import { Button } from '@/components/button';
+import { BUTTON_HIT_SLOP, Button } from '@/components/button';
 import { ErrorState } from '@/components/states';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 
@@ -46,9 +46,10 @@ export function PetQuestion({ placeId, published }: { placeId: number; published
               key={size ?? 'unknown'}
               accessibilityRole="button"
               onPress={() => send(true, size)}
-              className="min-h-11 justify-center rounded-full border px-4 active:bg-off-pressed border-off-border bg-off-bg dark:bg-off-bg-dark"
+              hitSlop={BUTTON_HIT_SLOP}
+              className="min-h-[35px] justify-center rounded-full border px-3 active:bg-off-pressed border-off-border bg-off-bg dark:bg-off-bg-dark"
             >
-              <Text className="text-sm font-semibold text-amber-900 dark:text-amber-200">
+              <Text className="text-xs font-semibold text-amber-900 dark:text-amber-200">
                 {t(`places.pets.ask.size.${size ?? 'unknown'}`)}
               </Text>
             </Pressable>

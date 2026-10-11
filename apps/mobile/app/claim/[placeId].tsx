@@ -21,7 +21,7 @@ import {
 
 import { apiPost } from '@/api/client';
 import { usePlace } from '@/api/hooks';
-import { Button } from '@/components/button';
+import { BUTTON_HIT_SLOP, Button } from '@/components/button';
 import { usePlaceName } from '@/components/place-row';
 import { ErrorState } from '@/components/states';
 import {
@@ -416,12 +416,13 @@ function Choice({
       accessibilityRole="checkbox"
       accessibilityState={{ checked: selected }}
       onPress={onPress}
-      className={`min-h-10 justify-center rounded-full border px-4 ${
+      hitSlop={BUTTON_HIT_SLOP}
+      className={`min-h-8 justify-center rounded-full border px-3 ${
         selected ? 'border-paw bg-paw' : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
       }`}
     >
       <Text
-        className={`text-sm font-semibold ${
+        className={`text-xs font-semibold ${
           selected ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'
         }`}
       >
