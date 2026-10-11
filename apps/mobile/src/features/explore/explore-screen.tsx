@@ -20,7 +20,7 @@ import { SearchInput } from '@/components/search-input';
 import { BUTTON_HIT_SLOP } from '@/components/button';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
-import { nextRadiusKm, smallerRadiusKm } from '@/features/settings/radius';
+import { clusterRadiusKm, nextRadiusKm } from '@/features/settings/radius';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -37,7 +37,7 @@ import {
   pinColor,
 } from '@/lib/categories';
 import { uniqueById } from '@/lib/unique';
-import { isAwayFrom, radiusForRegion, regionForRadius } from '@/lib/map-region';
+import { circleForBounds, isAwayFrom, radiusForRegion, regionForRadius } from '@/lib/map-region';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 
@@ -88,6 +88,9 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   // A radius set by zooming the map by hand: it replaces the presets for the list and the map
   // until the radius button is tapped (it's never saved to Ajustes).
   const [customRadiusKm, setCustomRadiusKm] = useState<number | null>(null);
+  // A tapped map cluster becomes the search circle's center (with customRadiusKm as its radius)
+  // until the radius button or "Mi ubicación" brings the circle back to the user.
+  const [focus, setFocus] = useState<{ lat: number; lng: number } | null>(null);
   const [text, setText] = useState('');
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
   // Pet-friendly searches show places that take pets; "Buscar también en lugares sin confirmar"
@@ -140,12 +143,21 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
             </Text>
           </Pressable>
         ))}
-        <NearMeButton nearMe={nearMe} onToggle={() => setNearMe((value) => !value)} />
+        <NearMeButton
+          nearMe={nearMe}
+          onToggle={() => {
+            setFocus(null);
+            setNearMe((value) => !value);
+          }}
+        />
         {/* The same row in both modes, so Lista and Mapa never resize. */}
         <RadiusButton
           className="min-h-[35px]"
           customRadiusKm={customRadiusKm}
-          onClearCustom={() => setCustomRadiusKm(null)}
+          onClearCustom={() => {
+            setCustomRadiusKm(null);
+            setFocus(null);
+          }}
         />
       </View>
       <View className="border-b border-neutral-200 dark:border-neutral-800">
@@ -168,6 +180,7 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           petFriendly={petFriendly}
           group={section}
           withUnconfirmed={withUnconfirmed}
+          focus={focus}
           widened={includeUnconfirmed ? (widenedFor?.auto ? 'auto' : 'manual') : null}
           onWiden={
             name !== '' && petFriendly && !withUnconfirmed
@@ -184,6 +197,11 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           petFriendly={petFriendly}
           group={section}
           withUnconfirmed={withUnconfirmed}
+          focus={focus}
+          onFocusCluster={(center, clusterKm) => {
+            setFocus(center);
+            setCustomRadiusKm(clusterKm);
+          }}
           onZoomByHand={setCustomRadiusKm}
           onLeaveMyLocation={() => setNearMe(false)}
         />
@@ -255,6 +273,7 @@ function PlacesList({
   petFriendly,
   group,
   withUnconfirmed,
+  focus,
   widened,
   onWiden,
 }: {
@@ -265,6 +284,8 @@ function PlacesList({
   petFriendly: boolean;
   group: CategoryGroup;
   withUnconfirmed: boolean;
+  /** A tapped cluster's center, which replaces the user's location as the circle's center. */
+  focus: { lat: number; lng: number } | null;
   /** Pet-friendly search widened to unanswered venues: by the user, or because none matched. */
   widened: 'auto' | 'manual' | null;
   /** Pet-friendly search: widen it to venues nobody has answered for yet. */
@@ -275,7 +296,7 @@ function PlacesList({
   const { units, radiusKm, onlyOpenNow } = useSettings();
   const location = useUserLocation();
   const places = usePlaces(
-    location.coords,
+    focus ?? location.coords,
     category,
     name,
     nearMe,
@@ -392,6 +413,8 @@ function PlacesMap({
   petFriendly,
   group,
   withUnconfirmed,
+  focus,
+  onFocusCluster,
   onZoomByHand,
   onLeaveMyLocation,
 }: {
@@ -402,6 +425,9 @@ function PlacesMap({
   petFriendly: boolean;
   group: CategoryGroup;
   withUnconfirmed: boolean;
+  focus: { lat: number; lng: number } | null;
+  /** A cluster was tapped: it becomes the search circle, with this center and radius. */
+  onFocusCluster: (center: { lat: number; lng: number }, radiusKm: number) => void;
   /** The radius of the view after the user zoomed or panned the map by hand. */
   onZoomByHand: (radiusKm: number) => void;
   /** The user moved the map away from their location by hand: "Mi ubicación" turns off. */
@@ -445,9 +471,10 @@ function PlacesMap({
       return;
     }
     fitted.current = { radiusKm, ...location.coords };
-    if (showingArea.current) return;
+    // Likewise while a tapped cluster is the circle.
+    if (showingArea.current || focus) return;
     moveMap(regionForRadius(location.coords, radiusKm));
-  }, [radiusKm, location.coords, moveMap]);
+  }, [radiusKm, location.coords, focus, moveMap]);
   // Turning "Mi ubicación" on in map view: read the device's position again and fly back to it,
   // with the circle fitted around it. Turning it off leaves the map where it is.
   const wasNearMe = useRef(nearMe);
@@ -486,9 +513,10 @@ function PlacesMap({
 
   // Places inside the radius circle: up to 200 one by one; with more in view, clusters (counting
   // only places inside the circle) that zoom in when tapped.
+  const center = focus ?? location.coords;
   const places = usePlacesMap(
     area,
-    location.coords,
+    center,
     category,
     name,
     nearMe,
@@ -503,7 +531,7 @@ function PlacesMap({
   const searchedArea = places.data?.area ?? null;
   const circle = searchedArea
     ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
-    : { center: location.coords, radiusKm: customRadiusKm ?? radiusKm };
+    : { center, radiusKm: customRadiusKm ?? radiusKm };
   // Fly to a newly searched area, and back to the user when the search no longer names one.
   const shownArea = useRef<string | null>(null);
   const loaded = places.data !== undefined;
@@ -603,15 +631,14 @@ function PlacesMap({
             key={`${category},${cluster.location.lat},${cluster.location.lng},${cluster.count}`}
             cluster={cluster}
             category={category}
-            onPress={() =>
-              // One ring closer, centered on the cluster.
-              moveMap(
-                regionForRadius(
-                  cluster.location,
-                  smallerRadiusKm(radiusForRegion(region, MAX_RADIUS_KM), units),
-                ),
-              )
-            }
+            onPress={() => {
+              // The cluster becomes the circle: centered on its places, just big enough for them
+              // (see clusterRadiusKm), and the map centers that circle on screen.
+              const covering = circleForBounds(cluster.bounds);
+              const clusterKm = clusterRadiusKm(covering.radiusKm, circle.radiusKm, units);
+              onFocusCluster(covering.center, clusterKm);
+              moveMap(regionForRadius(covering.center, clusterKm));
+            }}
           />
         ))}
       </MapView>

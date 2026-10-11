@@ -61,3 +61,26 @@ export function isAwayFrom(region: MapRegion, point: { lat: number; lng: number 
     Math.abs(point.lng - region.longitude) > region.longitudeDelta * CENTER_TOLERANCE
   );
 }
+
+/** Kilometers between two points (haversine). */
+export function distanceKm(
+  a: { lat: number; lng: number },
+  b: { lat: number; lng: number },
+): number {
+  const rad = Math.PI / 180;
+  const h =
+    Math.sin(((b.lat - a.lat) * rad) / 2) ** 2 +
+    Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(((b.lng - a.lng) * rad) / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(h));
+}
+
+/** The center of a box [minLng, minLat, maxLng, maxLat] and the radius of a circle covering it. */
+export function circleForBounds([minLng, minLat, maxLng, maxLat]: readonly [
+  number,
+  number,
+  number,
+  number,
+]): { center: { lat: number; lng: number }; radiusKm: number } {
+  const center = { lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2 };
+  return { center, radiusKm: distanceKm(center, { lat: maxLat, lng: maxLng }) };
+}

@@ -32,12 +32,14 @@ export function isRadiusOption(radiusKm: number, unit: DistanceUnit): boolean {
 }
 
 /**
- * A tapped map cluster zooms one ring closer: the largest choice in the unit below the view's
- * radius, or half of it below the smallest.
+ * A tapped map cluster becomes the search circle: the smallest choice in the unit that covers its
+ * places, when that's smaller than the current circle; otherwise just enough to cover them (to 0.1
+ * km, at least 0.5 km), never larger than the current circle.
  */
-export function smallerRadiusKm(viewRadiusKm: number, unit: DistanceUnit): number {
-  const below = radiusOptionsKm(unit).filter((option) => option < viewRadiusKm * 0.99);
-  return below.at(-1) ?? viewRadiusKm / 2;
+export function clusterRadiusKm(neededKm: number, currentKm: number, unit: DistanceUnit): number {
+  const preset = radiusOptionsKm(unit).find((option) => option >= neededKm);
+  if (preset !== undefined && preset < currentKm * 0.99) return preset;
+  return Math.min(currentKm, Math.max(0.5, Math.ceil(neededKm * 10) / 10));
 }
 
 /** The map's radius button: the next choice in the unit, back to the smallest after the largest. */

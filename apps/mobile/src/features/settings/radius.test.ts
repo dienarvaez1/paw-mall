@@ -5,7 +5,7 @@ import {
   isRadiusOption,
   nextRadiusKm,
   radiusOptionsKm,
-  smallerRadiusKm,
+  clusterRadiusKm,
   toKm,
 } from './radius';
 
@@ -62,11 +62,12 @@ describe('nextRadiusKm', () => {
   });
 });
 
-describe('smallerRadiusKm', () => {
-  it('goes one ring closer, or halves below the smallest', () => {
-    expect(smallerRadiusKm(25, 'km')).toBe(15);
-    expect(smallerRadiusKm(30, 'km')).toBe(25);
-    expect(smallerRadiusKm(5, 'km')).toBe(2.5);
-    expect(smallerRadiusKm(160, 'km')).toBe(80);
+describe('clusterRadiusKm', () => {
+  it('takes the smallest choice covering the cluster, never growing the circle', () => {
+    expect(clusterRadiusKm(7, 25, 'km')).toBe(10);
+    expect(clusterRadiusKm(12, 15, 'km')).toBe(12);
+    expect(clusterRadiusKm(30, 25, 'km')).toBe(25);
+    expect(clusterRadiusKm(0.2, 5, 'km')).toBe(0.5);
+    expect(clusterRadiusKm(0.2, 25, 'km')).toBe(5);
   });
 });
