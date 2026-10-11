@@ -83,18 +83,15 @@ const RADIUS_COLORS = {
 export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const { t } = useAppTranslation();
   const location = useUserLocation();
-  // Mapa/Lista, "Mi ubicación" (off at first) and the search text are shared with the other tab,
-  // start on the map around the user and go back there on wake (explore-view.tsx). Mi ubicación on: business names around
-  // the user; off: the search text names an area.
-  const { mode, setMode, nearMe, setNearMe, text, setText } = useExploreView();
+  // Mapa/Lista, "Mi ubicación", the search text and the circle's center are shared with the
+  // other tab, start on the map around the user and go back there on wake (explore-view.tsx).
+  // Mi ubicación on: business names around the user; off: the search text names an area.
+  // The circle's center (focus) is a tapped cluster or a hand pan, until "Mi ubicación" brings
+  // it back to the user.
+  const { mode, setMode, nearMe, setNearMe, text, setText, focus, setFocus } = useExploreView();
   const [category, setCategory] = useState<ChipCategory>(null);
   // Ajustes has the last word on the radius (owner's rule): the radius button, a zoom by hand
   // (exactly as zoomed) and a tapped cluster all save their radius there.
-  // A tapped map cluster becomes the search circle's center until "Mi ubicación" (or a return
-  // from the background) brings the circle back to the user.
-  const [focus, setFocus] = useState<{ lat: number; lng: number } | null>(null);
-  // Back from the background: the circle goes back to the user (a tapped cluster is dropped).
-  useOnWake(() => setFocus(null));
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
   // Pet-friendly searches show places that take pets; "Buscar también en lugares sin confirmar"
   // widens the current search to venues nobody has answered for yet (to ask on their page).
@@ -438,7 +435,7 @@ function PlacesMap({
       isGesture === true || touch.current.down || now - touch.current.liftedAt < HAND_MOVE_GRACE_MS
     );
   }, []);
-  const initialRegion: Region = regionForRadius(location.coords, radiusKm);
+  const initialRegion: Region = regionForRadius(focus ?? location.coords, radiusKm);
   const fitted = useRef({ radiusKm, ...location.coords });
   // While a searched area is shown, its circle has its own radius: don't fly back to the user.
   const showingArea = useRef(false);
@@ -480,6 +477,15 @@ function PlacesMap({
   // Back from the background: read the position again and fly back to the user.
   useOnWake(() => void refresh().then((coords) => moveMap(regionForRadius(coords, radiusKm))));
   const [region, setRegion] = useState<Region>(initialRegion);
+  // The circle moved on the other tab's map (a pan or a cluster): fly there too. On this tab's
+  // map the view is already there (a pan) or flying there (a cluster), so nothing moves.
+  const regionRef = useRef(initialRegion);
+  const flyingTo = useRef<{ lat: number; lng: number } | null>(null);
+  useEffect(() => {
+    if (!focus || flyingTo.current === focus) return;
+    flyingTo.current = focus;
+    if (isAwayFrom(regionRef.current, focus)) moveMap(regionForRadius(focus, radiusKm));
+  }, [focus, radiusKm, moveMap]);
   const [area, setArea] = useState<MapArea | null>(null);
 
   useEffect(() => {
@@ -577,6 +583,7 @@ function PlacesMap({
         onRegionChange={readHeading}
         onRegionChangeComplete={(next, details) => {
           setRegion(next);
+          regionRef.current = next;
           readHeading();
           // Only the user's own zooms and pans: the map's own moves (fitting a circle, a cluster,
           // the location button) keep the radius as it is.

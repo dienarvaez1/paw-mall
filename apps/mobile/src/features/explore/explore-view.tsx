@@ -13,7 +13,12 @@ type ExploreView = {
   /** The search box's text. */
   text: string;
   setText: (text: string) => void;
+  /** The search circle's center when it isn't the user: a tapped cluster or a hand pan. */
+  focus: Point | null;
+  setFocus: (focus: Point | null) => void;
 };
+
+type Point = { lat: number; lng: number };
 
 const ExploreViewContext = createContext<ExploreView>({
   mode: 'map',
@@ -22,10 +27,12 @@ const ExploreViewContext = createContext<ExploreView>({
   setNearMe: () => {},
   text: '',
   setText: () => {},
+  focus: null,
+  setFocus: () => {},
 });
 
 /**
- * Mapa/Lista, "Mi ubicación" and the search text, shared by Explorar and Pet-friendly so switching
+ * Mapa/Lista, "Mi ubicación", the search text and the circle's center, shared by Explorar and Pet-friendly so switching
  * tabs keeps them (the radius is shared with Urgencias). They start on the map, around the user's
  * location, with Mi ubicación on and an empty search, and go back to that whenever the app
  * returns from the background (owner's rules).
@@ -34,14 +41,16 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<ExploreMode>('map');
   const [nearMe, setNearMe] = useState(true);
   const [text, setText] = useState('');
+  const [focus, setFocus] = useState<Point | null>(null);
   useOnWake(() => {
     setMode('map');
     setNearMe(true);
     setText('');
+    setFocus(null);
   });
   const value = useMemo(
-    () => ({ mode, setMode, nearMe, setNearMe, text, setText }),
-    [mode, nearMe, text],
+    () => ({ mode, setMode, nearMe, setNearMe, text, setText, focus, setFocus }),
+    [mode, nearMe, text, focus],
   );
   return <ExploreViewContext.Provider value={value}>{children}</ExploreViewContext.Provider>;
 }
