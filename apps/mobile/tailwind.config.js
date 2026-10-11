@@ -10,11 +10,11 @@ module.exports = {
           DEFAULT: '#0F766E',
           dark: '#115E59',
         },
-        // The Paw-Mall logo's turquoise (#00C1C0) with 10% white, for buttons and selected
-        // controls. White text on it is too faint, so labels use teal-950 (#042F2E, over 8:1).
+        // The Paw-Mall logo's turquoise (#00C1C0), lightened twice by 10% white, for buttons and
+        // selected controls. White text on it is too faint, so labels use teal-950 (#042F2E).
         paw: {
-          DEFAULT: '#1AC7C6',
-          dark: '#1AACAB',
+          DEFAULT: '#31CDCC',
+          dark: '#31B4B3',
         },
       },
     },
