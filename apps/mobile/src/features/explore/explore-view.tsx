@@ -10,6 +10,9 @@ type ExploreView = {
   /** "Mi ubicación": on, the search looks around the user; off, the text names an area. */
   nearMe: boolean;
   setNearMe: (nearMe: boolean | ((current: boolean) => boolean)) => void;
+  /** The search box's text. */
+  text: string;
+  setText: (text: string) => void;
 };
 
 const ExploreViewContext = createContext<ExploreView>({
@@ -17,21 +20,29 @@ const ExploreViewContext = createContext<ExploreView>({
   setMode: () => {},
   nearMe: true,
   setNearMe: () => {},
+  text: '',
+  setText: () => {},
 });
 
 /**
- * Mapa/Lista and "Mi ubicación", shared by Explorar and Pet-friendly so switching tabs keeps them
- * (the radius is shared through Ajustes). Both start on the map at the user's location, and go
- * back to that whenever the app returns from the background (owner's rules).
+ * Mapa/Lista, "Mi ubicación" and the search text, shared by Explorar and Pet-friendly so switching
+ * tabs keeps them (the radius is shared through Ajustes). They start on the map at the user's
+ * location with an empty search, and go back to that whenever the app returns from the background
+ * (owner's rules).
  */
 export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<ExploreMode>('map');
   const [nearMe, setNearMe] = useState(true);
+  const [text, setText] = useState('');
   useOnWake(() => {
     setMode('map');
     setNearMe(true);
+    setText('');
   });
-  const value = useMemo(() => ({ mode, setMode, nearMe, setNearMe }), [mode, nearMe]);
+  const value = useMemo(
+    () => ({ mode, setMode, nearMe, setNearMe, text, setText }),
+    [mode, nearMe, text],
+  );
   return <ExploreViewContext.Provider value={value}>{children}</ExploreViewContext.Provider>;
 }
 

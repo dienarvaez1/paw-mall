@@ -83,23 +83,18 @@ const RADIUS_COLORS = {
 export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const { t } = useAppTranslation();
   const location = useUserLocation();
-  // Mapa/Lista and "Mi ubicación" are shared with the other tab, start on the map at the user's
-  // location and go back there on wake (explore-view.tsx). Mi ubicación on: business names around
+  // Mapa/Lista, "Mi ubicación" and the search text are shared with the other tab, start on the map
+  // at the user's location and go back there on wake (explore-view.tsx). Mi ubicación on: business names around
   // the user; off: the search text names an area.
-  const { mode, setMode, nearMe, setNearMe } = useExploreView();
+  const { mode, setMode, nearMe, setNearMe, text, setText } = useExploreView();
   const [category, setCategory] = useState<ChipCategory>(null);
   // Ajustes has the last word on the radius (owner's rule): the radius button, a zoom by hand
   // (exactly as zoomed) and a tapped cluster all save their radius there.
   // A tapped map cluster becomes the search circle's center until "Mi ubicación" (or a return
   // from the background) brings the circle back to the user.
   const [focus, setFocus] = useState<{ lat: number; lng: number } | null>(null);
-  const [text, setText] = useState('');
-  // Back from the background: start over at the user's location on the map, as on launch (the
-  // location is read again; the radius stays as Ajustes says).
-  useOnWake(() => {
-    setFocus(null);
-    setText('');
-  });
+  // Back from the background: the circle goes back to the user (a tapped cluster is dropped).
+  useOnWake(() => setFocus(null));
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
   // Pet-friendly searches show places that take pets; "Buscar también en lugares sin confirmar"
   // widens the current search to venues nobody has answered for yet (to ask on their page).
