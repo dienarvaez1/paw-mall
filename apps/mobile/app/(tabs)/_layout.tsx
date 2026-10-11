@@ -16,7 +16,7 @@ const LOGO = require('../../assets/images/logo.png') as ImageSource;
 
 /**
  * Every tab's header: the Paw-Mall logo on the left (3:1, transparent, readable in light and
- * dark), then the tab's title, centered under it.
+ * dark), then the tab's title beside it.
  */
 function TabHeader({ title }: { title: string }) {
   const { t } = useAppTranslation();
@@ -24,11 +24,11 @@ function TabHeader({ title }: { title: string }) {
   return (
     <View
       style={{ paddingTop: top + 4 }}
-      className="border-b border-neutral-200 bg-white px-4 pb-2 dark:border-neutral-800 dark:bg-neutral-950"
+      className="flex-row items-center gap-6 border-b border-neutral-200 bg-white px-4 pb-2 dark:border-neutral-800 dark:bg-neutral-950"
     >
       <Image
         source={LOGO}
-        style={{ width: 144, height: 48, alignSelf: 'flex-start' }}
+        style={{ width: 144, height: 48 }}
         contentFit="contain"
         accessible
         accessibilityRole="image"
@@ -36,7 +36,8 @@ function TabHeader({ title }: { title: string }) {
       />
       <Text
         accessibilityRole="header"
-        className="pt-1 text-center text-lg font-semibold text-neutral-900 dark:text-white"
+        numberOfLines={1}
+        className="flex-1 text-lg font-semibold text-neutral-900 dark:text-white"
       >
         {title}
       </Text>
