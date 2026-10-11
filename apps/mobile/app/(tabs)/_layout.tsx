@@ -1,6 +1,7 @@
 import { Image, type ImageSource } from 'expo-image';
 import { Tabs } from 'expo-router';
-import { Text, View, useColorScheme } from 'react-native';
+import { useState } from 'react';
+import { Modal, Pressable, Text, View, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ICONS } from '@/components/icons';
@@ -16,14 +17,18 @@ const LOGO = require('../../assets/images/logo.png') as ImageSource;
 
 /**
  * Every tab's header: the Paw-Mall logo on the left (3:1, transparent, readable in light and
- * dark), then the tab's title beside it.
+ * dark), then the tab's title beside it. Phones have no hover, so a title with a description shows
+ * an ⓘ and opens it as a tooltip under the header when tapped; a tap anywhere closes it.
  */
-function TabHeader({ title }: { title: string }) {
+function TabHeader({ title, description }: { title: string; description?: string }) {
   const { t } = useAppTranslation();
   const { top } = useSafeAreaInsets();
+  const [open, setOpen] = useState(false);
+  const [height, setHeight] = useState(0);
   return (
     <View
       style={{ paddingTop: top + 4 }}
+      onLayout={(event) => setHeight(event.nativeEvent.layout.height)}
       className="flex-row items-center gap-6 border-b border-neutral-200 bg-white px-4 pb-2 dark:border-neutral-800 dark:bg-neutral-950"
     >
       <Image
@@ -34,25 +39,77 @@ function TabHeader({ title }: { title: string }) {
         accessibilityRole="image"
         accessibilityLabel={t('common.appName')}
       />
-      <Text
-        accessibilityRole="header"
-        numberOfLines={1}
-        className="flex-1 text-lg font-semibold text-neutral-900 dark:text-white"
+      <Pressable
+        disabled={!description}
+        onPress={() => setOpen(true)}
+        accessibilityRole={description ? 'button' : 'header'}
+        accessibilityHint={description ? t('common.aboutSectionHint') : undefined}
+        hitSlop={8}
+        className="flex-1 flex-row items-center gap-1.5"
       >
-        {title}
-      </Text>
+        <Text
+          numberOfLines={1}
+          className="shrink text-lg font-semibold text-neutral-900 dark:text-white"
+        >
+          {title}
+        </Text>
+        {description ? (
+          <Text className="text-base text-teal-700 dark:text-teal-300">{INFO_GLYPH}</Text>
+        ) : null}
+      </Pressable>
+      {description ? (
+        <Modal
+          transparent
+          visible={open}
+          animationType="fade"
+          onRequestClose={() => setOpen(false)}
+        >
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('common.close')}
+            onPress={() => setOpen(false)}
+            style={{ flex: 1, paddingTop: height }}
+          >
+            <View className="mx-4 mt-2 rounded-2xl border border-neutral-200 bg-white p-4 shadow-lg dark:border-neutral-700 dark:bg-neutral-900">
+              <Text className="pb-1 text-base font-semibold text-neutral-900 dark:text-white">
+                {title}
+              </Text>
+              <Text className="text-sm leading-5 text-neutral-700 dark:text-neutral-300">
+                {description}
+              </Text>
+            </View>
+          </Pressable>
+        </Modal>
+      ) : null}
     </View>
   );
 }
+
+const INFO_GLYPH = '\u24D8';
 
 /** Explorar, Pet-friendly, Urgencias and Ajustes; Favoritos isn't scheduled yet. */
 export default function TabsLayout() {
   const { t } = useAppTranslation();
   const dark = useColorScheme() === 'dark';
-  const tabs: { name: string; title: string; icon: TabIconName }[] = [
-    { name: 'explore', title: t('places.tabTitle'), icon: 'tab-explore' },
-    { name: 'pet-friendly', title: t('places.petFriendly.tabTitle'), icon: 'tab-pets' },
-    { name: 'urgent', title: t('urgent.tabTitle'), icon: 'tab-urgent' },
+  const tabs: { name: string; title: string; icon: TabIconName; description?: string }[] = [
+    {
+      name: 'explore',
+      title: t('places.tabTitle'),
+      icon: 'tab-explore',
+      description: t('places.introExplore'),
+    },
+    {
+      name: 'pet-friendly',
+      title: t('places.petFriendly.tabTitle'),
+      icon: 'tab-pets',
+      description: t('places.introPetFriendly'),
+    },
+    {
+      name: 'urgent',
+      title: t('urgent.tabTitle'),
+      icon: 'tab-urgent',
+      description: t('urgent.intro'),
+    },
     { name: 'settings', title: t('settings.tabTitle'), icon: 'tab-settings' },
   ];
 
@@ -64,7 +121,7 @@ export default function TabsLayout() {
           name={tab.name}
           options={{
             title: tab.title,
-            header: () => <TabHeader title={tab.title} />,
+            header: () => <TabHeader title={tab.title} description={tab.description} />,
             tabBarIcon: ({ color }) => <TabIcon name={tab.icon} color={String(color)} />,
           }}
         />

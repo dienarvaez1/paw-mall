@@ -41,11 +41,6 @@ export default function UrgentScreen() {
           renderItem={({ item, index }) => <UrgentCard place={item} first={index === 0} />}
           ItemSeparatorComponent={() => <View className="h-3" />}
           contentContainerClassName="p-4"
-          ListHeaderComponent={
-            <Text className="pb-3 text-sm text-neutral-600 dark:text-neutral-300">
-              {t('urgent.intro')}
-            </Text>
-          }
           ListEmptyComponent={<EmptyState title={t('urgent.none')} hint={t('urgent.noneHint')} />}
           ListFooterComponent={
             urgent.data.items.length > 0 ? (

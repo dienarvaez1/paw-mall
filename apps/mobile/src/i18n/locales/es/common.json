@@ -13,5 +13,7 @@
     "google": "Google Maps",
     "waze": "Waze"
   },
-  "approximateLocation": "Usando una ubicación aproximada: Ciudad de México"
+  "approximateLocation": "Usando una ubicación aproximada: Ciudad de México",
+  "aboutSectionHint": "Muestra de qué trata esta sección",
+  "close": "Cerrar"
 }
