@@ -33,7 +33,7 @@ function TabHeader({ title, description }: { title: string; description?: string
     >
       <Image
         source={LOGO}
-        style={{ width: 144, height: 48 }}
+        style={{ width: 151, height: 50 }}
         contentFit="contain"
         accessible
         accessibilityRole="image"
