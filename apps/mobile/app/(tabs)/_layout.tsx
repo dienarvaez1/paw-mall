@@ -82,6 +82,7 @@ function TabHeader({ title, description }: { title: string; description?: string
 
 const INFO_GLYPH = '\u24D8';
 const LOGO_TURQUOISE = '#00c1c0';
+const LOGO_ORANGE = '#ff9722';
 
 /** The logo's colors: turquoise letters (#00C1C0) with an orange outline (#FF9722). */
 const TITLE_FILL = '#00c1c0';
@@ -142,21 +143,22 @@ export default function TabsLayout() {
     title: string;
     icon: TabIconName;
     description?: string;
-    /** Selected icon and name in the logo's turquoise instead of the default teal. */
-    logoTint?: boolean;
+    /** Selected icon and name in one of the logo's colors instead of the default teal. */
+    activeTint?: string;
   }[] = [
     {
       name: 'explore',
       title: t('places.tabTitle'),
       icon: 'tab-explore',
       description: t('places.introExplore'),
-      logoTint: true,
+      activeTint: LOGO_TURQUOISE,
     },
     {
       name: 'pet-friendly',
       title: t('places.petFriendly.tabTitle'),
       icon: 'tab-pets',
       description: t('places.introPetFriendly'),
+      activeTint: LOGO_ORANGE,
     },
     {
       name: 'urgent',
@@ -183,7 +185,7 @@ export default function TabsLayout() {
           options={{
             title: tab.title,
             header: () => <TabHeader title={tab.title} description={tab.description} />,
-            ...(tab.logoTint ? { tabBarActiveTintColor: LOGO_TURQUOISE } : {}),
+            ...(tab.activeTint ? { tabBarActiveTintColor: tab.activeTint } : {}),
             tabBarIcon: ({ color }) => <TabIcon name={tab.icon} color={String(color)} />,
           }}
         />
