@@ -159,7 +159,14 @@ export default function TabsLayout() {
   ];
 
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: dark ? '#2dd4bf' : '#0f766e' }}>
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: dark ? '#2dd4bf' : '#0f766e',
+        // The selected section sits on a light orange: the logo's #FF9722 with 85% white (dark:
+        // orange-950).
+        tabBarActiveBackgroundColor: dark ? '#431407' : '#ffefde',
+      }}
+    >
       {tabs.map((tab) => (
         <Tabs.Screen
           key={tab.name}
