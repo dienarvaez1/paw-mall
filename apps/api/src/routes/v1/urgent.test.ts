@@ -75,7 +75,7 @@ afterAll(async () => {
 });
 
 describe('GET /v1/places/urgent', () => {
-  it('lists vet hospitals and 24-hour vets: open first, then unknown, then closed', async () => {
+  it('lists vet hospitals and 24-hour vets, closest first', async () => {
     const res = await app.request(
       `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10`,
       {},
@@ -84,11 +84,11 @@ describe('GET /v1/places/urgent', () => {
     expect(res.headers.get('Cache-Control')).toBe('no-store');
     const { items } = urgentResponseSchema.parse(await res.json());
     expect(items.map((p) => [p.name, p.openNow])).toEqual([
-      ['hospital-open', true],
-      ['owner-24h-far', true],
+      ['hospital-closed-nearest', false],
       ['hospital-unknown-near', null],
       ['hint-24h', null],
-      ['hospital-closed-nearest', false],
+      ['hospital-open', true],
+      ['owner-24h-far', true],
     ]);
     expect(items.find((p) => p.name === 'hint-24h')?.open24h).toEqual({
       value: true,

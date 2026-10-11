@@ -7,6 +7,7 @@ import { Button } from '@/components/button';
 import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
+import { useExploreView } from '@/features/explore/explore-view';
 import { useUserLocation } from '@/features/location/location-context';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatDistance } from '@/i18n/format';
@@ -16,14 +17,16 @@ import { phoneUrl } from '@/lib/links';
 import { useOpenDirections } from '@/lib/open-url';
 
 /**
- * Urgencias: the nearest vet hospitals and 24-hour vets from the device's location, open ones
- * first, each with call and directions up front. Most hours aren't confirmed yet, and each card
+ * Urgencias: the nearest vet hospitals and 24-hour vets from the device's location, closest
+ * first, each with call and directions up front. The closest is highlighted only while "Mi
+ * ubicación" is on (owner's rule). Most hours aren't confirmed yet, and each card
  * says so.
  */
 export default function UrgentScreen() {
   const { t } = useAppTranslation();
   const location = useUserLocation();
   const urgent = useUrgentPlaces(location.coords);
+  const { nearMe } = useExploreView();
 
   return (
     <View className="flex-1 bg-white dark:bg-neutral-950">
@@ -38,7 +41,9 @@ export default function UrgentScreen() {
         <FlatList
           data={urgent.data.items}
           keyExtractor={(place) => String(place.id)}
-          renderItem={({ item, index }) => <UrgentCard place={item} first={index === 0} />}
+          renderItem={({ item, index }) => (
+            <UrgentCard place={item} first={nearMe && index === 0} />
+          )}
           ItemSeparatorComponent={() => <View className="h-3" />}
           contentContainerClassName="p-4"
           ListEmptyComponent={<EmptyState title={t('urgent.none')} hint={t('urgent.noneHint')} />}

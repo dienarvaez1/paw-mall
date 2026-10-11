@@ -513,8 +513,8 @@ export async function listCategories(db: Database, locale: Locale): Promise<Cate
 }
 
 /**
- * Urgencias: the nearest vet hospitals and 24-hour vets (confirmed or hinted by name), open now
- * first, then unknown hours, then closed; nearest first within each group.
+ * Urgencias: the nearest vet hospitals and 24-hour vets (confirmed or hinted by name), closest
+ * to farthest (owner's rule); each card tells whether it's open.
  */
 export async function urgentPlaces(
   db: Database,
@@ -530,7 +530,7 @@ export async function urgentPlaces(
       AND (v.open24h IS TRUE OR v.accepts_emergencies IS TRUE OR EXISTS (
         SELECT 1 FROM place_categories pc JOIN categories c ON c.id = pc.category_id
         WHERE pc.place_id = p.id AND c.slug = 'vet_hospital'))
-    ORDER BY CASE ${openNowSql} WHEN true THEN 0 WHEN false THEN 2 ELSE 1 END, distance_km, p.id
+    ORDER BY distance_km, p.id
     LIMIT ${URGENT_LIMIT}`);
   return { items: rows.map(toPlace) };
 }
