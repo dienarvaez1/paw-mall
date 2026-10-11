@@ -53,6 +53,10 @@ const CLUSTER_COLORS = { fill: '#31cdcc', text: '#042f2e' };
 // Explorar's controls (Lista/Mapa, Mi ubicación, the radius button, the selected chip) use the
 // logo's turquoise, lightened, when on: bg-paw (#31cdcc) with text-teal-950 (#042f2e).
 const ON_TEXT = '#042f2e';
+// Off, they look like the radius button after zooming by hand: amber-500 border, amber-50 (dark:
+// amber-950) background, amber-900 (dark: amber-200) labels.
+const OFF_TEXT_LIGHT = '#78350f';
+const OFF_TEXT_DARK = '#fde68a';
 /** How long the map takes to zoom to a new radius. */
 const MAP_FIT_MS = 500;
 /**
@@ -119,13 +123,15 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
               Keyboard.dismiss();
               setMode(value);
             }}
-            className={`min-h-11 flex-1 items-center justify-center rounded-xl ${
-              mode === value ? 'bg-paw' : 'bg-neutral-100 dark:bg-neutral-800'
+            className={`min-h-11 flex-1 items-center justify-center rounded-xl border ${
+              mode === value
+                ? 'border-paw bg-paw'
+                : 'border-amber-500 bg-amber-50 dark:bg-amber-950'
             }`}
           >
             <Text
               className={`text-base font-semibold ${
-                mode === value ? 'text-teal-950' : 'text-neutral-800 dark:text-neutral-200'
+                mode === value ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'
               }`}
             >
               {value === 'list' ? t('places.showList') : t('places.showMap')}
@@ -215,9 +221,7 @@ function CategoryChips({
             accessibilityState={{ checked: active }}
             onPress={() => onSelect(slug)}
             className={`min-h-10 flex-row items-center gap-2 rounded-full border px-4 ${
-              active
-                ? 'border-paw bg-paw'
-                : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
+              active ? 'border-paw bg-paw' : 'border-amber-500 bg-amber-50 dark:bg-amber-950'
             }`}
           >
             {color ? (
@@ -228,7 +232,7 @@ function CategoryChips({
             ) : null}
             <Text
               className={`text-sm font-semibold ${
-                active ? 'text-teal-950' : 'text-neutral-800 dark:text-neutral-200'
+                active ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'
               }`}
             >
               {t(`places.chips.${slug ?? 'all'}`)}
@@ -874,15 +878,13 @@ function NearMeButton({ nearMe, onToggle }: { nearMe: boolean; onToggle: () => v
       accessibilityHint={t('places.nearMeHint')}
       onPress={onToggle}
       className={`h-11 w-11 items-center justify-center rounded-full border ${
-        nearMe
-          ? 'border-paw bg-paw'
-          : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
+        nearMe ? 'border-paw bg-paw' : 'border-amber-500 bg-amber-50 dark:bg-amber-950'
       }`}
     >
       <Image
         source={ICONS.locate}
         style={{ width: 22, height: 22 }}
-        tintColor={nearMe ? ON_TEXT : scheme === 'dark' ? '#e5e5e5' : '#262626'}
+        tintColor={nearMe ? ON_TEXT : scheme === 'dark' ? OFF_TEXT_DARK : OFF_TEXT_LIGHT}
       />
     </Pressable>
   );

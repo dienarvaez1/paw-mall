@@ -417,14 +417,12 @@ function Choice({
       accessibilityState={{ checked: selected }}
       onPress={onPress}
       className={`min-h-10 justify-center rounded-full border px-4 ${
-        selected
-          ? 'border-paw bg-paw'
-          : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
+        selected ? 'border-paw bg-paw' : 'border-amber-500 bg-amber-50 dark:bg-amber-950'
       }`}
     >
       <Text
         className={`text-sm font-semibold ${
-          selected ? 'text-teal-950' : 'text-neutral-800 dark:text-neutral-200'
+          selected ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'
         }`}
       >
         {label}
