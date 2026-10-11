@@ -81,7 +81,9 @@ const RADIUS_COLORS = {
 export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const { t } = useAppTranslation();
   const location = useUserLocation();
-  const [mode, setMode] = useState<Mode>('list');
+  // Opens on the map (owner's rule), and goes back to it whenever the app returns from the
+  // background.
+  const [mode, setMode] = useState<Mode>('map');
   const [category, setCategory] = useState<ChipCategory>(null);
   // "Mi ubicación": off, the search text names an area to search around; on, business names
   // around the user within the Ajustes radius.
@@ -97,6 +99,7 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   // Back from the background: start over at the user's location, as on launch (the radius goes
   // back to 3 miles in Settings, and the location is read again).
   useOnWake(() => {
+    setMode('map');
     setNearMe(true);
     setFocus(null);
     setCustomRadiusKm(null);
