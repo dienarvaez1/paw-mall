@@ -257,14 +257,13 @@ async function interpretSearch(db: Database, query: SearchQuery) {
     }
   }
   const { category, words } = detectCategory(text);
-  // A city or town (not a colonia or landmark) with more than CITY_BUSY_MATCHES matches: 3 mi
-  // around it (owner's rule), counted with the search's filters.
+  // A city or town (not a colonia or landmark) with more than CITY_BUSY_MATCHES places: 3 mi
+  // around it (owner's rule). Counted over every visible place, not the tab's filters, so
+  // Explorar's and Pet-friendly's maps get the same circle (owner's rule: the maps stay in sync).
   if (area && (area.kind === 'municipality' || area.kind === 'town')) {
     const matches = await countPlaces(db, [
       visibleSql,
       searchCircleSql(point, CITY_AREA_RADIUS_KM, namedAfter),
-      ...filterConditions({ ...query, category: query.category ?? category ?? undefined }),
-      ...(words ? [allWordsSql(words)] : []),
     ]);
     if (matches > CITY_BUSY_MATCHES) {
       radiusKm = CITY_AREA_RADIUS_KM;

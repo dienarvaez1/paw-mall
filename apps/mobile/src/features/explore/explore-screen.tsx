@@ -1,6 +1,6 @@
 import { type CategoryGroup, MAX_RADIUS_KM, type Place, type PlaceCluster } from '@paw-mall/shared';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -450,7 +450,25 @@ function PlacesMap({
       isGesture === true || touch.current.down || now - touch.current.liftedAt < HAND_MOVE_GRACE_MS
     );
   }, []);
-  const initialRegion: Region = regionForRadius(focus ?? location.coords, radiusKm);
+  // Both tabs' maps show the same view (owner's rule): the visible map records its view after
+  // every move, and a map opens on it (or re-takes it when its tab comes back to the screen).
+  const { readMapView, saveMapView } = useExploreView();
+  const initialRegion: Region =
+    readMapView() ?? regionForRadius(focus ?? location.coords, radiusKm);
+  const onScreen = useRef(false);
+  useFocusEffect(
+    useCallback(() => {
+      onScreen.current = true;
+      const shared = readMapView();
+      if (shared) {
+        autoMoveUntil.current = Date.now() + AUTO_MOVE_GRACE_MS;
+        mapRef.current?.animateToRegion(shared, 0);
+      }
+      return () => {
+        onScreen.current = false;
+      };
+    }, [readMapView]),
+  );
   // The circle the view is fitted to. Its radius and center are shared by both tabs' maps (the
   // radius in Ajustes, the center in explore-view.tsx), so a zoom, pan or cluster tap on one map
   // refits the other; the map that made the change records it here first and doesn't move.
@@ -591,6 +609,7 @@ function PlacesMap({
         onRegionChange={readHeading}
         onRegionChangeComplete={(next, details) => {
           setRegion(next);
+          if (onScreen.current) saveMapView(next);
           readHeading();
           // Only the user's own zooms and pans: the map's own moves (fitting a circle, a cluster,
           // the location button) keep the radius as it is.

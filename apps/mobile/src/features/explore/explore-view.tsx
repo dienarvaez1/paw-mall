@@ -1,4 +1,5 @@
-import { type ReactNode, createContext, useContext, useMemo, useState } from 'react';
+import { type ReactNode, createContext, useContext, useMemo, useRef, useState } from 'react';
+import type { Region } from 'react-native-maps';
 
 import { useOnWake } from '@/lib/use-on-wake';
 
@@ -16,6 +17,12 @@ type ExploreView = {
   /** The search circle's center when it isn't the user: a tapped cluster or a hand pan. */
   focus: Point | null;
   setFocus: (focus: Point | null) => void;
+  /**
+   * The view of the map on screen (written by the visible tab's map), so the other tab's map
+   * opens on exactly the same view. Kept outside React state: panning doesn't re-render.
+   */
+  readMapView: () => Region | null;
+  saveMapView: (region: Region) => void;
 };
 
 type Point = { lat: number; lng: number };
@@ -29,6 +36,8 @@ const ExploreViewContext = createContext<ExploreView>({
   setText: () => {},
   focus: null,
   setFocus: () => {},
+  readMapView: () => null,
+  saveMapView: () => {},
 });
 
 /**
@@ -43,6 +52,13 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const [nearMe, setNearMe] = useState(true);
   const [text, setText] = useState('');
   const [focus, setFocus] = useState<Point | null>(null);
+  const mapView = useRef<Region | null>(null);
+  const [mapViewAccess] = useState(() => ({
+    readMapView: () => mapView.current,
+    saveMapView: (region: Region) => {
+      mapView.current = region;
+    },
+  }));
   useOnWake(() => {
     // After a search the app comes back to it as it was (owner's rule).
     if (text.trim()) return;
@@ -52,8 +68,8 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
     setFocus(null);
   });
   const value = useMemo(
-    () => ({ mode, setMode, nearMe, setNearMe, text, setText, focus, setFocus }),
-    [mode, nearMe, text, focus],
+    () => ({ mode, setMode, nearMe, setNearMe, text, setText, focus, setFocus, ...mapViewAccess }),
+    [mode, nearMe, text, focus, mapViewAccess],
   );
   return <ExploreViewContext.Provider value={value}>{children}</ExploreViewContext.Provider>;
 }
