@@ -27,15 +27,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done        | 2026-10-05 | 2026-10-05 |
-| 5     | Trust               | `phase-5/trust`           | #6  | Done        | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | Done        | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | #9  | In progress | 2026-10-10 | —          |
+| Phase | Name                | Branch                    | PR  | Status    | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation          | `phase-1/foundation`      | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust               | `phase-5/trust`           | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | #9  | In review | 2026-10-10 | —          |
 
 ## Pending owner reviews
 
@@ -600,7 +600,7 @@ a task (and a note in the phase that applies it).
   once licensing is verified, plus curated entries.
 - **Done when:** museums and parks appear with their pet policy, and each source is credited.
 - **Branch / PR:** `phase-7/tourism-museums` / #9
-- **Status:** In progress
+- **Status:** In review (PR ready)
 - **Checks:**
   - [x] Licensing of each source verified and recorded below
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
@@ -608,8 +608,8 @@ a task (and a note in the phase that applies it).
   - [x] API check on real data: `category=park` lists the 8 parks with their policy and source
         (Chapultepec 1ª Sección and Parque Frida Kahlo as "No acepta perros"); a "perro grande"
         profile adds the 6 parks that take dogs to Four Seasons and Courtyard Airport
-  - [ ] Done-when check on a phone: Explorar → Museos and Parques; open a place and see its
-        policy card and source
+  - [x] Done-when check on a phone: Explorar → Museos and Parques; open a place and see its
+        policy card and source. Verified by the owner on 2026-10-10
 - **Notes:**
   - **Sources and licensing:**
     - Sistema de Información Cultural (Secretaría de Cultura): its open data may be copied,
