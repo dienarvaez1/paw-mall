@@ -501,19 +501,6 @@ function PlacesMap({
     autoMoveUntil.current = Date.now() + MAP_FIT_MS + AUTO_MOVE_GRACE_MS;
     mapRef.current?.animateCamera({ heading: 0 }, { duration: MAP_FIT_MS });
   };
-  // "My location": read the position again and fit the radius circle around it.
-  const [locating, setLocating] = useState(false);
-  const goToMyLocation = async () => {
-    if (locating) return;
-    setLocating(true);
-    try {
-      const coords = await location.refresh();
-      moveMap(regionForRadius(coords, circle.radiusKm));
-    } finally {
-      setLocating(false);
-    }
-  };
-
   return (
     // Any touch on the map (pan, zoom, pin) hides the keyboard.
     <View
@@ -549,6 +536,7 @@ function PlacesMap({
         }}
         showsCompass={false}
         showsUserLocation={location.source === 'device'}
+        showsMyLocationButton={false}
         userInterfaceStyle={scheme === 'dark' ? 'dark' : 'light'}
       >
         {/* The search radius from Settings, around the user's location. */}
@@ -589,24 +577,11 @@ function PlacesMap({
         accessibilityRole="button"
         accessibilityLabel={t('places.compass')}
         onPress={pointNorth}
-        className="absolute bottom-[84px] right-3 h-12 w-12 items-center justify-center rounded-full bg-white shadow active:bg-neutral-100 dark:bg-neutral-900 dark:active:bg-neutral-800"
+        className="absolute bottom-6 right-3 h-12 w-12 items-center justify-center rounded-full bg-white shadow active:bg-neutral-100 dark:bg-neutral-900 dark:active:bg-neutral-800"
       >
         <Image
           source={ICONS.compass}
           style={{ width: 28, height: 28, transform: [{ rotate: `${-heading}deg` }] }}
-        />
-      </Pressable>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('places.myLocation')}
-        accessibilityState={{ busy: locating }}
-        onPress={() => void goToMyLocation()}
-        className="absolute bottom-6 right-3 h-12 w-12 items-center justify-center rounded-full bg-white shadow active:bg-neutral-100 dark:bg-neutral-900 dark:active:bg-neutral-800"
-      >
-        <Image
-          source={ICONS.locate}
-          style={{ width: 24, height: 24, opacity: locating ? 0.4 : 1 }}
-          tintColor={scheme === 'dark' ? '#f5f5f5' : '#262626'}
         />
       </Pressable>
       {places.isError ? (

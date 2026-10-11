@@ -29,7 +29,6 @@
   "mapCountPartial_one": "{{shown}} de {{total}} lugar a menos de {{distance}}",
   "mapCountPartial_other": "{{shown}} de {{total}} lugares a menos de {{distance}}",
   "mapShowAll": "Toca para ver todo el radio",
-  "myLocation": "Ir a mi ubicación",
   "compass": "Brújula. Toca para orientar el mapa al norte.",
   "categoriesLabel": "Categorías",
   "open24hHint": "Su nombre dice «24 horas». Horario sin confirmar.",

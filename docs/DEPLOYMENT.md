@@ -650,6 +650,7 @@ a task (and a note in the phase that applies it).
   - [x] `pnpm lint`, `pnpm typecheck`
   - [x] `pnpm test`: 217 tests, also while `pnpm places:curated` runs alongside
   - [ ] Owner's bugs: fixed and checked on a phone
+    - [ ] Map: remove the "my location" button (removed; also Android's built-in one)
 - **Notes:**
   - **Flaky Google tests (fixed):** API and importer tests shared the dev database, and their
     test places use source `curated`. `pnpm places:curated` removes every curated place not in its

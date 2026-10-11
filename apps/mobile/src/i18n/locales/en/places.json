@@ -29,7 +29,6 @@
   "mapCountPartial_one": "{{shown}} of {{total}} place within {{distance}}",
   "mapCountPartial_other": "{{shown}} of {{total}} places within {{distance}}",
   "mapShowAll": "Tap to see the whole radius",
-  "myLocation": "Go to my location",
   "compass": "Compass. Tap to turn the map north.",
   "categoriesLabel": "Categories",
   "open24hHint": "Its name says “24 horas”. Hours not confirmed.",
