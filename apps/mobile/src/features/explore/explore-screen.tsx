@@ -474,8 +474,8 @@ function PlacesMap({
     },
     [radiusKm, location.coords, setRadiusKm],
   );
-  // Back from the background: fly back to the user (the location refresh may move it again).
-  useOnWake(() => moveMap(regionForRadius(location.coords, radiusKm)));
+  // Back from the background: read the position again and fly back to the user.
+  useOnWake(() => void refresh().then((coords) => moveMap(regionForRadius(coords, radiusKm))));
   const [region, setRegion] = useState<Region>(initialRegion);
   const [area, setArea] = useState<MapArea | null>(null);
 

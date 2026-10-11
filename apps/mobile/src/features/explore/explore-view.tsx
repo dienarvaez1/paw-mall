@@ -18,7 +18,7 @@ type ExploreView = {
 const ExploreViewContext = createContext<ExploreView>({
   mode: 'map',
   setMode: () => {},
-  nearMe: false,
+  nearMe: true,
   setNearMe: () => {},
   text: '',
   setText: () => {},
@@ -27,16 +27,16 @@ const ExploreViewContext = createContext<ExploreView>({
 /**
  * Mapa/Lista, "Mi ubicación" and the search text, shared by Explorar and Pet-friendly so switching
  * tabs keeps them (the radius is shared with Urgencias). They start on the map, around the user's
- * location, with Mi ubicación off and an empty search, and go back to that whenever the app
+ * location, with Mi ubicación on and an empty search, and go back to that whenever the app
  * returns from the background (owner's rules).
  */
 export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<ExploreMode>('map');
-  const [nearMe, setNearMe] = useState(false);
+  const [nearMe, setNearMe] = useState(true);
   const [text, setText] = useState('');
   useOnWake(() => {
     setMode('map');
-    setNearMe(false);
+    setNearMe(true);
     setText('');
   });
   const value = useMemo(
