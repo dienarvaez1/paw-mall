@@ -21,8 +21,8 @@ import { useOpenDirections } from '@/lib/open-url';
 const SEARCH_DEBOUNCE_MS = 300;
 
 /**
- * Urgencias: the nearest vet hospitals and 24-hour vets from the device's location (or the area
- * the search box names), closest first, each with call and directions up front. The closest is
+ * Urgencias: the nearest vet hospitals and 24-hour vets from the device's location (or where the
+ * map was moved by hand, or the area the search box names), closest first, each with call and directions up front. The closest is
  * highlighted only while "Mi ubicación" is on and no searched area moved the list (owner's
  * rules). Most hours aren't confirmed yet, and each card says so.
  */
@@ -30,8 +30,12 @@ export default function UrgentScreen() {
   const { t } = useAppTranslation();
   const location = useUserLocation();
   // The search box of Explorar and Pet-friendly: a place it names moves Urgencias there.
-  const { nearMe, text } = useExploreView();
-  const urgent = useUrgentPlaces(location.coords, useDebounced(text.trim(), SEARCH_DEBOUNCE_MS));
+  // A map moved by hand (or a tapped cluster) moves Urgencias' center there too (owner's rule).
+  const { nearMe, text, focus } = useExploreView();
+  const urgent = useUrgentPlaces(
+    focus ?? location.coords,
+    useDebounced(text.trim(), SEARCH_DEBOUNCE_MS),
+  );
   const area = urgent.data?.area ?? null;
   const locale = useLocale();
   const { units } = useSettings();
@@ -50,7 +54,7 @@ export default function UrgentScreen() {
           data={urgent.data.items}
           keyExtractor={(place) => String(place.id)}
           renderItem={({ item, index }) => (
-            <UrgentCard place={item} first={nearMe && !area && index === 0} />
+            <UrgentCard place={item} first={nearMe && !area && !focus && index === 0} />
           )}
           ItemSeparatorComponent={() => <View className="h-3" />}
           contentContainerClassName="p-4"
