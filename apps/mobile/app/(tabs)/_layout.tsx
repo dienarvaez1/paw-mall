@@ -85,7 +85,7 @@ const INFO_GLYPH = '\u24D8';
 /** The logo's colors: orange letters (#FF9722) with a turquoise outline (#00C1C0). */
 const TITLE_FILL = '#ff9722';
 const TITLE_OUTLINE = '#00c1c0';
-const OUTLINE_PX = 1.5;
+const OUTLINE_PX = 0.75;
 const OUTLINE_OFFSETS = [
   [-1, -1],
   [0, -1],
