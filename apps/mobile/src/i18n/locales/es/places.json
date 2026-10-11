@@ -46,7 +46,9 @@
     "public_vet_service": "Servicios públicos",
     "restaurant": "Restaurantes",
     "cafe": "Cafés",
-    "lodging": "Hospedaje"
+    "lodging": "Hospedaje",
+    "museum": "Museos",
+    "park": "Parques"
   },
   "noOpenPlaces": "No hay lugares abiertos ahora con horario confirmado a menos de {{distance}}.",
   "noOpenPlacesHint": "Todavía pocos negocios tienen su horario confirmado. Desactiva «Solo lugares abiertos ahora» en Ajustes para ver todos, o revisa el horario de cada uno con «Ver horario».",

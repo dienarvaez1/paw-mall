@@ -29,7 +29,7 @@ const { values: args } = parseArgs({
 const { places, excluded } = readCuratedFile(JSON.parse(readFileSync(args.file, 'utf8')));
 const count = (slug: string) => places.filter((p) => p.categories.includes(slug as never)).length;
 console.log(
-  `${places.length} curated places: ${count('restaurant')} restaurants, ${count('cafe')} cafés, ${count('lodging')} lodging.`,
+  `${places.length} curated places: ${count('restaurant')} restaurants, ${count('cafe')} cafés, ${count('lodging')} lodging, ${count('museum')} museums, ${count('park')} parks.`,
 );
 if (excluded.length > 0) console.log(`Left out (cruelty-linked names): ${excluded.join(', ')}`);
 

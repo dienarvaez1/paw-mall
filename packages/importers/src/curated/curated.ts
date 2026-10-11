@@ -1,5 +1,6 @@
-// Curated pet-friendly places (data/pet-friendly-cdmx.json): restaurants, cafés and lodging the
-// team collected from public statements, each with its source and the date it was checked.
+// Curated pet-friendly places (data/pet-friendly-cdmx.json): restaurants, cafés, lodging, museums
+// and parks the team collected from public statements, each with its source and the date it was
+// checked.
 //
 // Importer scripts run on plain Node, which can't load packages/shared's values (its imports have
 // no file extensions), so this file imports only its types: the lists below must match them

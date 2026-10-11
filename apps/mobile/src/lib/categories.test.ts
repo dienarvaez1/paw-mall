@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { CATEGORY_COLORS, isPetFriendlyCategory, pinColor } from './categories';
+import {
+  CATEGORY_COLORS,
+  isPetFilterCategory,
+  isPetFriendlyCategory,
+  pinColor,
+} from './categories';
 
 const place = (...slugs: string[]) =>
   ({ categories: slugs.map((slug) => ({ slug, name: slug })) }) as Parameters<typeof pinColor>[0];
@@ -23,10 +28,20 @@ describe('pinColor', () => {
 });
 
 describe('isPetFriendlyCategory', () => {
-  it('is true for restaurants, cafés and lodging only', () => {
+  it('is true for pet-friendly venues only', () => {
     expect(isPetFriendlyCategory('restaurant')).toBe(true);
     expect(isPetFriendlyCategory('lodging')).toBe(true);
     expect(isPetFriendlyCategory('veterinarian')).toBe(false);
     expect(isPetFriendlyCategory(null)).toBe(false);
+  });
+});
+
+describe('isPetFilterCategory', () => {
+  it('filters restaurants, cafés and lodging, but lists every museum and park', () => {
+    expect(isPetFilterCategory('restaurant')).toBe(true);
+    expect(isPetFilterCategory('museum')).toBe(false);
+    expect(isPetFilterCategory('park')).toBe(false);
+    expect(isPetFriendlyCategory('park')).toBe(true);
+    expect(isPetFilterCategory(null)).toBe(false);
   });
 });
