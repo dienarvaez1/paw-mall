@@ -47,12 +47,7 @@ function TabHeader({ title, description }: { title: string; description?: string
         hitSlop={8}
         className="flex-1 flex-row items-center gap-1.5"
       >
-        <Text
-          numberOfLines={1}
-          className="shrink text-lg font-semibold text-neutral-900 dark:text-white"
-        >
-          {title}
-        </Text>
+        <OutlinedTitle title={title} />
         {description ? (
           <Text className="text-base text-teal-700 dark:text-teal-300">{INFO_GLYPH}</Text>
         ) : null}
@@ -86,6 +81,56 @@ function TabHeader({ title, description }: { title: string; description?: string
 }
 
 const INFO_GLYPH = '\u24D8';
+
+/** The logo's colors: orange letters (#FF9722) with a turquoise outline (#00C1C0). */
+const TITLE_FILL = '#ff9722';
+const TITLE_OUTLINE = '#00c1c0';
+const OUTLINE_PX = 1.5;
+const OUTLINE_OFFSETS = [
+  [-1, -1],
+  [0, -1],
+  [1, -1],
+  [-1, 0],
+  [1, 0],
+  [-1, 1],
+  [0, 1],
+  [1, 1],
+] as const;
+const titleStyle = { fontSize: 21, fontWeight: '800', lineHeight: 26 } as const;
+
+/**
+ * The tab title in the logo's style. React Native has no text outline, so turquoise copies offset
+ * in eight directions sit behind the orange text; only the front copy is read aloud.
+ */
+function OutlinedTitle({ title }: { title: string }) {
+  return (
+    <View className="shrink">
+      {OUTLINE_OFFSETS.map(([x, y]) => (
+        <Text
+          key={`${x},${y}`}
+          aria-hidden
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          numberOfLines={1}
+          style={[
+            titleStyle,
+            {
+              position: 'absolute',
+              left: x * OUTLINE_PX,
+              top: y * OUTLINE_PX,
+              color: TITLE_OUTLINE,
+            },
+          ]}
+        >
+          {title}
+        </Text>
+      ))}
+      <Text numberOfLines={1} style={[titleStyle, { color: TITLE_FILL }]}>
+        {title}
+      </Text>
+    </View>
+  );
+}
 
 /** Explorar, Pet-friendly, Urgencias and Ajustes; Favoritos isn't scheduled yet. */
 export default function TabsLayout() {
