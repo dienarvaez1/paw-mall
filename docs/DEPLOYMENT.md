@@ -682,7 +682,7 @@ a task (and a note in the phase that applies it).
 - **Status:** In progress
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
-  - [x] `pnpm test`: 232 tests (shared 30, api 64, importers 79, mobile 59)
+  - [x] `pnpm test`: 249 tests (shared 30, api 64, importers 95, mobile 60)
   - [x] API check on dev data: two "yes, up to mediano" answers on a DENUE taquería publish a
         users' policy (source `community`, mediano); test answers removed after
   - [ ] Done-when check on a phone
@@ -720,6 +720,28 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
   - **Test fix (belongs to Phase 8):** `places.test.ts` cleaned up with `external_id LIKE
 'test-%'`, deleting other files' test places when files ran in parallel (a second cause of the
     flaky Google tests); it now uses `test-places-`.
+  - **Free sources instead of Google (owner, 2026-10-11):** Google's dog and hours fields cost
+    $25 per 1,000 requests and can't be stored, so:
+    - **OpenStreetMap hours** (`pnpm places:osm-hours`, snapshot `data/osm-hours.json`): restaurants
+      and cafés in CDMX, vets and pet stores in the region. 1,120 elements, 978 readable (one range
+      per day; split shifts, holidays and the like are skipped), 375 matched to listed places
+      (same kind, within 100 m, similar name).
+    - **Business homepages**, on the website check's single visit: schema.org hours and "pet
+      friendly" wording (never next to a no). Only when the site speaks for that one place: its
+      host belongs to no other place, it isn't a hotel group's homepage, and it names the place.
+      The first run without that rule picked up chain sites ("sucursales pet friendly",
+      wyndhamhotels.com); with it: hours for 44 places, 12 venues say pets are welcome (source
+      `website`, credited to the site).
+    - **Chain-wide policies** (`pnpm places:chains`, `data/pet-friendly-chains.json`): no
+      restaurant or café chain in Mexico states one policy for all branches; City Express by
+      Marriott does (1 pet up to 15 kg). DENUE hotels in CDMX (721111, 721112, 721190; 794) are
+      imported so chains and users can fill them; City Express adds 2 branches beyond the 5
+      curated ones.
+    - Hours priority: owner > website > OpenStreetMap; the place page says where they came from.
+    - Pet-friendly places within 160 km: 81 → 95.
+  - **List duplicates (fixed):** pages fetched at different times could repeat a place when
+    policies changed in between (React "two children with the same key"); the list keeps each
+    place once.
 - **Follow-ups:**
   - `pnpm places:enrich-overture` and `pnpm places:check-websites` now also cover 55,741
     restaurants and cafés; consider limiting website checks to pet businesses before running them.
