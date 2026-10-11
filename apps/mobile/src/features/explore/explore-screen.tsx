@@ -22,7 +22,7 @@ import { SearchInput } from '@/components/search-input';
 import { BUTTON_HIT_SLOP } from '@/components/button';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
-import { coveringRadiusKm, nextRadiusKm } from '@/features/settings/radius';
+import { coveringRadiusKm, isRadiusOption, nextRadiusKm } from '@/features/settings/radius';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -885,6 +885,9 @@ function RadiusButton({ className }: { className: string }) {
   const locale = useLocale();
   const { radiusKm, units, setRadiusKm } = useSettings();
   const distance = formatDistance(radiusKm, locale, units);
+  // A radius from zooming the map (or a tapped cluster) is off the presets: the button shows off
+  // (amber) until pressed, which moves to the next preset and turns it on (owner's rule).
+  const preset = isRadiusOption(radiusKm, units);
   return (
     <Pressable
       accessibilityRole="button"
@@ -892,9 +895,18 @@ function RadiusButton({ className }: { className: string }) {
       accessibilityHint={t('places.radiusButtonHint')}
       onPress={() => setRadiusKm(nextRadiusKm(radiusKm, units))}
       hitSlop={BUTTON_HIT_SLOP}
-      className={`min-w-[38px] items-center justify-center rounded-full border border-paw bg-paw px-2.5 active:bg-paw-dark ${className}`}
+      accessibilityState={{ checked: preset }}
+      className={`min-w-[38px] items-center justify-center rounded-full border px-2.5 ${
+        preset
+          ? 'border-paw bg-paw active:bg-paw-dark'
+          : 'border-off-border bg-off-bg active:bg-off-pressed dark:bg-off-bg-dark'
+      } ${className}`}
     >
-      <Text className="text-xs font-bold text-teal-950">{distance}</Text>
+      <Text
+        className={`text-xs font-bold ${preset ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'}`}
+      >
+        {distance}
+      </Text>
     </Pressable>
   );
 }
