@@ -502,7 +502,7 @@ function PlacesMap({
     return () => clearTimeout(timer);
   }, [region]);
 
-  // Places inside the radius circle: up to 200 one by one; with more in view, clusters (counting
+  // Places inside the radius circle: up to 50 one by one; with more in view, clusters (counting
   // only places inside the circle) that zoom in when tapped.
   const center = focus ?? location.coords;
   const places = usePlacesMap(

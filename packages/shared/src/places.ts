@@ -84,7 +84,7 @@ export const MAX_PAGE_SIZE = 200;
 export const AREA_RADIUS_KM = 5;
 
 /** Most places the map shows one by one; with more in view it shows clusters. */
-export const MAP_MAX_PLACES = 200;
+export const MAP_MAX_PLACES = 50;
 
 const latitude = z.coerce.number().min(-90).max(90);
 const longitude = z.coerce.number().min(-180).max(180);
