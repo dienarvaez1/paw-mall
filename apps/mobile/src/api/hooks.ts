@@ -47,7 +47,8 @@ export function usePlaces(
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters(petFriendly || isPetFilterCategory(category));
+  // A name search also finds venues nobody has answered for yet, to ask on their page.
+  const filters = usePlaceFilters(petFriendly || (isPetFilterCategory(category) && !name));
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
@@ -106,7 +107,8 @@ export function usePlacesMap(
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters(petFriendly || isPetFilterCategory(category));
+  // A name search also finds venues nobody has answered for yet, to ask on their page.
+  const filters = usePlaceFilters(petFriendly || (isPetFilterCategory(category) && !name));
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;

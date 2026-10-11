@@ -193,7 +193,10 @@
     "source": {
       "owner": "Declarada por el dueño",
       "ownerShort": "Dueño",
-      "curated": "Fuente: {{name}}"
+      "curated": "Fuente: {{name}}",
+      "community": "Según usuarios de Paw Mall",
+      "communityShort": "Usuarios",
+      "osm": "Fuente: OpenStreetMap (© colaboradores de OpenStreetMap)"
     },
     "lastConfirmed": "Última confirmación: {{date}}",
     "confirmations_one": "confirmada por {{count}} persona",
@@ -215,6 +218,22 @@
       "dog_small": "perro pequeño",
       "dog_medium": "perro mediano",
       "dog_large": "perro grande"
+    },
+    "ask": {
+      "unknown": "Aún no sabemos si acepta mascotas.",
+      "rowUnknown": "¿Acepta mascotas? Sin confirmar",
+      "question": "¿Acepta perros?",
+      "yes": "Sí",
+      "no": "No",
+      "sizeQuestion": "¿Hasta qué tamaño de perro?",
+      "size": {
+        "small": "Pequeño (hasta 10 kg)",
+        "medium": "Mediano (10–25 kg)",
+        "large": "Grande (más de 25 kg)",
+        "unknown": "No sé"
+      },
+      "thanks": "Gracias. Cuando {{count}} personas coincidan, aparecerá en Pet-friendly.",
+      "thanksCounted": "Gracias. Tu respuesta ya cuenta."
     }
   }
 }

@@ -7,6 +7,8 @@
     "NOT_FOUND": "No encontramos lo que buscas.",
     "PLACE_NOT_FOUND": "No encontramos este lugar.",
     "POLICY_NOT_FOUND": "No encontramos la política de mascotas de este lugar.",
-    "INTERNAL_ERROR": "Algo salió mal en el servidor."
+    "INTERNAL_ERROR": "Algo salió mal en el servidor.",
+    "POLICY_EXISTS": "Este lugar ya tiene una política de mascotas.",
+    "NOT_A_PET_VENUE": "Solo se puede responder en restaurantes, cafés, hospedaje, museos y parques."
   }
 }

@@ -84,6 +84,10 @@ export function PlaceRow({
           <Text className="text-sm font-medium text-teal-800 dark:text-teal-300" numberOfLines={2}>
             {policy}
           </Text>
+        ) : showPolicy ? (
+          <Text className="text-sm text-neutral-500 dark:text-neutral-400">
+            {t('places.pets.ask.rowUnknown')}
+          </Text>
         ) : null}
         <OpenStatus place={place} />
       </Pressable>

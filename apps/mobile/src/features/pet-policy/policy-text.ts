@@ -41,11 +41,18 @@ export function feeText(fee: PetFee | null, t: T, language: Language): string | 
     : t('places.pets.fee.amount', { amount });
 }
 
-/** Who said it: the owner, or the curated source's name. */
+/** Who said it: the owner, Paw Mall's users, OpenStreetMap, or the curated source's name. */
 export function sourceText(policy: PetPolicy, t: T): string {
-  return policy.source === 'owner'
-    ? t('places.pets.source.owner')
-    : t('places.pets.source.curated', { name: policy.sourceName ?? '' });
+  switch (policy.source) {
+    case 'owner':
+      return t('places.pets.source.owner');
+    case 'community':
+      return t('places.pets.source.community');
+    case 'osm':
+      return t('places.pets.source.osm');
+    default:
+      return t('places.pets.source.curated', { name: policy.sourceName ?? '' });
+  }
 }
 
 /**
@@ -67,7 +74,12 @@ export function usePolicySummary(policy: PetPolicy | null): string | null {
           : t('places.pets.petFriendly');
   const summary = t('places.pets.summary', {
     allows,
-    source: policy.source === 'owner' ? t('places.pets.source.ownerShort') : policy.sourceName,
+    source:
+      policy.source === 'owner'
+        ? t('places.pets.source.ownerShort')
+        : policy.source === 'community'
+          ? t('places.pets.source.communityShort')
+          : policy.sourceName,
     date: formatShortDate(policy.lastConfirmedOn, language),
   });
   return policy.underReview ? t('places.pets.underReviewShort', { summary }) : summary;

@@ -10,12 +10,13 @@ import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { ErrorState, SkeletonList } from '@/components/states';
 import { GoogleHours } from '@/features/google/google-hours';
+import { PetQuestionCard } from '@/features/pet-policy/pet-question';
 import { PolicyCard } from '@/features/pet-policy/policy-card';
 import { useReportPlace } from '@/features/reports/place-reports';
 import { formatClockTime, formatDate, formatMonthYear, formatWeekday } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
-import { pinColor } from '@/lib/categories';
+import { isPetFriendlyCategory, pinColor } from '@/lib/categories';
 import { phoneUrl } from '@/lib/links';
 import { useOpenDirections } from '@/lib/open-url';
 import { placeLine } from '@/lib/place-line';
@@ -102,7 +103,11 @@ function PlaceDetail({ place: p }: { place: Place }) {
         ) : null}
       </View>
 
-      {p.petPolicy ? <PolicyCard placeId={p.id} policy={p.petPolicy} /> : null}
+      {p.petPolicy ? (
+        <PolicyCard placeId={p.id} policy={p.petPolicy} />
+      ) : p.categories.some((c) => isPetFriendlyCategory(c.slug)) ? (
+        <PetQuestionCard placeId={p.id} />
+      ) : null}
 
       <HoursSection place={p} />
 

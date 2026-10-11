@@ -63,6 +63,9 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
   `pnpm places:enrich-overture` and `pnpm places:check-websites` (visits each business website
   once), then `pnpm places:areas` (colonias, cities and landmarks for the search box). Each is
   safe to re-run; `pnpm places:import --dry-run` reports without writing.
+- Pet-friendly: `pnpm places:curated` (hand-collected places), then `pnpm places:osm`
+  (OpenStreetMap snapshot `data/osm-dogs-cdmx.json`; `--refresh` fetches a new one). Run both after
+  `pnpm places:import`: they hide DENUE copies of their venues.
 - Landmarks: `pnpm places:landmarks` refreshes the committed Wikidata snapshot
   (`packages/importers/data/landmarks-wikidata.json`); run `pnpm places:areas` after it. The
   curated `data/landmarks.json` wins over Wikidata on the same name.

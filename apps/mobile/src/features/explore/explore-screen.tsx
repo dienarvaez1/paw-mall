@@ -74,9 +74,6 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const location = useUserLocation();
   const [mode, setMode] = useState<Mode>('list');
   const [category, setCategory] = useState<ChipCategory>(null);
-  // Pet-friendly "Todos": only places whose pet policy takes pets, narrowed by the pet profile.
-  // Its restaurant, café and lodging chips filter the same way; museums and parks list every place.
-  const petFriendly = section === 'pet_friendly' && category === null;
   // "Mi ubicación": off, the search text names an area to search around; on, business names
   // around the user within the Ajustes radius.
   const [nearMe, setNearMe] = useState(false);
@@ -85,6 +82,10 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const [customRadiusKm, setCustomRadiusKm] = useState<number | null>(null);
   const [text, setText] = useState('');
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
+  // Pet-friendly "Todos": only places whose pet policy takes pets, narrowed by the pet profile.
+  // Its restaurant, café and lodging chips filter the same way; museums and parks list every place.
+  // A name search lists every venue, including those nobody has answered for yet.
+  const petFriendly = section === 'pet_friendly' && category === null && name === '';
   useDismissKeyboardOnBlur();
 
   return (

@@ -11,6 +11,7 @@ import {
   dedupeChainBranches,
   formatPhone,
   isCrueltyLinked,
+  foodCategory,
   mapDenueRow,
   normalizeWebsite,
   parseEditionDate,
@@ -201,5 +202,15 @@ describe('helpers', () => {
 
   it('reads the edition date from the data dictionary', () => {
     expect(parseEditionDate('DICCIONARIO DE DATOS DENUE (20/05/2026),,,,')).toBe('2026-05-20');
+  });
+});
+
+describe('foodCategory', () => {
+  it('imports restaurants and cafés in Ciudad de México only', () => {
+    expect(foodCategory('722511', '09')).toBe('restaurant');
+    expect(foodCategory('722514', '9')).toBe('restaurant');
+    expect(foodCategory('722515', '09')).toBe('cafe');
+    expect(foodCategory('722511', '15')).toBeNull();
+    expect(foodCategory('465911', '09')).toBeNull();
   });
 });

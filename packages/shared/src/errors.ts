@@ -5,6 +5,8 @@ export const ERROR_CODES = [
   'NOT_FOUND',
   'PLACE_NOT_FOUND',
   'POLICY_NOT_FOUND',
+  'POLICY_EXISTS',
+  'NOT_A_PET_VENUE',
   'INTERNAL_ERROR',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];

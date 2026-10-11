@@ -40,7 +40,7 @@ if (args['dry-run']) {
   try {
     const result = await saveCuratedPlaces(sql, places);
     console.log(
-      `Saved ${result.saved} places (${result.policies} curated policies; ${result.ownerKept} owner policies kept); removed ${result.removed} no longer in the file.`,
+      `Saved ${result.saved} places (${result.policies} curated policies; ${result.ownerKept} owner policies kept); removed ${result.removed} no longer in the file; hid ${result.duplicates} DENUE copies.`,
     );
   } finally {
     await sql.end();

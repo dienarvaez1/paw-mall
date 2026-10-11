@@ -192,3 +192,54 @@ describe('POST /v1/places/:id/policy-answers', () => {
     expect(row?.n).toBe(0);
   });
 });
+
+const addCategory = (id: number, slug: string) =>
+  sql`INSERT INTO place_categories (place_id, category_id, source)
+      SELECT ${id}, id, 'activity' FROM categories WHERE slug = ${slug}`;
+const answerPet = (id: number, n: number, takesDogs: boolean, maxDogSize?: string) =>
+  post(`/v1/places/${id}/pet-answers`, { takesDogs, maxDogSize, clientId: phone(n) });
+
+describe('POST /v1/places/:id/pet-answers', () => {
+  it('publishes a users policy once 2 phones agree, more than disagree', async () => {
+    const id = await addPlace('Taquería Sin Política', null);
+    await addCategory(id, 'restaurant');
+    expect((await answerPet(id, 1, true, 'large')).status).toBe(201);
+    expect(await policyOf(id)).toBeNull();
+    await answerPet(id, 2, true, 'medium');
+    expect(await policyOf(id)).toMatchObject({
+      source: 'community',
+      dogs: true,
+      maxDogSize: 'medium',
+      sourceName: null,
+    });
+    expect(await names({ petFriendly: 'true', petSpecies: 'dog', dogSize: 'medium' })).toContain(
+      'Taquería Sin Política',
+    );
+    // Two phones saying no: a tie withdraws it.
+    await answerPet(id, 3, false);
+    await answerPet(id, 4, false);
+    expect(await policyOf(id)).toBeNull();
+    const [row] = await sql`SELECT count(*)::int AS n FROM pet_answers WHERE place_id = ${id}`;
+    expect(row?.n).toBe(4);
+  });
+
+  it('only for pet-friendly venues without an owner or sourced policy', async () => {
+    const vet = await addPlace('Veterinaria Pregunta', null);
+    await addCategory(vet, 'veterinarian');
+    const notVenue = await answerPet(vet, 1, true);
+    expect(notVenue.status).toBe(409);
+    expect(await notVenue.json()).toEqual({ error: { code: 'NOT_A_PET_VENUE' } });
+
+    await addCategory(ids.anySize!, 'restaurant');
+    const sourced = await answerPet(ids.anySize!, 1, false);
+    expect(sourced.status).toBe(409);
+    expect(await sourced.json()).toEqual({ error: { code: 'POLICY_EXISTS' } });
+
+    const extra = await post(`/v1/places/${vet}/pet-answers`, {
+      takesDogs: true,
+      clientId: phone(1),
+      lat: 19.4,
+    });
+    expect(extra.status).toBe(400);
+  });
+});

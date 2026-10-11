@@ -27,16 +27,17 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done        | 2026-10-05 | 2026-10-05 |
-| 5     | Trust               | `phase-5/trust`           | #6  | Done        | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | Done        | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | #9  | Done        | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes           | `phase-8/bug-fixes`       | #11 | In progress | 2026-10-10 | —          |
+| Phase | Name                  | Branch                       | PR  | Status      | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | ----------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done        | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done        | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done        | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done        | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done        | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done        | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | In progress | 2026-10-10 | —          |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | In progress | 2026-10-10 | —          |
 
 ## Pending owner reviews
 
@@ -669,6 +670,51 @@ a task (and a note in the phase that applies it).
     España were already corrected in Phase 7.
 - **Follow-ups:** —
 
+### Phase 9 — Pet-friendly at scale
+
+- **Scope:** OpenStreetMap dog parks, parks and venues with a dog rule; DENUE restaurants and
+  cafés in Ciudad de México with users' "¿Acepta mascotas?" answers making their policy.
+- **Done when:** a name search in Pet-friendly finds an unanswered restaurant, two phones
+  answering yes make it appear under Restaurantes with "Según usuarios de Paw Mall", and
+  OpenStreetMap is credited on its places.
+- **Branch / PR:** `phase-9/pet-friendly-scale` / #12, stacked on Phase 8 (#11), which stays open
+  for more owner bugs; it merges after #11.
+- **Status:** In progress
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 230 tests (shared 30, api 62, importers 79, mobile 59)
+  - [x] API check on dev data: two "yes, up to mediano" answers on a DENUE taquería publish a
+        users' policy (source `community`, mediano); test answers removed after
+  - [ ] Done-when check on a phone
+- **Notes:**
+  - **Owner decisions (2026-10-10):** unknown venues appear only in name searches and on their
+    page (the chips show confirmed places); 2 phones agreeing, more than disagree, within 365 days.
+  - **DENUE:** SCIAN 7225xx in Ciudad de México only: 45,879 restaurants and 9,862 cafés
+    (722515), no policy until users answer. Names that match the cruelty rule (e.g. "Taquería y
+    Carnicería") are left out, as everywhere. Explorar never shows them (`group` filter).
+  - **Users' answers:** `POST /v1/places/:id/pet-answers` (`takesDogs`, optional `maxDogSize`,
+    `clientId`), table `pet_answers` (migration 0012), one row per phone. Same privacy rule as
+    reports. The policy (source `community`) is published, updated or withdrawn on each answer;
+    its size is the lower median of the sizes given. Venues with an owner, curated or OSM policy
+    answer "¿Sigue siendo así?" instead (409 `POLICY_EXISTS`); non-venues get 409
+    `NOT_A_PET_VENUE`.
+  - **OpenStreetMap:** snapshot `data/osm-dogs-cdmx.json` (54 elements, 2026-10-11; `pnpm
+places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, Col. …" from
+    the nearest colonia), 17 parks and 2 venues; 4 say no to dogs; 2 skipped next to a curated
+    park. ODbL 1.0: credited on each card ("© colaboradores de OpenStreetMap") and in Ajustes, and
+    kept in their own rows (source `osm`). Footpaths tagged dog=* are ignored.
+  - **Duplicates:** DENUE restaurants and cafés within 100 m of a curated or OSM venue of the same
+    kind with a similar name (pg_trgm > 0.4) are hidden (`duplicate_of_curated` / `_osm`),
+    re-checked on every run: 4 hidden (Cardinal ×2, Juana Juana, Q' Pedro Pablo).
+  - Pet-friendly places within 160 km: 34 → 81 before any user answer.
+  - **Test fix (belongs to Phase 8):** `places.test.ts` cleaned up with `external_id LIKE
+'test-%'`, deleting other files' test places when files ran in parallel (a second cause of the
+    flaky Google tests); it now uses `test-places-`.
+- **Follow-ups:**
+  - `pnpm places:enrich-overture` and `pnpm places:check-websites` now also cover 55,741
+    restaurants and cafés; consider limiting website checks to pet businesses before running them.
+  - Answers from abusive phones: no rate limit beyond one answer per place and phone.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -696,3 +742,4 @@ Play readiness").
 | 2026-10-10 | Phase 7 started            | #9  |
 | 2026-10-10 | Phase 7 merged (`146991b`) | #9  |
 | 2026-10-10 | Phase 8 started            | #11 |
+| 2026-10-10 | Phase 9 started            | #12 |

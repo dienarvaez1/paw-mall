@@ -7,6 +7,8 @@
     "NOT_FOUND": "We couldn't find what you're looking for.",
     "PLACE_NOT_FOUND": "We couldn't find this place.",
     "POLICY_NOT_FOUND": "We couldn't find this place's pet policy.",
-    "INTERNAL_ERROR": "Something went wrong on the server."
+    "INTERNAL_ERROR": "Something went wrong on the server.",
+    "POLICY_EXISTS": "This place already has a pet policy.",
+    "NOT_A_PET_VENUE": "You can only answer for restaurants, cafés, lodging, museums and parks."
   }
 }

@@ -7,6 +7,7 @@ import { formatShortDate } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 
+import { PetQuestion } from './pet-question';
 import { usePolicyAnswer } from './policy-answers';
 import { dogsText, feeText, otherPetsTexts, sourceText } from './policy-text';
 
@@ -76,7 +77,12 @@ export function PolicyCard({ placeId, policy }: { placeId: number; policy: PetPo
           </Pressable>
         ) : null}
       </View>
-      <PolicyQuestion placeId={placeId} />
+      {/* Users' policies follow users' answers; the others take "¿Sigue siendo así?". */}
+      {policy.source === 'community' ? (
+        <PetQuestion placeId={placeId} published />
+      ) : (
+        <PolicyQuestion placeId={placeId} />
+      )}
     </View>
   );
 }

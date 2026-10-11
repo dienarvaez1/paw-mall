@@ -58,8 +58,11 @@ export const petPolicyInputSchema = z.object({
 });
 export type PetPolicyInput = z.infer<typeof petPolicyInputSchema>;
 
-/** Who stated the policy: the verified owner, or the team from a public source. */
-export const PET_POLICY_SOURCES = ['owner', 'curated'] as const;
+/**
+ * Who stated the policy: the verified owner, the team from a public source, OpenStreetMap's
+ * contributors, or Paw Mall's users (PET_ANSWERS_TO_PUBLISH phones agreeing).
+ */
+export const PET_POLICY_SOURCES = ['owner', 'curated', 'osm', 'community'] as const;
 export type PetPolicySource = (typeof PET_POLICY_SOURCES)[number];
 
 export const petPolicySchema = petPolicyInputSchema.extend({
@@ -90,3 +93,43 @@ export const policyAnswerSchema = z.strictObject({
   clientId: z.string().regex(/^[A-Za-z0-9-]{16,64}$/),
 });
 export type PolicyAnswer = z.infer<typeof policyAnswerSchema>;
+
+/** Phones that must agree (more of them than disagree) before users' answers make a policy. */
+export const PET_ANSWERS_TO_PUBLISH = 2;
+/** Users' answers older than this no longer count. */
+export const PET_ANSWER_WINDOW_DAYS = 365;
+
+/**
+ * "¿Acepta mascotas?" on a pet-friendly venue without a policy from its owner or a source: does it
+ * take dogs, and if so the largest dog the user saw allowed (null: doesn't know). Same privacy
+ * rule as reports: only the answer and the app's random id.
+ */
+export const petAnswerSchema = z.strictObject({
+  takesDogs: z.boolean(),
+  maxDogSize: z.enum(DOG_SIZES).nullable().optional(),
+  clientId: z.string().regex(/^[A-Za-z0-9-]{16,64}$/),
+});
+export type PetAnswer = z.infer<typeof petAnswerSchema>;
+
+/**
+ * The policy users' answers support, or null while they don't: PET_ANSWERS_TO_PUBLISH phones
+ * saying the same, more than say the opposite. The size is the lower median of the sizes given
+ * with a yes, so one generous answer can't open it to larger dogs; null when none gave a size.
+ */
+export function communityPolicy(
+  answers: readonly Pick<PetAnswer, 'takesDogs' | 'maxDogSize'>[],
+): { dogs: boolean; maxDogSize: DogSize | null } | null {
+  const yes = answers.filter((a) => a.takesDogs);
+  const no = answers.length - yes.length;
+  if (yes.length >= PET_ANSWERS_TO_PUBLISH && yes.length > no) {
+    const sizes = yes
+      .map((a) => a.maxDogSize)
+      .filter((size) => size != null)
+      .map((size) => DOG_SIZES.indexOf(size))
+      .sort((a, b) => a - b);
+    const median = sizes[Math.floor((sizes.length - 1) / 2)];
+    return { dogs: true, maxDogSize: median === undefined ? null : DOG_SIZES[median]! };
+  }
+  if (no >= PET_ANSWERS_TO_PUBLISH && no > yes.length) return { dogs: false, maxDogSize: null };
+  return null;
+}
