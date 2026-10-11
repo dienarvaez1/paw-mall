@@ -41,7 +41,7 @@ type ExploreView = {
   saveMapView: (region: Region) => void;
   /**
    * How the user said to read a search text that is a place's name ("Tlaxcala"): as the place
-   * (search around it, "Mi ubicación" off and disabled) or as a business name.
+   * (search around it, "Mi ubicación" turned off) or as a business name.
    */
   placeChoice: PlaceChoice | null;
 };
@@ -120,7 +120,7 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
 /**
  * A search text that is exactly a city's, colonia's or landmark's name ("Tlaxcala") could also be
  * a business name, so the app asks once how to read it (owner's rule). As a place: the search
- * goes around it and "Mi ubicación" turns off (disabled until the text changes). As a name: only
+ * goes around it and "Mi ubicación" turns off (turning it back on clears the text). As a name: only
  * business names match. One dialog for both tabs, since the text is shared.
  */
 function usePlaceQuestion(

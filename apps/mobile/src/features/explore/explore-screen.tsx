@@ -48,7 +48,7 @@ import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 import { useOnWake } from '@/lib/use-on-wake';
 
-import { readsAsPlace, useExploreView } from './explore-view';
+import { useExploreView } from './explore-view';
 
 // Mapa first, then Lista (owner's order).
 const MODES = ['map', 'list'] as const;
@@ -95,10 +95,7 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   // Mi ubicación on: business names around the user; off: the search text names an area.
   // The circle's center (focus) is a tapped cluster or a hand pan, until "Mi ubicación" brings
   // it back to the user.
-  const { mode, setMode, nearMe, setNearMe, text, setText, focus, setFocus, placeChoice } =
-    useExploreView();
-  // The text was confirmed as a place: "Mi ubicación" stays off until the text changes.
-  const nearMeDisabled = readsAsPlace(placeChoice, text) === true;
+  const { mode, setMode, nearMe, setNearMe, text, setText, focus, setFocus } = useExploreView();
   const [category, setCategory] = useState<ChipCategory>(null);
   // Ajustes has the last word on the radius (owner's rule): the radius button, a zoom by hand
   // (exactly as zoomed) and a tapped cluster all save their radius there.
@@ -155,7 +152,6 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
         ))}
         <NearMeButton
           nearMe={nearMe}
-          disabled={nearMeDisabled}
           onToggle={() => {
             setFocus(null);
             // Turning it on starts over around the user: the search box empties and the radius
@@ -944,15 +940,7 @@ function RadiusButton({ className }: { className: string }) {
  * "Mi ubicación": off, the search text names an area to search around ("Zócalo"); on, it
  * searches business names around the user within the chosen radius.
  */
-function NearMeButton({
-  nearMe,
-  disabled,
-  onToggle,
-}: {
-  nearMe: boolean;
-  disabled: boolean;
-  onToggle: () => void;
-}) {
+function NearMeButton({ nearMe, onToggle }: { nearMe: boolean; onToggle: () => void }) {
   const { t } = useAppTranslation();
   const scheme = useColorScheme();
   // Just the icon; screen readers announce "Mi ubicación" and whether it's on.
@@ -960,14 +948,13 @@ function NearMeButton({
     <Pressable
       accessibilityRole="switch"
       accessibilityLabel={t('places.nearMe')}
-      accessibilityState={{ checked: nearMe, disabled }}
+      accessibilityState={{ checked: nearMe }}
       accessibilityHint={t('places.nearMeHint')}
       onPress={onToggle}
-      disabled={disabled}
       hitSlop={BUTTON_HIT_SLOP}
       className={`h-[35px] w-[35px] items-center justify-center rounded-full border ${
         nearMe ? 'border-paw bg-paw' : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
-      } ${disabled ? 'opacity-40' : ''}`}
+      }`}
     >
       <Image
         source={ICONS.locate}
