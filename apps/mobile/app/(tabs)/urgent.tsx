@@ -11,7 +11,7 @@ import { useExploreView } from '@/features/explore/explore-view';
 import { useUserLocation } from '@/features/location/location-context';
 import { useDebounced } from '@/lib/use-debounced';
 import { useSettings } from '@/features/settings/settings-context';
-import { formatDistance } from '@/i18n/format';
+import { formatCount, formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 import { phoneUrl } from '@/lib/links';
@@ -33,6 +33,8 @@ export default function UrgentScreen() {
   const { nearMe, text } = useExploreView();
   const urgent = useUrgentPlaces(location.coords, useDebounced(text.trim(), SEARCH_DEBOUNCE_MS));
   const area = urgent.data?.area ?? null;
+  const locale = useLocale();
+  const { units } = useSettings();
 
   return (
     <View className="flex-1 bg-white dark:bg-neutral-950">
@@ -53,9 +55,14 @@ export default function UrgentScreen() {
           ItemSeparatorComponent={() => <View className="h-3" />}
           contentContainerClassName="p-4"
           ListHeaderComponent={
-            area ? (
+            // A searched area with results: the same summary as Explorar's ("8 lugares a menos de
+            // 3 mi de Xochimilco").
+            area && urgent.data.items.length > 0 ? (
               <Text className="pb-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
-                {t('urgent.nearArea', {
+                {t('places.areaCount', {
+                  count: urgent.data.items.length,
+                  total: formatCount(urgent.data.items.length, locale),
+                  distance: formatDistance(area.radiusKm, locale, units),
                   area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
                 })}
               </Text>
