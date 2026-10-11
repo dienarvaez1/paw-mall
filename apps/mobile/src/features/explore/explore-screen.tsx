@@ -106,6 +106,9 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   return (
     <View className="flex-1 bg-white dark:bg-neutral-950">
       <View className="px-4 pt-3">
+        <Text className="pb-3 text-sm text-neutral-600 dark:text-neutral-300">
+          {t(section === 'pet_friendly' ? 'places.introPetFriendly' : 'places.introExplore')}
+        </Text>
         <SearchInput
           value={text}
           onChangeText={setText}
@@ -347,11 +350,6 @@ function PlacesList({
         }}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
-        ListHeaderComponent={
-          <Text className="pb-3 text-sm text-neutral-600 dark:text-neutral-300">
-            {t(group === 'pet_friendly' ? 'places.introPetFriendly' : 'places.introExplore')}
-          </Text>
-        }
         ListEmptyComponent={
           name ? (
             <EmptyState
