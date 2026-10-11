@@ -15,5 +15,6 @@
   },
   "approximateLocation": "Usando una ubicación aproximada: Ciudad de México",
   "aboutSectionHint": "Muestra de qué trata esta sección",
-  "close": "Cerrar"
+  "close": "Cerrar",
+  "hideKeyboard": "Ocultar teclado"
 }

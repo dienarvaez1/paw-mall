@@ -15,5 +15,6 @@
   },
   "approximateLocation": "Using an approximate location: Mexico City",
   "aboutSectionHint": "Shows what this section is about",
-  "close": "Close"
+  "close": "Close",
+  "hideKeyboard": "Hide keyboard"
 }
