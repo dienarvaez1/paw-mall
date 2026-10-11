@@ -1,5 +1,7 @@
 import {
   AREA_NAME_RADIUS_KM,
+  CITY_AREA_RADIUS_KM,
+  CITY_BUSY_MATCHES,
   type Category,
   type CategorySlug,
   DEFAULT_LOCALE,
@@ -222,7 +224,7 @@ export async function listPlaces(
   return { ...result, area: search.area, searchCategory: search.category };
 }
 
-type SearchQuery = {
+type SearchQuery = PlaceFilters & {
   q?: string;
   namesOnly?: boolean;
   lat: number;
@@ -255,6 +257,20 @@ async function interpretSearch(db: Database, query: SearchQuery) {
     }
   }
   const { category, words } = detectCategory(text);
+  // A city or town (not a colonia or landmark) with more than CITY_BUSY_MATCHES matches: 3 mi
+  // around it (owner's rule), counted with the search's filters.
+  if (area && (area.kind === 'municipality' || area.kind === 'town')) {
+    const matches = await countPlaces(db, [
+      visibleSql,
+      searchCircleSql(point, CITY_AREA_RADIUS_KM, namedAfter),
+      ...filterConditions({ ...query, category: query.category ?? category ?? undefined }),
+      ...(words ? [allWordsSql(words)] : []),
+    ]);
+    if (matches > CITY_BUSY_MATCHES) {
+      radiusKm = CITY_AREA_RADIUS_KM;
+      area = { ...area, radiusKm };
+    }
+  }
   return { point, radiusKm, area, category, words, namedAfter };
 }
 

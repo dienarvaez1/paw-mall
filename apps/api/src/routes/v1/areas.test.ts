@@ -1,4 +1,4 @@
-import { placeListResponseSchema, placeMapResponseSchema } from '@paw-mall/shared';
+import { KM_PER_MILE, placeListResponseSchema, placeMapResponseSchema } from '@paw-mall/shared';
 import postgres from 'postgres';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
@@ -72,6 +72,17 @@ describe('searching an area', () => {
     // With a business word too, only the town's own circle counts.
     const vets = await search('veterinaria en pueblo nombre paw');
     expect(vets.items.map((p) => p.name)).toEqual(['Veterinaria del Centro']);
+  });
+
+  it('narrows a busy city or town to 3 miles, but not a quiet one or a landmark', async () => {
+    await addArea('municipality', 'Ciudad Llena Paw', 400);
+    for (let i = 0; i < 11; i += 1)
+      await addPlace(`busy-${i}`, `Veterinaria Llena ${i}`, 400.2 + i * 0.3);
+    const busy = await search('ciudad llena paw');
+    expect(busy.area).toMatchObject({ kind: 'municipality', radiusKm: 3 * KM_PER_MILE });
+    expect(busy.total).toBe(11);
+    // Pueblo Nombre Paw has one place nearby: the usual 5 km.
+    expect((await search('pueblo nombre paw')).area?.radiusKm).toBe(5);
   });
 
   it('moves the search to the area, within 5 km of it, leaving the radius setting alone', async () => {
