@@ -682,7 +682,7 @@ a task (and a note in the phase that applies it).
 - **Status:** In progress
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
-  - [x] `pnpm test`: 230 tests (shared 30, api 62, importers 79, mobile 59)
+  - [x] `pnpm test`: 231 tests (shared 30, api 63, importers 79, mobile 59)
   - [x] API check on dev data: two "yes, up to mediano" answers on a DENUE taquería publish a
         users' policy (source `community`, mediano); test answers removed after
   - [ ] Done-when check on a phone
@@ -707,6 +707,10 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
     kind with a similar name (pg_trgm > 0.4) are hidden (`duplicate_of_curated` / `_osm`),
     re-checked on every run: 4 hidden (Cardinal ×2, Juana Juana, Q' Pedro Pablo).
   - Pet-friendly places within 160 km: 34 → 81 before any user answer.
+  - **Fixed after the first phone try:** the Pet-friendly tab showed "Algo salió mal": the
+    place `source` enum in `packages/shared` lacked `osm`, so every list with an OpenStreetMap
+    place failed validation in the app. Added it, an OSM credit line on the place page and list,
+    and an API test that lists an OSM place.
   - **Test fix (belongs to Phase 8):** `places.test.ts` cleaned up with `external_id LIKE
 'test-%'`, deleting other files' test places when files ran in parallel (a second cause of the
     flaky Google tests); it now uses `test-places-`.

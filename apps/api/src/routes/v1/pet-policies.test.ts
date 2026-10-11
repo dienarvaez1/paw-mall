@@ -112,6 +112,26 @@ describe('pet-friendly filter', () => {
     expect(await names({ group: 'pet_business' })).toEqual([]);
   });
 
+  it('lists OpenStreetMap places with their policy', async () => {
+    const [row] = await sql<{ id: number }[]>`
+      INSERT INTO places (source, external_id, name, address, city, state, location)
+      VALUES ('osm', 'test-pets-osm', 'Parque canino', 'Col. Prueba', 'Ciudad', 'Estado',
+              ST_SetSRID(ST_MakePoint(-131, 3), 4326)::geography)
+      RETURNING id`;
+    await sql`
+      INSERT INTO pet_policies (place_id, dogs, max_dog_size, source, source_name, source_url,
+                                last_confirmed_on)
+      VALUES (${row!.id}, true, 'large', 'osm', 'OpenStreetMap',
+              'https://www.openstreetmap.org/node/1', '2026-10-11')`;
+    const response = await app.request(
+      '/v1/places?lat=3&lng=-131&radiusKm=1&petFriendly=true',
+      {},
+      testEnv,
+    );
+    const body = placeListResponseSchema.parse(await response.json());
+    expect(body.items[0]).toMatchObject({ source: 'osm', petPolicy: { source: 'osm' } });
+  });
+
   it('returns the policy with its source and last confirmation', async () => {
     const response = await app.request(`/v1/places/${ids.medium}`, {}, testEnv);
     const place = placeSchema.parse(await response.json());

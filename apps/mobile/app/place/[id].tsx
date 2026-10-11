@@ -157,6 +157,13 @@ function PlaceDetail({ place: p }: { place: Place }) {
           </Text>
         </View>
       ) : null}
+      {p.source === 'osm' ? (
+        <View className="gap-1 px-4 pt-6">
+          <Text className="text-xs text-neutral-500 dark:text-neutral-400">
+            {t('places.sourceOsm')}
+          </Text>
+        </View>
+      ) : null}
     </ScrollView>
   );
 }

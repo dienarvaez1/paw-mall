@@ -19,7 +19,14 @@ export const categoryListResponseSchema = z.object({ items: z.array(categorySche
 export type CategoryListResponse = z.infer<typeof categoryListResponseSchema>;
 
 /** Where a value came from. Owner-verified values always win over the others. */
-export const valueSourceSchema = z.enum(['denue', 'overture', 'owner', 'shoppers', 'curated']);
+export const valueSourceSchema = z.enum([
+  'denue',
+  'overture',
+  'owner',
+  'shoppers',
+  'curated',
+  'osm',
+]);
 export type ValueSource = z.infer<typeof valueSourceSchema>;
 
 export const placeSchema = z.object({

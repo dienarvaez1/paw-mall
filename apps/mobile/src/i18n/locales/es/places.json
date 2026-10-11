@@ -235,5 +235,6 @@
       "thanks": "Gracias. Cuando {{count}} personas coincidan, aparecerá en Pet-friendly.",
       "thanksCounted": "Gracias. Tu respuesta ya cuenta."
     }
-  }
+  },
+  "sourceOsm": "Datos: © colaboradores de OpenStreetMap (ODbL)."
 }

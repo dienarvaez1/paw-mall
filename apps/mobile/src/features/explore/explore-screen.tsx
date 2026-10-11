@@ -637,24 +637,35 @@ function PlaceMarker({
   );
 }
 
-/** INEGI's terms ask for attribution wherever DENUE data is shown; includes the edition date. */
+/**
+ * INEGI's terms ask for attribution wherever DENUE data is shown (with the edition date), and
+ * OpenStreetMap's license wherever its data is.
+ */
 function SourceNote({ places }: { places: Place[] }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const denue = places.find((place) => place.source === 'denue');
-  if (!denue) return null;
+  const osm = places.some((place) => place.source === 'osm');
+  if (!denue && !osm) return null;
   const overture = places.some(
     (p) => p.phoneSource === 'overture' || p.websiteSource === 'overture' || p.socialUrl,
   );
   return (
     <View className="gap-1 px-4 py-4">
-      <Text className="text-center text-xs text-neutral-500 dark:text-neutral-400">
-        {denue.sourceUpdatedOn
-          ? t('places.sourceDenueUpdated', {
-              date: formatMonthYear(denue.sourceUpdatedOn, locale),
-            })
-          : t('places.sourceDenue')}
-      </Text>
+      {denue ? (
+        <Text className="text-center text-xs text-neutral-500 dark:text-neutral-400">
+          {denue.sourceUpdatedOn
+            ? t('places.sourceDenueUpdated', {
+                date: formatMonthYear(denue.sourceUpdatedOn, locale),
+              })
+            : t('places.sourceDenue')}
+        </Text>
+      ) : null}
+      {osm ? (
+        <Text className="text-center text-xs text-neutral-500 dark:text-neutral-400">
+          {t('places.sourceOsm')}
+        </Text>
+      ) : null}
       {overture ? (
         <Text className="text-center text-xs text-neutral-500 dark:text-neutral-400">
           {t('places.sourceOverture')}
