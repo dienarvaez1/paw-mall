@@ -85,7 +85,12 @@ function filterConditions(filters: PlaceFilters): SQL[] {
       ? sql`(p.name IS NOT NULL AND lower(f_unaccent(p.name)) NOT LIKE '%sin nombre%')`
       : null,
     filters.openNow ? sql`${openNowSql} IS TRUE` : null,
-    filters.petFriendly ? petFriendlySql(filters) : null,
+    filters.petFriendly
+      ? filters.withUnconfirmed
+        ? sql`(${petFriendlySql(filters)}
+             OR NOT EXISTS (SELECT 1 FROM pet_policies pp WHERE pp.place_id = p.id))`
+        : petFriendlySql(filters)
+      : null,
   ].filter((condition) => condition !== null);
 }
 

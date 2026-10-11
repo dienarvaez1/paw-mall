@@ -103,6 +103,8 @@ const placeFilters = {
    * taking that species, and dogs of that size.
    */
   petFriendly: z.stringbool().optional(),
+  /** With petFriendly: also venues without a pet policy yet (never those that say no). */
+  withUnconfirmed: z.stringbool().optional(),
   petSpecies: z.enum(PET_SPECIES).optional(),
   dogSize: z.enum(DOG_SIZES).optional(),
 };

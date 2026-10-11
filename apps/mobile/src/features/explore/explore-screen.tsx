@@ -91,9 +91,10 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   // Pet-friendly "Todos", Restaurantes, Cafés and Hospedaje: only places whose pet policy takes
   // pets, narrowed by the pet profile. Museos and Parques list every place, including a no.
   const petFriendly =
-    section === 'pet_friendly' &&
-    (category === null || isPetFilterCategory(category)) &&
-    !includeUnconfirmed;
+    section === 'pet_friendly' && (category === null || isPetFilterCategory(category));
+  // Ajustes "Solo lugares confirmados" off, or a widened search: unanswered venues too.
+  const { onlyConfirmedPetPlaces } = useSettings();
+  const withUnconfirmed = petFriendly && (!onlyConfirmedPetPlaces || includeUnconfirmed);
   useDismissKeyboardOnBlur();
 
   return (
@@ -156,9 +157,10 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           customRadiusKm={customRadiusKm}
           petFriendly={petFriendly}
           group={section}
+          withUnconfirmed={withUnconfirmed}
           widened={includeUnconfirmed ? (widenedFor?.auto ? 'auto' : 'manual') : null}
           onWiden={
-            section === 'pet_friendly' && name !== '' && petFriendly
+            name !== '' && petFriendly && !withUnconfirmed
               ? (auto) => setWidenedFor({ name, auto })
               : undefined
           }
@@ -171,6 +173,7 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           customRadiusKm={customRadiusKm}
           petFriendly={petFriendly}
           group={section}
+          withUnconfirmed={withUnconfirmed}
           onZoomByHand={setCustomRadiusKm}
           onLeaveMyLocation={() => setNearMe(false)}
         />
@@ -242,6 +245,7 @@ function PlacesList({
   customRadiusKm,
   petFriendly,
   group,
+  withUnconfirmed,
   widened,
   onWiden,
 }: {
@@ -251,6 +255,7 @@ function PlacesList({
   customRadiusKm: number | null;
   petFriendly: boolean;
   group: CategoryGroup;
+  withUnconfirmed: boolean;
   /** Pet-friendly search widened to unanswered venues: by the user, or because none matched. */
   widened: 'auto' | 'manual' | null;
   /** Pet-friendly search: widen it to venues nobody has answered for yet. */
@@ -268,6 +273,7 @@ function PlacesList({
     customRadiusKm,
     petFriendly,
     group,
+    withUnconfirmed,
   );
   const petMode = petFriendly || isPetFriendlyCategory(category);
   const area = places.data?.pages[0]?.area ?? null;
@@ -375,6 +381,7 @@ function PlacesMap({
   customRadiusKm,
   petFriendly,
   group,
+  withUnconfirmed,
   onZoomByHand,
   onLeaveMyLocation,
 }: {
@@ -384,6 +391,7 @@ function PlacesMap({
   customRadiusKm: number | null;
   petFriendly: boolean;
   group: CategoryGroup;
+  withUnconfirmed: boolean;
   /** The radius of the view after the user zoomed or panned the map by hand. */
   onZoomByHand: (radiusKm: number) => void;
   /** The user moved the map away from their location by hand: "Mi ubicación" turns off. */
@@ -477,6 +485,7 @@ function PlacesMap({
     customRadiusKm,
     petFriendly,
     group,
+    withUnconfirmed,
   );
   const petMode = petFriendly || isPetFriendlyCategory(category);
   // A searched area ("Zócalo") moves the circle there with its own radius; otherwise the circle is

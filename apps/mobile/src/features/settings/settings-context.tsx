@@ -29,6 +29,8 @@ type Settings = {
   petSpecies: PetSpecies | null;
   /** The dog's size, for dogs; null when not set. */
   dogSize: DogSize | null;
+  /** Pet-friendly shows only places confirmed to take pets; off, also unanswered venues. */
+  onlyConfirmedPetPlaces: boolean;
 };
 type SettingsContextValue = Settings & {
   setRadiusKm: (radiusKm: number) => void;
@@ -40,6 +42,7 @@ type SettingsContextValue = Settings & {
   setOnlyOpenNow: (onlyOpenNow: boolean) => void;
   setPetSpecies: (petSpecies: PetSpecies | null) => void;
   setDogSize: (dogSize: DogSize | null) => void;
+  setOnlyConfirmedPetPlaces: (onlyConfirmedPetPlaces: boolean) => void;
 };
 
 const STORAGE_KEY = 'settings.preferences';
@@ -53,6 +56,7 @@ const DEFAULTS: Settings = {
   onlyOpenNow: false,
   petSpecies: null,
   dogSize: null,
+  onlyConfirmedPetPlaces: true,
 };
 
 /**
@@ -80,6 +84,7 @@ export function parseSettings(raw: string | null): Settings {
       dogSize: (DOG_SIZES as readonly unknown[]).includes(value.dogSize)
         ? (value.dogSize as DogSize)
         : null,
+      onlyConfirmedPetPlaces: value.onlyConfirmedPetPlaces !== false,
     };
   } catch {
     return DEFAULTS;
@@ -97,6 +102,7 @@ const SettingsContext = createContext<SettingsContextValue>({
   setOnlyOpenNow: () => {},
   setPetSpecies: () => {},
   setDogSize: () => {},
+  setOnlyConfirmedPetPlaces: () => {},
 });
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
@@ -127,6 +133,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setOnlyOpenNow: (onlyOpenNow) => update({ onlyOpenNow }),
       setPetSpecies: (petSpecies) => update({ petSpecies }),
       setDogSize: (dogSize) => update({ dogSize }),
+      setOnlyConfirmedPetPlaces: (onlyConfirmedPetPlaces) => update({ onlyConfirmedPetPlaces }),
     };
   }, [settings]);
 
@@ -143,7 +150,7 @@ export function useSettings() {
  * Explorar toggle, or a pet-friendly category chip), only places whose policy takes pets, and the
  * pet profile narrows them: a cat, or a dog of that size.
  */
-export function usePlaceFilters(petFriendly = false) {
+export function usePlaceFilters(petFriendly = false, withUnconfirmed = false) {
   const {
     onlyWithPhone,
     onlyWithWebsite,
@@ -160,7 +167,7 @@ export function usePlaceFilters(petFriendly = false) {
       withSocial: onlyWithSocial || undefined,
       named: hideUnnamed || undefined,
       openNow: onlyOpenNow || undefined,
-      ...petProfileFilters(petFriendly, petSpecies, dogSize),
+      ...petProfileFilters(petFriendly, petSpecies, dogSize, withUnconfirmed),
     }),
     [
       onlyWithPhone,
@@ -169,21 +176,32 @@ export function usePlaceFilters(petFriendly = false) {
       hideUnnamed,
       onlyOpenNow,
       petFriendly,
+      withUnconfirmed,
       petSpecies,
       dogSize,
     ],
   );
 }
 
-/** The pet-friendly API parameters; the dog size counts only for dogs. */
+/**
+ * The pet-friendly API parameters; the dog size counts only for dogs. `withUnconfirmed` adds
+ * venues without a policy yet.
+ */
 export function petProfileFilters(
   petFriendly: boolean,
   petSpecies: PetSpecies | null,
   dogSize: DogSize | null,
-): { petFriendly?: true; petSpecies?: PetSpecies; dogSize?: DogSize } {
+  withUnconfirmed = false,
+): {
+  petFriendly?: true;
+  withUnconfirmed?: true;
+  petSpecies?: PetSpecies;
+  dogSize?: DogSize;
+} {
   if (!petFriendly) return {};
   return {
     petFriendly: true,
+    ...(withUnconfirmed ? { withUnconfirmed: true as const } : {}),
     ...(petSpecies ? { petSpecies } : {}),
     ...(petSpecies === 'dog' && dogSize ? { dogSize } : {}),
   };

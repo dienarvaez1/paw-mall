@@ -35,6 +35,8 @@
       "small": "Pequeño (hasta 10 kg)",
       "medium": "Mediano (10 a 25 kg)",
       "large": "Grande (más de 25 kg)"
-    }
+    },
+    "onlyConfirmed": "Solo lugares confirmados",
+    "onlyConfirmedHint": "Apagado, Pet-friendly también muestra restaurantes y cafés que nadie ha confirmado todavía (nunca los que dicen que no)."
   }
 }

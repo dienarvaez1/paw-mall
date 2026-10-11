@@ -682,7 +682,7 @@ a task (and a note in the phase that applies it).
 - **Status:** In progress
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
-  - [x] `pnpm test`: 231 tests (shared 30, api 63, importers 79, mobile 59)
+  - [x] `pnpm test`: 232 tests (shared 30, api 64, importers 79, mobile 59)
   - [x] API check on dev data: two "yes, up to mediano" answers on a DENUE taquería publish a
         users' policy (source `community`, mediano); test answers removed after
   - [ ] Done-when check on a phone
@@ -692,6 +692,9 @@ a task (and a note in the phase that applies it).
     confirmar" under the count to widen them to unanswered venues; when no confirmed place matches
     (e.g. "taco"), the search widens by itself, with a notice. Unanswered venues' pages ask
     "¿Acepta mascotas?".
+  - **Ajustes → Mi mascota → "Solo lugares confirmados"** (on by default): off, Pet-friendly also
+    lists venues without a policy yet, never those that say no (API `withUnconfirmed=true` with
+    `petFriendly=true`; a widened search uses the same filter).
   - **DENUE:** SCIAN 7225xx in Ciudad de México only: 45,879 restaurants and 9,862 cafés
     (722515), no policy until users answer. Names that match the cruelty rule (e.g. "Taquería y
     Carnicería") are left out, as everywhere. Explorar never shows them (`group` filter).

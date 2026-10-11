@@ -68,6 +68,12 @@ export default function SettingsScreen() {
             onPress={() => settings.setPetSpecies(species)}
           />
         ))}
+        <SwitchRow
+          label={t('settings.pet.onlyConfirmed')}
+          hint={t('settings.pet.onlyConfirmedHint')}
+          value={settings.onlyConfirmedPetPlaces}
+          onChange={settings.setOnlyConfirmedPetPlaces}
+        />
       </Section>
 
       {settings.petSpecies === 'dog' ? (

@@ -8,7 +8,7 @@ describe('parseSettings', () => {
   it('reads stored values', () => {
     expect(
       parseSettings(
-        '{"radiusKm":25,"units":"km","onlyWithPhone":true,"onlyWithWebsite":true,"onlyWithSocial":true,"hideUnnamed":true,"onlyOpenNow":true,"petSpecies":"dog","dogSize":"large"}',
+        '{"radiusKm":25,"units":"km","onlyWithPhone":true,"onlyWithWebsite":true,"onlyWithSocial":true,"hideUnnamed":true,"onlyOpenNow":true,"petSpecies":"dog","dogSize":"large","onlyConfirmedPetPlaces":false}',
       ),
     ).toEqual({
       radiusKm: 25,
@@ -20,6 +20,7 @@ describe('parseSettings', () => {
       onlyOpenNow: true,
       petSpecies: 'dog',
       dogSize: 'large',
+      onlyConfirmedPetPlaces: false,
     });
     const miles = parseSettings(`{"radiusKm":${10 * 1.609344},"units":"mi"}`);
     expect(miles.units).toBe('mi');
@@ -43,6 +44,7 @@ describe('parseSettings', () => {
       onlyOpenNow: false,
       petSpecies: null,
       dogSize: null,
+      onlyConfirmedPetPlaces: true,
     };
     expect(parseSettings(null)).toEqual(defaults);
     expect(
@@ -56,6 +58,11 @@ describe('petProfileFilters', () => {
   it('sends the profile only with the pet-friendly filter on', () => {
     expect(petProfileFilters(false, 'dog', 'large')).toEqual({});
     expect(petProfileFilters(true, null, null)).toEqual({ petFriendly: true });
+    expect(petProfileFilters(true, null, null, true)).toEqual({
+      petFriendly: true,
+      withUnconfirmed: true,
+    });
+    expect(petProfileFilters(false, null, null, true)).toEqual({});
     expect(petProfileFilters(true, 'dog', 'large')).toEqual({
       petFriendly: true,
       petSpecies: 'dog',

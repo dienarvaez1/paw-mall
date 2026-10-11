@@ -80,6 +80,24 @@ describe('pet-friendly filter', () => {
     ]);
   });
 
+  it('with unconfirmed places, adds venues without a policy, never those that say no', async () => {
+    expect(await names({ petFriendly: 'true', withUnconfirmed: 'true' })).toEqual([
+      'Café Gatos',
+      'Café Perros',
+      'Hotel Grande',
+      'Hotel Mediano',
+      'Restaurante Sin Política',
+    ]);
+    expect(
+      await names({
+        petFriendly: 'true',
+        petSpecies: 'dog',
+        dogSize: 'large',
+        withUnconfirmed: 'true',
+      }),
+    ).toEqual(['Hotel Grande', 'Restaurante Sin Política']);
+  });
+
   it('with a "perro grande" profile, keeps only places that allow large dogs', async () => {
     expect(await names({ petFriendly: 'true', petSpecies: 'dog', dogSize: 'large' })).toEqual([
       'Hotel Grande',

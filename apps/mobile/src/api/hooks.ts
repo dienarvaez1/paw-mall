@@ -44,10 +44,12 @@ export function usePlaces(
   petFriendly = false,
   /** The tab's section: pet businesses (Explorar) or pet-friendly venues. */
   group?: CategoryGroup,
+  /** With petFriendly: also venues without a pet policy yet. */
+  withUnconfirmed = false,
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters(petFriendly);
+  const filters = usePlaceFilters(petFriendly, withUnconfirmed);
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
@@ -103,10 +105,12 @@ export function usePlacesMap(
   customRadiusKm: number | null = null,
   petFriendly = false,
   group?: CategoryGroup,
+  /** With petFriendly: also venues without a pet policy yet. */
+  withUnconfirmed = false,
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters(petFriendly);
+  const filters = usePlaceFilters(petFriendly, withUnconfirmed);
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
