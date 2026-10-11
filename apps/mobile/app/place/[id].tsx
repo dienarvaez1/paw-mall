@@ -10,6 +10,7 @@ import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { ErrorState, SkeletonList } from '@/components/states';
 import { GoogleHours } from '@/features/google/google-hours';
+import { PolicyCard } from '@/features/pet-policy/policy-card';
 import { useReportPlace } from '@/features/reports/place-reports';
 import { formatClockTime, formatDate, formatMonthYear, formatWeekday } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -101,6 +102,8 @@ function PlaceDetail({ place: p }: { place: Place }) {
         ) : null}
       </View>
 
+      {p.petPolicy ? <PolicyCard placeId={p.id} policy={p.petPolicy} /> : null}
+
       <HoursSection place={p} />
 
       <View className="gap-3 px-4 pt-8">
@@ -140,6 +143,13 @@ function PlaceDetail({ place: p }: { place: Place }) {
               {t('places.sourceOverture')}
             </Text>
           ) : null}
+        </View>
+      ) : null}
+      {p.source === 'curated' ? (
+        <View className="gap-1 px-4 pt-6">
+          <Text className="text-xs text-neutral-500 dark:text-neutral-400">
+            {t('places.sourceCurated')}
+          </Text>
         </View>
       ) : null}
     </ScrollView>

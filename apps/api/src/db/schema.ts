@@ -1,11 +1,12 @@
 // Database schema. Kept free of relative imports (and value imports from packages) so the
 // importers can load it with plain Node.
-import type { PlaceHours } from '@paw-mall/shared';
+import type { PetFee, PetPolicyInput, PlaceHours } from '@paw-mall/shared';
 import { sql } from 'drizzle-orm';
 import {
   boolean,
   customType,
   date,
+  doublePrecision,
   index,
   integer,
   jsonb,
@@ -190,12 +191,66 @@ export const placeClaims = pgTable(
     hours: jsonb().$type<PlaceHours>(),
     open24h: boolean(),
     acceptsEmergencies: boolean(),
+    /** Pet-friendly venues: the pets they take (PetPolicyInput in packages/shared). */
+    petPolicy: jsonb().$type<PetPolicyInput>(),
     contactName: text(),
     contact: text(),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     decidedAt: timestamp({ withTimezone: true }),
   },
   (t) => [index('place_claims_status_idx').on(t.status)],
+);
+
+/**
+ * What pets a venue takes (Phase 6), from the verified owner or a curated public source. Owner
+ * policies always win: curated imports never overwrite them.
+ */
+export const petPolicies = pgTable('pet_policies', {
+  placeId: integer()
+    .primaryKey()
+    .references(() => places.id, { onDelete: 'cascade' }),
+  dogs: boolean(),
+  cats: boolean(),
+  otherPets: boolean(),
+  /** small | medium | large: the largest dog allowed ('large' with no weight limit: any size). */
+  maxDogSize: text(),
+  maxWeightKg: doublePrecision(),
+  maxPets: smallint(),
+  /** Null when the source doesn't say; amount 0 is free. */
+  fee: jsonb().$type<PetFee>(),
+  /** indoor, terrace, outdoor; empty when unknown. */
+  areas: text()
+    .array()
+    .notNull()
+    .default(sql`'{}'::text[]`),
+  rules: text(),
+  /** 'owner' or 'curated'. */
+  source: text().notNull(),
+  sourceName: text(),
+  sourceUrl: text(),
+  /** When the source was checked, the owner's claim approved, or a shopper last confirmed it. */
+  lastConfirmedOn: date({ mode: 'string' }).notNull(),
+  /** Set when enough phones disputed it; cleared or removed by `pnpm places:policies`. */
+  reviewSince: timestamp({ withTimezone: true }),
+});
+
+/**
+ * Shoppers confirming a pet policy still holds or saying it changed, one answer per phone (the
+ * latest wins). Privacy as with reports: only the answer, the date and the app's random id.
+ */
+export const policyAnswers = pgTable(
+  'policy_answers',
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    placeId: integer()
+      .notNull()
+      .references(() => places.id, { onDelete: 'cascade' }),
+    /** 'confirm' or 'dispute'. */
+    answer: text().notNull(),
+    clientId: text().notNull(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('policy_answers_place_client_idx').on(t.placeId, t.clientId)],
 );
 
 /**

@@ -2,6 +2,9 @@ import {
   type Category,
   type CategorySlug,
   DEFAULT_LOCALE,
+  DOG_SIZES,
+  type PetPolicy,
+  POLICY_ANSWER_WINDOW_DAYS,
   type Locale,
   type Place,
   type PlaceCluster,
@@ -42,6 +45,27 @@ const liveWebsiteSql = sql`(p.website IS NOT NULL AND
 /** Open now by confirmed hours: true, false or NULL (unknown). Places `p`, vet_details `v`. */
 const openNowSql = sql`place_open_now(p.hours, v.open24h, v.open24h_source, now())`;
 
+/**
+ * Places whose pet policy takes pets and isn't under review; with the pet profile, only those
+ * taking that species, and dogs of that size or larger.
+ */
+function petFriendlySql(filters: PlaceFilters): SQL {
+  const sizes = filters.dogSize ? DOG_SIZES.slice(DOG_SIZES.indexOf(filters.dogSize)) : null;
+  const takes =
+    filters.petSpecies === 'cat'
+      ? sql`pp.cats IS TRUE`
+      : filters.petSpecies === 'dog'
+        ? sizes
+          ? sql`pp.dogs IS TRUE AND pp.max_dog_size IN (${sql.join(
+              sizes.map((size) => sql`${size}`),
+              sql`, `,
+            )})`
+          : sql`pp.dogs IS TRUE`
+        : sql`(pp.dogs OR pp.cats OR pp.other_pets) IS TRUE`;
+  return sql`EXISTS (SELECT 1 FROM pet_policies pp
+                     WHERE pp.place_id = p.id AND pp.review_since IS NULL AND ${takes})`;
+}
+
 /** The conditions for a category and the user's Settings filters (places aliased `p`). */
 function filterConditions(filters: PlaceFilters): SQL[] {
   return [
@@ -57,6 +81,7 @@ function filterConditions(filters: PlaceFilters): SQL[] {
       ? sql`(p.name IS NOT NULL AND lower(f_unaccent(p.name)) NOT LIKE '%sin nombre%')`
       : null,
     filters.openNow ? sql`${openNowSql} IS TRUE` : null,
+    filters.petFriendly ? petFriendlySql(filters) : null,
   ].filter((condition) => condition !== null);
 }
 
@@ -84,7 +109,24 @@ type PlaceRow = {
   source_updated_on: string | null;
   registered_on: string | null;
   owner_verified_on: string | null;
+  pet_policy: PetPolicy | null;
 };
+
+/** A place's pet policy as JSON in the API's shape, with recent shopper answers counted. */
+const petPolicySql = sql`(SELECT json_build_object(
+    'dogs', pp.dogs, 'cats', pp.cats, 'otherPets', pp.other_pets,
+    'maxDogSize', pp.max_dog_size, 'maxWeightKg', pp.max_weight_kg, 'maxPets', pp.max_pets,
+    'fee', pp.fee, 'areas', pp.areas, 'rules', pp.rules,
+    'source', pp.source, 'sourceName', pp.source_name, 'sourceUrl', pp.source_url,
+    'lastConfirmedOn', pp.last_confirmed_on::text,
+    'confirmations', (SELECT count(*) FROM policy_answers a WHERE a.place_id = p.id
+      AND a.answer = 'confirm'
+      AND a.created_at > now() - make_interval(days => ${POLICY_ANSWER_WINDOW_DAYS}))::int,
+    'disputes', (SELECT count(*) FROM policy_answers a WHERE a.place_id = p.id
+      AND a.answer = 'dispute'
+      AND a.created_at > now() - make_interval(days => ${POLICY_ANSWER_WINDOW_DAYS}))::int,
+    'underReview', pp.review_since IS NOT NULL)
+  FROM pet_policies pp WHERE pp.place_id = p.id)`;
 
 /**
  * Place columns where the places table is aliased `p` and vet_details `v`, with category names in
@@ -101,6 +143,7 @@ function placeColumnsSql(locale: Locale, point?: Point) {
     ST_Y(p.location::geometry) AS lat, ST_X(p.location::geometry) AS lng,
     ${point ? sql`round((ST_Distance(p.location, ${pointSql(point)}) / 1000)::numeric, 1)` : sql`NULL`} AS distance_km,
     v.open24h, v.open24h_source, p.hours, ${openNowSql} AS open_now,
+    ${petPolicySql} AS pet_policy,
     (SELECT coalesce(json_agg(json_build_object('slug', c.slug, 'name', coalesce(t.name, d.name))
                               ORDER BY c.sort_order), '[]')
      FROM place_categories pc
@@ -136,6 +179,7 @@ function toPlace(row: PlaceRow): Place {
     sourceUpdatedOn: row.source_updated_on,
     registeredOn: row.registered_on,
     ownerVerifiedOn: row.owner_verified_on,
+    petPolicy: row.pet_policy,
   };
 }
 

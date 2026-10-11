@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { placeHoursSchema } from './hours';
+import { petPolicyInputSchema } from './pet-policy';
 
 /** Why a user reports a place: it closed, or it's linked to animal cruelty. */
 export const PLACE_REPORT_REASONS = ['closed', 'cruelty'] as const;
@@ -41,13 +42,20 @@ export const placeClaimSchema = z
     open24h: z.boolean().optional(),
     /** Vets: takes emergencies. */
     acceptsEmergencies: z.boolean().optional(),
+    /** Pet-friendly venues: the pets they take. */
+    petPolicy: petPolicyInputSchema.optional(),
     contactName: z.string().trim().min(2).max(100),
     contact: z.string().trim().min(5).max(120),
     consent: z.literal(true),
   })
   .refine(
     (claim) =>
-      claim.phone || claim.website || claim.hours || claim.open24h || claim.acceptsEmergencies,
-    { message: 'Give at least a phone, a website, opening hours or a vet detail' },
+      claim.phone ||
+      claim.website ||
+      claim.hours ||
+      claim.open24h ||
+      claim.acceptsEmergencies ||
+      claim.petPolicy,
+    { message: 'Give at least a phone, a website, opening hours, a vet detail or a pet policy' },
   );
 export type PlaceClaim = z.infer<typeof placeClaimSchema>;

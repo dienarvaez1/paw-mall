@@ -4,6 +4,7 @@ export const ERROR_CODES = [
   'BAD_REQUEST',
   'NOT_FOUND',
   'PLACE_NOT_FOUND',
+  'POLICY_NOT_FOUND',
   'INTERNAL_ERROR',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];

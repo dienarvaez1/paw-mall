@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { CATEGORY_GROUPS, CATEGORY_SLUGS } from './categories';
 import { placeHoursSchema } from './hours';
+import { DOG_SIZES, PET_SPECIES, petPolicySchema } from './pet-policy';
 
 export const categorySlugSchema = z.enum(CATEGORY_SLUGS);
 
@@ -54,6 +55,8 @@ export const placeSchema = z.object({
   registeredOn: z.string().nullable(),
   /** Date the owner's claim was approved ("Verificado por el dueño"); null when not verified. */
   ownerVerifiedOn: z.string().nullable(),
+  /** Pet-friendly venues: what pets they take, who said so and when; null when unknown. */
+  petPolicy: petPolicySchema.nullable(),
 });
 export type Place = z.infer<typeof placeSchema>;
 
@@ -86,6 +89,13 @@ const placeFilters = {
   named: z.stringbool().optional(),
   /** Only places open right now by confirmed hours. */
   openNow: z.stringbool().optional(),
+  /**
+   * Only places whose pet policy takes pets (not under review); with the pet profile, only those
+   * taking that species, and dogs of that size.
+   */
+  petFriendly: z.stringbool().optional(),
+  petSpecies: z.enum(PET_SPECIES).optional(),
+  dogSize: z.enum(DOG_SIZES).optional(),
 };
 export type PlaceFilters = { [K in keyof typeof placeFilters]?: z.infer<(typeof placeFilters)[K]> };
 

@@ -1,4 +1,4 @@
-import type { CategorySlug, Place } from '@paw-mall/shared';
+import { type CategorySlug, PET_FRIENDLY_CATEGORIES, type Place } from '@paw-mall/shared';
 
 /** The category chips on Explorar, in order; null is "Todos". */
 export const CHIP_CATEGORIES = [
@@ -10,6 +10,9 @@ export const CHIP_CATEGORIES = [
   'boarding',
   'feed_store',
   'dog_trainer',
+  'restaurant',
+  'cafe',
+  'lodging',
   'pet_funeral',
   'public_vet_service',
 ] as const satisfies readonly (CategorySlug | null)[];
@@ -28,6 +31,9 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   feed_store: '#ca8a04',
   pet_funeral: '#854d0e',
   dog_trainer: '#0369a1',
+  restaurant: '#e11d48',
+  cafe: '#d946ef',
+  lodging: '#0891b2',
 };
 const DEFAULT_COLOR = '#525252';
 
@@ -37,4 +43,9 @@ export function pinColor(place: Pick<Place, 'categories'>, selected: ChipCategor
   const slugs = new Set(place.categories.map((c) => c.slug));
   const first = (Object.keys(CATEGORY_COLORS) as CategorySlug[]).find((slug) => slugs.has(slug));
   return first ? (CATEGORY_COLORS[first] ?? DEFAULT_COLOR) : DEFAULT_COLOR;
+}
+
+/** Restaurants, cafés and lodging: their chips show only places whose pet policy takes pets. */
+export function isPetFriendlyCategory(category: CategorySlug | null): boolean {
+  return category !== null && (PET_FRIENDLY_CATEGORIES as readonly string[]).includes(category);
 }

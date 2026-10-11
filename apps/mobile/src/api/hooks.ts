@@ -9,7 +9,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
-import type { ChipCategory } from '@/lib/categories';
+import { type ChipCategory, isPetFriendlyCategory } from '@/lib/categories';
 
 import { apiGet } from './client';
 
@@ -39,10 +39,12 @@ export function usePlaces(
   nearMe = false,
   /** A radius the user set by zooming the map by hand; replaces the presets while set. */
   customRadiusKm: number | null = null,
+  /** Explorar's pet-friendly toggle; a pet-friendly category chip turns it on too. */
+  petFriendly = false,
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters();
+  const filters = usePlaceFilters(petFriendly || isPetFriendlyCategory(category));
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
@@ -84,10 +86,11 @@ export function usePlacesMap(
   name = '',
   nearMe = false,
   customRadiusKm: number | null = null,
+  petFriendly = false,
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters();
+  const filters = usePlaceFilters(petFriendly || isPetFriendlyCategory(category));
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;

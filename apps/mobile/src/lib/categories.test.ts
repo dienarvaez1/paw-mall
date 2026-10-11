@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { CATEGORY_COLORS, pinColor } from './categories';
+import { CATEGORY_COLORS, isPetFriendlyCategory, pinColor } from './categories';
 
 const place = (...slugs: string[]) =>
   ({ categories: slugs.map((slug) => ({ slug, name: slug })) }) as Parameters<typeof pinColor>[0];
@@ -19,5 +19,14 @@ describe('pinColor', () => {
 
   it('falls back to a neutral color', () => {
     expect(pinColor(place(), null)).toBe('#525252');
+  });
+});
+
+describe('isPetFriendlyCategory', () => {
+  it('is true for restaurants, cafés and lodging only', () => {
+    expect(isPetFriendlyCategory('restaurant')).toBe(true);
+    expect(isPetFriendlyCategory('lodging')).toBe(true);
+    expect(isPetFriendlyCategory('veterinarian')).toBe(false);
+    expect(isPetFriendlyCategory(null)).toBe(false);
   });
 });

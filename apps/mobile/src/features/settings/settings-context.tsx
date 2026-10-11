@@ -1,5 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DEFAULT_RADIUS_KM } from '@paw-mall/shared';
+import {
+  DEFAULT_RADIUS_KM,
+  DOG_SIZES,
+  type DogSize,
+  PET_SPECIES,
+  type PetSpecies,
+} from '@paw-mall/shared';
 import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { type DistanceUnit, UNIT_OPTIONS, closestRadiusKm, isRadiusOption } from './radius';
@@ -19,6 +25,10 @@ type Settings = {
   hideUnnamed: boolean;
   /** Show only places open right now by confirmed hours. */
   onlyOpenNow: boolean;
+  /** The pet profile: which pet the user goes out with (null: not set). */
+  petSpecies: PetSpecies | null;
+  /** The dog's size, for dogs; null when not set. */
+  dogSize: DogSize | null;
 };
 type SettingsContextValue = Settings & {
   setRadiusKm: (radiusKm: number) => void;
@@ -28,6 +38,8 @@ type SettingsContextValue = Settings & {
   setOnlyWithSocial: (onlyWithSocial: boolean) => void;
   setHideUnnamed: (hideUnnamed: boolean) => void;
   setOnlyOpenNow: (onlyOpenNow: boolean) => void;
+  setPetSpecies: (petSpecies: PetSpecies | null) => void;
+  setDogSize: (dogSize: DogSize | null) => void;
 };
 
 const STORAGE_KEY = 'settings.preferences';
@@ -39,6 +51,8 @@ const DEFAULTS: Settings = {
   onlyWithSocial: false,
   hideUnnamed: false,
   onlyOpenNow: false,
+  petSpecies: null,
+  dogSize: null,
 };
 
 /**
@@ -60,6 +74,12 @@ export function parseSettings(raw: string | null): Settings {
       onlyWithSocial: value.onlyWithSocial === true,
       hideUnnamed: value.hideUnnamed === true,
       onlyOpenNow: value.onlyOpenNow === true,
+      petSpecies: (PET_SPECIES as readonly unknown[]).includes(value.petSpecies)
+        ? (value.petSpecies as PetSpecies)
+        : null,
+      dogSize: (DOG_SIZES as readonly unknown[]).includes(value.dogSize)
+        ? (value.dogSize as DogSize)
+        : null,
     };
   } catch {
     return DEFAULTS;
@@ -75,6 +95,8 @@ const SettingsContext = createContext<SettingsContextValue>({
   setOnlyWithSocial: () => {},
   setHideUnnamed: () => {},
   setOnlyOpenNow: () => {},
+  setPetSpecies: () => {},
+  setDogSize: () => {},
 });
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
@@ -103,6 +125,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setOnlyWithSocial: (onlyWithSocial) => update({ onlyWithSocial }),
       setHideUnnamed: (hideUnnamed) => update({ hideUnnamed }),
       setOnlyOpenNow: (onlyOpenNow) => update({ onlyOpenNow }),
+      setPetSpecies: (petSpecies) => update({ petSpecies }),
+      setDogSize: (dogSize) => update({ dogSize }),
     };
   }, [settings]);
 
@@ -115,11 +139,20 @@ export function useSettings() {
 
 /**
  * The place filters chosen in Settings, as API parameters (only the ones that are on) — the same
- * object is part of each query key, so changing a switch refetches.
+ * object is part of each query key, so changing a switch refetches. With `petFriendly` (the
+ * Explorar toggle, or a pet-friendly category chip), only places whose policy takes pets, and the
+ * pet profile narrows them: a cat, or a dog of that size.
  */
-export function usePlaceFilters() {
-  const { onlyWithPhone, onlyWithWebsite, onlyWithSocial, hideUnnamed, onlyOpenNow } =
-    useSettings();
+export function usePlaceFilters(petFriendly = false) {
+  const {
+    onlyWithPhone,
+    onlyWithWebsite,
+    onlyWithSocial,
+    hideUnnamed,
+    onlyOpenNow,
+    petSpecies,
+    dogSize,
+  } = useSettings();
   return useMemo(
     () => ({
       withPhone: onlyWithPhone || undefined,
@@ -127,7 +160,31 @@ export function usePlaceFilters() {
       withSocial: onlyWithSocial || undefined,
       named: hideUnnamed || undefined,
       openNow: onlyOpenNow || undefined,
+      ...petProfileFilters(petFriendly, petSpecies, dogSize),
     }),
-    [onlyWithPhone, onlyWithWebsite, onlyWithSocial, hideUnnamed, onlyOpenNow],
+    [
+      onlyWithPhone,
+      onlyWithWebsite,
+      onlyWithSocial,
+      hideUnnamed,
+      onlyOpenNow,
+      petFriendly,
+      petSpecies,
+      dogSize,
+    ],
   );
+}
+
+/** The pet-friendly API parameters; the dog size counts only for dogs. */
+export function petProfileFilters(
+  petFriendly: boolean,
+  petSpecies: PetSpecies | null,
+  dogSize: DogSize | null,
+): { petFriendly?: true; petSpecies?: PetSpecies; dogSize?: DogSize } {
+  if (!petFriendly) return {};
+  return {
+    petFriendly: true,
+    ...(petSpecies ? { petSpecies } : {}),
+    ...(petSpecies === 'dog' && dogSize ? { dogSize } : {}),
+  };
 }

@@ -1,4 +1,11 @@
-import type { PlaceClaim, PlaceReport, PlaceReportReason } from '@paw-mall/shared';
+import {
+  type PlaceClaim,
+  type PlaceReport,
+  type PlaceReportReason,
+  POLICY_ANSWER_WINDOW_DAYS,
+  POLICY_DISPUTES_TO_REVIEW,
+  type PolicyAnswer,
+} from '@paw-mall/shared';
 import { sql } from 'drizzle-orm';
 
 import type { Database } from '../db/client';
@@ -32,9 +39,51 @@ export async function reportPlace(db: Database, placeId: number, report: PlaceRe
 export async function createClaim(db: Database, placeId: number, claim: PlaceClaim) {
   await db.execute(sql`
     INSERT INTO place_claims (place_id, phone, website, hours, open24h, accepts_emergencies,
-                              contact_name, contact)
+                              pet_policy, contact_name, contact)
     VALUES (${placeId}, ${claim.phone ?? null}, ${claim.website ?? null},
             ${claim.hours ? JSON.stringify(claim.hours) : null}::jsonb,
             ${claim.open24h ?? null}, ${claim.acceptsEmergencies ?? null},
+            ${claim.petPolicy ? JSON.stringify(claim.petPolicy) : null}::jsonb,
             ${claim.contactName}, ${claim.contact})`);
+}
+
+/**
+ * Records a shopper's answer about a place's pet policy (one per phone; a new answer replaces the
+ * old one). A confirmation moves "last confirmed" to today. When at least
+ * POLICY_DISPUTES_TO_REVIEW phones recently said it changed, and more of them than confirmed it,
+ * the policy goes under review (`pnpm places:policies`). Returns false when the place has no
+ * policy. Only the answer, the date and the app's random id are stored.
+ */
+export async function answerPolicy(
+  db: Database,
+  placeId: number,
+  { answer, clientId }: PolicyAnswer,
+): Promise<boolean> {
+  const [policy] = await db.execute<{ place_id: number }>(
+    sql`SELECT place_id FROM pet_policies WHERE place_id = ${placeId}`,
+  );
+  if (!policy) return false;
+
+  await db.execute(sql`
+    INSERT INTO policy_answers (place_id, answer, client_id)
+    VALUES (${placeId}, ${answer}, ${clientId})
+    ON CONFLICT (place_id, client_id) DO UPDATE SET answer = EXCLUDED.answer, created_at = now()`);
+
+  if (answer === 'confirm') {
+    await db.execute(sql`
+      UPDATE pet_policies
+      SET last_confirmed_on = (now() AT TIME ZONE 'America/Mexico_City')::date
+      WHERE place_id = ${placeId} AND review_since IS NULL`);
+    return true;
+  }
+  await db.execute(sql`
+    UPDATE pet_policies SET review_since = now()
+    WHERE place_id = ${placeId} AND review_since IS NULL
+      AND (SELECT count(*) FILTER (WHERE answer = 'dispute') >= ${POLICY_DISPUTES_TO_REVIEW}
+                  AND count(*) FILTER (WHERE answer = 'dispute')
+                      > count(*) FILTER (WHERE answer = 'confirm')
+           FROM policy_answers
+           WHERE place_id = ${placeId}
+             AND created_at > now() - make_interval(days => ${POLICY_ANSWER_WINDOW_DAYS}))`);
+  return true;
 }
