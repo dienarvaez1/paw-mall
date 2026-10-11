@@ -334,7 +334,8 @@ function PlacesList({
         renderItem={({ item }) => (
           <PlaceRow place={item} selected={category} away={nearMe} showPolicy={petMode} />
         )}
-        ItemSeparatorComponent={() => <View className="h-px bg-neutral-100 dark:bg-neutral-900" />}
+        ItemSeparatorComponent={() => <View className="h-3" />}
+        contentContainerClassName="p-4"
         onEndReachedThreshold={0.5}
         onEndReached={() => {
           if (places.hasNextPage && !places.isFetchingNextPage) void places.fetchNextPage();

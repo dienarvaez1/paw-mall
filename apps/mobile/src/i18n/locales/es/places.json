@@ -245,5 +245,6 @@
   },
   "sourceOsm": "Datos: © colaboradores de OpenStreetMap (ODbL).",
   "searchUnconfirmed": "Buscar también en lugares sin confirmar",
-  "widenedAuto": "Ningún lugar confirmado coincide con «{{query}}». Estos aún no tienen política de mascotas: abre uno y dinos si las acepta."
+  "widenedAuto": "Ningún lugar confirmado coincide con «{{query}}». Estos aún no tienen política de mascotas: abre uno y dinos si las acepta.",
+  "details": "Ver detalles"
 }
