@@ -9,7 +9,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
-import { type ChipCategory, isPetFriendlyCategory } from '@/lib/categories';
+import { type ChipCategory, isPetFilterCategory } from '@/lib/categories';
 
 import { apiGet } from './client';
 
@@ -44,7 +44,7 @@ export function usePlaces(
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters(petFriendly || isPetFriendlyCategory(category));
+  const filters = usePlaceFilters(petFriendly || isPetFilterCategory(category));
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
@@ -90,7 +90,7 @@ export function usePlacesMap(
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters(petFriendly || isPetFriendlyCategory(category));
+  const filters = usePlaceFilters(petFriendly || isPetFilterCategory(category));
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;

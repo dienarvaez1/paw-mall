@@ -27,15 +27,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done        | 2026-10-05 | 2026-10-05 |
-| 5     | Trust               | `phase-5/trust`           | #6  | Done        | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | In review   | 2026-10-10 | —          |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | —   | Not started | —          | —          |
+| Phase | Name                | Branch                    | PR  | Status    | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation          | `phase-1/foundation`      | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust               | `phase-5/trust`           | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | #9  | In review | 2026-10-10 | —          |
 
 ## Pending owner reviews
 
@@ -546,7 +546,7 @@ a task (and a note in the phase that applies it).
 - **Done when:** with a "perro grande" profile, the map shows only places whose policy allows
   large dogs, each with its policy source and last confirmation.
 - **Branch / PR:** `phase-6/pet-friendly` / #8
-- **Status:** In review (PR ready)
+- **Status:** Done, merged 2026-10-10 (`cb7b3b6`)
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 216 tests (shared 27, api 59, importers 73, mobile 57), including the
@@ -590,8 +590,8 @@ a task (and a note in the phase that applies it).
     `POST /v1/places/:id/policy-answers`; migration 0011 (`pet_policies`, `policy_answers`,
     `place_claims.pet_policy`). `zod` added to the importers (already in the stack).
 - **Follow-ups:**
-  - Ask the owner whether press sources are acceptable for restaurants (see "Pending owner
-    reviews"), and whether to widen the curated set (more colonias, other cities).
+  - Press sources for restaurants: accepted by the owner on 2026-10-10. Widening the curated
+    set (more colonias, other cities) is still open.
   - Fees: restaurants' fees are left unknown; hotels' fees are as published.
 
 ### Phase 7 — Tourism and museums
@@ -599,16 +599,43 @@ a task (and a note in the phase that applies it).
 - **Scope:** pet-friendly attributes on museums, parks and tourist sites from official sources
   once licensing is verified, plus curated entries.
 - **Done when:** museums and parks appear with their pet policy, and each source is credited.
-- **Branch / PR:** `phase-7/tourism-museums` / —
-- **Status:** Not started
+- **Branch / PR:** `phase-7/tourism-museums` / #9
+- **Status:** In review (PR ready)
 - **Checks:**
-  - [ ] Licensing of each source verified and recorded below
-  - [ ] `pnpm lint`
-  - [ ] `pnpm typecheck`
-  - [ ] `pnpm test`
-  - [ ] Done-when check on device
-- **Notes:** —
-- **Follow-ups:** —
+  - [x] Licensing of each source verified and recorded below
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 217 tests (shared 27, api 59, importers 73, mobile 58)
+  - [x] API check on real data: `category=park` lists the 8 parks with their policy and source
+        (Chapultepec 1ª Sección and Parque Frida Kahlo as "No acepta perros"); a "perro grande"
+        profile adds the 6 parks that take dogs to Four Seasons and Courtyard Airport
+  - [x] Done-when check on a phone: Explorar → Museos and Parques; open a place and see its
+        policy card and source. Verified by the owner on 2026-10-10
+- **Notes:**
+  - **Sources and licensing:**
+    - Sistema de Información Cultural (Secretaría de Cultura): its open data may be copied,
+      published, adapted and used commercially, with credit to the source. It has no pet
+      policies, so it isn't imported yet (see follow-ups).
+    - Pet rules are facts quoted with a link and check date, as in Phase 6: Chilango (Anahuacalli,
+      Los Pinos, Parque México, Parque España), Time Out México reporting Sedema's Programa de
+      Manejo del Bosque de Chapultepec, Mexico News Daily (Parque Lincoln, Parque Frida Kahlo),
+      Ciudad de México Secreta (Parque Hundido). Credited on each card and in Ajustes.
+    - Locations from Overture Maps (release 2026-09-23.1); Parque México and Parque España use
+      their well-known coordinates because Overture's points for them are wrong.
+  - **Curated data:** 10 new entries in `data/pet-friendly-cdmx.json` (36 in all): 2 museums
+    (Anahuacalli, Complejo Cultural Los Pinos) and 8 parks (Chapultepec 1ª, 2ª and 3ª Secciones,
+    México, España, Lincoln, Hundido, Frida Kahlo). Places that say no to pets are listed too, so
+    shoppers know before they go; they never match the Pet-friendly filter. Public parks have no
+    published size limit, so they match every dog size.
+  - **App:** Museos and Parques chips (violet and brown pins). Unlike Restaurantes, Cafés and
+    Hospedaje, they list every museum and park, each row showing its policy; the summary says
+    "No acepta perros" when the policy says no.
+  - Left out: Museo Tamayo's #ArteYPerros (a temporary exhibition), Teotihuacan and INAH museums
+    (no source with a page to link yet), Viveros de Coyoacán and Bosque de Tlalpan (no source).
+- **Follow-ups:**
+  - Import the SIC museum directory (license allows it, with credit) once there is a way to fill
+    pet policies for it; museums without a policy add little.
+  - Add INAH sites ("no mascotas, salvo perros de asistencia") with official pages as sources.
+  - Tourist sites chip: no entries yet.
 
 ## Production deployment
 
@@ -633,3 +660,5 @@ Play readiness").
 | 2026-10-06 | Phase 5 merged (`80118ac`) | #6  |
 | 2026-10-10 | Diary files git-ignored    | #7  |
 | 2026-10-10 | Phase 6 started            | #8  |
+| 2026-10-10 | Phase 6 merged (`cb7b3b6`) | #8  |
+| 2026-10-10 | Phase 7 started            | #9  |

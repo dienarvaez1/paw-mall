@@ -13,6 +13,8 @@ export const CHIP_CATEGORIES = [
   'restaurant',
   'cafe',
   'lodging',
+  'museum',
+  'park',
   'pet_funeral',
   'public_vet_service',
 ] as const satisfies readonly (CategorySlug | null)[];
@@ -34,6 +36,10 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   restaurant: '#e11d48',
   cafe: '#d946ef',
   lodging: '#0891b2',
+  museum: '#6d28d9',
+  // Brown, not green (owner's rule).
+  park: '#92400e',
+  tourist_site: '#1e3a8a',
 };
 const DEFAULT_COLOR = '#525252';
 
@@ -45,7 +51,17 @@ export function pinColor(place: Pick<Place, 'categories'>, selected: ChipCategor
   return first ? (CATEGORY_COLORS[first] ?? DEFAULT_COLOR) : DEFAULT_COLOR;
 }
 
-/** Restaurants, cafés and lodging: their chips show only places whose pet policy takes pets. */
+/** Pet-friendly venues (restaurants to parks): their rows and callouts show the pet policy. */
 export function isPetFriendlyCategory(category: CategorySlug | null): boolean {
   return category !== null && (PET_FRIENDLY_CATEGORIES as readonly string[]).includes(category);
+}
+
+const PET_FILTER_CATEGORIES: readonly CategorySlug[] = ['restaurant', 'cafe', 'lodging'];
+
+/**
+ * Restaurants, cafés and lodging: their chips show only places whose pet policy takes pets.
+ * Museums, parks and tourist sites show every place, including those that say no to pets.
+ */
+export function isPetFilterCategory(category: CategorySlug | null): boolean {
+  return category !== null && PET_FILTER_CATEGORIES.includes(category);
 }

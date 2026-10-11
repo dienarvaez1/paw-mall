@@ -56,10 +56,15 @@ export function usePolicySummary(policy: PetPolicy | null): string | null {
   const { t } = useAppTranslation();
   const language = useLocale();
   if (!policy) return null;
-  const allows =
-    (policy.dogs ? dogsText(policy, t, language) : null) ??
-    otherPetsTexts(policy, t)[0] ??
-    t('places.pets.petFriendly');
+  const allows = policy.dogs
+    ? (dogsText(policy, t, language) ?? t('places.pets.petFriendly'))
+    : policy.cats
+      ? t('places.pets.cats.yes')
+      : policy.otherPets
+        ? t('places.pets.otherPets.yes')
+        : policy.dogs === false
+          ? t('places.pets.dogs.no')
+          : t('places.pets.petFriendly');
   const summary = t('places.pets.summary', {
     allows,
     source: policy.source === 'owner' ? t('places.pets.source.ownerShort') : policy.sourceName,

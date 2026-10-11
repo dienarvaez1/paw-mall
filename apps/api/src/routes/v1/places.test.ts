@@ -126,7 +126,7 @@ describe('GET /v1/categories', () => {
     const { items } = categoryListResponseSchema.parse(await res.json());
     expect(items.map((c) => c.slug).slice(0, 3)).toEqual(['pet_store', 'boutique', 'veterinarian']);
     expect(items.find((c) => c.slug === 'feed_store')?.name).toBe('Feed store');
-    expect(items.find((c) => c.slug === 'museum')?.placeCount).toBe(0);
+    expect(items.find((c) => c.slug === 'tourist_site')?.placeCount).toBe(0);
   });
 });
 

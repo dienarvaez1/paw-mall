@@ -46,7 +46,9 @@
     "public_vet_service": "Public services",
     "restaurant": "Restaurants",
     "cafe": "Cafés",
-    "lodging": "Lodging"
+    "lodging": "Lodging",
+    "museum": "Museums",
+    "park": "Parks"
   },
   "noOpenPlaces": "No places open now with confirmed hours within {{distance}}.",
   "noOpenPlacesHint": "Few businesses have confirmed hours yet. Turn off “Only places open now” in Settings to see them all, or check each one with “See hours”.",

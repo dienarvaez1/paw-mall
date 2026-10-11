@@ -1,5 +1,5 @@
 {
-  "about": "Curated pet-friendly restaurants, cafés and lodging in Mexico City (docs/PLAN.md, Phase 6). Hotel policies come from each hotel's own website; restaurant and café policies from the food press (Time Out México, Chilango, Ciudad de México Secreta) where the venue publishes none. Locations and phones from Overture Maps (release 2026-09-23.1). Sizes: pequeño up to 10 kg, mediano 10–25 kg, grande over 25 kg. Load with `pnpm places:curated`.",
+  "about": "Curated pet-friendly places in Mexico City (docs/PLAN.md, Phases 6 and 7): restaurants, cafés, lodging, museums and parks. Hotel policies come from each hotel's own website; restaurants, cafés, museums and parks from the press (Time Out México, Chilango, Ciudad de México Secreta, Mexico News Daily) where the venue publishes none; Chapultepec's rules are Sedema's Programa de Manejo as reported by Time Out México. Places that say no to pets are listed too, so shoppers know before they go. Locations and phones from Overture Maps (release 2026-09-23.1). Sizes: pequeño up to 10 kg, mediano 10–25 kg, grande over 25 kg. Load with `pnpm places:curated`.",
   "places": [
     {
       "id": "four-seasons-mexico-city",
@@ -787,6 +787,314 @@
       "source": {
         "name": "Time Out México",
         "url": "https://www.timeoutmexico.mx/ciudad-de-mexico/restaurantes-cafes/restaurantes-y-cafes-pet-friendly",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "museo-anahuacalli",
+      "name": "Museo Diego Rivera Anahuacalli",
+      "categories": ["museum"],
+      "address": "Museo 150, Col. San Pablo Tepetlapa, C.P. 04620",
+      "city": "Coyoacán",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.322785,
+        "lng": -99.143859
+      },
+      "phone": null,
+      "website": "https://www.museoanahuacalli.org.mx/",
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": ["outdoor"],
+        "rules": "Perros en los espacios abiertos, con correa en todo momento; recoger sus desechos."
+      },
+      "source": {
+        "name": "Chilango",
+        "url": "https://www.chilango.com/agenda/otros/museos-pet-friendly-en-cdmx-lista-de-museos-mascotas/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "complejo-cultural-los-pinos",
+      "name": "Complejo Cultural Los Pinos",
+      "categories": ["museum"],
+      "address": "Calzada del Rey s/n, Bosque de Chapultepec I Secc., C.P. 11580",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.415602,
+        "lng": -99.191204
+      },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": ["outdoor"],
+        "rules": "Perros en las áreas abiertas y los jardines, incluidas sus actividades."
+      },
+      "source": {
+        "name": "Chilango",
+        "url": "https://www.chilango.com/agenda/otros/museos-pet-friendly-en-cdmx-lista-de-museos-mascotas/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "bosque-chapultepec-1a-seccion",
+      "name": "Bosque de Chapultepec, Primera Sección",
+      "categories": ["park"],
+      "address": "Paseo de la Reforma s/n, Bosque de Chapultepec I Secc., C.P. 11580",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.42181,
+        "lng": -99.184372
+      },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": false,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": [],
+        "rules": "No se permiten animales de compañía (Programa de Manejo del Bosque, Sedema). Animales de asistencia sí, con registro en la entrada. Para pasear perros: segunda y tercera sección."
+      },
+      "source": {
+        "name": "Time Out México",
+        "url": "https://www.timeoutmexico.mx/ciudad-de-mexico/que-hacer/nuevas-reglas-bosque-de-chapultepec-2024",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "bosque-chapultepec-2a-seccion",
+      "name": "Bosque de Chapultepec, Segunda Sección",
+      "categories": ["park"],
+      "address": "Av. Constituyentes s/n, Bosque de Chapultepec II Secc., C.P. 11100",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.412032,
+        "lng": -99.198064
+      },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "noSizeLimit": true,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": {
+          "amount": 0
+        },
+        "areas": ["outdoor"],
+        "rules": "Con correa; recoger desechos y llevar agua. No se permiten cachorros menores de 4 meses ni perros enfermos."
+      },
+      "source": {
+        "name": "Time Out México",
+        "url": "https://www.timeoutmexico.mx/ciudad-de-mexico/que-hacer/nuevas-reglas-bosque-de-chapultepec-2024",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "bosque-chapultepec-3a-seccion",
+      "name": "Bosque de Chapultepec, Tercera Sección",
+      "categories": ["park"],
+      "address": "Av. Constituyentes s/n, Bosque de Chapultepec III Secc., C.P. 11100",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.408289,
+        "lng": -99.215271
+      },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "noSizeLimit": true,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": {
+          "amount": 0
+        },
+        "areas": ["outdoor"],
+        "rules": "Con correa; recoger desechos y llevar agua. No se permiten cachorros menores de 4 meses ni perros enfermos."
+      },
+      "source": {
+        "name": "Time Out México",
+        "url": "https://www.timeoutmexico.mx/ciudad-de-mexico/que-hacer/nuevas-reglas-bosque-de-chapultepec-2024",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "parque-mexico",
+      "name": "Parque México",
+      "categories": ["park"],
+      "address": "Av. México s/n, Col. Hipódromo, C.P. 06100",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.4119,
+        "lng": -99.17
+      },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "noSizeLimit": true,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": {
+          "amount": 0
+        },
+        "areas": ["outdoor"],
+        "rules": "Área para perros y composteros para sus desechos."
+      },
+      "source": {
+        "name": "Chilango",
+        "url": "https://www.chilango.com/noticias/parques-con-areas-para-perros/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "parque-espana",
+      "name": "Parque España",
+      "categories": ["park"],
+      "address": "Av. Sonora s/n, Col. Condesa, C.P. 06140",
+      "city": "Cuauhtémoc",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.4155,
+        "lng": -99.1709
+      },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "noSizeLimit": true,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": {
+          "amount": 0
+        },
+        "areas": ["outdoor"],
+        "rules": "Área para perros y composteros para sus desechos."
+      },
+      "source": {
+        "name": "Chilango",
+        "url": "https://www.chilango.com/noticias/parques-con-areas-para-perros/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "parque-lincoln",
+      "name": "Parque Lincoln",
+      "categories": ["park"],
+      "address": "Av. Emilio Castelar s/n, Col. Polanco, C.P. 11550",
+      "city": "Miguel Hidalgo",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.429677,
+        "lng": -99.1972
+      },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "noSizeLimit": true,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": {
+          "amount": 0
+        },
+        "areas": ["outdoor"],
+        "rules": "Zona para perros."
+      },
+      "source": {
+        "name": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/lifestyle/mexico-city-best-parks-that-arent-chapultepec/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "parque-hundido",
+      "name": "Parque Hundido (Parque Luis G. Urbina)",
+      "categories": ["park"],
+      "address": "Av. Insurgentes Sur s/n, Col. Extremadura Insurgentes, C.P. 03740",
+      "city": "Benito Juárez",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.37446,
+        "lng": -99.17898
+      },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "noSizeLimit": true,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": {
+          "amount": 0
+        },
+        "areas": ["outdoor"],
+        "rules": "Espacio para perros: correr, jugar y convivir."
+      },
+      "source": {
+        "name": "Ciudad de México Secreta",
+        "url": "https://cdmxsecreta.com/parques-para-perros-cdmx/",
+        "checkedOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "parque-frida-kahlo",
+      "name": "Parque Frida Kahlo",
+      "categories": ["park"],
+      "address": "Fernández Leal esq. Pacífico, Col. La Concepción, C.P. 04020",
+      "city": "Coyoacán",
+      "state": "Ciudad de México",
+      "location": {
+        "lat": 19.346221,
+        "lng": -99.158547
+      },
+      "phone": null,
+      "website": null,
+      "policy": {
+        "dogs": false,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": null,
+        "maxPets": null,
+        "fee": null,
+        "areas": [],
+        "rules": "No se permiten mascotas, patines, bicicletas ni equipo deportivo."
+      },
+      "source": {
+        "name": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/lifestyle/mexico-city-best-parks-that-arent-chapultepec/",
         "checkedOn": "2026-10-10"
       }
     }
