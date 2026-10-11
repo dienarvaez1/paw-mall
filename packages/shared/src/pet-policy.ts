@@ -59,10 +59,18 @@ export const petPolicyInputSchema = z.object({
 export type PetPolicyInput = z.infer<typeof petPolicyInputSchema>;
 
 /**
- * Who stated the policy: the verified owner, the team from a public source, OpenStreetMap's
- * contributors, or Paw Mall's users (PET_ANSWERS_TO_PUBLISH phones agreeing).
+ * Who stated the policy: the verified owner, the team from a public source (one venue, or a chain's
+ * policy for all its branches), the business's own website, OpenStreetMap's contributors, or Paw
+ * Mall's users (PET_ANSWERS_TO_PUBLISH phones agreeing).
  */
-export const PET_POLICY_SOURCES = ['owner', 'curated', 'osm', 'community'] as const;
+export const PET_POLICY_SOURCES = [
+  'owner',
+  'curated',
+  'chain',
+  'website',
+  'osm',
+  'community',
+] as const;
 export type PetPolicySource = (typeof PET_POLICY_SOURCES)[number];
 
 export const petPolicySchema = petPolicyInputSchema.extend({

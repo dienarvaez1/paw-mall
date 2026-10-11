@@ -50,6 +50,10 @@ export function sourceText(policy: PetPolicy, t: T): string {
       return t('places.pets.source.community');
     case 'osm':
       return t('places.pets.source.osm');
+    case 'chain':
+      return t('places.pets.source.chain', { name: policy.sourceName ?? '' });
+    case 'website':
+      return t('places.pets.source.website', { name: policy.sourceName ?? '' });
     default:
       return t('places.pets.source.curated', { name: policy.sourceName ?? '' });
   }

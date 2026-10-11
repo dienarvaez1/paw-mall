@@ -11,7 +11,7 @@ import {
   dedupeChainBranches,
   formatPhone,
   isCrueltyLinked,
-  foodCategory,
+  venueCategory,
   mapDenueRow,
   normalizeWebsite,
   parseEditionDate,
@@ -205,12 +205,14 @@ describe('helpers', () => {
   });
 });
 
-describe('foodCategory', () => {
-  it('imports restaurants and cafés in Ciudad de México only', () => {
-    expect(foodCategory('722511', '09')).toBe('restaurant');
-    expect(foodCategory('722514', '9')).toBe('restaurant');
-    expect(foodCategory('722515', '09')).toBe('cafe');
-    expect(foodCategory('722511', '15')).toBeNull();
-    expect(foodCategory('465911', '09')).toBeNull();
+describe('venueCategory', () => {
+  it('imports restaurants, cafés and hotels in Ciudad de México only', () => {
+    expect(venueCategory('722511', '09')).toBe('restaurant');
+    expect(venueCategory('722514', '9')).toBe('restaurant');
+    expect(venueCategory('722515', '09')).toBe('cafe');
+    expect(venueCategory('721111', '09')).toBe('lodging');
+    expect(venueCategory('721113', '09')).toBeNull();
+    expect(venueCategory('722511', '15')).toBeNull();
+    expect(venueCategory('465911', '09')).toBeNull();
   });
 });

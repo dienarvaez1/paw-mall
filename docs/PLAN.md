@@ -184,7 +184,9 @@ before starting the next. No deploys in any phase until the owner decides.
    - Done when: each bug is fixed and checked on a phone.
 9. **Pet-friendly at scale (added 2026-10-10).** OpenStreetMap dog parks, parks and venues with a
    dog rule; DENUE restaurants and cafés in Ciudad de México, whose pet policy comes from users'
-   "¿Acepta mascotas?" answers (2 phones agreeing, more than disagree, within a year).
+   "¿Acepta mascotas?" answers (2 phones agreeing, more than disagree, within a year). Free
+   sources for hours and policies instead of Google: OpenStreetMap opening hours, businesses'
+   homepages (schema.org hours, "pet friendly" wording) and chain-wide policies.
    - Done when: a name search in Pet-friendly finds an unanswered restaurant, two phones answering
      yes make it appear under Restaurantes with "Según usuarios de Paw Mall", and OpenStreetMap is
      credited on its places.

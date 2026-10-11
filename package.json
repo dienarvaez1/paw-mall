@@ -26,7 +26,9 @@
     "places:policies": "pnpm --filter @paw-mall/importers policies",
     "places:areas": "pnpm --filter @paw-mall/importers areas",
     "places:landmarks": "pnpm --filter @paw-mall/importers landmarks",
-    "places:osm": "pnpm --filter @paw-mall/importers osm"
+    "places:osm": "pnpm --filter @paw-mall/importers osm",
+    "places:osm-hours": "pnpm --filter @paw-mall/importers osm-hours",
+    "places:chains": "pnpm --filter @paw-mall/importers chains"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

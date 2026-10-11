@@ -19,6 +19,9 @@ export const categoryListResponseSchema = z.object({ items: z.array(categorySche
 export type CategoryListResponse = z.infer<typeof categoryListResponseSchema>;
 
 /** Where a value came from. Owner-verified values always win over the others. */
+/** Who gave a place's weekly hours (Google's are never stored). */
+export const HOURS_SOURCES = ['owner', 'website', 'osm'] as const;
+
 export const valueSourceSchema = z.enum([
   'denue',
   'overture',
@@ -46,8 +49,9 @@ export const placeSchema = z.object({
   distanceKm: z.number().nullable(),
   /** Vets only: open 24 hours. A 'name' source is an unconfirmed hint from the business name. */
   open24h: z.object({ value: z.boolean(), source: z.enum(['name', 'owner']) }).nullable(),
-  /** Confirmed weekly hours (owner-verified from Phase 5); null when unknown. */
+  /** Weekly hours from the owner, the business's website or OpenStreetMap; null when unknown. */
   hours: placeHoursSchema.nullable(),
+  hoursSource: z.enum(HOURS_SOURCES).nullable(),
   /**
    * Open right now by confirmed hours (or an owner's 24-hour answer); null when unknown. A "24
    * horas" name hint alone stays null.

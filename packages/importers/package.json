@@ -16,7 +16,9 @@
     "landmarks": "node src/areas/wikidata-cli.ts",
     "curated": "node src/curated/cli.ts",
     "policies": "node src/review/policies-cli.ts",
-    "osm": "node src/osm/cli.ts"
+    "osm": "node src/osm/cli.ts",
+    "osm-hours": "node src/osm/hours-cli.ts",
+    "chains": "node src/chains/cli.ts"
   },
   "dependencies": {
     "@duckdb/node-api": "1.5.6-r.1",

@@ -35,6 +35,7 @@ import {
   isPetFriendlyCategory,
   pinColor,
 } from '@/lib/categories';
+import { uniqueById } from '@/lib/unique';
 import { isAwayFrom, radiusForRegion, regionForBounds, regionForRadius } from '@/lib/map-region';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
@@ -278,7 +279,7 @@ function PlacesList({
   const petMode = petFriendly || isPetFriendlyCategory(category);
   const area = places.data?.pages[0]?.area ?? null;
   const items = useMemo(
-    () => places.data?.pages.flatMap((page) => page.items) ?? [],
+    () => uniqueById(places.data?.pages.flatMap((page) => page.items) ?? []),
     [places.data],
   );
   const total = places.data?.pages[0]?.total ?? 0;

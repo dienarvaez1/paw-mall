@@ -111,6 +111,7 @@ type PlaceRow = {
   open24h: boolean | null;
   open24h_source: 'name' | 'owner' | null;
   hours: PlaceHours | null;
+  hours_source: Place['hoursSource'];
   open_now: boolean | null;
   source: ValueSource;
   phone_source: ValueSource | null;
@@ -151,7 +152,7 @@ function placeColumnsSql(locale: Locale, point?: Point) {
     (p.owner_verified_at AT TIME ZONE 'America/Mexico_City')::date::text AS owner_verified_on,
     ST_Y(p.location::geometry) AS lat, ST_X(p.location::geometry) AS lng,
     ${point ? sql`round((ST_Distance(p.location, ${pointSql(point)}) / 1000)::numeric, 1)` : sql`NULL`} AS distance_km,
-    v.open24h, v.open24h_source, p.hours, ${openNowSql} AS open_now,
+    v.open24h, v.open24h_source, p.hours, p.hours_source, ${openNowSql} AS open_now,
     ${petPolicySql} AS pet_policy,
     (SELECT coalesce(json_agg(json_build_object('slug', c.slug, 'name', coalesce(t.name, d.name))
                               ORDER BY c.sort_order), '[]')
@@ -181,6 +182,7 @@ function toPlace(row: PlaceRow): Place {
         ? null
         : { value: row.open24h, source: row.open24h_source },
     hours: row.hours,
+    hoursSource: row.hours ? row.hours_source : null,
     openNow: row.open_now,
     source: row.source,
     phoneSource: row.phone_source,

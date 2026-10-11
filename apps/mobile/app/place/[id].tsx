@@ -185,27 +185,34 @@ function HoursSection({ place: p }: { place: Place }) {
           {t('places.hours.allDayEveryDay')}
         </Text>
       ) : p.hours ? (
-        WEEK_ORDER.map((day) => {
-          const hours = p.hours?.[day] ?? null;
-          const allDay = hours?.open === '00:00' && ['24:00', '00:00'].includes(hours.close);
-          return (
-            <View key={day} className="flex-row justify-between py-1">
-              <Text className="text-base capitalize text-neutral-700 dark:text-neutral-300">
-                {formatWeekday(day, locale)}
-              </Text>
-              <Text className="text-base text-neutral-900 dark:text-white">
-                {!hours
-                  ? t('places.hours.closed')
-                  : allDay
-                    ? t('places.hours.allDay')
-                    : t('places.hours.range', {
-                        open: formatClockTime(hours.open, locale),
-                        close: formatClockTime(hours.close, locale),
-                      })}
-              </Text>
-            </View>
-          );
-        })
+        <>
+          {WEEK_ORDER.map((day) => {
+            const hours = p.hours?.[day] ?? null;
+            const allDay = hours?.open === '00:00' && ['24:00', '00:00'].includes(hours.close);
+            return (
+              <View key={day} className="flex-row justify-between py-1">
+                <Text className="text-base capitalize text-neutral-700 dark:text-neutral-300">
+                  {formatWeekday(day, locale)}
+                </Text>
+                <Text className="text-base text-neutral-900 dark:text-white">
+                  {!hours
+                    ? t('places.hours.closed')
+                    : allDay
+                      ? t('places.hours.allDay')
+                      : t('places.hours.range', {
+                          open: formatClockTime(hours.open, locale),
+                          close: formatClockTime(hours.close, locale),
+                        })}
+                </Text>
+              </View>
+            );
+          })}
+          {p.hoursSource ? (
+            <Text className="pt-1 text-xs text-neutral-500 dark:text-neutral-400">
+              {t(`places.hours.source.${p.hoursSource}`)}
+            </Text>
+          ) : null}
+        </>
       ) : (
         <>
           {p.open24h?.value ? (

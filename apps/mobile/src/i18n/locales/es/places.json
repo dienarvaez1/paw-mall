@@ -60,7 +60,12 @@
     "closed": "Cerrado",
     "allDay": "Abierto 24 horas",
     "allDayEveryDay": "Abierto las 24 horas, todos los días (confirmado por el dueño)",
-    "range": "{{open}} – {{close}}"
+    "range": "{{open}} – {{close}}",
+    "source": {
+      "owner": "Horario confirmado por el dueño.",
+      "website": "Horario según el sitio web del negocio.",
+      "osm": "Horario: © colaboradores de OpenStreetMap (ODbL)."
+    }
   },
   "google": {
     "showHours": "Ver horario",
@@ -196,7 +201,9 @@
       "curated": "Fuente: {{name}}",
       "community": "Según usuarios de Paw Mall",
       "communityShort": "Usuarios",
-      "osm": "Fuente: OpenStreetMap (© colaboradores de OpenStreetMap)"
+      "osm": "Fuente: OpenStreetMap (© colaboradores de OpenStreetMap)",
+      "chain": "Política de la cadena {{name}}",
+      "website": "Según su sitio web ({{name}})"
     },
     "lastConfirmed": "Última confirmación: {{date}}",
     "confirmations_one": "confirmada por {{count}} persona",

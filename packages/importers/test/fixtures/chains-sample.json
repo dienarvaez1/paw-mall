@@ -1,0 +1,26 @@
+{
+  "about": "A sample of data/pet-friendly-chains.json for tests.",
+  "chains": [
+    {
+      "id": "hotel-prueba",
+      "name": "Hoteles Prueba",
+      "match": "HOTEL PRUEBA",
+      "categories": ["lodging"],
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": 15,
+        "maxPets": 1,
+        "fee": null,
+        "areas": ["indoor"],
+        "rules": "Una mascota por habitación."
+      },
+      "source": {
+        "name": "Hoteles Prueba",
+        "url": "https://hoteles.example.mx/mascotas",
+        "checkedOn": "2026-10-11"
+      }
+    }
+  ]
+}
