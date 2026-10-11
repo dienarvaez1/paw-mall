@@ -309,13 +309,20 @@ function PlacesList({
     return <ErrorState error={places.error} onRetry={() => void places.refetch()} />;
 
   // The summary stays put above the list while it scrolls: "69 lugares a menos de 5 km de
-  // Tlaxcala", or "1,237 lugares a menos de 5 km" around the user.
-  const summary = area
+  // Tlaxcala", or around the user (or a moved circle) named by the nearest place's city: "1,237
+  // lugares a menos de 5 km de Coyoacán" (the list is nearest first).
+  const nearestCity = places.data?.pages[0]?.items[0]?.city ?? null;
+  const summaryArea = area
+    ? area.municipality
+      ? `${area.name}, ${area.municipality}`
+      : area.name
+    : nearestCity;
+  const summary = summaryArea
     ? t('places.areaCount', {
         count: total,
         total: formatCount(total, locale),
         distance,
-        area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
+        area: summaryArea,
       })
     : t('places.listCount', { count: total, total: formatCount(total, locale), distance });
   // A keyword in the search picked the category ("tlaxcala vet"): say so up front, unless a chip
@@ -648,7 +655,8 @@ function PlacesMap({
           inView={places.data.total}
           inRadius={places.data.radiusTotal}
           radiusKm={circle.radiusKm}
-          areaName={searchedArea?.name ?? null}
+          // A searched area by its name; otherwise the nearest place's city.
+          areaName={searchedArea?.name ?? places.data.nearestCity}
           onPress={fitCircle}
         />
       ) : null}

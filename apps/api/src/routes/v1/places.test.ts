@@ -194,6 +194,13 @@ describe('GET /v1/places/map', () => {
     expect(result.total).toBe(3);
   });
 
+  it('names the city of the place nearest the circle, with clusters too', async () => {
+    expect((await map('radiusKm=5')).nearestCity).toBe('Ciudad');
+    expect((await map('radiusKm=5&limit=2')).nearestCity).toBe('Ciudad');
+    // Without the nearer two, Veterinaria Lejana (Coyoacán) is the nearest.
+    expect((await map('radiusKm=5&q=lejana')).nearestCity).toBe('Coyoacán');
+  });
+
   it('filters the map by category', async () => {
     expect(await map('radiusKm=5&category=pet_store')).toMatchObject({ total: 1, radiusTotal: 1 });
   });

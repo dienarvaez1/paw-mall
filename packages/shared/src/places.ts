@@ -206,6 +206,8 @@ const mapCounts = {
   total: z.number().int(),
   /** Every place within radiusKm, in view or not. */
   radiusTotal: z.number().int(),
+  /** The city of the place in view nearest the circle's center, to name where the circle is. */
+  nearestCity: z.string().nullable().default(null),
 };
 
 export const placeMapResponseSchema = z.discriminatedUnion('kind', [

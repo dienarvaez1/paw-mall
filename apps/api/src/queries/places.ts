@@ -424,6 +424,8 @@ export async function placesForMap(
     pageOfPlaces(db, { ...point, page: 1, pageSize: query.limit }, locale, [...inRadius, inBox]),
     countPlaces(db, inRadius),
   ]);
+  // The page is nearest first, so its first place names the circle's city.
+  const nearestCity = places.items[0]?.city ?? null;
   if (places.total <= query.limit) {
     return {
       kind: 'places',
@@ -432,6 +434,7 @@ export async function placesForMap(
       items: places.items,
       total: places.total,
       radiusTotal,
+      nearestCity,
     };
   }
 
@@ -466,6 +469,7 @@ export async function placesForMap(
     clusters,
     total: places.total,
     radiusTotal,
+    nearestCity,
   };
 }
 
