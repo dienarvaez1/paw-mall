@@ -48,6 +48,8 @@ beforeAll(async () => {
   ids.unknownSize = await addPlace('Café Perros', { dogs: true, cats: null, maxDogSize: null });
   ids.catsOnly = await addPlace('Café Gatos', { dogs: false, cats: true, maxDogSize: null });
   ids.noPolicy = await addPlace('Restaurante Sin Política', null);
+  await sql`INSERT INTO place_categories (place_id, category_id, source)
+            SELECT ${ids.anySize!}, id, 'curated' FROM categories WHERE slug = 'lodging'`;
 });
 
 afterAll(async () => {
@@ -103,6 +105,11 @@ describe('pet-friendly filter', () => {
 
   it('ignores the profile when the filter is off', async () => {
     expect(await names({ petSpecies: 'dog', dogSize: 'large' })).toHaveLength(5);
+  });
+
+  it('keeps only places in a category of the group', async () => {
+    expect(await names({ group: 'pet_friendly' })).toEqual(['Hotel Grande']);
+    expect(await names({ group: 'pet_business' })).toEqual([]);
   });
 
   it('returns the policy with its source and last confirmation', async () => {

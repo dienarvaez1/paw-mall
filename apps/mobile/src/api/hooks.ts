@@ -1,4 +1,5 @@
 import {
+  type CategoryGroup,
   placeListResponseSchema,
   placeMapResponseSchema,
   placeSchema,
@@ -39,8 +40,10 @@ export function usePlaces(
   nearMe = false,
   /** A radius the user set by zooming the map by hand; replaces the presets while set. */
   customRadiusKm: number | null = null,
-  /** Explorar's pet-friendly toggle; a pet-friendly category chip turns it on too. */
+  /** Pet-friendly "Todos"; the restaurant, café and lodging chips turn it on too. */
   petFriendly = false,
+  /** The tab's section: pet businesses (Explorar) or pet-friendly venues. */
+  group?: CategoryGroup,
 ) {
   const locale = useLocale();
   const settings = useSettings();
@@ -49,7 +52,18 @@ export function usePlaces(
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
   return useInfiniteQuery({
-    queryKey: ['places', locale, radiusKm, filters, coords, category, name, nearMe, areaRadiusKm],
+    queryKey: [
+      'places',
+      locale,
+      radiusKm,
+      filters,
+      coords,
+      category,
+      group,
+      name,
+      nearMe,
+      areaRadiusKm,
+    ],
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
       apiGet(
@@ -58,6 +72,7 @@ export function usePlaces(
           ...coords,
           radiusKm,
           category: category ?? undefined,
+          group,
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,
           namesOnly: (name && nearMe) || undefined,
@@ -87,6 +102,7 @@ export function usePlacesMap(
   nearMe = false,
   customRadiusKm: number | null = null,
   petFriendly = false,
+  group?: CategoryGroup,
 ) {
   const locale = useLocale();
   const settings = useSettings();
@@ -104,6 +120,7 @@ export function usePlacesMap(
       radiusKm,
       areaRadiusKm,
       category,
+      group,
       name,
       nearMe,
     ],
@@ -118,6 +135,7 @@ export function usePlacesMap(
           ...coords,
           radiusKm,
           category: category ?? undefined,
+          group,
           // The search box, as in the list (see usePlaces).
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,

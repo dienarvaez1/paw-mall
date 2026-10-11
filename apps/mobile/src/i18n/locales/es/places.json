@@ -142,12 +142,12 @@
   "radiusButtonCustom": "Radio a mano: {{distance}}",
   "radiusButtonCustomHint": "Lo elegiste con el zoom del mapa. Toca para volver a los radios de Ajustes.",
   "petFriendly": {
-    "toggle": "Pet-friendly",
-    "withProfile": "Pet-friendly: {{profile}}",
-    "hint": "Muestra solo lugares que aceptan mascotas, según tu mascota en Ajustes."
+    "tabTitle": "Pet-friendly",
+    "forProfile": "Para tu mascota: {{profile}}. Cámbiala en Ajustes.",
+    "noProfile": "Elige tu mascota en Ajustes para ver solo los lugares que la aceptan."
   },
   "noPetFriendlyPlaces": "No hay lugares pet-friendly a menos de {{distance}} para tu mascota",
-  "noPetFriendlyPlacesHint": "Por ahora tenemos restaurantes, cafés y hoteles de la Ciudad de México. Prueba un radio mayor o cambia tu mascota en Ajustes.",
+  "noPetFriendlyPlacesHint": "Por ahora tenemos restaurantes, cafés, hoteles, museos y parques de la Ciudad de México. Prueba un radio mayor o cambia tu mascota en Ajustes.",
   "sourceCurated": "Política de mascotas: reunida por Paw Mall de la fuente indicada. Ubicación y teléfono: Overture Maps Foundation.",
   "pets": {
     "title": "Política de mascotas",

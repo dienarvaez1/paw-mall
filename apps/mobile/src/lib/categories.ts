@@ -1,7 +1,7 @@
 import { type CategorySlug, PET_FRIENDLY_CATEGORIES, type Place } from '@paw-mall/shared';
 
-/** The category chips on Explorar, in order; null is "Todos". */
-export const CHIP_CATEGORIES = [
+/** Explorar's category chips (pet businesses), in order; null is "Todos". */
+export const EXPLORE_CHIPS = [
   null,
   'veterinarian',
   'vet_hospital',
@@ -10,14 +10,22 @@ export const CHIP_CATEGORIES = [
   'boarding',
   'feed_store',
   'dog_trainer',
+  'pet_funeral',
+  'public_vet_service',
+] as const satisfies readonly (CategorySlug | null)[];
+
+/** The Pet-friendly tab's chips, in order; null is "Todos" (places that take pets). */
+export const PET_FRIENDLY_CHIPS = [
+  null,
   'restaurant',
   'cafe',
   'lodging',
   'museum',
   'park',
-  'pet_funeral',
-  'public_vet_service',
 ] as const satisfies readonly (CategorySlug | null)[];
+
+/** Every chip of both tabs. */
+export const CHIP_CATEGORIES = [...EXPLORE_CHIPS, ...PET_FRIENDLY_CHIPS.slice(1)] as const;
 export type ChipCategory = (typeof CHIP_CATEGORIES)[number];
 
 /** Pin and chip colors by category; the first match in this order wins for a place's pin. */

@@ -648,9 +648,12 @@ a task (and a note in the phase that applies it).
 - **Status:** In progress
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`
-  - [x] `pnpm test`: 217 tests, also while `pnpm places:curated` runs alongside
+  - [x] `pnpm test`: 218 tests, also while `pnpm places:curated` runs alongside
   - [ ] Owner's bugs: fixed and checked on a phone
     - [ ] Map: remove the "my location" button (removed; also Android's built-in one)
+    - [ ] Pet-friendly as its own tab between Explorar and Urgencias, with the restaurant, café,
+          lodging, museum and park chips; Explorar keeps only pet businesses (new `group` filter on
+          `/v1/places` and `/v1/places/map`)
 - **Notes:**
   - **Flaky Google tests (fixed):** API and importer tests shared the dev database, and their
     test places use source `curated`. `pnpm places:curated` removes every curated place not in its
