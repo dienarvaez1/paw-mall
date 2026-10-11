@@ -26,8 +26,6 @@
   "clusterLabel_other": "{{count}} places. Tap to zoom in.",
   "mapCount_one": "{{total}} place within {{distance}}",
   "mapCount_other": "{{total}} places within {{distance}}",
-  "mapCountPartial_one": "{{shown}} of {{total}} place within {{distance}}",
-  "mapCountPartial_other": "{{shown}} of {{total}} places within {{distance}}",
   "mapShowAll": "Tap to see the whole radius",
   "compass": "Compass. Tap to turn the map north.",
   "categoriesLabel": "Categories",
@@ -142,8 +140,6 @@
   "searchPlaceholderNearMe": "Business name, city, colonia or landmark",
   "radiusButton": "Search radius: {{distance}}",
   "radiusButtonHint": "Tap for the next radius. It's used by the list, the map and “My location”, and saved in Settings.",
-  "mapAreaCountPartial_one": "{{shown}} of {{total}} place within {{distance}} of {{area}}",
-  "mapAreaCountPartial_other": "{{shown}} of {{total}} places within {{distance}} of {{area}}",
   "categorySummary": "{{category}}: {{summary}}",
   "petFriendly": {
     "tabTitle": "Pet-friendly",

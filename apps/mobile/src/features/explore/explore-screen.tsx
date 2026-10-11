@@ -853,15 +853,12 @@ function MapCountLegend({
   const { units } = useSettings();
   const distance = formatDistance(radiusKm, locale, units);
   const total = formatCount(inRadius, locale);
-  const shown = formatCount(inView, locale);
   const partial = inView < inRadius;
+  // Every place in the circle, worded as on the list and Urgencias (owner's rule): "7 lugares a
+  // menos de 5 km de Tlalnepantla de Baz"; when some are out of view, "Ver todo" fits the circle.
   const label = areaName
-    ? partial
-      ? t('places.mapAreaCountPartial', { count: inRadius, shown, total, distance, area: areaName })
-      : t('places.areaCount', { count: inRadius, total, distance, area: areaName })
-    : partial
-      ? t('places.mapCountPartial', { count: inRadius, shown, total, distance })
-      : t('places.mapCount', { count: inRadius, total, distance });
+    ? t('places.areaCount', { count: inRadius, total, distance, area: areaName })
+    : t('places.mapCount', { count: inRadius, total, distance });
   return (
     <View pointerEvents="box-none" className="absolute left-3 right-3 top-3 items-center">
       <Pressable

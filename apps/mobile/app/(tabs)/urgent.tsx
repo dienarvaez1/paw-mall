@@ -42,9 +42,7 @@ export default function UrgentScreen() {
     ? area.municipality
       ? `${area.name}, ${area.municipality}`
       : area.name
-    : focus
-      ? (items[0]?.city ?? null)
-      : null;
+    : (items[0]?.city ?? null);
   const locale = useLocale();
   const { units, radiusKm } = useSettings();
 
@@ -68,7 +66,7 @@ export default function UrgentScreen() {
           contentContainerClassName="p-4"
           ListHeaderComponent={
             // The same summary as Explorar's: around a searched area ("8 lugares a menos de 3 mi
-            // de Xochimilco"), or around where the map was moved, named by the closest place's
+            // de Xochimilco"), or around the user or a moved map, named by the closest place's
             // city ("7 lugares a menos de 5 km de Tlalnepantla de Baz").
             summaryArea && items.length > 0 ? (
               <Text className="pb-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
