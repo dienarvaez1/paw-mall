@@ -83,6 +83,8 @@ function TabHeader({ title, description }: { title: string; description?: string
 const INFO_GLYPH = '\u24D8';
 const LOGO_TURQUOISE = '#00c1c0';
 const LOGO_ORANGE = '#ff9722';
+/** red-400. */
+const LIGHT_RED = '#f87171';
 
 /** The logo's colors: turquoise letters (#00C1C0) with an orange outline (#FF9722). */
 const TITLE_FILL = '#00c1c0';
@@ -143,7 +145,7 @@ export default function TabsLayout() {
     title: string;
     icon: TabIconName;
     description?: string;
-    /** Selected icon and name in one of the logo's colors instead of the default teal. */
+    /** Selected icon and name in the section's own color instead of the default teal. */
     activeTint?: string;
   }[] = [
     {
@@ -165,6 +167,7 @@ export default function TabsLayout() {
       title: t('urgent.tabTitle'),
       icon: 'tab-urgent',
       description: t('urgent.intro'),
+      activeTint: LIGHT_RED,
     },
     { name: 'settings', title: t('settings.tabTitle'), icon: 'tab-settings' },
   ];
