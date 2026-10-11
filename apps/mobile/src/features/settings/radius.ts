@@ -45,9 +45,11 @@ export function coveringRadiusKm(neededKm: number, unit: DistanceUnit): number {
   return options.find((option) => option >= neededKm) ?? options.at(-1) ?? neededKm;
 }
 
-/** The map's radius button: the next choice in the unit, back to the smallest after the largest. */
+/**
+ * The map's radius button: the next choice above the radius in the unit (also from a radius set by
+ * zooming the map), back to the smallest after the largest.
+ */
 export function nextRadiusKm(radiusKm: number, unit: DistanceUnit): number {
   const options = radiusOptionsKm(unit);
-  const current = options.findIndex((option) => Math.abs(option - radiusKm) < 1e-6);
-  return options[(current + 1) % options.length] ?? options[0] ?? radiusKm;
+  return options.find((option) => option > radiusKm + 1e-6) ?? options[0] ?? radiusKm;
 }

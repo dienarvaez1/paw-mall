@@ -1,14 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DOG_SIZES, type DogSize, PET_SPECIES, type PetSpecies } from '@paw-mall/shared';
+import {
+  DOG_SIZES,
+  type DogSize,
+  MAX_RADIUS_KM,
+  PET_SPECIES,
+  type PetSpecies,
+} from '@paw-mall/shared';
 import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-import {
-  closestRadiusKm,
-  isRadiusOption,
-  startRadiusKm,
-  type DistanceUnit,
-  UNIT_OPTIONS,
-} from './radius';
+import { closestRadiusKm, startRadiusKm, type DistanceUnit, UNIT_OPTIONS } from './radius';
 
 export { type DistanceUnit, UNIT_OPTIONS } from './radius';
 
@@ -70,10 +70,14 @@ export function parseSettings(raw: string | null): Settings {
     const units = (UNIT_OPTIONS as readonly string[]).includes(value.units ?? '')
       ? (value.units as DistanceUnit)
       : DEFAULTS.units;
-    const stored = typeof value.radiusKm === 'number' ? value.radiusKm : DEFAULTS.radiusKm;
+    // Any radius from the presets or from zooming the map (0.1 to MAX_RADIUS_KM) is kept as is.
+    const stored =
+      typeof value.radiusKm === 'number' && value.radiusKm >= 0.1 && value.radiusKm <= MAX_RADIUS_KM
+        ? value.radiusKm
+        : DEFAULTS.radiusKm;
     return {
       units,
-      radiusKm: isRadiusOption(stored, units) ? stored : closestRadiusKm(stored, units),
+      radiusKm: stored,
       onlyWithPhone: value.onlyWithPhone === true,
       onlyWithWebsite: value.onlyWithWebsite === true,
       onlyWithSocial: value.onlyWithSocial === true,

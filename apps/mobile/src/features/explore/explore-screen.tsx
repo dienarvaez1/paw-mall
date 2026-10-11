@@ -20,7 +20,7 @@ import { SearchInput } from '@/components/search-input';
 import { BUTTON_HIT_SLOP } from '@/components/button';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
-import { closestRadiusKm, coveringRadiusKm, nextRadiusKm } from '@/features/settings/radius';
+import { coveringRadiusKm, nextRadiusKm } from '@/features/settings/radius';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -90,8 +90,8 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   // around the user within the Ajustes radius.
   // Starts on (owner's rule), and turns back on whenever the app returns from the background.
   const [nearMe, setNearMe] = useState(true);
-  // Ajustes has the last word on the radius (owner's rule): the radius button, a zoom by hand and
-  // a tapped cluster all save their radius there, as the closest Ajustes choice.
+  // Ajustes has the last word on the radius (owner's rule): the radius button, a zoom by hand
+  // (exactly as zoomed) and a tapped cluster all save their radius there.
   // A tapped map cluster becomes the search circle's center until "Mi ubicación" (or a return
   // from the background) brings the circle back to the user.
   const [focus, setFocus] = useState<{ lat: number; lng: number } | null>(null);
@@ -472,8 +472,9 @@ function PlacesMap({
     if (!nearMe || was) return;
     void refresh().then((coords) => moveMap(regionForRadius(coords, radiusKm)));
   }, [nearMe, refresh, radiusKm, moveMap]);
-  // The map's own radius changes (a zoom by hand, a tapped cluster) go to Ajustes as the closest
-  // choice, without the refit a change from Ajustes or the radius button makes.
+  // The map's own radius changes go to Ajustes (a zoom by hand exactly as zoomed, a tapped cluster
+  // as the smallest choice covering it), without the refit a change from Ajustes or the radius
+  // button makes.
   const saveRadius = useCallback(
     (nextKm: number) => {
       if (Math.abs(nextKm - radiusKm) < 1e-6) return;
@@ -589,7 +590,8 @@ function PlacesMap({
           if (movedByHand(details?.isGesture)) {
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
             if (!searchedArea && Math.abs(handRadiusKm - circle.radiusKm) >= 0.05) {
-              saveRadius(closestRadiusKm(handRadiusKm, units));
+              // Exactly as zoomed, even between the presets (owner's rule).
+              saveRadius(handRadiusKm);
             }
             // The center moved by hand off the user: no longer "at my location".
             if (nearMe && isAwayFrom(next, location.coords)) onLeaveMyLocation();

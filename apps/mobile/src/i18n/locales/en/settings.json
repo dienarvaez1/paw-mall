@@ -38,5 +38,6 @@
     },
     "onlyConfirmed": "Only confirmed places",
     "onlyConfirmedHint": "Off, Pet-friendly also shows restaurants and cafés nobody has confirmed yet (never those that say no)."
-  }
+  },
+  "radiusFromMap": "{{distance}} (from zooming the map)"
 }

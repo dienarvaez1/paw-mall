@@ -28,10 +28,11 @@ describe('parseSettings', () => {
     expect(miles.radiusKm).toBeCloseTo(16.09344, 5);
   });
 
-  it('moves a radius that is not a choice for the unit to the closest one', () => {
-    // 25 km saved with miles selected (from an older version) becomes 15 mi.
-    expect(parseSettings('{"radiusKm":25,"units":"mi"}').radiusKm).toBeCloseTo(15 * 1.609344, 5);
-    expect(parseSettings('{"radiusKm":7,"units":"km"}').radiusKm).toBe(5);
+  it('keeps a radius set by zooming the map, and drops impossible ones', () => {
+    expect(parseSettings('{"radiusKm":7.3,"units":"km"}').radiusKm).toBe(7.3);
+    expect(parseSettings('{"radiusKm":25,"units":"mi"}').radiusKm).toBe(25);
+    expect(parseSettings('{"radiusKm":0,"units":"km"}').radiusKm).toBe(5);
+    expect(parseSettings('{"radiusKm":9999,"units":"km"}').radiusKm).toBe(5);
   });
 
   it('falls back to defaults for missing, unknown or broken values', () => {

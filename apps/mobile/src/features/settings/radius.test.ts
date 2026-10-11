@@ -58,8 +58,10 @@ describe('nextRadiusKm', () => {
     expect(nextRadiusKm(toKm(100, 'mi'), 'mi')).toBeCloseTo(toKm(3, 'mi'));
   });
 
-  it('starts from the smallest when the radius is not a choice', () => {
-    expect(nextRadiusKm(7, 'km')).toBe(5);
+  it('goes to the next choice above a radius set by zooming the map', () => {
+    expect(nextRadiusKm(7, 'km')).toBe(10);
+    expect(nextRadiusKm(toKm(4, 'mi'), 'mi')).toBeCloseTo(toKm(5, 'mi'));
+    expect(nextRadiusKm(200, 'km')).toBe(5);
   });
 });
 

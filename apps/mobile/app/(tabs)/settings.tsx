@@ -34,6 +34,18 @@ export default function SettingsScreen() {
       </Section>
 
       <Section title={t('settings.searchRadius')} hint={t('settings.searchRadiusHint')}>
+        {/* A radius set by zooming the map, between the choices: shown selected, first. */}
+        {RADIUS_OPTIONS[settings.units].some(
+          (value) => Math.abs(settings.radiusKm - toKm(value, settings.units)) < 1e-6,
+        ) ? null : (
+          <Option
+            label={t('settings.radiusFromMap', {
+              distance: formatDistance(settings.radiusKm, locale, settings.units),
+            })}
+            selected
+            onPress={() => {}}
+          />
+        )}
         {RADIUS_OPTIONS[settings.units].map((value) => {
           // Shown in the selected unit; stored and sent to the API in km.
           const km = toKm(value, settings.units);
