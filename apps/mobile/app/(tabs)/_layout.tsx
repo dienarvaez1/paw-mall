@@ -1,4 +1,4 @@
-import { Image } from 'expo-image';
+import { Image, type ImageSource } from 'expo-image';
 import { Tabs } from 'expo-router';
 import { useColorScheme } from 'react-native';
 
@@ -9,6 +9,23 @@ type TabIconName = 'tab-explore' | 'tab-pets' | 'tab-urgent' | 'tab-settings';
 
 function TabIcon({ name, color }: { name: TabIconName; color: string }) {
   return <Image source={ICONS[name]} style={{ width: 26, height: 26 }} tintColor={color} />;
+}
+
+const LOGO = require('../../assets/images/logo.png') as ImageSource;
+
+/** The Paw-Mall logo in every tab's header (3:1, transparent, readable in light and dark). */
+function HeaderLogo() {
+  const { t } = useAppTranslation();
+  return (
+    <Image
+      source={LOGO}
+      style={{ width: 120, height: 40 }}
+      contentFit="contain"
+      accessible
+      accessibilityRole="header"
+      accessibilityLabel={t('common.appName')}
+    />
+  );
 }
 
 /** Explorar, Pet-friendly, Urgencias and Ajustes; Favoritos isn't scheduled yet. */
@@ -30,6 +47,7 @@ export default function TabsLayout() {
           name={tab.name}
           options={{
             title: tab.title,
+            headerTitle: () => <HeaderLogo />,
             tabBarIcon: ({ color }) => <TabIcon name={tab.icon} color={String(color)} />,
           }}
         />
