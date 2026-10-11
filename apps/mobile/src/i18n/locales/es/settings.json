@@ -1,8 +1,6 @@
 {
   "tabTitle": "Ajustes",
   "language": "Idioma",
-  "searchRadius": "Radio de búsqueda",
-  "searchRadiusHint": "Qué tan lejos buscar lugares a tu alrededor.",
   "units": "Unidades de distancia",
   "unit": {
     "km": "Kilómetros",
@@ -38,6 +36,5 @@
     },
     "onlyConfirmed": "Solo lugares confirmados",
     "onlyConfirmedHint": "Apagado, Pet-friendly también muestra restaurantes y cafés que nadie ha confirmado todavía (nunca los que dicen que no)."
-  },
-  "radiusFromMap": "{{distance}} (del zoom del mapa)"
+  }
 }

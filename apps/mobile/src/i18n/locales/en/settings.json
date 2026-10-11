@@ -1,8 +1,6 @@
 {
   "tabTitle": "Settings",
   "language": "Language",
-  "searchRadius": "Search radius",
-  "searchRadiusHint": "How far around you to look for places.",
   "units": "Distance units",
   "unit": {
     "km": "Kilometers",
@@ -38,6 +36,5 @@
     },
     "onlyConfirmed": "Only confirmed places",
     "onlyConfirmedHint": "Off, Pet-friendly also shows restaurants and cafés nobody has confirmed yet (never those that say no)."
-  },
-  "radiusFromMap": "{{distance}} (from zooming the map)"
+  }
 }

@@ -162,7 +162,7 @@ export function usePlace(id: number) {
 const URGENT_REFRESH_MS = 60 * 1000;
 
 /** Urgencias: the nearest vet hospitals and 24-hour vets, open ones first. */
-/** Urgencias, within the Ajustes radius and with its place switches (Ajustes has the last word). */
+/** Urgencias, within the radius set on the Explorar and Pet-friendly maps, and with the Ajustes place switches. */
 export function useUrgentPlaces(coords: Coords) {
   const locale = useLocale();
   const { radiusKm } = useSettings();

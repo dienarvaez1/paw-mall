@@ -26,7 +26,7 @@ const ExploreViewContext = createContext<ExploreView>({
 
 /**
  * Mapa/Lista, "Mi ubicación" and the search text, shared by Explorar and Pet-friendly so switching
- * tabs keeps them (the radius is shared through Ajustes). They start on the map, around the user's
+ * tabs keeps them (the radius is shared with Urgencias). They start on the map, around the user's
  * location, with Mi ubicación off and an empty search, and go back to that whenever the app
  * returns from the background (owner's rules).
  */

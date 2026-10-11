@@ -3,10 +3,8 @@ import Constants from 'expo-constants';
 import type { ReactNode } from 'react';
 import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
 
-import { RADIUS_OPTIONS, toKm } from '@/features/settings/radius';
 import { UNIT_OPTIONS, useSettings } from '@/features/settings/settings-context';
 import { setLanguage } from '@/i18n';
-import { formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 
@@ -31,33 +29,6 @@ export default function SettingsScreen() {
             onPress={() => void setLanguage(code)}
           />
         ))}
-      </Section>
-
-      <Section title={t('settings.searchRadius')} hint={t('settings.searchRadiusHint')}>
-        {/* A radius set by zooming the map, between the choices: shown selected, first. */}
-        {RADIUS_OPTIONS[settings.units].some(
-          (value) => Math.abs(settings.radiusKm - toKm(value, settings.units)) < 1e-6,
-        ) ? null : (
-          <Option
-            label={t('settings.radiusFromMap', {
-              distance: formatDistance(settings.radiusKm, locale, settings.units),
-            })}
-            selected
-            onPress={() => {}}
-          />
-        )}
-        {RADIUS_OPTIONS[settings.units].map((value) => {
-          // Shown in the selected unit; stored and sent to the API in km.
-          const km = toKm(value, settings.units);
-          return (
-            <Option
-              key={`${settings.units}-${value}`}
-              label={formatDistance(km, locale, settings.units)}
-              selected={Math.abs(settings.radiusKm - km) < 1e-6}
-              onPress={() => settings.setRadiusKm(km)}
-            />
-          );
-        })}
       </Section>
 
       <Section title={t('settings.units')}>
