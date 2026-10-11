@@ -82,9 +82,9 @@ function TabHeader({ title, description }: { title: string; description?: string
 
 const INFO_GLYPH = '\u24D8';
 
-/** The logo's colors: orange letters (#FF9722) with a turquoise outline (#00C1C0). */
-const TITLE_FILL = '#ff9722';
-const TITLE_OUTLINE = '#00c1c0';
+/** The logo's colors: turquoise letters (#00C1C0) with an orange outline (#FF9722). */
+const TITLE_FILL = '#00c1c0';
+const TITLE_OUTLINE = '#ff9722';
 const OUTLINE_PX = 0.75;
 const OUTLINE_OFFSETS = [
   [-1, -1],
@@ -99,8 +99,8 @@ const OUTLINE_OFFSETS = [
 const titleStyle = { fontSize: 21, fontWeight: '600', lineHeight: 26 } as const;
 
 /**
- * The tab title in the logo's style. React Native has no text outline, so turquoise copies offset
- * in eight directions sit behind the orange text; only the front copy is read aloud.
+ * The tab title in the logo's style. React Native has no text outline, so orange copies offset in
+ * eight directions sit behind the turquoise text; only the front copy is read aloud.
  */
 function OutlinedTitle({ title }: { title: string }) {
   return (
