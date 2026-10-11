@@ -597,6 +597,8 @@ function PlacesMap({
         }}
         showsCompass={false}
         showsUserLocation={location.source === 'device'}
+        // Your location: a plain blue dot (iOS draws it in the map's tint; Android's is blue already).
+        tintColor="#007aff"
         showsMyLocationButton={false}
         userInterfaceStyle={scheme === 'dark' ? 'dark' : 'light'}
       >
