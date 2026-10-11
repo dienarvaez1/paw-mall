@@ -52,12 +52,20 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
 };
 const DEFAULT_COLOR = '#525252';
 
+/** The category a place's pin shows: the selected chip's, or its most specific one. */
+export function pinCategory(
+  place: Pick<Place, 'categories'>,
+  selected: ChipCategory,
+): CategorySlug | null {
+  if (selected) return selected;
+  const slugs = new Set(place.categories.map((c) => c.slug));
+  return (Object.keys(CATEGORY_COLORS) as CategorySlug[]).find((slug) => slugs.has(slug)) ?? null;
+}
+
 /** The pin color for a place: its selected category's, or its most specific one's. */
 export function pinColor(place: Pick<Place, 'categories'>, selected: ChipCategory): string {
-  if (selected) return CATEGORY_COLORS[selected] ?? DEFAULT_COLOR;
-  const slugs = new Set(place.categories.map((c) => c.slug));
-  const first = (Object.keys(CATEGORY_COLORS) as CategorySlug[]).find((slug) => slugs.has(slug));
-  return first ? (CATEGORY_COLORS[first] ?? DEFAULT_COLOR) : DEFAULT_COLOR;
+  const slug = pinCategory(place, selected);
+  return (slug && CATEGORY_COLORS[slug]) || DEFAULT_COLOR;
 }
 
 /** Pet-friendly venues (restaurants to parks): their rows and callouts show the pet policy. */

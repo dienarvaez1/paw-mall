@@ -14,6 +14,7 @@ import {
 import MapView, { Circle, Marker, type Region } from 'react-native-maps';
 
 import { type MapArea, usePlaces, usePlacesMap } from '@/api/hooks';
+import { CategoryPin } from '@/components/category-pin';
 import { ICONS } from '@/components/icons';
 import { PlaceRow, usePlaceName } from '@/components/place-row';
 import { SearchInput } from '@/components/search-input';
@@ -34,7 +35,6 @@ import {
   type ChipCategory,
   isPetFilterCategory,
   isPetFriendlyCategory,
-  pinColor,
 } from '@/lib/categories';
 import { uniqueById } from '@/lib/unique';
 import { circleForBounds, isAwayFrom, radiusForRegion, regionForRadius } from '@/lib/map-region';
@@ -723,9 +723,9 @@ function PlaceMarker({
   const policy = usePolicySummary(place.petPolicy);
   const kinds = showPolicy && policy ? policy : place.categories.map((c) => c.name).join(' · ');
   return (
-    <Marker
-      coordinate={{ latitude: place.location.lat, longitude: place.location.lng }}
-      pinColor={pinColor(place, category)}
+    <CategoryPin
+      place={place}
+      category={category}
       title={name}
       description={
         place.distanceKm === null

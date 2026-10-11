@@ -2,10 +2,11 @@ import { type Place, type PlaceReportReason, WEEK_ORDER } from '@paw-mall/shared
 import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 
 import { usePlace } from '@/api/hooks';
 import { BUTTON_HIT_SLOP, Button } from '@/components/button';
+import { CategoryPin } from '@/components/category-pin';
 import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { ErrorState, SkeletonList } from '@/components/states';
@@ -16,7 +17,7 @@ import { useReportPlace } from '@/features/reports/place-reports';
 import { formatClockTime, formatDate, formatMonthYear, formatWeekday } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
-import { isPetFriendlyCategory, pinColor } from '@/lib/categories';
+import { isPetFriendlyCategory } from '@/lib/categories';
 import { phoneUrl } from '@/lib/links';
 import { useOpenDirections } from '@/lib/open-url';
 import { placeLine } from '@/lib/place-line';
@@ -48,7 +49,7 @@ function PlaceDetail({ place: p }: { place: Place }) {
         pitchEnabled={false}
         rotateEnabled={false}
       >
-        <Marker coordinate={coordinate} title={name} pinColor={pinColor(p, null)} />
+        <CategoryPin place={p} category={null} title={name} />
       </MapView>
 
       <View className="gap-2 px-4 pt-5">
