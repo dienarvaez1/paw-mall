@@ -1,6 +1,7 @@
 import { Image, type ImageSource } from 'expo-image';
 import { Tabs } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { Text, View, useColorScheme } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ICONS } from '@/components/icons';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -13,18 +14,33 @@ function TabIcon({ name, color }: { name: TabIconName; color: string }) {
 
 const LOGO = require('../../assets/images/logo.png') as ImageSource;
 
-/** The Paw-Mall logo in every tab's header (3:1, transparent, readable in light and dark). */
-function HeaderLogo() {
+/**
+ * Every tab's header: the Paw-Mall logo (3:1, transparent, readable in light and dark), then the
+ * tab's title under it.
+ */
+function TabHeader({ title }: { title: string }) {
   const { t } = useAppTranslation();
+  const { top } = useSafeAreaInsets();
   return (
-    <Image
-      source={LOGO}
-      style={{ width: 120, height: 40 }}
-      contentFit="contain"
-      accessible
-      accessibilityRole="header"
-      accessibilityLabel={t('common.appName')}
-    />
+    <View
+      style={{ paddingTop: top + 4 }}
+      className="items-center border-b border-neutral-200 bg-white pb-2 dark:border-neutral-800 dark:bg-neutral-950"
+    >
+      <Image
+        source={LOGO}
+        style={{ width: 144, height: 48 }}
+        contentFit="contain"
+        accessible
+        accessibilityRole="image"
+        accessibilityLabel={t('common.appName')}
+      />
+      <Text
+        accessibilityRole="header"
+        className="pt-1 text-lg font-semibold text-neutral-900 dark:text-white"
+      >
+        {title}
+      </Text>
+    </View>
   );
 }
 
@@ -47,7 +63,7 @@ export default function TabsLayout() {
           name={tab.name}
           options={{
             title: tab.title,
-            headerTitle: () => <HeaderLogo />,
+            header: () => <TabHeader title={tab.title} />,
             tabBarIcon: ({ color }) => <TabIcon name={tab.icon} color={String(color)} />,
           }}
         />
