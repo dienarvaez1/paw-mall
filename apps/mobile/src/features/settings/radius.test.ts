@@ -66,10 +66,11 @@ describe('nextRadiusKm', () => {
 });
 
 describe('coveringRadiusKm', () => {
-  it('takes the smallest choice that covers the cluster', () => {
-    expect(coveringRadiusKm(7, 'km')).toBe(10);
-    expect(coveringRadiusKm(0.2, 'km')).toBe(5);
-    expect(coveringRadiusKm(400, 'km')).toBe(160);
+  it('covers the cluster in whole kilometers', () => {
+    expect(coveringRadiusKm(7)).toBe(7);
+    expect(coveringRadiusKm(7.2)).toBe(8);
+    expect(coveringRadiusKm(0.2)).toBe(1);
+    expect(coveringRadiusKm(400)).toBe(161);
   });
 });
 

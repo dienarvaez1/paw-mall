@@ -1,4 +1,4 @@
-import { KM_PER_MILE } from '@paw-mall/shared';
+import { KM_PER_MILE, MAX_RADIUS_KM } from '@paw-mall/shared';
 
 export const UNIT_OPTIONS = ['km', 'mi'] as const;
 export type DistanceUnit = (typeof UNIT_OPTIONS)[number];
@@ -39,10 +39,12 @@ export function isRadiusOption(radiusKm: number, unit: DistanceUnit): boolean {
   return radiusOptionsKm(unit).some((option) => Math.abs(option - radiusKm) < 1e-6);
 }
 
-/** A tapped map cluster's radius: the smallest choice in the unit that covers its places. */
-export function coveringRadiusKm(neededKm: number, unit: DistanceUnit): number {
-  const options = radiusOptionsKm(unit);
-  return options.find((option) => option >= neededKm) ?? options.at(-1) ?? neededKm;
+/**
+ * A tapped map cluster's radius: the whole kilometers that cover its places (1 km steps, owner's
+ * rule), at least 1 km and at most the largest radius.
+ */
+export function coveringRadiusKm(neededKm: number): number {
+  return Math.min(MAX_RADIUS_KM, Math.max(1, Math.ceil(neededKm - 1e-9)));
 }
 
 /**

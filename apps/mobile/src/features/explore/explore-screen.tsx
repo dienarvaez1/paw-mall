@@ -419,7 +419,7 @@ function PlacesMap({
   onLeaveMyLocation: () => void;
 }) {
   const { t } = useAppTranslation();
-  const { radiusKm, units, setRadiusKm } = useSettings();
+  const { radiusKm, setRadiusKm } = useSettings();
   const router = useRouter();
   const location = useUserLocation();
   const scheme = useColorScheme();
@@ -443,23 +443,22 @@ function PlacesMap({
     );
   }, []);
   const initialRegion: Region = regionForRadius(focus ?? location.coords, radiusKm);
-  const fitted = useRef({ radiusKm, ...location.coords });
+  // The circle the view is fitted to. Its radius and center are shared by both tabs' maps (the
+  // radius in Ajustes, the center in explore-view.tsx), so a zoom, pan or cluster tap on one map
+  // refits the other; the map that made the change records it here first and doesn't move.
+  const { lat: fitLat, lng: fitLng } = focus ?? location.coords;
+  const fitted = useRef({ radiusKm, lat: fitLat, lng: fitLng });
   // While a searched area is shown, its circle has its own radius: don't fly back to the user.
   const showingArea = useRef(false);
   useEffect(() => {
     const last = fitted.current;
-    if (
-      last.radiusKm === radiusKm &&
-      last.lat === location.coords.lat &&
-      last.lng === location.coords.lng
-    ) {
+    if (last.radiusKm === radiusKm && last.lat === fitLat && last.lng === fitLng) {
       return;
     }
-    fitted.current = { radiusKm, ...location.coords };
-    // Likewise while a tapped cluster is the circle.
-    if (showingArea.current || focus) return;
-    moveMap(regionForRadius(location.coords, radiusKm));
-  }, [radiusKm, location.coords, focus, moveMap]);
+    fitted.current = { radiusKm, lat: fitLat, lng: fitLng };
+    if (showingArea.current) return;
+    moveMap(regionForRadius({ lat: fitLat, lng: fitLng }, radiusKm));
+  }, [radiusKm, fitLat, fitLng, moveMap]);
   // Turning "Mi ubicación" on in map view: read the device's position again and fly back to it,
   // with the circle fitted around it. Turning it off leaves the map where it is.
   const wasNearMe = useRef(nearMe);
@@ -470,29 +469,19 @@ function PlacesMap({
     if (!nearMe || was) return;
     void refresh().then((coords) => moveMap(regionForRadius(coords, radiusKm)));
   }, [nearMe, refresh, radiusKm, moveMap]);
-  // The map's own radius changes go to Ajustes (a zoom by hand exactly as zoomed, a tapped cluster
-  // as the smallest choice covering it), without the refit a change from Ajustes or the radius
-  // button makes.
-  const saveRadius = useCallback(
-    (nextKm: number) => {
-      if (Math.abs(nextKm - radiusKm) < 1e-6) return;
-      fitted.current = { radiusKm: nextKm, ...location.coords };
-      setRadiusKm(nextKm);
+  // A zoom or pan by hand: the radius (exactly as zoomed) goes to Ajustes and the center to the
+  // shared circle, recorded as fitted so this map stays put while the other one follows.
+  const saveCircle = useCallback(
+    (nextKm: number, center: { lat: number; lng: number } | null) => {
+      fitted.current = { ...fitted.current, ...center, radiusKm: nextKm };
+      if (Math.abs(nextKm - radiusKm) >= 1e-6) setRadiusKm(nextKm);
+      if (center) onMoveCircle(center);
     },
-    [radiusKm, location.coords, setRadiusKm],
+    [radiusKm, setRadiusKm, onMoveCircle],
   );
   // Back from the background: read the position again and fly back to the user.
   useOnWake(() => void refresh().then((coords) => moveMap(regionForRadius(coords, radiusKm))));
   const [region, setRegion] = useState<Region>(initialRegion);
-  // The circle moved on the other tab's map (a pan or a cluster): fly there too. On this tab's
-  // map the view is already there (a pan) or flying there (a cluster), so nothing moves.
-  const regionRef = useRef(initialRegion);
-  const flyingTo = useRef<{ lat: number; lng: number } | null>(null);
-  useEffect(() => {
-    if (!focus || flyingTo.current === focus) return;
-    flyingTo.current = focus;
-    if (isAwayFrom(regionRef.current, focus)) moveMap(regionForRadius(focus, radiusKm));
-  }, [focus, radiusKm, moveMap]);
   const [area, setArea] = useState<MapArea | null>(null);
 
   useEffect(() => {
@@ -590,22 +579,23 @@ function PlacesMap({
         onRegionChange={readHeading}
         onRegionChangeComplete={(next, details) => {
           setRegion(next);
-          regionRef.current = next;
           readHeading();
           // Only the user's own zooms and pans: the map's own moves (fitting a circle, a cluster,
           // the location button) keep the radius as it is.
           // A pan alone leaves the scale (and so the radius) as it was.
           if (movedByHand(details?.isGesture)) {
+            // Zoomed: the radius exactly as zoomed, even between the presets. Panned: the circle
+            // follows to the map's new center. Both maps take it (owner's rules).
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
-            if (!searchedArea && Math.abs(handRadiusKm - circle.radiusKm) >= 0.05) {
-              // Exactly as zoomed, even between the presets (owner's rule).
-              saveRadius(handRadiusKm);
+            const zoomed = !searchedArea && Math.abs(handRadiusKm - circle.radiusKm) >= 0.05;
+            const panned = !searchedArea && isAwayFrom(next, circle.center);
+            if (zoomed || panned) {
+              saveCircle(
+                zoomed ? handRadiusKm : radiusKm,
+                panned ? { lat: next.latitude, lng: next.longitude } : null,
+              );
             }
-            // Panned by hand: the circle follows to the map's new center (owner's rule), and off
-            // the user it's no longer "at my location".
-            if (!searchedArea && isAwayFrom(next, circle.center)) {
-              onMoveCircle({ lat: next.latitude, lng: next.longitude });
-            }
+            // Off the user, it's no longer "at my location".
             if (nearMe && isAwayFrom(next, location.coords)) onLeaveMyLocation();
           }
         }}
@@ -639,12 +629,11 @@ function PlacesMap({
             cluster={cluster}
             category={category}
             onPress={() => {
-              // The cluster becomes the circle: centered on its places, just big enough for them
-              // (see clusterRadiusKm), and the map centers that circle on screen.
+              // The cluster becomes the circle: centered on its places, in whole kilometers just
+              // big enough for them, and the map (and the other tab's) centers it on screen.
               const covering = circleForBounds(cluster.bounds);
-              const clusterKm = coveringRadiusKm(covering.radiusKm, units);
-              saveRadius(clusterKm);
-              onMoveCircle(covering.center);
+              const clusterKm = coveringRadiusKm(covering.radiusKm);
+              saveCircle(clusterKm, covering.center);
               moveMap(regionForRadius(covering.center, clusterKm));
             }}
           />
