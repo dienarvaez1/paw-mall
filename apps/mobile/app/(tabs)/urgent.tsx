@@ -37,8 +37,16 @@ export default function UrgentScreen() {
     useDebounced(text.trim(), SEARCH_DEBOUNCE_MS),
   );
   const area = urgent.data?.area ?? null;
+  const items = urgent.data?.items ?? [];
+  const summaryArea = area
+    ? area.municipality
+      ? `${area.name}, ${area.municipality}`
+      : area.name
+    : focus
+      ? (items[0]?.city ?? null)
+      : null;
   const locale = useLocale();
-  const { units } = useSettings();
+  const { units, radiusKm } = useSettings();
 
   return (
     <View className="flex-1 bg-white dark:bg-neutral-950">
@@ -59,15 +67,16 @@ export default function UrgentScreen() {
           ItemSeparatorComponent={() => <View className="h-3" />}
           contentContainerClassName="p-4"
           ListHeaderComponent={
-            // A searched area with results: the same summary as Explorar's ("8 lugares a menos de
-            // 3 mi de Xochimilco").
-            area && urgent.data.items.length > 0 ? (
+            // The same summary as Explorar's: around a searched area ("8 lugares a menos de 3 mi
+            // de Xochimilco"), or around where the map was moved, named by the closest place's
+            // city ("7 lugares a menos de 5 km de Tlalnepantla de Baz").
+            summaryArea && items.length > 0 ? (
               <Text className="pb-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
                 {t('places.areaCount', {
-                  count: urgent.data.items.length,
-                  total: formatCount(urgent.data.items.length, locale),
-                  distance: formatDistance(area.radiusKm, locale, units),
-                  area: area.municipality ? `${area.name}, ${area.municipality}` : area.name,
+                  count: items.length,
+                  total: formatCount(items.length, locale),
+                  distance: formatDistance(area?.radiusKm ?? radiusKm, locale, units),
+                  area: summaryArea,
                 })}
               </Text>
             ) : null
