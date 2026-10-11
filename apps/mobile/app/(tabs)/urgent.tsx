@@ -38,6 +38,9 @@ export default function UrgentScreen() {
   );
   const area = urgent.data?.area ?? null;
   const items = urgent.data?.items ?? [];
+  // Measured from the user ("Mi ubicación" on, no searched area, map not moved): only then is the
+  // first card highlighted and do distances read "0.7 km away" (owner's rules).
+  const fromUser = nearMe && !area && !focus;
   const summaryArea = area
     ? area.municipality
       ? `${area.name}, ${area.municipality}`
@@ -60,7 +63,7 @@ export default function UrgentScreen() {
           data={urgent.data.items}
           keyExtractor={(place) => String(place.id)}
           renderItem={({ item, index }) => (
-            <UrgentCard place={item} first={nearMe && !area && !focus && index === 0} />
+            <UrgentCard place={item} first={fromUser && index === 0} away={fromUser} />
           )}
           ItemSeparatorComponent={() => <View className="h-3" />}
           contentContainerClassName="p-4"
@@ -93,7 +96,7 @@ export default function UrgentScreen() {
   );
 }
 
-function UrgentCard({ place, first }: { place: Place; first: boolean }) {
+function UrgentCard({ place, first, away }: { place: Place; first: boolean; away: boolean }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const { units } = useSettings();
@@ -111,7 +114,11 @@ function UrgentCard({ place, first }: { place: Place; first: boolean }) {
         <Text className="flex-1 text-lg font-bold text-neutral-900 dark:text-white">{name}</Text>
         {place.distanceKm !== null ? (
           <Text className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
-            {t('places.distanceKm', { distance: formatDistance(place.distanceKm, locale, units) })}
+            {away
+              ? t('places.distanceKm', {
+                  distance: formatDistance(place.distanceKm, locale, units),
+                })
+              : formatDistance(place.distanceKm, locale, units)}
           </Text>
         ) : null}
       </View>
