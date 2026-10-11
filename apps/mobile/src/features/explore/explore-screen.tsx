@@ -14,6 +14,7 @@ import {
 import MapView, { Circle, Marker, type Region } from 'react-native-maps';
 
 import { type MapArea, usePlaces, usePlacesMap } from '@/api/hooks';
+import { CategoryBadge } from '@/components/category-badge';
 import { CategoryPin } from '@/components/category-pin';
 import { ICONS } from '@/components/icons';
 import { PlaceRow, usePlaceName } from '@/components/place-row';
@@ -233,12 +234,7 @@ function CategoryChips({
               active ? 'border-paw bg-paw' : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
             }`}
           >
-            {color ? (
-              <View
-                className="h-2 w-2 rounded-full border border-white"
-                style={{ backgroundColor: color }}
-              />
-            ) : null}
+            {slug && color ? <CategoryBadge slug={slug} color={color} size={18} /> : null}
             <Text
               className={`text-xs font-semibold ${
                 active ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'

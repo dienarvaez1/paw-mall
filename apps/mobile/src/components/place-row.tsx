@@ -2,13 +2,14 @@ import type { Place } from '@paw-mall/shared';
 import { Link } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
+import { CategoryBadge } from '@/components/category-badge';
 import { OpenStatus } from '@/components/open-status';
 import { usePolicySummary } from '@/features/pet-policy/policy-text';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
-import { type ChipCategory, pinColor } from '@/lib/categories';
+import { type ChipCategory, pinCategory, pinColor } from '@/lib/categories';
 import { placeLine } from '@/lib/place-line';
 
 /** The place's name, or a translated label for businesses registered without one. */
@@ -30,9 +31,10 @@ export function CategoryLine({
 }) {
   return (
     <View className="flex-row items-center gap-2">
-      <View
-        className="h-2.5 w-2.5 rounded-full"
-        style={{ backgroundColor: pinColor(place, selected) }}
+      <CategoryBadge
+        slug={pinCategory(place, selected)}
+        color={pinColor(place, selected)}
+        size={small ? 18 : 20}
       />
       <Text
         className={`flex-1 ${small ? 'text-[13px]' : 'text-sm'} text-neutral-600 dark:text-neutral-300`}
