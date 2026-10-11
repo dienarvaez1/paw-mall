@@ -27,15 +27,15 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status    | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | --- | --------- | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | Done      | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done      | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done      | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done      | 2026-10-05 | 2026-10-05 |
-| 5     | Trust               | `phase-5/trust`           | #6  | Done      | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | Done      | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | #9  | In review | 2026-10-10 | —          |
+| Phase | Name                | Branch                    | PR  | Status | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | --- | ------ | ---------- | ---------- |
+| 1     | Foundation          | `phase-1/foundation`      | #2  | Done   | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done   | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done   | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done   | 2026-10-05 | 2026-10-05 |
+| 5     | Trust               | `phase-5/trust`           | #6  | Done   | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | Done   | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | #9  | Done   | 2026-10-10 | 2026-10-10 |
 
 ## Pending owner reviews
 
@@ -600,7 +600,7 @@ a task (and a note in the phase that applies it).
   once licensing is verified, plus curated entries.
 - **Done when:** museums and parks appear with their pet policy, and each source is credited.
 - **Branch / PR:** `phase-7/tourism-museums` / #9
-- **Status:** In review (PR ready)
+- **Status:** Done, merged 2026-10-10 (`146991b`)
 - **Checks:**
   - [x] Licensing of each source verified and recorded below
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
@@ -662,3 +662,4 @@ Play readiness").
 | 2026-10-10 | Phase 6 started            | #8  |
 | 2026-10-10 | Phase 6 merged (`cb7b3b6`) | #8  |
 | 2026-10-10 | Phase 7 started            | #9  |
+| 2026-10-10 | Phase 7 merged (`146991b`) | #9  |
