@@ -749,7 +749,9 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
     opening hours across the region (snapshot `data/osm-dogs.json`, renamed from
     `osm-dogs-cdmx.json`: 187 elements, 173 places saved, 101 dog parks; hours: 2,874 elements,
     687 matched), City Express policy on 7 branches. Pet-friendly places within 160 km of CDMX:
-    95 → 154. Curated places stay CDMX-only (hand research).
+    95 → 154 (177 after the website check). Curated places stay CDMX-only (hand research).
+    Website check over 6,934 sites: hours for 70 places, 54 venues say pets are welcome (mostly
+    hotels with their own site; one restaurant inside a hotel takes the hotel's wording).
   - **List duplicates (fixed):** pages fetched at different times could repeat a place when
     policies changed in between (React "two children with the same key"); the list keeps each
     place once.
