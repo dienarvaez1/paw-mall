@@ -96,7 +96,7 @@ const OUTLINE_OFFSETS = [
   [0, 1],
   [1, 1],
 ] as const;
-const titleStyle = { fontSize: 21, fontWeight: '800', lineHeight: 26 } as const;
+const titleStyle = { fontSize: 21, fontWeight: '600', lineHeight: 26 } as const;
 
 /**
  * The tab title in the logo's style. React Native has no text outline, so turquoise copies offset
