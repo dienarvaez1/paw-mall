@@ -20,7 +20,7 @@ import { SearchInput } from '@/components/search-input';
 import { BUTTON_HIT_SLOP } from '@/components/button';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
-import { clusterRadiusKm, nextRadiusKm } from '@/features/settings/radius';
+import { clusterRadiusKm, nextRadiusKm, startRadiusKm } from '@/features/settings/radius';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -40,6 +40,7 @@ import { uniqueById } from '@/lib/unique';
 import { circleForBounds, isAwayFrom, radiusForRegion, regionForRadius } from '@/lib/map-region';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
+import { useOnWake } from '@/lib/use-on-wake';
 
 const MODES = ['list', 'map'] as const;
 type Mode = (typeof MODES)[number];
@@ -84,7 +85,8 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const [category, setCategory] = useState<ChipCategory>(null);
   // "Mi ubicación": off, the search text names an area to search around; on, business names
   // around the user within the Ajustes radius.
-  const [nearMe, setNearMe] = useState(false);
+  // Starts on (owner's rule), and turns back on whenever the app returns from the background.
+  const [nearMe, setNearMe] = useState(true);
   // A radius set by zooming the map by hand: it replaces the presets for the list and the map
   // until the radius button is tapped (it's never saved to Ajustes).
   const [customRadiusKm, setCustomRadiusKm] = useState<number | null>(null);
@@ -92,6 +94,14 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   // until the radius button or "Mi ubicación" brings the circle back to the user.
   const [focus, setFocus] = useState<{ lat: number; lng: number } | null>(null);
   const [text, setText] = useState('');
+  // Back from the background: start over at the user's location, as on launch (the radius goes
+  // back to 3 miles in Settings, and the location is read again).
+  useOnWake(() => {
+    setNearMe(true);
+    setFocus(null);
+    setCustomRadiusKm(null);
+    setText('');
+  });
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
   // Pet-friendly searches show places that take pets; "Buscar también en lugares sin confirmar"
   // widens the current search to venues nobody has answered for yet (to ask on their page).
@@ -494,6 +504,9 @@ function PlacesMap({
     if (!had || customRadiusKm !== null || showingArea.current) return;
     moveMap(regionForRadius(location.coords, radiusKm));
   }, [customRadiusKm, location.coords, radiusKm, moveMap]);
+  // Back from the background: fly back to the user at the start radius (the location refresh and
+  // the radius reset may move it again when they land).
+  useOnWake(() => moveMap(regionForRadius(location.coords, startRadiusKm(units))));
   const [region, setRegion] = useState<Region>(initialRegion);
   const [area, setArea] = useState<MapArea | null>(null);
 

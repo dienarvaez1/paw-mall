@@ -6,6 +6,7 @@ import {
   nextRadiusKm,
   radiusOptionsKm,
   clusterRadiusKm,
+  startRadiusKm,
   toKm,
 } from './radius';
 
@@ -69,5 +70,12 @@ describe('clusterRadiusKm', () => {
     expect(clusterRadiusKm(30, 25, 'km')).toBe(25);
     expect(clusterRadiusKm(0.2, 5, 'km')).toBe(0.5);
     expect(clusterRadiusKm(0.2, 25, 'km')).toBe(5);
+  });
+});
+
+describe('startRadiusKm', () => {
+  it('starts at 3 miles, or the closest choice in km', () => {
+    expect(startRadiusKm('mi')).toBeCloseTo(4.828, 3);
+    expect(startRadiusKm('km')).toBe(5);
   });
 });

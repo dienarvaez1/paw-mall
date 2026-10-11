@@ -13,6 +13,14 @@ export function toKm(value: number, unit: DistanceUnit): number {
   return unit === 'mi' ? value * KM_PER_MILE : value;
 }
 
+/** Every launch and every return from the background starts at 3 miles (owner's rule). */
+export const START_RADIUS_MILES = 3;
+
+/** The start radius as a choice in the unit: 3 mi, or the closest in km (5 km). */
+export function startRadiusKm(unit: DistanceUnit): number {
+  return closestRadiusKm(toKm(START_RADIUS_MILES, 'mi'), unit);
+}
+
 /** The radius choices for a unit, in km (what the API takes). */
 export function radiusOptionsKm(unit: DistanceUnit): number[] {
   return RADIUS_OPTIONS[unit].map((value) => toKm(value, unit));

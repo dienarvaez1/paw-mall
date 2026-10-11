@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@react-native-async-storage/async-storage', () => ({ default: {} }));
+vi.mock('@/lib/use-on-wake', () => ({ useOnWake: () => {} }));
 
 const { parseSettings, petProfileFilters } = await import('./settings-context');
 

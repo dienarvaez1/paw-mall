@@ -8,7 +8,14 @@ import {
 } from '@paw-mall/shared';
 import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-import { type DistanceUnit, UNIT_OPTIONS, closestRadiusKm, isRadiusOption } from './radius';
+import {
+  closestRadiusKm,
+  isRadiusOption,
+  startRadiusKm,
+  type DistanceUnit,
+  UNIT_OPTIONS,
+} from './radius';
+import { useOnWake } from '@/lib/use-on-wake';
 
 export { type DistanceUnit, UNIT_OPTIONS } from './radius';
 
@@ -108,11 +115,18 @@ const SettingsContext = createContext<SettingsContextValue>({
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
 
+  // Every launch, and every return from the background, starts at the 3-mile radius.
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
-      .then((raw) => setSettings(parseSettings(raw)))
+      .then((raw) => {
+        const stored = parseSettings(raw);
+        setSettings({ ...stored, radiusKm: startRadiusKm(stored.units) });
+      })
       .catch(() => {});
   }, []);
+  useOnWake(() =>
+    setSettings((current) => ({ ...current, radiusKm: startRadiusKm(current.units) })),
+  );
 
   const value = useMemo<SettingsContextValue>(() => {
     const update = (patch: Partial<Settings>) =>

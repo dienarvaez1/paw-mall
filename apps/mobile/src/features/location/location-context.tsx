@@ -10,6 +10,8 @@ import {
   useState,
 } from 'react';
 
+import { useOnWake } from '@/lib/use-on-wake';
+
 export type UserLocation = {
   coords: { lat: number; lng: number };
   /** `fallback` when permission was denied or no fix was available. */
@@ -43,7 +45,10 @@ function located(coords: UserLocation['coords'] | null): LocationState {
     : { coords: FALLBACK_LOCATION, source: 'fallback', ready: true };
 }
 
-/** Asks for location at startup (and on refresh); falls back to central Mexico City. */
+/**
+ * Asks for location at startup, on refresh and whenever the app returns from the background;
+ * falls back to central Mexico City.
+ */
 export function LocationProvider({ children }: { children: ReactNode }) {
   const [location, setLocation] = useState<LocationState>(initial);
 
@@ -64,6 +69,8 @@ export function LocationProvider({ children }: { children: ReactNode }) {
     setLocation(next);
     return next.coords;
   }, []);
+
+  useOnWake(() => void refresh());
 
   const value = useMemo(() => ({ ...location, refresh }), [location, refresh]);
   return <LocationContext.Provider value={value}>{children}</LocationContext.Provider>;
