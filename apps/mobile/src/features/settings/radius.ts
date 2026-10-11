@@ -31,6 +31,15 @@ export function isRadiusOption(radiusKm: number, unit: DistanceUnit): boolean {
   return radiusOptionsKm(unit).some((option) => Math.abs(option - radiusKm) < 1e-6);
 }
 
+/**
+ * A tapped map cluster zooms one ring closer: the largest choice in the unit below the view's
+ * radius, or half of it below the smallest.
+ */
+export function smallerRadiusKm(viewRadiusKm: number, unit: DistanceUnit): number {
+  const below = radiusOptionsKm(unit).filter((option) => option < viewRadiusKm * 0.99);
+  return below.at(-1) ?? viewRadiusKm / 2;
+}
+
 /** The map's radius button: the next choice in the unit, back to the smallest after the largest. */
 export function nextRadiusKm(radiusKm: number, unit: DistanceUnit): number {
   const options = radiusOptionsKm(unit);

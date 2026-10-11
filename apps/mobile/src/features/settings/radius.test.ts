@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { closestRadiusKm, isRadiusOption, nextRadiusKm, radiusOptionsKm, toKm } from './radius';
+import {
+  closestRadiusKm,
+  isRadiusOption,
+  nextRadiusKm,
+  radiusOptionsKm,
+  smallerRadiusKm,
+  toKm,
+} from './radius';
 
 describe('search radius by unit', () => {
   it('keeps km choices as they are', () => {
@@ -52,5 +59,14 @@ describe('nextRadiusKm', () => {
 
   it('starts from the smallest when the radius is not a choice', () => {
     expect(nextRadiusKm(7, 'km')).toBe(5);
+  });
+});
+
+describe('smallerRadiusKm', () => {
+  it('goes one ring closer, or halves below the smallest', () => {
+    expect(smallerRadiusKm(25, 'km')).toBe(15);
+    expect(smallerRadiusKm(30, 'km')).toBe(25);
+    expect(smallerRadiusKm(5, 'km')).toBe(2.5);
+    expect(smallerRadiusKm(160, 'km')).toBe(80);
   });
 });

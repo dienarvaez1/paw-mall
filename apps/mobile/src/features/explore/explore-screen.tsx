@@ -20,7 +20,7 @@ import { SearchInput } from '@/components/search-input';
 import { BUTTON_HIT_SLOP } from '@/components/button';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
-import { nextRadiusKm } from '@/features/settings/radius';
+import { nextRadiusKm, smallerRadiusKm } from '@/features/settings/radius';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -37,7 +37,7 @@ import {
   pinColor,
 } from '@/lib/categories';
 import { uniqueById } from '@/lib/unique';
-import { isAwayFrom, radiusForRegion, regionForBounds, regionForRadius } from '@/lib/map-region';
+import { isAwayFrom, radiusForRegion, regionForRadius } from '@/lib/map-region';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 
@@ -408,7 +408,7 @@ function PlacesMap({
   onLeaveMyLocation: () => void;
 }) {
   const { t } = useAppTranslation();
-  const { radiusKm } = useSettings();
+  const { radiusKm, units } = useSettings();
   const router = useRouter();
   const location = useUserLocation();
   const scheme = useColorScheme();
@@ -603,7 +603,15 @@ function PlacesMap({
             key={`${category},${cluster.location.lat},${cluster.location.lng},${cluster.count}`}
             cluster={cluster}
             category={category}
-            onPress={() => moveMap(regionForBounds(cluster.bounds))}
+            onPress={() =>
+              // One ring closer, centered on the cluster.
+              moveMap(
+                regionForRadius(
+                  cluster.location,
+                  smallerRadiusKm(radiusForRegion(region, MAX_RADIUS_KM), units),
+                ),
+              )
+            }
           />
         ))}
       </MapView>
