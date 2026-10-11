@@ -14,5 +14,11 @@ export const REGION = 'MX';
 /** International mile. */
 export const KM_PER_MILE = 1.609344;
 
+/**
+ * A search that is just a place's name ("Tlaxcala") also lists businesses with that word in their
+ * name up to this far from the place: 25 miles (owner's rule).
+ */
+export const AREA_NAME_RADIUS_KM = 25 * KM_PER_MILE;
+
 /** Where the app centers when location is unavailable: Zócalo, Mexico City. */
 export const FALLBACK_LOCATION = { lat: 19.4326, lng: -99.1332 } as const;

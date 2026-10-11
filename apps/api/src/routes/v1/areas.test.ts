@@ -36,6 +36,11 @@ beforeAll(async () => {
   await addPlace('at-plaza', 'Veterinaria de la Plaza', 50.3);
   await addPlace('plaza-4km', 'Estetica Cerca de la Plaza', 54, 'groomer');
   await addPlace('plaza-8km', 'Veterinaria Lejos de la Plaza', 58);
+  // A town, with businesses named after it within 25 miles (40 km) of it, and beyond.
+  await addArea('town', 'Pueblo Nombre Paw', 200);
+  await addPlace('in-town', 'Veterinaria del Centro', 200.5);
+  await addPlace('named-30km', 'Veterinaria Pueblo Nombre Paw', 230);
+  await addPlace('named-45km', 'Estetica Pueblo Nombre Paw', 245, 'groomer');
   await addArea('landmark', 'Plaza Prueba Paw', 50);
   // The same colonia name twice: the one near the user wins.
   await addArea('colonia', 'Colonia Gemela Paw', 1);
@@ -58,6 +63,17 @@ async function search(q: string, extra = '') {
 }
 
 describe('searching an area', () => {
+  it('also lists businesses named after the place, up to 25 miles away', async () => {
+    const result = await search('pueblo nombre paw');
+    expect(result.items.map((p) => [p.name, p.distanceKm])).toEqual([
+      ['Veterinaria del Centro', 0.5],
+      ['Veterinaria Pueblo Nombre Paw', 30],
+    ]);
+    // With a business word too, only the town's own circle counts.
+    const vets = await search('veterinaria en pueblo nombre paw');
+    expect(vets.items.map((p) => p.name)).toEqual(['Veterinaria del Centro']);
+  });
+
   it('moves the search to the area, within 5 km of it, leaving the radius setting alone', async () => {
     const result = await search('plaza prueba paw');
     expect(result.area).toMatchObject({ name: 'Plaza Prueba Paw', kind: 'landmark', radiusKm: 5 });

@@ -1,4 +1,5 @@
 import {
+  AREA_NAME_RADIUS_KM,
   type Category,
   type CategorySlug,
   DEFAULT_LOCALE,
@@ -216,6 +217,7 @@ export async function listPlaces(
       category: query.category ?? search.category ?? undefined,
     },
     locale,
+    search.namedAfter,
   );
   return { ...result, area: search.area, searchCategory: search.category };
 }
@@ -240,17 +242,39 @@ async function interpretSearch(db: Database, query: SearchQuery) {
   let radiusKm = query.radiusKm;
   let area: PlaceListResponse['area'] = null;
   let text = query.q ?? '';
+  // The whole search is a place's name ("Tlaxcala"): businesses named after it count too.
+  let namedAfter: string | null = null;
   if (text && !query.namesOnly) {
     const found = await findAreaSearch(db, text, point);
     if (found) {
       point = found.area.location;
       radiusKm = query.areaRadiusKm;
       area = { ...found.area, radiusKm };
+      if (!found.business) namedAfter = text;
       text = found.business ?? '';
     }
   }
   const { category, words } = detectCategory(text);
-  return { point, radiusKm, area, category, words };
+  return { point, radiusKm, area, category, words, namedAfter };
+}
+
+/**
+ * The search circle (places aliased `p`). When the search was just a place's name, it also takes
+ * businesses with every word of that name in their own name, up to AREA_NAME_RADIUS_KM away
+ * ("Tlaxcala": Tlaxcala's places, plus "Veterinaria Tlaxcala" 20 miles out).
+ */
+function searchCircleSql(point: Point, radiusKm: number, namedAfter: string | null): SQL {
+  if (!namedAfter) return withinRadiusSql(point, radiusKm);
+  const name = sql`lower(f_unaccent(coalesce(p.name, '')))`;
+  const named = sql.join(
+    searchWords(namedAfter).map((word) => {
+      const text = sql`lower(f_unaccent(${word}))`;
+      return sql`(${name} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!')`;
+    }),
+    sql` AND `,
+  );
+  return sql`(${withinRadiusSql(point, radiusKm)}
+    OR (${withinRadiusSql(point, Math.max(radiusKm, AREA_NAME_RADIUS_KM))} AND ${named}))`;
 }
 
 /**
@@ -296,11 +320,12 @@ async function searchPlaces(
   db: Database,
   query: PlaceListQuery,
   locale: Locale,
+  namedAfter: string | null = null,
 ): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory'>> {
   const point = { lat: query.lat, lng: query.lng };
   const conditions = [
     visibleSql,
-    withinRadiusSql(point, query.radiusKm),
+    searchCircleSql(point, query.radiusKm, namedAfter),
     ...filterConditions(query),
   ];
   if (!query.q) return pageOfPlaces(db, query, locale, conditions);
@@ -385,12 +410,12 @@ export async function placesForMap(
   const { minLng, minLat, maxLng, maxLat } = query.bbox;
   // The search box, as in the list: a place moves the circle there, keywords pick a category,
   // and other words must appear in the names.
-  const { point, radiusKm, area, category, words } = await interpretSearch(db, query);
+  const { point, radiusKm, area, category, words, namedAfter } = await interpretSearch(db, query);
   const filters = { ...query, category: query.category ?? category ?? undefined };
   const inBox = sql`p.location && ST_MakeEnvelope(${minLng}, ${minLat}, ${maxLng}, ${maxLat}, 4326)::geography`;
   const inRadius = [
     visibleSql,
-    withinRadiusSql(point, radiusKm),
+    searchCircleSql(point, radiusKm, namedAfter),
     ...filterConditions(filters),
     ...(words ? [allWordsSql(words)] : []),
   ];
