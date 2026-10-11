@@ -51,7 +51,8 @@ const SEARCH_DEBOUNCE_MS = 300;
  */
 const CLUSTER_COLORS = { fill: '#84cc16', text: '#1a2e05' };
 // Explorar's controls (Lista/Mapa, Mi ubicación, the radius button, the selected chip) use the
-// clusters' greens when on: bg-lime-500 (#84cc16) with text-lime-950 (#1a2e05).
+// logo's turquoise when on: bg-paw (#00c1c0) with text-teal-950 (#042f2e).
+const ON_TEXT = '#042f2e';
 /** How long the map takes to zoom to a new radius. */
 const MAP_FIT_MS = 500;
 /**
@@ -119,12 +120,12 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
               setMode(value);
             }}
             className={`min-h-11 flex-1 items-center justify-center rounded-xl ${
-              mode === value ? 'bg-lime-500' : 'bg-neutral-100 dark:bg-neutral-800'
+              mode === value ? 'bg-paw' : 'bg-neutral-100 dark:bg-neutral-800'
             }`}
           >
             <Text
               className={`text-base font-semibold ${
-                mode === value ? 'text-lime-950' : 'text-neutral-800 dark:text-neutral-200'
+                mode === value ? 'text-teal-950' : 'text-neutral-800 dark:text-neutral-200'
               }`}
             >
               {value === 'list' ? t('places.showList') : t('places.showMap')}
@@ -215,7 +216,7 @@ function CategoryChips({
             onPress={() => onSelect(slug)}
             className={`min-h-10 flex-row items-center gap-2 rounded-full border px-4 ${
               active
-                ? 'border-lime-500 bg-lime-500'
+                ? 'border-paw bg-paw'
                 : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
             }`}
           >
@@ -227,7 +228,7 @@ function CategoryChips({
             ) : null}
             <Text
               className={`text-sm font-semibold ${
-                active ? 'text-lime-950' : 'text-neutral-800 dark:text-neutral-200'
+                active ? 'text-teal-950' : 'text-neutral-800 dark:text-neutral-200'
               }`}
             >
               {t(`places.chips.${slug ?? 'all'}`)}
@@ -843,12 +844,12 @@ function RadiusButton({
       accessibilityHint={t(custom ? 'places.radiusButtonCustomHint' : 'places.radiusButtonHint')}
       onPress={() => (custom ? onClearCustom() : setRadiusKm(nextRadiusKm(radiusKm, units)))}
       className={`min-w-12 items-center justify-center rounded-full border px-3 active:bg-neutral-100 dark:active:bg-neutral-800 ${
-        custom ? 'border-amber-500 bg-amber-50 dark:bg-amber-950' : 'border-lime-500 bg-lime-500'
+        custom ? 'border-amber-500 bg-amber-50 dark:bg-amber-950' : 'border-paw bg-paw'
       } ${className}`}
     >
       <Text
         className={`text-sm font-bold ${
-          custom ? 'text-amber-900 dark:text-amber-200' : 'text-lime-950'
+          custom ? 'text-amber-900 dark:text-amber-200' : 'text-teal-950'
         }`}
       >
         {distance}
@@ -874,14 +875,14 @@ function NearMeButton({ nearMe, onToggle }: { nearMe: boolean; onToggle: () => v
       onPress={onToggle}
       className={`h-11 w-11 items-center justify-center rounded-full border ${
         nearMe
-          ? 'border-lime-500 bg-lime-500'
+          ? 'border-paw bg-paw'
           : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
       }`}
     >
       <Image
         source={ICONS.locate}
         style={{ width: 22, height: 22 }}
-        tintColor={nearMe ? CLUSTER_COLORS.text : scheme === 'dark' ? '#e5e5e5' : '#262626'}
+        tintColor={nearMe ? ON_TEXT : scheme === 'dark' ? '#e5e5e5' : '#262626'}
       />
     </Pressable>
   );

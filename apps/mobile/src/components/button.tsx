@@ -16,13 +16,13 @@ export function Button({ label, onPress, accessibilityLabel, variant = 'primary'
       onPress={onPress}
       className={`min-h-12 flex-1 items-center justify-center rounded-xl px-4 ${
         primary
-          ? 'bg-brand active:bg-brand-dark'
+          ? 'bg-paw active:bg-paw-dark'
           : 'bg-neutral-100 active:bg-neutral-200 dark:bg-neutral-800'
       }`}
     >
       <Text
         className={`text-base font-semibold ${
-          primary ? 'text-white' : 'text-neutral-900 dark:text-white'
+          primary ? 'text-teal-950' : 'text-neutral-900 dark:text-white'
         }`}
       >
         {label}

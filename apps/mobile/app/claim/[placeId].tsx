@@ -212,7 +212,7 @@ export default function ClaimScreen() {
             value={consent}
             onValueChange={setConsent}
             accessibilityLabel={t('places.claim.consent')}
-            trackColor={{ true: '#0f766e' }}
+            trackColor={{ true: '#00c1c0' }}
           />
           <Text className="flex-1 text-sm leading-5 text-neutral-700 dark:text-neutral-300">
             {t('places.claim.consent')}
@@ -418,13 +418,13 @@ function Choice({
       onPress={onPress}
       className={`min-h-10 justify-center rounded-full border px-4 ${
         selected
-          ? 'border-teal-700 bg-teal-700'
+          ? 'border-paw bg-paw'
           : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
       }`}
     >
       <Text
         className={`text-sm font-semibold ${
-          selected ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
+          selected ? 'text-teal-950' : 'text-neutral-800 dark:text-neutral-200'
         }`}
       >
         {label}
@@ -441,7 +441,7 @@ function SwitchRow(props: { label: string; value: boolean; onChange: (value: boo
         value={props.value}
         onValueChange={props.onChange}
         accessibilityLabel={props.label}
-        trackColor={{ true: '#0f766e' }}
+        trackColor={{ true: '#00c1c0' }}
       />
     </View>
   );
