@@ -83,8 +83,8 @@ const RADIUS_COLORS = {
 export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const { t } = useAppTranslation();
   const location = useUserLocation();
-  // Mapa/Lista, "Mi ubicación" and the search text are shared with the other tab, start on the map
-  // at the user's location and go back there on wake (explore-view.tsx). Mi ubicación on: business names around
+  // Mapa/Lista, "Mi ubicación" (off at first) and the search text are shared with the other tab,
+  // start on the map around the user and go back there on wake (explore-view.tsx). Mi ubicación on: business names around
   // the user; off: the search text names an area.
   const { mode, setMode, nearMe, setNearMe, text, setText } = useExploreView();
   const [category, setCategory] = useState<ChipCategory>(null);
