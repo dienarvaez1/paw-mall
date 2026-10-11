@@ -22,7 +22,12 @@ import { SearchInput } from '@/components/search-input';
 import { BUTTON_HIT_SLOP } from '@/components/button';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
-import { coveringRadiusKm, isRadiusOption, nextRadiusKm } from '@/features/settings/radius';
+import {
+  coveringRadiusKm,
+  isRadiusOption,
+  nextRadiusKm,
+  startRadiusKm,
+} from '@/features/settings/radius';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -105,7 +110,7 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const petFriendly =
     section === 'pet_friendly' && (category === null || isPetFilterCategory(category));
   // Ajustes "Solo lugares confirmados" off, or a widened search: unanswered venues too.
-  const { onlyConfirmedPetPlaces } = useSettings();
+  const { onlyConfirmedPetPlaces, units, setRadiusKm } = useSettings();
   const withUnconfirmed = petFriendly && (!onlyConfirmedPetPlaces || includeUnconfirmed);
   useDismissKeyboardOnBlur();
 
@@ -149,8 +154,12 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           nearMe={nearMe}
           onToggle={() => {
             setFocus(null);
-            // Turning it on starts over around the user: the search box empties (owner's rule).
-            if (!nearMe) setText('');
+            // Turning it on starts over around the user: the search box empties and the radius
+            // goes back to the 3 mi preset (5 km in km) (owner's rules).
+            if (!nearMe) {
+              setText('');
+              setRadiusKm(startRadiusKm(units));
+            }
             setNearMe(!nearMe);
           }}
         />
