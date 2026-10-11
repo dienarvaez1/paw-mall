@@ -600,8 +600,9 @@ function PlacesMap({
         ))}
         {clusters.map((cluster) => (
           <ClusterMarker
-            key={`${cluster.location.lat},${cluster.location.lng},${cluster.count}`}
+            key={`${category},${cluster.location.lat},${cluster.location.lng},${cluster.count}`}
             cluster={cluster}
+            category={category}
             onPress={() => moveMap(regionForBounds(cluster.bounds))}
           />
         ))}
@@ -738,7 +739,16 @@ function SourceNote({ places }: { places: Place[] }) {
 }
 
 /** A small turquoise bubble with the number of places it groups; wider for longer numbers. */
-function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: () => void }) {
+/** A cluster's number takes the selected chip's color; with "Todos" it stays dark teal. */
+function ClusterMarker({
+  cluster,
+  category,
+  onPress,
+}: {
+  cluster: PlaceCluster;
+  category: ChipCategory;
+  onPress: () => void;
+}) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const label = formatCount(cluster.count, locale);
@@ -762,7 +772,15 @@ function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: (
           justifyContent: 'center',
         }}
       >
-        <Text style={{ color: CLUSTER_COLORS.text, fontWeight: '700', fontSize: 10 }}>{label}</Text>
+        <Text
+          style={{
+            color: (category && CATEGORY_COLORS[category]) || CLUSTER_COLORS.text,
+            fontWeight: '800',
+            fontSize: 10,
+          }}
+        >
+          {label}
+        </Text>
       </View>
     </Marker>
   );
