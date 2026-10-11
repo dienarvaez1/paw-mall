@@ -42,7 +42,8 @@ import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 import { useOnWake } from '@/lib/use-on-wake';
 
-const MODES = ['list', 'map'] as const;
+// Mapa first, then Lista (owner's order).
+const MODES = ['map', 'list'] as const;
 type Mode = (typeof MODES)[number];
 /** Wait for the map to settle before loading its places (keeps panning cheap). */
 const MAP_SETTLE_MS = 400;
