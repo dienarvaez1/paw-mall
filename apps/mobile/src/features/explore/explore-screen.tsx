@@ -84,7 +84,8 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const { t } = useAppTranslation();
   const location = useUserLocation();
   // Mapa/Lista, "Mi ubicación", the search text and the circle's center are shared with the
-  // other tab, start on the map around the user and go back there on wake (explore-view.tsx).
+  // other tab, start on the map around the user and go back there on wake unless a search is
+  // showing (explore-view.tsx).
   // Mi ubicación on: business names around the user; off: the search text names an area.
   // The circle's center (focus) is a tapped cluster or a hand pan, until "Mi ubicación" brings
   // it back to the user.
@@ -479,8 +480,12 @@ function PlacesMap({
     },
     [radiusKm, setRadiusKm, onMoveCircle],
   );
-  // Back from the background: read the position again and fly back to the user.
-  useOnWake(() => void refresh().then((coords) => moveMap(regionForRadius(coords, radiusKm))));
+  // Back from the background: read the position again and fly back to the user, unless a search
+  // is showing (it comes back as it was).
+  useOnWake(() => {
+    if (name) return;
+    void refresh().then((coords) => moveMap(regionForRadius(coords, radiusKm)));
+  });
   const [region, setRegion] = useState<Region>(initialRegion);
   const [area, setArea] = useState<MapArea | null>(null);
 
