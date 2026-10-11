@@ -27,15 +27,16 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | --- | ------ | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | Done   | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done   | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done   | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done   | 2026-10-05 | 2026-10-05 |
-| 5     | Trust               | `phase-5/trust`           | #6  | Done   | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | Done   | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | #9  | Done   | 2026-10-10 | 2026-10-10 |
+| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
+| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
+| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done        | 2026-10-05 | 2026-10-05 |
+| 5     | Trust               | `phase-5/trust`           | #6  | Done        | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | Done        | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums | `phase-7/tourism-museums` | #9  | Done        | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes           | `phase-8/bug-fixes`       | #11 | In progress | 2026-10-10 | —          |
 
 ## Pending owner reviews
 
@@ -637,6 +638,33 @@ a task (and a note in the phase that applies it).
   - Add INAH sites ("no mascotas, salvo perros de asistencia") with official pages as sources.
   - Tourist sites chip: no entries yet.
 
+### Phase 8 — Bug fixes
+
+- **Scope:** fix the bugs the owner reports, plus two known issues: flaky Google "Ver horario"
+  tests, and curated places with a wrong map location.
+- **Done when:** each reported bug is fixed and checked on a phone, and the full test run passes
+  while a `pnpm places:*` command runs at the same time.
+- **Branch / PR:** `phase-8/bug-fixes` / #11
+- **Status:** In progress
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`
+  - [x] `pnpm test`: 217 tests, also while `pnpm places:curated` runs alongside
+  - [ ] Owner's bugs: fixed and checked on a phone
+- **Notes:**
+  - **Flaky Google tests (fixed):** API and importer tests shared the dev database, and their
+    test places use source `curated`. `pnpm places:curated` removes every curated place not in its
+    file, so running it during a test run deleted the test place and the Google tests found
+    nothing (`expected null`). Tests also wrote to and deleted real rows (the Google usage
+    counters, old lookups). Tests now use their own database, `paw_mall_test` on the same Docker
+    server, created and migrated by the test setup (`apps/api/test/test-db.ts`, shared by the
+    API and importer runs, with a lock so parallel runs don't migrate at once). Override with
+    `TEST_DATABASE_URL`.
+  - **Curated locations (checked, no change):** each curated place is within 900 m of its
+    stated colonia's center (colonias from `search_areas`); the Chapultepec sections and Los
+    Pinos have no colonia in their address and were checked by hand. Parque México and Parque
+    España were already corrected in Phase 7.
+- **Follow-ups:** —
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -663,3 +691,4 @@ Play readiness").
 | 2026-10-10 | Phase 6 merged (`cb7b3b6`) | #8  |
 | 2026-10-10 | Phase 7 started            | #9  |
 | 2026-10-10 | Phase 7 merged (`146991b`) | #9  |
+| 2026-10-10 | Phase 8 started            | #11 |
