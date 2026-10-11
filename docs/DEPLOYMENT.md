@@ -744,10 +744,18 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
     saves its radius to Ajustes as the closest choice (no separate "custom" radius any more);
     Urgencias follows the Ajustes radius and place switches. Launch and wake still reset the
     location, the map view and Mi ubicación.
+  - **Backfill to every supported state (owner, 2026-10-11):** DENUE restaurants, cafés and hotels
+    in all 9 states (about 311,000 venues; 336,588 places in all), OpenStreetMap dog places and
+    opening hours across the region (snapshot `data/osm-dogs.json`, renamed from
+    `osm-dogs-cdmx.json`: 187 elements, 173 places saved, 101 dog parks; hours: 2,874 elements,
+    687 matched), City Express policy on 7 branches. Pet-friendly places within 160 km of CDMX:
+    95 → 154. Curated places stay CDMX-only (hand research).
   - **List duplicates (fixed):** pages fetched at different times could repeat a place when
     policies changed in between (React "two children with the same key"); the list keeps each
     place once.
 - **Follow-ups:**
+  - Pet-friendly with "Solo lugares confirmados" off takes 0.6–1.1 s in dense areas (sorting
+    about 13,000 places); worth an index or a cheaper count.
   - `pnpm places:enrich-overture` and `pnpm places:check-websites` now also cover 55,741
     restaurants and cafés; consider limiting website checks to pet businesses before running them.
   - Answers from abusive phones: no rate limit beyond one answer per place and phone.

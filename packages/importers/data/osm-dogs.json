@@ -1,0 +1,2272 @@
+{
+  "about": "OpenStreetMap places with a dog rule in the supported states (dog parks; parks and venues tagged dog=*). © OpenStreetMap contributors, ODbL 1.0 (https://www.openstreetmap.org/copyright). Refresh with `pnpm places:osm --refresh`.",
+  "fetchedOn": "2026-10-11",
+  "elements": [
+    {
+      "type": "node",
+      "id": 10841317677,
+      "lat": 19.4074753,
+      "lon": -99.0934558,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 10844622445,
+      "lat": 19.4133459,
+      "lon": -99.0679896,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 10974283437,
+      "lat": 19.1846903,
+      "lon": -99.5866056,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11091385094,
+      "lat": 19.4246656,
+      "lon": -99.2174217,
+      "tags": {
+        "name": "True Foods",
+        "amenity": "cafe",
+        "dog": "yes",
+        "addr:street": "Calle Monte Blanco",
+        "addr:housenumber": "143"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12498082296,
+      "lat": 19.0549197,
+      "lon": -98.232619,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12557665056,
+      "lat": 20.6579216,
+      "lon": -100.3147749,
+      "tags": {
+        "name": "Parque para perros de Zákia",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12779931304,
+      "lat": 20.7115749,
+      "lon": -103.4006092,
+      "tags": {
+        "name": "Parque Canino El Polvorín",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12954750332,
+      "lat": 20.1228145,
+      "lon": -98.7351661,
+      "tags": {
+        "name": "Gastrocantina Perro Gris",
+        "amenity": "bar",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12954784322,
+      "lat": 20.1235629,
+      "lon": -98.7361544,
+      "tags": {
+        "name": "Bar Don Julio",
+        "amenity": "pub",
+        "dog": "no"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13822983571,
+      "lat": 20.3881704,
+      "lon": -97.8858251,
+      "tags": {
+        "name": "Mirador",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Sendero de la Cruz"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14158256895,
+      "lat": 21.3076226,
+      "lon": -100.5085663,
+      "tags": {
+        "name": "Area de juegos",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "San Juan",
+        "addr:housenumber": "sin numero"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14160241886,
+      "lat": 21.2988063,
+      "lon": -100.5124257,
+      "tags": {
+        "name": "area natural",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2825660572,
+      "lat": 20.6961129,
+      "lon": -103.389395,
+      "tags": {
+        "name": "Parque temático canino",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3681387267,
+      "lat": 21.1538526,
+      "lon": -101.6935411,
+      "tags": {
+        "name": "Área Canina",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3776008587,
+      "lat": 19.3948254,
+      "lon": -99.1423904,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4235881465,
+      "lat": 19.2829346,
+      "lon": -99.6650534,
+      "tags": {
+        "name": "Perrón",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5264903478,
+      "lat": 19.329349,
+      "lon": -99.1822371,
+      "tags": {
+        "name": "Tierra Cocina Viva",
+        "amenity": "restaurant",
+        "dog": "yes",
+        "website": "https://tierracocinaviva.mx/"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5763234356,
+      "lat": 19.4139541,
+      "lon": -99.0837951,
+      "tags": {
+        "leisure": "dog_park",
+        "addr:street": "Calz. Ignacio Zaragoza"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5898064180,
+      "lat": 19.049444,
+      "lon": -98.0912926,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6312858067,
+      "lat": 19.0170723,
+      "lon": -98.2465392,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6312858068,
+      "lat": 19.0175499,
+      "lon": -98.2459238,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6312858069,
+      "lat": 19.0165394,
+      "lon": -98.2450956,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6312858070,
+      "lat": 19.0171484,
+      "lon": -98.2448549,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6377133595,
+      "lat": 19.6196729,
+      "lon": -99.0197998,
+      "tags": {
+        "name": "Parque Independencia",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "bulevar independencia"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6377133599,
+      "lat": 19.6178589,
+      "lon": -99.020288,
+      "tags": {
+        "name": "Jardin cerrada sin numero 1",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "cerrada sin nombe num 1",
+        "addr:housenumber": "Los heroes Ecatepec V secc"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6377133610,
+      "lat": 19.6238314,
+      "lon": -99.0170747,
+      "tags": {
+        "name": "canchas empastadas",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Av .Jose Maria Pino Suarez"
+      }
+    },
+    {
+      "type": "node",
+      "id": 7423623163,
+      "lat": 20.6494503,
+      "lon": -100.4711648,
+      "tags": {
+        "name": "Parque Canino Publico",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 7423790404,
+      "lat": 20.6482352,
+      "lon": -100.4765346,
+      "tags": {
+        "name": "Parque Canino Monte Mayor",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 7831722125,
+      "lat": 20.6365726,
+      "lon": -103.4350707,
+      "tags": {
+        "name": "Lealtad Canina",
+        "leisure": "dog_park",
+        "addr:street": "Calle Rinconada Arjona"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9518296819,
+      "lat": 20.7068076,
+      "lon": -103.3602579,
+      "tags": {
+        "name": "Parque Canino",
+        "leisure": "dog_park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9723551570,
+      "lat": 19.4886627,
+      "lon": -99.1231775,
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9750838829,
+      "lat": 19.1790723,
+      "lon": -99.4334236,
+      "tags": {
+        "name": "Club Canino Volk",
+        "leisure": "dog_park",
+        "addr:street": "Mexicaltzingo-Tianguistengo-Xalatlaco"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 10763409,
+      "center": {
+        "lat": 18.8769508,
+        "lon": -97.1089109
+      },
+      "tags": {
+        "name": "Las Flores",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Sauce"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 19355787,
+      "center": {
+        "lat": 20.5957454,
+        "lon": -103.3580793
+      },
+      "tags": {
+        "name": "Dog Park",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 20008211,
+      "center": {
+        "lat": 19.4590778,
+        "lon": -99.0715572
+      },
+      "tags": {
+        "name": "Bosque de San Juan de Aragón",
+        "leisure": "park",
+        "tourism": "attraction",
+        "dog": "leashed",
+        "addr:street": "Avenida José Loreto Fabela"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 4126373,
+      "center": {
+        "lat": 20.6106982,
+        "lon": -100.391462
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 5377444,
+      "center": {
+        "lat": 19.2937322,
+        "lon": -99.094343
+      },
+      "tags": {
+        "name": "Parque Ecológico de Xochimilco",
+        "leisure": "nature_reserve",
+        "dog": "no",
+        "addr:street": "Periférico Boulevard Adolfo Ruiz Cortines",
+        "addr:housenumber": "1"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1025700304,
+      "center": {
+        "lat": 20.5520714,
+        "lon": -100.3972879
+      },
+      "tags": {
+        "name": "Colinas del Sur",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1055547789,
+      "center": {
+        "lat": 20.5453114,
+        "lon": -100.4544389
+      },
+      "tags": {
+        "name": "Parque Canino Piramides",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1070241362,
+      "center": {
+        "lat": 19.0572191,
+        "lon": -98.3081431
+      },
+      "tags": {
+        "name": "Alfa club de instrucción canina",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1070241363,
+      "center": {
+        "lat": 19.0572613,
+        "lon": -98.3082608
+      },
+      "tags": {
+        "name": "Alfa club de instrucción canina",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1070241366,
+      "center": {
+        "lat": 19.0570094,
+        "lon": -98.3076869
+      },
+      "tags": {
+        "name": "Alfa club de instrucción canina",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1070242542,
+      "center": {
+        "lat": 19.0575355,
+        "lon": -98.307832
+      },
+      "tags": {
+        "name": "Alfa club de instrucción canina",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1087300478,
+      "center": {
+        "lat": 20.6133182,
+        "lon": -100.3917122
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1100650588,
+      "center": {
+        "lat": 18.9376363,
+        "lon": -99.2110026
+      },
+      "tags": {
+        "name": "Ciclopista Cuernavaca",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1102447224,
+      "center": {
+        "lat": 20.5533687,
+        "lon": -100.4492103
+      },
+      "tags": {
+        "name": "Andador Dulce (Parque Polinizador)",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1104207948,
+      "center": {
+        "lat": 20.5878864,
+        "lon": -100.2768447
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1107267568,
+      "center": {
+        "lat": 19.4209641,
+        "lon": -99.1546332
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1110160384,
+      "center": {
+        "lat": 19.4101922,
+        "lon": -99.1572673
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1110160385,
+      "center": {
+        "lat": 19.409766,
+        "lon": -99.1569825
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1117014330,
+      "center": {
+        "lat": 19.4332997,
+        "lon": -99.1619457
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1137369025,
+      "center": {
+        "lat": 20.6976231,
+        "lon": -100.4700443
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1152502877,
+      "center": {
+        "lat": 19.184003,
+        "lon": -99.591055
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1163083564,
+      "center": {
+        "lat": 19.4243435,
+        "lon": -99.1766581
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1166282986,
+      "center": {
+        "lat": 19.3918088,
+        "lon": -99.1000801
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1172334833,
+      "center": {
+        "lat": 19.3107536,
+        "lon": -99.1660906
+      },
+      "tags": {
+        "name": "Parque Canino",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1176705405,
+      "center": {
+        "lat": 19.4632869,
+        "lon": -99.0703641
+      },
+      "tags": {
+        "name": "Parque Canino",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1180048523,
+      "center": {
+        "lat": 18.8225774,
+        "lon": -97.9133127
+      },
+      "tags": {
+        "name": "Parque Juárez",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1180725324,
+      "center": {
+        "lat": 20.4929858,
+        "lon": -100.3819143
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1192742783,
+      "center": {
+        "lat": 20.5475556,
+        "lon": -100.4140994
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1202852587,
+      "center": {
+        "lat": 19.6971089,
+        "lon": -103.4520218
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1208193253,
+      "center": {
+        "lat": 20.7926124,
+        "lon": -103.423013
+      },
+      "tags": {
+        "name": "Parque lineal de Alva",
+        "leisure": "park",
+        "dog": "leashed",
+        "addr:street": "Av. C"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1211312710,
+      "center": {
+        "lat": 19.2870804,
+        "lon": -103.7009494
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223974811,
+      "center": {
+        "lat": 16.8827243,
+        "lon": -99.8992049
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1230339293,
+      "center": {
+        "lat": 19.7964632,
+        "lon": -99.8899349
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1250094499,
+      "center": {
+        "lat": 19.4417402,
+        "lon": -99.1856325
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1251763395,
+      "center": {
+        "lat": 19.3334928,
+        "lon": -98.9726094
+      },
+      "tags": {
+        "name": "Parque Yecahuitzotl",
+        "leisure": "nature_reserve",
+        "dog": "no"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1292550568,
+      "center": {
+        "lat": 20.6923683,
+        "lon": -103.4235676
+      },
+      "tags": {
+        "name": "Parque Canino Eca Do Queirós",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1302112493,
+      "center": {
+        "lat": 19.4554448,
+        "lon": -99.2567564
+      },
+      "tags": {
+        "name": "Los Pinos",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1313140847,
+      "center": {
+        "lat": 20.5705783,
+        "lon": -103.1856403
+      },
+      "tags": {
+        "name": "Lunar",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Camino Real",
+        "addr:housenumber": "172"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1313140851,
+      "center": {
+        "lat": 20.5728707,
+        "lon": -103.1833378
+      },
+      "tags": {
+        "name": "Camino Real",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Camino Real"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1314101272,
+      "center": {
+        "lat": 19.3991174,
+        "lon": -99.1725029
+      },
+      "tags": {
+        "name": "Parque Lineal Ecoducto Río de la Piedad",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1316005298,
+      "center": {
+        "lat": 19.4000824,
+        "lon": -99.1691907
+      },
+      "tags": {
+        "name": "Parque Lineal Ecoducto Río de la Piedad",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1316005299,
+      "center": {
+        "lat": 19.4013737,
+        "lon": -99.165088
+      },
+      "tags": {
+        "name": "Parque Lineal Ecoducto Río de la Piedad",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1316005300,
+      "center": {
+        "lat": 19.4027057,
+        "lon": -99.1613223
+      },
+      "tags": {
+        "name": "Parque Lineal Ecoducto Río de la Piedad",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1324877394,
+      "center": {
+        "lat": 20.723538,
+        "lon": -103.409488
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1343811402,
+      "center": {
+        "lat": 20.7068103,
+        "lon": -103.360642
+      },
+      "tags": {
+        "name": "Parque Canino Circunvalación Y Enrique Diaz De León",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1354353828,
+      "center": {
+        "lat": 19.5515677,
+        "lon": -99.2124157
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1356790812,
+      "center": {
+        "lat": 20.6088762,
+        "lon": -100.3895967
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1356790957,
+      "center": {
+        "lat": 20.6578915,
+        "lon": -100.3147526
+      },
+      "tags": {
+        "name": "Parque de perros de Zákia",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1356958667,
+      "center": {
+        "lat": 20.6130433,
+        "lon": -100.4043454
+      },
+      "tags": {
+        "name": "Corredor intercultural",
+        "leisure": "park",
+        "dog": "no"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1356958668,
+      "center": {
+        "lat": 20.6131658,
+        "lon": -100.40406
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "no"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1367170857,
+      "center": {
+        "lat": 20.7245281,
+        "lon": -103.3135909
+      },
+      "tags": {
+        "name": "Parque Canino Natural Huentitán",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1373264891,
+      "center": {
+        "lat": 19.5910993,
+        "lon": -98.9612788
+      },
+      "tags": {
+        "name": "Felipe Valtierra",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1384914642,
+      "center": {
+        "lat": 20.0928622,
+        "lon": -98.7728082
+      },
+      "tags": {
+        "name": "Perros Chicos",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1384914643,
+      "center": {
+        "lat": 20.0927023,
+        "lon": -98.7731079
+      },
+      "tags": {
+        "name": "Perros Grandes",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1388572436,
+      "center": {
+        "lat": 20.6467005,
+        "lon": -100.3578769
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1408892451,
+      "center": {
+        "lat": 16.8305966,
+        "lon": -99.9069568
+      },
+      "tags": {
+        "name": "Hotel Caletilla",
+        "tourism": "hotel",
+        "dog": "yes",
+        "addr:street": "Avenida Adolfo López Mateos"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1411608827,
+      "center": {
+        "lat": 19.4799763,
+        "lon": -98.9837625
+      },
+      "tags": {
+        "name": "Proyecto Ecológico Lago de Texcoco (PELT)",
+        "leisure": "park",
+        "dog": "no"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1416395906,
+      "center": {
+        "lat": 19.4663736,
+        "lon": -99.1580206
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1422612784,
+      "center": {
+        "lat": 19.6681872,
+        "lon": -99.1562685
+      },
+      "tags": {
+        "name": "Parque Tanque Azul",
+        "leisure": "park",
+        "dog": "leashed",
+        "addr:street": "Avenida Santiago"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1422943523,
+      "center": {
+        "lat": 19.668948,
+        "lon": -99.1495163
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "leashed",
+        "addr:street": "Avenida Teyahualco"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1428152323,
+      "center": {
+        "lat": 20.9107869,
+        "lon": -100.7101301
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1428152324,
+      "center": {
+        "lat": 20.9109896,
+        "lon": -100.7098304
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1429351932,
+      "center": {
+        "lat": 19.2885278,
+        "lon": -99.5179184
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1450133759,
+      "center": {
+        "lat": 20.5869713,
+        "lon": -100.4294627
+      },
+      "tags": {
+        "name": "Parque Gema",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Calle Rubí"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1459924321,
+      "center": {
+        "lat": 21.0862402,
+        "lon": -101.6544833
+      },
+      "tags": {
+        "name": "Parque Lineal El Cortijo",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Boulevard Río Mayo"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1459927630,
+      "center": {
+        "lat": 21.0857016,
+        "lon": -101.6510349
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1482935243,
+      "center": {
+        "lat": 19.1476175,
+        "lon": -98.2022837
+      },
+      "tags": {
+        "name": "Parque Municipal Tenancingo",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1499152462,
+      "center": {
+        "lat": 18.9297631,
+        "lon": -97.10086
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1534385382,
+      "center": {
+        "lat": 19.5697218,
+        "lon": -98.2712429
+      },
+      "tags": {
+        "name": "Parque de Buenavista",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1536441841,
+      "center": {
+        "lat": 20.0929577,
+        "lon": -98.7752858
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1548354790,
+      "center": {
+        "lat": 20.6798151,
+        "lon": -100.7439332
+      },
+      "tags": {
+        "name": "Parque Lazaro cardenas",
+        "leisure": "park",
+        "dog": "unleashed",
+        "addr:street": "Calle Expropiación Ferroviaria",
+        "addr:housenumber": "sn"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1553536262,
+      "center": {
+        "lat": 20.5989698,
+        "lon": -100.33699
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 278142512,
+      "center": {
+        "lat": 20.7109088,
+        "lon": -103.3865833
+      },
+      "tags": {
+        "name": "Parque Canino Altamira",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 321740220,
+      "center": {
+        "lat": 20.6956727,
+        "lon": -100.4452576
+      },
+      "tags": {
+        "name": "Parque Santa Fe",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 345643863,
+      "center": {
+        "lat": 20.538958,
+        "lon": -100.4028871
+      },
+      "tags": {
+        "name": "Parque Mirador",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 368047895,
+      "center": {
+        "lat": 19.210927,
+        "lon": -98.7534468
+      },
+      "tags": {
+        "name": "\"El Cedral\"",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 368702086,
+      "center": {
+        "lat": 20.634955,
+        "lon": -100.471784
+      },
+      "tags": {
+        "name": "kukulcan",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 369134712,
+      "center": {
+        "lat": 19.3100353,
+        "lon": -99.4587115
+      },
+      "tags": {
+        "name": "Parque Ameyalco",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Avenida Miguel Hidalgo",
+        "addr:housenumber": "15"
+      }
+    },
+    {
+      "type": "way",
+      "id": 423244129,
+      "center": {
+        "lat": 19.5091546,
+        "lon": -99.2091193
+      },
+      "tags": {
+        "name": "Parque de los Pericos",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Avenida de las Culturas"
+      }
+    },
+    {
+      "type": "way",
+      "id": 458583778,
+      "center": {
+        "lat": 19.3460697,
+        "lon": -99.0711648
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Avenida del Rosal"
+      }
+    },
+    {
+      "type": "way",
+      "id": 473224994,
+      "center": {
+        "lat": 19.5259098,
+        "lon": -99.2326574
+      },
+      "tags": {
+        "name": "Parque Canino Bellavista",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 4758891,
+      "center": {
+        "lat": 19.4123553,
+        "lon": -99.1693925
+      },
+      "tags": {
+        "name": "Parque México",
+        "leisure": "park",
+        "dog": "leashed",
+        "addr:street": "Avenida México"
+      }
+    },
+    {
+      "type": "way",
+      "id": 479771511,
+      "center": {
+        "lat": 19.3732704,
+        "lon": -99.1564685
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 527123544,
+      "center": {
+        "lat": 19.0166414,
+        "lon": -98.2431117
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 531304421,
+      "center": {
+        "lat": 19.4788205,
+        "lon": -99.1609778
+      },
+      "tags": {
+        "name": "Azcapotzalco",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Boulevard de los Ferrocarriles",
+        "addr:housenumber": "406"
+      }
+    },
+    {
+      "type": "way",
+      "id": 544048314,
+      "center": {
+        "lat": 19.2073978,
+        "lon": -98.7640468
+      },
+      "tags": {
+        "name": "Templo Parroquial \"Santa María de Guadalupe\"",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 544668814,
+      "center": {
+        "lat": 19.4110234,
+        "lon": -99.1697868
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 546917656,
+      "center": {
+        "lat": 20.6904354,
+        "lon": -103.328756
+      },
+      "tags": {
+        "name": "Parque México",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 547752745,
+      "center": {
+        "lat": 20.5292059,
+        "lon": -97.4264794
+      },
+      "tags": {
+        "name": "Parque recreativo infantil",
+        "leisure": "park",
+        "dog": "no",
+        "addr:street": "López Velarde",
+        "addr:housenumber": "-"
+      }
+    },
+    {
+      "type": "way",
+      "id": 547756246,
+      "center": {
+        "lat": 20.5283911,
+        "lon": -97.4288026
+      },
+      "tags": {
+        "name": "Parque 5 de mayo",
+        "leisure": "park",
+        "dog": "leashed",
+        "addr:street": "Jaime Nunó",
+        "addr:housenumber": "-"
+      }
+    },
+    {
+      "type": "way",
+      "id": 551018739,
+      "center": {
+        "lat": 19.4196203,
+        "lon": -99.0879627
+      },
+      "tags": {
+        "name": "Parque Canino",
+        "leisure": "dog_park",
+        "addr:street": "Plaza del Ejecutivo"
+      }
+    },
+    {
+      "type": "way",
+      "id": 551018741,
+      "center": {
+        "lat": 19.4139197,
+        "lon": -99.0838479
+      },
+      "tags": {
+        "name": "Baldio",
+        "leisure": "dog_park",
+        "addr:street": "Calz. Ignacio Zaragoza"
+      }
+    },
+    {
+      "type": "way",
+      "id": 552942642,
+      "center": {
+        "lat": 19.5277035,
+        "lon": -99.1526435
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 556409909,
+      "center": {
+        "lat": 19.2076556,
+        "lon": -98.7587027
+      },
+      "tags": {
+        "name": "Club Deportivo San Rafael",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 556618240,
+      "center": {
+        "lat": 20.6780507,
+        "lon": -101.3453497
+      },
+      "tags": {
+        "name": "Plaza Manuel Clouthier",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Boulevard Gustavo Díaz Ordaz"
+      }
+    },
+    {
+      "type": "way",
+      "id": 556965686,
+      "center": {
+        "lat": 19.4202189,
+        "lon": -99.0993109
+      },
+      "tags": {
+        "name": "Iztaccihuatl paseo canino",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 559165206,
+      "center": {
+        "lat": 19.619641,
+        "lon": -99.0200298
+      },
+      "tags": {
+        "name": "Parque Independencia",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "bulevar independencia",
+        "addr:housenumber": "Los Heroes ecatepec 5ta secc"
+      }
+    },
+    {
+      "type": "way",
+      "id": 559166284,
+      "center": {
+        "lat": 19.62379,
+        "lon": -99.0170337
+      },
+      "tags": {
+        "name": "Canchas empastadas",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Av .Jose Maria Pino Suarez"
+      }
+    },
+    {
+      "type": "way",
+      "id": 561145219,
+      "center": {
+        "lat": 19.2453434,
+        "lon": -99.5788565
+      },
+      "tags": {
+        "name": "Parque canino",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 562614644,
+      "center": {
+        "lat": 19.4557133,
+        "lon": -99.2474653
+      },
+      "tags": {
+        "name": "Las Cuevitas",
+        "leisure": "park",
+        "dog": "yes",
+        "website": "https://t.me/Zomeyucan",
+        "addr:street": "Calle Continuación Xonacatlan",
+        "addr:housenumber": "33"
+      }
+    },
+    {
+      "type": "way",
+      "id": 569414925,
+      "center": {
+        "lat": 19.3030007,
+        "lon": -99.137433
+      },
+      "tags": {
+        "name": "Área de entrenamiento canino",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 583571679,
+      "center": {
+        "lat": 18.3427067,
+        "lon": -99.522469
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 585504351,
+      "center": {
+        "lat": 19.3948782,
+        "lon": -99.134937
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 607127540,
+      "center": {
+        "lat": 19.3568085,
+        "lon": -99.2714082
+      },
+      "tags": {
+        "name": "Parque La Mexicana",
+        "leisure": "park",
+        "dog": "leashed",
+        "website": "https://parquelamexicana.mx/",
+        "addr:street": "Avenida Luis Barragán",
+        "addr:housenumber": "505"
+      }
+    },
+    {
+      "type": "way",
+      "id": 611247541,
+      "center": {
+        "lat": 19.4002936,
+        "lon": -99.1500708
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 612478761,
+      "center": {
+        "lat": 20.6084434,
+        "lon": -100.482095
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 630661197,
+      "center": {
+        "lat": 19.2720976,
+        "lon": -99.6563332
+      },
+      "tags": {
+        "name": "Parque de Perros",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 660893513,
+      "center": {
+        "lat": 20.4875086,
+        "lon": -103.4830968
+      },
+      "tags": {
+        "name": "Dog Park Vista Sur",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 664750286,
+      "center": {
+        "lat": 19.4065842,
+        "lon": -99.1902908
+      },
+      "tags": {
+        "name": "Pérgola en Parque Lira",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 666146357,
+      "center": {
+        "lat": 19.4497904,
+        "lon": -99.2137124
+      },
+      "tags": {
+        "name": "Parque Zamzy",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Calle Tercer Anillo De Circunvalación",
+        "addr:housenumber": "34"
+      }
+    },
+    {
+      "type": "way",
+      "id": 666612446,
+      "center": {
+        "lat": 16.7329148,
+        "lon": -98.6013016
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 668868487,
+      "center": {
+        "lat": 19.3286073,
+        "lon": -99.7317332
+      },
+      "tags": {
+        "name": "Parque La Loma I",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 679361973,
+      "center": {
+        "lat": 19.3287749,
+        "lon": -99.7370365
+      },
+      "tags": {
+        "name": "Parque La Loma II",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 679361974,
+      "center": {
+        "lat": 19.3268532,
+        "lon": -99.7365439
+      },
+      "tags": {
+        "name": "Parque La Loma II",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 680999072,
+      "center": {
+        "lat": 19.6179598,
+        "lon": -99.0202231
+      },
+      "tags": {
+        "name": "Jardin cerrada sin nombre num1",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "cerrada sin nombe num 1"
+      }
+    },
+    {
+      "type": "way",
+      "id": 681021683,
+      "center": {
+        "lat": 19.6173397,
+        "lon": -99.0263894
+      },
+      "tags": {
+        "name": "Vuelo de los Gansos",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 684052623,
+      "center": {
+        "lat": 19.6796547,
+        "lon": -98.9029918
+      },
+      "tags": {
+        "name": "La garita",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Camino viejo a San Juan",
+        "addr:housenumber": "s/n"
+      }
+    },
+    {
+      "type": "way",
+      "id": 694314536,
+      "center": {
+        "lat": 20.3056669,
+        "lon": -98.9902913
+      },
+      "tags": {
+        "name": "Unidad Deportiva la Cruz",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Calle Miguel Hidalgo"
+      }
+    },
+    {
+      "type": "way",
+      "id": 696705534,
+      "center": {
+        "lat": 19.3640446,
+        "lon": -99.1744206
+      },
+      "tags": {
+        "name": "Parque Perros",
+        "leisure": "dog_park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 704211492,
+      "center": {
+        "lat": 17.5259803,
+        "lon": -99.4924571
+      },
+      "tags": {
+        "name": "APROCAN",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 708153019,
+      "center": {
+        "lat": 19.1957912,
+        "lon": -98.8205066
+      },
+      "tags": {
+        "name": "Club Campestre Santa María",
+        "leisure": "park",
+        "dog": "no",
+        "website": "https://coralclubes.com.mx/club-santa-maria/"
+      }
+    },
+    {
+      "type": "way",
+      "id": 718207500,
+      "center": {
+        "lat": 18.3529207,
+        "lon": -99.5415655
+      },
+      "tags": {
+        "name": "Parque Ciriales",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Almendros"
+      }
+    },
+    {
+      "type": "way",
+      "id": 719957484,
+      "center": {
+        "lat": 19.3589044,
+        "lon": -99.2689815
+      },
+      "tags": {
+        "name": "Jardín Canino",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 722378407,
+      "center": {
+        "lat": 19.6250148,
+        "lon": -99.0180151
+      },
+      "tags": {
+        "name": "Parque del aprendizaje",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 723006704,
+      "center": {
+        "lat": 20.5481872,
+        "lon": -100.424386
+      },
+      "tags": {
+        "name": "Parque Canino Omar Herrera",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 728190550,
+      "center": {
+        "lat": 19.8848484,
+        "lon": -100.4514798
+      },
+      "tags": {
+        "name": "Parque del Panteón",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 730049764,
+      "center": {
+        "lat": 20.5833033,
+        "lon": -100.2771003
+      },
+      "tags": {
+        "name": "Parque Rincones del Marques",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Marques de Cerralbo"
+      }
+    },
+    {
+      "type": "way",
+      "id": 733408798,
+      "center": {
+        "lat": 19.68772,
+        "lon": -99.2250998
+      },
+      "tags": {
+        "name": "Area de recreacion Cofradia 4",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:housenumber": "S/N"
+      }
+    },
+    {
+      "type": "way",
+      "id": 733416493,
+      "center": {
+        "lat": 19.6842613,
+        "lon": -99.2251108
+      },
+      "tags": {
+        "name": "Parque entre los Edificios #1",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 733419424,
+      "center": {
+        "lat": 19.6855736,
+        "lon": -99.2309008
+      },
+      "tags": {
+        "name": "Parque  de cofra",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 733434996,
+      "center": {
+        "lat": 19.4198138,
+        "lon": -99.0878632
+      },
+      "tags": {
+        "name": "Parque paseo canino razas pequeñas",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 735039340,
+      "center": {
+        "lat": 18.8794284,
+        "lon": -97.1125615
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 735053226,
+      "center": {
+        "lat": 18.8793499,
+        "lon": -97.1042929
+      },
+      "tags": {
+        "name": "Parque del Chirimoyo",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 736367687,
+      "center": {
+        "lat": 18.8738138,
+        "lon": -97.0998916
+      },
+      "tags": {
+        "name": "Parque Quetzalcoatl",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 737643279,
+      "center": {
+        "lat": 19.385362,
+        "lon": -99.0622589
+      },
+      "tags": {
+        "name": "Area Verde Unidad E",
+        "leisure": "park",
+        "dog": "leashed"
+      }
+    },
+    {
+      "type": "way",
+      "id": 762932370,
+      "center": {
+        "lat": 19.419748,
+        "lon": -99.0117863
+      },
+      "tags": {
+        "name": "Parque Estado de Mexico",
+        "leisure": "park",
+        "dog": "no",
+        "addr:street": "Bordo de Xochiaca"
+      }
+    },
+    {
+      "type": "way",
+      "id": 769434867,
+      "center": {
+        "lat": 19.2867039,
+        "lon": -103.7049344
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 769449550,
+      "center": {
+        "lat": 19.2853031,
+        "lon": -103.7026896
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 769450765,
+      "center": {
+        "lat": 19.2846999,
+        "lon": -103.7005094
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 769466317,
+      "center": {
+        "lat": 19.2865024,
+        "lon": -103.7020759
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 769466327,
+      "center": {
+        "lat": 19.2862897,
+        "lon": -103.7019727
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 777347050,
+      "center": {
+        "lat": 18.8764545,
+        "lon": -97.1084341
+      },
+      "tags": {
+        "name": "Parque Deportivo Las Flores",
+        "leisure": "park",
+        "dog": "leashed",
+        "addr:street": "Carr. A Sta Ana Atzacan"
+      }
+    },
+    {
+      "type": "way",
+      "id": 798992208,
+      "center": {
+        "lat": 18.8850278,
+        "lon": -97.1106482
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 800416633,
+      "center": {
+        "lat": 20.5662388,
+        "lon": -100.4406636
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "no"
+      }
+    },
+    {
+      "type": "way",
+      "id": 803489449,
+      "center": {
+        "lat": 20.5693283,
+        "lon": -100.4414918
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "no"
+      }
+    },
+    {
+      "type": "way",
+      "id": 803489450,
+      "center": {
+        "lat": 20.5654815,
+        "lon": -100.4379653
+      },
+      "tags": {
+        "leisure": "park",
+        "dog": "no"
+      }
+    },
+    {
+      "type": "way",
+      "id": 80757657,
+      "center": {
+        "lat": 19.409566,
+        "lon": -99.1564852
+      },
+      "tags": {
+        "name": "Jardín López Velarde",
+        "leisure": "park",
+        "dog": "yes",
+        "addr:street": "Centro Urbano Pdte. Juárez"
+      }
+    },
+    {
+      "type": "way",
+      "id": 839261557,
+      "center": {
+        "lat": 20.6345786,
+        "lon": -103.4348072
+      },
+      "tags": {
+        "name": "Paseos del Can",
+        "leisure": "dog_park",
+        "addr:street": "Calle Rinconada de Cáceres"
+      }
+    },
+    {
+      "type": "way",
+      "id": 847838052,
+      "center": {
+        "lat": 19.5022411,
+        "lon": -99.1765164
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 852107793,
+      "center": {
+        "lat": 19.1775149,
+        "lon": -100.1023369
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 852273368,
+      "center": {
+        "lat": 20.5512321,
+        "lon": -100.4465905
+      },
+      "tags": {
+        "name": "Parque canino CAM",
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 866152558,
+      "center": {
+        "lat": 20.692071,
+        "lon": -100.4717182
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 882968451,
+      "center": {
+        "lat": 18.7291933,
+        "lon": -98.9613619
+      },
+      "tags": {
+        "name": "Parque Leopoldo Heredia",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 929886247,
+      "center": {
+        "lat": 19.3760465,
+        "lon": -99.1902837
+      },
+      "tags": {
+        "leisure": "dog_park"
+      }
+    },
+    {
+      "type": "way",
+      "id": 965825022,
+      "center": {
+        "lat": 19.5088356,
+        "lon": -98.8770454
+      },
+      "tags": {
+        "name": "Parque Municipal Acueducto del Rey",
+        "leisure": "park",
+        "dog": "yes"
+      }
+    }
+  ]
+}

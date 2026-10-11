@@ -1,20 +1,20 @@
-// OpenStreetMap places with a dog rule in Ciudad de México: dog parks, and parks and venues tagged
-// dog=yes|leashed|designated|no. © OpenStreetMap contributors, under the Open Database License
+// OpenStreetMap places with a dog rule in the supported states: dog parks, and parks and venues
+// tagged dog=yes|leashed|designated|no. © OpenStreetMap contributors, under the Open Database License
 // (ODbL 1.0): credited wherever shown, and kept in their own rows (source 'osm'), never merged
-// into another source's records. The snapshot is data/osm-dogs-cdmx.json (`pnpm places:osm`).
+// into another source's records. The snapshot is data/osm-dogs.json (`pnpm places:osm`).
 import type { CategorySlug } from '@paw-mall/shared';
 
 import { isCrueltyLinked } from '../denue/map.ts';
 
 export const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
-/** Ciudad de México's bounding box: south, west, north, east. */
-const CDMX_BBOX = '19.05,-99.37,19.6,-98.94';
+/** The supported states' bounding box: south, west, north, east (as in hours.ts). */
+const REGION_BBOX = '16.3,-103.8,21.7,-97.0';
 export const OVERPASS_QUERY = `[out:json][timeout:90];
 (
-  nwr["leisure"="dog_park"](${CDMX_BBOX});
-  nwr["dog"]["leisure"~"^(park|garden|nature_reserve)$"](${CDMX_BBOX});
-  nwr["dog"]["amenity"~"^(restaurant|fast_food|cafe|ice_cream|bar|pub)$"](${CDMX_BBOX});
-  nwr["dog"]["tourism"~"^(hotel|hostel|guest_house|motel|museum|attraction|zoo)$"](${CDMX_BBOX});
+  nwr["leisure"="dog_park"](${REGION_BBOX});
+  nwr["dog"]["leisure"~"^(park|garden|nature_reserve)$"](${REGION_BBOX});
+  nwr["dog"]["amenity"~"^(restaurant|fast_food|cafe|ice_cream|bar|pub)$"](${REGION_BBOX});
+  nwr["dog"]["tourism"~"^(hotel|hostel|guest_house|motel|museum|attraction|zoo)$"](${REGION_BBOX});
 );
 out tags center;`;
 

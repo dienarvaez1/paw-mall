@@ -1,5 +1,5 @@
 // Weekly hours from OpenStreetMap's opening_hours tag, matched to places already listed:
-// restaurants and cafés in Ciudad de México, and vets and pet stores across the region. A match is
+// restaurants, cafés, vets and pet stores across the supported states. A match is
 // the same kind of place within MATCH_METERS with a similar name (pg_trgm). © OpenStreetMap
 // contributors, ODbL 1.0; the app credits the hours' source. Snapshot: data/osm-hours.json.
 import type { CategorySlug, PlaceHours } from '@paw-mall/shared';
@@ -8,12 +8,11 @@ import type postgres from 'postgres';
 import { parseOpeningHours } from '../hours/opening-hours.ts';
 import type { OsmElement } from './osm.ts';
 
-/** Ciudad de México (food), and the whole region (pet businesses): south, west, north, east. */
-const CDMX_BBOX = '19.05,-99.37,19.6,-98.94';
+/** The supported states: south, west, north, east. */
 const REGION_BBOX = '16.3,-103.8,21.7,-97.0';
 export const OSM_HOURS_QUERY = `[out:json][timeout:120];
 (
-  nwr["amenity"~"^(restaurant|fast_food|cafe|ice_cream)$"]["opening_hours"]["name"](${CDMX_BBOX});
+  nwr["amenity"~"^(restaurant|fast_food|cafe|ice_cream)$"]["opening_hours"]["name"](${REGION_BBOX});
   nwr["amenity"="veterinary"]["opening_hours"]["name"](${REGION_BBOX});
   nwr["shop"~"^(pet|pet_grooming)$"]["opening_hours"]["name"](${REGION_BBOX});
 );

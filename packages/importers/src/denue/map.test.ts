@@ -206,13 +206,12 @@ describe('helpers', () => {
 });
 
 describe('venueCategory', () => {
-  it('imports restaurants, cafés and hotels in Ciudad de México only', () => {
-    expect(venueCategory('722511', '09')).toBe('restaurant');
-    expect(venueCategory('722514', '9')).toBe('restaurant');
-    expect(venueCategory('722515', '09')).toBe('cafe');
-    expect(venueCategory('721111', '09')).toBe('lodging');
-    expect(venueCategory('721113', '09')).toBeNull();
-    expect(venueCategory('722511', '15')).toBeNull();
-    expect(venueCategory('465911', '09')).toBeNull();
+  it('imports restaurants, cafés and hotels (not motels)', () => {
+    expect(venueCategory('722511')).toBe('restaurant');
+    expect(venueCategory('722514')).toBe('restaurant');
+    expect(venueCategory('722515')).toBe('cafe');
+    expect(venueCategory('721111')).toBe('lodging');
+    expect(venueCategory('721113')).toBeNull();
+    expect(venueCategory('465911')).toBeNull();
   });
 });

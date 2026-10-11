@@ -1,5 +1,5 @@
-// Loads OpenStreetMap places with a dog rule in Ciudad de México (see osm.ts) from the committed
-// snapshot, data/osm-dogs-cdmx.json. Safe to re-run.
+// Loads OpenStreetMap places with a dog rule in the supported states (see osm.ts) from the committed
+// snapshot, data/osm-dogs.json. Safe to re-run.
 //
 //   pnpm places:osm              load the snapshot
 //   pnpm places:osm --refresh    fetch a new snapshot from the Overpass API first (one request)
@@ -26,7 +26,7 @@ const { values: args } = parseArgs({
     'dry-run': { type: 'boolean', default: false },
   },
 });
-const snapshotPath = join(import.meta.dirname, '../../data/osm-dogs-cdmx.json');
+const snapshotPath = join(import.meta.dirname, '../../data/osm-dogs.json');
 
 type Snapshot = { about: string; fetchedOn: string; elements: OsmElement[] };
 
@@ -43,7 +43,7 @@ if (args.refresh) {
   const { elements } = (await response.json()) as { elements: OsmElement[] };
   const snapshot: Snapshot = {
     about:
-      'OpenStreetMap places with a dog rule in Ciudad de México (dog parks; parks and venues tagged dog=*). © OpenStreetMap contributors, ODbL 1.0 (https://www.openstreetmap.org/copyright). Refresh with `pnpm places:osm --refresh`.',
+      'OpenStreetMap places with a dog rule in the supported states (dog parks; parks and venues tagged dog=*). © OpenStreetMap contributors, ODbL 1.0 (https://www.openstreetmap.org/copyright). Refresh with `pnpm places:osm --refresh`.',
     fetchedOn: new Date().toISOString().slice(0, 10),
     elements: elements
       .map(slimElement)

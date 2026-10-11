@@ -25,17 +25,15 @@ const NAME_ONLY_ACTIVITIES = new Set(['812990', '812310']);
 const VET_ACTIVITIES = new Set(['541941', '541942']);
 
 /**
- * Restaurants, cafés (SCIAN 7225xx) and hotels (721111, 721112, 721190; not motels), only in
- * Ciudad de México, where pet-friendly coverage starts: imported without a pet policy, for chain
- * policies, their websites and users' "¿Acepta mascotas?" answers to fill (Phase 9).
+ * Restaurants, cafés (SCIAN 7225xx) and hotels (721111, 721112, 721190; not motels), in every
+ * imported state (owner, 2026-10-11): imported without a pet policy, for chain policies, their
+ * websites and users' "¿Acepta mascotas?" answers to fill (Phase 9).
  */
-const VENUE_STATES = new Set(['09']);
 const CAFES = '722515';
 const LODGING = new Set(['721111', '721112', '721190']);
 
-/** The category of a restaurant, café or hotel in a covered state; null for anything else. */
-export function venueCategory(activityCode: string, stateCode: string): CategorySlug | null {
-  if (!VENUE_STATES.has(stateCode.trim().padStart(2, '0'))) return null;
+/** The category of a restaurant, café or hotel; null for anything else. */
+export function venueCategory(activityCode: string): CategorySlug | null {
   if (LODGING.has(activityCode)) return 'lodging';
   if (!activityCode.startsWith('7225')) return null;
   return activityCode === CAFES ? 'cafe' : 'restaurant';
@@ -302,7 +300,7 @@ export function mapDenueRow(row: Record<string, string>): MappedRow | null {
     return null;
   }
   const name = clean(row.nom_estab) || clean(row.raz_social);
-  const venue = venueCategory(activityCode, row.cve_ent ?? '');
+  const venue = venueCategory(activityCode);
   const categories: PlaceCategory[] = venue
     ? [{ slug: venue, source: 'activity' }]
     : categorize(activityCode, name);
