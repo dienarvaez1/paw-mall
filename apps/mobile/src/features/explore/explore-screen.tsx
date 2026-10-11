@@ -46,10 +46,10 @@ type Mode = (typeof MODES)[number];
 const MAP_SETTLE_MS = 400;
 const SEARCH_DEBOUNCE_MS = 300;
 /**
- * Cluster bubbles: lime green (lime-500) with dark lime numbers (lime-950), owner's choice. No
- * category uses green, so clusters never look like pins.
+ * Cluster bubbles: the buttons' turquoise (bg-paw, tailwind.config.js) with dark teal numbers
+ * (teal-950), owner's choice. Keep in step with the paw color.
  */
-const CLUSTER_COLORS = { fill: '#84cc16', text: '#1a2e05' };
+const CLUSTER_COLORS = { fill: '#31cdcc', text: '#042f2e' };
 // Explorar's controls (Lista/Mapa, Mi ubicación, the radius button, the selected chip) use the
 // logo's turquoise, lightened, when on: bg-paw (#31cdcc) with text-teal-950 (#042f2e).
 const ON_TEXT = '#042f2e';
@@ -730,7 +730,7 @@ function SourceNote({ places }: { places: Place[] }) {
   );
 }
 
-/** A small lime-green bubble with the number of places it groups; wider for longer numbers. */
+/** A small turquoise bubble with the number of places it groups; wider for longer numbers. */
 function ClusterMarker({ cluster, onPress }: { cluster: PlaceCluster; onPress: () => void }) {
   const { t } = useAppTranslation();
   const locale = useLocale();

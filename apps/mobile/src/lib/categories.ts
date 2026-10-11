@@ -34,7 +34,7 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   veterinarian: '#2563eb',
   public_vet_service: '#475569',
   groomer: '#9333ea',
-  // Not green: green is for map clusters (owner's rule).
+  // Not turquoise: turquoise is for map clusters (owner's rule).
   boarding: '#4f46e5',
   boutique: '#db2777',
   pet_store: '#ea580c',
