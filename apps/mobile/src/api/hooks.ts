@@ -38,8 +38,6 @@ export function usePlaces(
   category: ChipCategory,
   name = '',
   nearMe = false,
-  /** A radius the user set by zooming the map by hand; replaces the presets while set. */
-  customRadiusKm: number | null = null,
   /** Only places whose pet policy takes pets (Pet-friendly decides when). */
   petFriendly = false,
   /** The tab's section: pet businesses (Explorar) or pet-friendly venues. */
@@ -51,8 +49,8 @@ export function usePlaces(
   const settings = useSettings();
   const filters = usePlaceFilters(petFriendly, withUnconfirmed);
   const presetAreaRadiusKm = useAreaRadiusKm();
-  const radiusKm = customRadiusKm ?? settings.radiusKm;
-  const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
+  const radiusKm = settings.radiusKm;
+  const areaRadiusKm = presetAreaRadiusKm;
   return useInfiniteQuery({
     queryKey: [
       'places',
@@ -102,7 +100,6 @@ export function usePlacesMap(
   category: ChipCategory,
   name = '',
   nearMe = false,
-  customRadiusKm: number | null = null,
   petFriendly = false,
   group?: CategoryGroup,
   /** With petFriendly: also venues without a pet policy yet. */
@@ -112,8 +109,8 @@ export function usePlacesMap(
   const settings = useSettings();
   const filters = usePlaceFilters(petFriendly, withUnconfirmed);
   const presetAreaRadiusKm = useAreaRadiusKm();
-  const radiusKm = customRadiusKm ?? settings.radiusKm;
-  const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
+  const radiusKm = settings.radiusKm;
+  const areaRadiusKm = presetAreaRadiusKm;
   return useQuery({
     queryKey: [
       'places-map',
@@ -165,11 +162,21 @@ export function usePlace(id: number) {
 const URGENT_REFRESH_MS = 60 * 1000;
 
 /** Urgencias: the nearest vet hospitals and 24-hour vets, open ones first. */
+/** Urgencias, within the Ajustes radius and with its place switches (Ajustes has the last word). */
 export function useUrgentPlaces(coords: Coords) {
   const locale = useLocale();
+  const { radiusKm } = useSettings();
+  const { withPhone, withWebsite, withSocial, named, openNow } = usePlaceFilters();
+  const filters = { withPhone, withWebsite, withSocial, named, openNow };
   return useQuery({
-    queryKey: ['urgent', locale, coords],
-    queryFn: () => apiGet('/v1/places/urgent', { ...coords }, locale, urgentResponseSchema),
+    queryKey: ['urgent', locale, coords, radiusKm, filters],
+    queryFn: () =>
+      apiGet(
+        '/v1/places/urgent',
+        { ...coords, radiusKm, ...filters },
+        locale,
+        urgentResponseSchema,
+      ),
     staleTime: 0,
     refetchInterval: URGENT_REFRESH_MS,
   });

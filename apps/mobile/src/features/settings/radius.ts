@@ -13,7 +13,7 @@ export function toKm(value: number, unit: DistanceUnit): number {
   return unit === 'mi' ? value * KM_PER_MILE : value;
 }
 
-/** Every launch and every return from the background starts at 3 miles (owner's rule). */
+/** A first launch starts at 3 miles (5 km in km); after that, Ajustes decides. */
 export const START_RADIUS_MILES = 3;
 
 /** The start radius as a choice in the unit: 3 mi, or the closest in km (5 km). */
@@ -39,15 +39,10 @@ export function isRadiusOption(radiusKm: number, unit: DistanceUnit): boolean {
   return radiusOptionsKm(unit).some((option) => Math.abs(option - radiusKm) < 1e-6);
 }
 
-/**
- * A tapped map cluster becomes the search circle: the smallest choice in the unit that covers its
- * places, when that's smaller than the current circle; otherwise just enough to cover them (to 0.1
- * km, at least 0.5 km), never larger than the current circle.
- */
-export function clusterRadiusKm(neededKm: number, currentKm: number, unit: DistanceUnit): number {
-  const preset = radiusOptionsKm(unit).find((option) => option >= neededKm);
-  if (preset !== undefined && preset < currentKm * 0.99) return preset;
-  return Math.min(currentKm, Math.max(0.5, Math.ceil(neededKm * 10) / 10));
+/** A tapped map cluster's radius: the smallest choice in the unit that covers its places. */
+export function coveringRadiusKm(neededKm: number, unit: DistanceUnit): number {
+  const options = radiusOptionsKm(unit);
+  return options.find((option) => option >= neededKm) ?? options.at(-1) ?? neededKm;
 }
 
 /** The map's radius button: the next choice in the unit, back to the smallest after the largest. */

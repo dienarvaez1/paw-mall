@@ -5,7 +5,7 @@ import {
   isRadiusOption,
   nextRadiusKm,
   radiusOptionsKm,
-  clusterRadiusKm,
+  coveringRadiusKm,
   startRadiusKm,
   toKm,
 } from './radius';
@@ -63,18 +63,16 @@ describe('nextRadiusKm', () => {
   });
 });
 
-describe('clusterRadiusKm', () => {
-  it('takes the smallest choice covering the cluster, never growing the circle', () => {
-    expect(clusterRadiusKm(7, 25, 'km')).toBe(10);
-    expect(clusterRadiusKm(12, 15, 'km')).toBe(12);
-    expect(clusterRadiusKm(30, 25, 'km')).toBe(25);
-    expect(clusterRadiusKm(0.2, 5, 'km')).toBe(0.5);
-    expect(clusterRadiusKm(0.2, 25, 'km')).toBe(5);
+describe('coveringRadiusKm', () => {
+  it('takes the smallest choice that covers the cluster', () => {
+    expect(coveringRadiusKm(7, 'km')).toBe(10);
+    expect(coveringRadiusKm(0.2, 'km')).toBe(5);
+    expect(coveringRadiusKm(400, 'km')).toBe(160);
   });
 });
 
 describe('startRadiusKm', () => {
-  it('starts at 3 miles, or the closest choice in km', () => {
+  it('starts a first launch at 3 miles, or the closest choice in km', () => {
     expect(startRadiusKm('mi')).toBeCloseTo(4.828, 3);
     expect(startRadiusKm('km')).toBe(5);
   });

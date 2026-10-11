@@ -481,7 +481,7 @@ export async function urgentPlaces(
     SELECT ${placeColumnsSql(locale, point)}
     FROM places p
     LEFT JOIN vet_details v ON v.place_id = p.id
-    WHERE ${visibleSql} AND ${withinRadiusSql(point, query.radiusKm)}
+    WHERE ${sql.join([visibleSql, withinRadiusSql(point, query.radiusKm), ...filterConditions(query)], sql` AND `)}
       AND (v.open24h IS TRUE OR v.accepts_emergencies IS TRUE OR EXISTS (
         SELECT 1 FROM place_categories pc JOIN categories c ON c.id = pc.category_id
         WHERE pc.place_id = p.id AND c.slug = 'vet_hospital'))

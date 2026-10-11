@@ -216,11 +216,19 @@ export type PlaceMapResponse = z.infer<typeof placeMapResponseSchema>;
 
 export const idParamSchema = z.object({ id: z.coerce.number().int().positive() });
 
-/** Urgencias: the nearest vet hospitals and 24-hour vets, open ones first. */
+/**
+ * Urgencias: the nearest vet hospitals and 24-hour vets, open ones first, within the Ajustes radius
+ * and with its place switches (phone, website, social, named, open now).
+ */
 export const urgentQuerySchema = z.object({
   lat: latitude,
   lng: longitude,
   radiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(25),
+  withPhone: placeFilters.withPhone,
+  withWebsite: placeFilters.withWebsite,
+  withSocial: placeFilters.withSocial,
+  named: placeFilters.named,
+  openNow: placeFilters.openNow,
 });
 export type UrgentQuery = z.infer<typeof urgentQuerySchema>;
 

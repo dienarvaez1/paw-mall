@@ -144,8 +144,6 @@
   "mapAreaCountPartial_one": "{{shown}} de {{total}} lugar a menos de {{distance}} de {{area}}",
   "mapAreaCountPartial_other": "{{shown}} de {{total}} lugares a menos de {{distance}} de {{area}}",
   "categorySummary": "{{category}}: {{summary}}",
-  "radiusButtonCustom": "Radio a mano: {{distance}}",
-  "radiusButtonCustomHint": "Lo elegiste con el zoom del mapa. Toca para volver a los radios de Ajustes.",
   "petFriendly": {
     "tabTitle": "Pet-friendly",
     "forProfile": "Para tu mascota: {{profile}}. Cámbiala en Ajustes.",

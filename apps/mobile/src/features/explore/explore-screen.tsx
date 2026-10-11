@@ -20,7 +20,7 @@ import { SearchInput } from '@/components/search-input';
 import { BUTTON_HIT_SLOP } from '@/components/button';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
 import { useUserLocation } from '@/features/location/location-context';
-import { clusterRadiusKm, nextRadiusKm, startRadiusKm } from '@/features/settings/radius';
+import { closestRadiusKm, coveringRadiusKm, nextRadiusKm } from '@/features/settings/radius';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatCount, formatDistance, formatMonthYear } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
@@ -89,20 +89,18 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   // around the user within the Ajustes radius.
   // Starts on (owner's rule), and turns back on whenever the app returns from the background.
   const [nearMe, setNearMe] = useState(true);
-  // A radius set by zooming the map by hand: it replaces the presets for the list and the map
-  // until the radius button is tapped (it's never saved to Ajustes).
-  const [customRadiusKm, setCustomRadiusKm] = useState<number | null>(null);
-  // A tapped map cluster becomes the search circle's center (with customRadiusKm as its radius)
-  // until the radius button or "Mi ubicación" brings the circle back to the user.
+  // Ajustes has the last word on the radius (owner's rule): the radius button, a zoom by hand and
+  // a tapped cluster all save their radius there, as the closest Ajustes choice.
+  // A tapped map cluster becomes the search circle's center until "Mi ubicación" (or a return
+  // from the background) brings the circle back to the user.
   const [focus, setFocus] = useState<{ lat: number; lng: number } | null>(null);
   const [text, setText] = useState('');
-  // Back from the background: start over at the user's location, as on launch (the radius goes
-  // back to 3 miles in Settings, and the location is read again).
+  // Back from the background: start over at the user's location on the map, as on launch (the
+  // location is read again; the radius stays as Ajustes says).
   useOnWake(() => {
     setMode('map');
     setNearMe(true);
     setFocus(null);
-    setCustomRadiusKm(null);
     setText('');
   });
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
@@ -164,14 +162,7 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           }}
         />
         {/* The same row in both modes, so Lista and Mapa never resize. */}
-        <RadiusButton
-          className="min-h-[35px]"
-          customRadiusKm={customRadiusKm}
-          onClearCustom={() => {
-            setCustomRadiusKm(null);
-            setFocus(null);
-          }}
-        />
+        <RadiusButton className="min-h-[35px]" />
       </View>
       <View className="border-b border-neutral-200 dark:border-neutral-800">
         <CategoryChips
@@ -189,7 +180,6 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           name={name}
           category={category}
           nearMe={nearMe}
-          customRadiusKm={customRadiusKm}
           petFriendly={petFriendly}
           group={section}
           withUnconfirmed={withUnconfirmed}
@@ -206,16 +196,11 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           category={category}
           name={name}
           nearMe={nearMe}
-          customRadiusKm={customRadiusKm}
           petFriendly={petFriendly}
           group={section}
           withUnconfirmed={withUnconfirmed}
           focus={focus}
-          onFocusCluster={(center, clusterKm) => {
-            setFocus(center);
-            setCustomRadiusKm(clusterKm);
-          }}
-          onZoomByHand={setCustomRadiusKm}
+          onFocusCluster={setFocus}
           onLeaveMyLocation={() => setNearMe(false)}
         />
       )}
@@ -282,7 +267,6 @@ function PlacesList({
   name,
   category,
   nearMe,
-  customRadiusKm,
   petFriendly,
   group,
   withUnconfirmed,
@@ -293,7 +277,6 @@ function PlacesList({
   name: string;
   category: ChipCategory;
   nearMe: boolean;
-  customRadiusKm: number | null;
   petFriendly: boolean;
   group: CategoryGroup;
   withUnconfirmed: boolean;
@@ -313,7 +296,6 @@ function PlacesList({
     category,
     name,
     nearMe,
-    customRadiusKm,
     petFriendly,
     group,
     withUnconfirmed,
@@ -331,11 +313,7 @@ function PlacesList({
     if (noConfirmedMatch) onWiden?.(true);
   }, [noConfirmedMatch, onWiden]);
   // Area searches use 5 km (3 mi); everything around the user uses the shared radius.
-  const distance = formatDistance(
-    area ? area.radiusKm : (customRadiusKm ?? radiusKm),
-    locale,
-    units,
-  );
+  const distance = formatDistance(area ? area.radiusKm : radiusKm, locale, units);
 
   if (places.isPending) return <SkeletonList />;
   if (places.isError)
@@ -422,32 +400,27 @@ function PlacesMap({
   category,
   name,
   nearMe,
-  customRadiusKm,
   petFriendly,
   group,
   withUnconfirmed,
   focus,
   onFocusCluster,
-  onZoomByHand,
   onLeaveMyLocation,
 }: {
   category: ChipCategory;
   name: string;
   nearMe: boolean;
-  customRadiusKm: number | null;
   petFriendly: boolean;
   group: CategoryGroup;
   withUnconfirmed: boolean;
   focus: { lat: number; lng: number } | null;
-  /** A cluster was tapped: it becomes the search circle, with this center and radius. */
-  onFocusCluster: (center: { lat: number; lng: number }, radiusKm: number) => void;
-  /** The radius of the view after the user zoomed or panned the map by hand. */
-  onZoomByHand: (radiusKm: number) => void;
+  /** A cluster was tapped: its center becomes the search circle's (its radius goes to Ajustes). */
+  onFocusCluster: (center: { lat: number; lng: number }) => void;
   /** The user moved the map away from their location by hand: "Mi ubicación" turns off. */
   onLeaveMyLocation: () => void;
 }) {
   const { t } = useAppTranslation();
-  const { radiusKm, units } = useSettings();
+  const { radiusKm, units, setRadiusKm } = useSettings();
   const router = useRouter();
   const location = useUserLocation();
   const scheme = useColorScheme();
@@ -463,13 +436,13 @@ function PlacesMap({
     autoMoveUntil.current = Date.now() + MAP_FIT_MS + AUTO_MOVE_GRACE_MS;
     mapRef.current?.animateToRegion(region, MAP_FIT_MS);
   }, []);
-  const movedByHand = (isGesture: boolean | undefined) => {
+  const movedByHand = useCallback((isGesture: boolean | undefined) => {
     const now = Date.now();
     if (now < autoMoveUntil.current) return false;
     return (
       isGesture === true || touch.current.down || now - touch.current.liftedAt < HAND_MOVE_GRACE_MS
     );
-  };
+  }, []);
   const initialRegion: Region = regionForRadius(location.coords, radiusKm);
   const fitted = useRef({ radiusKm, ...location.coords });
   // While a searched area is shown, its circle has its own radius: don't fly back to the user.
@@ -496,20 +469,20 @@ function PlacesMap({
     const was = wasNearMe.current;
     wasNearMe.current = nearMe;
     if (!nearMe || was) return;
-    void refresh().then((coords) => moveMap(regionForRadius(coords, customRadiusKm ?? radiusKm)));
-  }, [nearMe, refresh, customRadiusKm, radiusKm, moveMap]);
-  // Back to the presets (the radius button): fit the preset circle again. A zoom by hand sets a
-  // custom radius without moving the map.
-  const hadCustom = useRef(customRadiusKm !== null);
-  useEffect(() => {
-    const had = hadCustom.current;
-    hadCustom.current = customRadiusKm !== null;
-    if (!had || customRadiusKm !== null || showingArea.current) return;
-    moveMap(regionForRadius(location.coords, radiusKm));
-  }, [customRadiusKm, location.coords, radiusKm, moveMap]);
-  // Back from the background: fly back to the user at the start radius (the location refresh and
-  // the radius reset may move it again when they land).
-  useOnWake(() => moveMap(regionForRadius(location.coords, startRadiusKm(units))));
+    void refresh().then((coords) => moveMap(regionForRadius(coords, radiusKm)));
+  }, [nearMe, refresh, radiusKm, moveMap]);
+  // The map's own radius changes (a zoom by hand, a tapped cluster) go to Ajustes as the closest
+  // choice, without the refit a change from Ajustes or the radius button makes.
+  const saveRadius = useCallback(
+    (nextKm: number) => {
+      if (Math.abs(nextKm - radiusKm) < 1e-6) return;
+      fitted.current = { radiusKm: nextKm, ...location.coords };
+      setRadiusKm(nextKm);
+    },
+    [radiusKm, location.coords, setRadiusKm],
+  );
+  // Back from the background: fly back to the user (the location refresh may move it again).
+  useOnWake(() => moveMap(regionForRadius(location.coords, radiusKm)));
   const [region, setRegion] = useState<Region>(initialRegion);
   const [area, setArea] = useState<MapArea | null>(null);
 
@@ -536,7 +509,6 @@ function PlacesMap({
     category,
     name,
     nearMe,
-    customRadiusKm,
     petFriendly,
     group,
     withUnconfirmed,
@@ -547,7 +519,7 @@ function PlacesMap({
   const searchedArea = places.data?.area ?? null;
   const circle = searchedArea
     ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
-    : { center, radiusKm: customRadiusKm ?? radiusKm };
+    : { center, radiusKm };
   // Fly to a newly searched area, and back to the user when the search no longer names one.
   const shownArea = useRef<string | null>(null);
   const loaded = places.data !== undefined;
@@ -615,7 +587,9 @@ function PlacesMap({
           // A pan alone leaves the scale (and so the radius) as it was.
           if (movedByHand(details?.isGesture)) {
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
-            if (Math.abs(handRadiusKm - circle.radiusKm) >= 0.05) onZoomByHand(handRadiusKm);
+            if (!searchedArea && Math.abs(handRadiusKm - circle.radiusKm) >= 0.05) {
+              saveRadius(closestRadiusKm(handRadiusKm, units));
+            }
             // The center moved by hand off the user: no longer "at my location".
             if (nearMe && isAwayFrom(next, location.coords)) onLeaveMyLocation();
           }
@@ -651,8 +625,9 @@ function PlacesMap({
               // The cluster becomes the circle: centered on its places, just big enough for them
               // (see clusterRadiusKm), and the map centers that circle on screen.
               const covering = circleForBounds(cluster.bounds);
-              const clusterKm = clusterRadiusKm(covering.radiusKm, circle.radiusKm, units);
-              onFocusCluster(covering.center, clusterKm);
+              const clusterKm = coveringRadiusKm(covering.radiusKm, units);
+              saveRadius(clusterKm);
+              onFocusCluster(covering.center);
               moveMap(regionForRadius(covering.center, clusterKm));
             }}
           />
@@ -896,41 +871,21 @@ function MapCountLegend({
  * saves it to the same setting as Ajustes, so the list, the map, "Mi ubicación" and Ajustes always
  * agree.
  */
-function RadiusButton({
-  className,
-  customRadiusKm,
-  onClearCustom,
-}: {
-  className: string;
-  /** A radius from zooming the map by hand: shown in amber; a tap goes back to the presets. */
-  customRadiusKm: number | null;
-  onClearCustom: () => void;
-}) {
+function RadiusButton({ className }: { className: string }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const { radiusKm, units, setRadiusKm } = useSettings();
-  const custom = customRadiusKm !== null;
-  const distance = formatDistance(customRadiusKm ?? radiusKm, locale, units);
+  const distance = formatDistance(radiusKm, locale, units);
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={t(custom ? 'places.radiusButtonCustom' : 'places.radiusButton', {
-        distance,
-      })}
-      accessibilityHint={t(custom ? 'places.radiusButtonCustomHint' : 'places.radiusButtonHint')}
-      onPress={() => (custom ? onClearCustom() : setRadiusKm(nextRadiusKm(radiusKm, units)))}
+      accessibilityLabel={t('places.radiusButton', { distance })}
+      accessibilityHint={t('places.radiusButtonHint')}
+      onPress={() => setRadiusKm(nextRadiusKm(radiusKm, units))}
       hitSlop={BUTTON_HIT_SLOP}
-      className={`min-w-[38px] items-center justify-center rounded-full border px-2.5 active:bg-neutral-100 dark:active:bg-neutral-800 ${
-        custom ? 'border-off-border bg-off-bg dark:bg-off-bg-dark' : 'border-paw bg-paw'
-      } ${className}`}
+      className={`min-w-[38px] items-center justify-center rounded-full border border-paw bg-paw px-2.5 active:bg-paw-dark ${className}`}
     >
-      <Text
-        className={`text-xs font-bold ${
-          custom ? 'text-amber-900 dark:text-amber-200' : 'text-teal-950'
-        }`}
-      >
-        {distance}
-      </Text>
+      <Text className="text-xs font-bold text-teal-950">{distance}</Text>
     </Pressable>
   );
 }

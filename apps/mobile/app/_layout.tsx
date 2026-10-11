@@ -10,8 +10,7 @@ import { OfflineBanner } from '@/components/states';
 import { LocationProvider } from '@/features/location/location-context';
 import { connectQueryOnlineState } from '@/features/network/network';
 import { SettingsProvider } from '@/features/settings/settings-context';
-import { initI18n, startInSpanish } from '@/i18n';
-import { useOnWake } from '@/lib/use-on-wake';
+import { initI18n } from '@/i18n';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 
 const queryClient = new QueryClient({
@@ -41,8 +40,6 @@ export default function RootLayout() {
   const [i18nReady, setI18nReady] = useState(false);
   const scheme = useColorScheme();
 
-  // Spanish on every launch (initI18n) and every return from the background.
-  useOnWake(startInSpanish);
   useEffect(() => {
     initI18n().finally(() => setI18nReady(true));
   }, []);

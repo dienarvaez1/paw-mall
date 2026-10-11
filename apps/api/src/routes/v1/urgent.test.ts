@@ -97,6 +97,21 @@ describe('GET /v1/places/urgent', () => {
   });
 });
 
+describe('GET /v1/places/urgent with the Ajustes switches', () => {
+  it('applies the radius and "only open now", like the other pages', async () => {
+    const urgent = async (params: string) => {
+      const res = await app.request(
+        `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&${params}`,
+        {},
+        testEnv,
+      );
+      return urgentResponseSchema.parse(await res.json()).items.map((p) => p.name);
+    };
+    expect(await urgent('radiusKm=10&openNow=true')).toEqual(['hospital-open', 'owner-24h-far']);
+    expect(await urgent('radiusKm=10&withPhone=true')).toEqual([]);
+  });
+});
+
 describe('openNow filter', () => {
   it('keeps only places open by confirmed hours', async () => {
     const res = await app.request(

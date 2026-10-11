@@ -739,6 +739,11 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
       curated ones.
     - Hours priority: owner > website > OpenStreetMap; the place page says where they came from.
     - Pet-friendly places within 160 km: 81 → 95.
+  - **Ajustes has the last word (owner, 2026-10-11):** the radius and language chosen in Ajustes
+    hold across launches (a first launch: Spanish, 3 mi / 5 km); a zoom by hand or a tapped cluster
+    saves its radius to Ajustes as the closest choice (no separate "custom" radius any more);
+    Urgencias follows the Ajustes radius and place switches. Launch and wake still reset the
+    location, the map view and Mi ubicación.
   - **List duplicates (fixed):** pages fetched at different times could repeat a place when
     policies changed in between (React "two children with the same key"); the list keeps each
     place once.

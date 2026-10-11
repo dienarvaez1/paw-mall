@@ -1,11 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  DEFAULT_RADIUS_KM,
-  DOG_SIZES,
-  type DogSize,
-  PET_SPECIES,
-  type PetSpecies,
-} from '@paw-mall/shared';
+import { DOG_SIZES, type DogSize, PET_SPECIES, type PetSpecies } from '@paw-mall/shared';
 import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import {
@@ -15,7 +9,6 @@ import {
   type DistanceUnit,
   UNIT_OPTIONS,
 } from './radius';
-import { useOnWake } from '@/lib/use-on-wake';
 
 export { type DistanceUnit, UNIT_OPTIONS } from './radius';
 
@@ -54,7 +47,8 @@ type SettingsContextValue = Settings & {
 
 const STORAGE_KEY = 'settings.preferences';
 const DEFAULTS: Settings = {
-  radiusKm: DEFAULT_RADIUS_KM,
+  // A first launch: 3 miles, as 5 km (the default unit).
+  radiusKm: startRadiusKm('km'),
   units: 'km',
   onlyWithPhone: false,
   onlyWithWebsite: false,
@@ -115,18 +109,13 @@ const SettingsContext = createContext<SettingsContextValue>({
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
 
-  // Every launch, and every return from the background, starts at the 3-mile radius.
+  // Ajustes has the last word (owner's rule): what's saved here holds across launches and every
+  // page follows it; a first launch starts at 3 miles (5 km).
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
-      .then((raw) => {
-        const stored = parseSettings(raw);
-        setSettings({ ...stored, radiusKm: startRadiusKm(stored.units) });
-      })
+      .then((raw) => setSettings(parseSettings(raw)))
       .catch(() => {});
   }, []);
-  useOnWake(() =>
-    setSettings((current) => ({ ...current, radiusKm: startRadiusKm(current.units) })),
-  );
 
   const value = useMemo<SettingsContextValue>(() => {
     const update = (patch: Partial<Settings>) =>

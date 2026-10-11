@@ -144,8 +144,6 @@
   "mapAreaCountPartial_one": "{{shown}} of {{total}} place within {{distance}} of {{area}}",
   "mapAreaCountPartial_other": "{{shown}} of {{total}} places within {{distance}} of {{area}}",
   "categorySummary": "{{category}}: {{summary}}",
-  "radiusButtonCustom": "Custom radius: {{distance}}",
-  "radiusButtonCustomHint": "Set by zooming the map. Tap to go back to the Settings radius.",
   "petFriendly": {
     "tabTitle": "Pet-friendly",
     "forProfile": "For your pet: {{profile}}. Change it in Settings.",
