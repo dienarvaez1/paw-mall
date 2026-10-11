@@ -347,6 +347,11 @@ function PlacesList({
         }}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
+        ListHeaderComponent={
+          <Text className="pb-3 text-sm text-neutral-600 dark:text-neutral-300">
+            {t(group === 'pet_friendly' ? 'places.introPetFriendly' : 'places.introExplore')}
+          </Text>
+        }
         ListEmptyComponent={
           name ? (
             <EmptyState
