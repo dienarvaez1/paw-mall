@@ -42,9 +42,10 @@ import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 import { useOnWake } from '@/lib/use-on-wake';
 
+import { useExploreView } from './explore-view';
+
 // Mapa first, then Lista (owner's order).
 const MODES = ['map', 'list'] as const;
-type Mode = (typeof MODES)[number];
 /** Wait for the map to settle before loading its places (keeps panning cheap). */
 const MAP_SETTLE_MS = 400;
 const SEARCH_DEBOUNCE_MS = 300;
@@ -82,14 +83,11 @@ const RADIUS_COLORS = {
 export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const { t } = useAppTranslation();
   const location = useUserLocation();
-  // Opens on the map (owner's rule), and goes back to it whenever the app returns from the
-  // background.
-  const [mode, setMode] = useState<Mode>('map');
+  // Mapa/Lista and "Mi ubicación" are shared with the other tab, start on the map at the user's
+  // location and go back there on wake (explore-view.tsx). Mi ubicación on: business names around
+  // the user; off: the search text names an area.
+  const { mode, setMode, nearMe, setNearMe } = useExploreView();
   const [category, setCategory] = useState<ChipCategory>(null);
-  // "Mi ubicación": off, the search text names an area to search around; on, business names
-  // around the user within the Ajustes radius.
-  // Starts on (owner's rule), and turns back on whenever the app returns from the background.
-  const [nearMe, setNearMe] = useState(true);
   // Ajustes has the last word on the radius (owner's rule): the radius button, a zoom by hand
   // (exactly as zoomed) and a tapped cluster all save their radius there.
   // A tapped map cluster becomes the search circle's center until "Mi ubicación" (or a return
@@ -99,8 +97,6 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   // Back from the background: start over at the user's location on the map, as on launch (the
   // location is read again; the radius stays as Ajustes says).
   useOnWake(() => {
-    setMode('map');
-    setNearMe(true);
     setFocus(null);
     setText('');
   });

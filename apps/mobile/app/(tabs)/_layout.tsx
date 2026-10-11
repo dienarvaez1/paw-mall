@@ -5,6 +5,7 @@ import { Modal, Pressable, Text, View, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ICONS } from '@/components/icons';
+import { ExploreViewProvider } from '@/features/explore/explore-view';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 
 type TabIconName = 'tab-explore' | 'tab-pets' | 'tab-urgent' | 'tab-settings';
@@ -173,26 +174,28 @@ export default function TabsLayout() {
   ];
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: dark ? '#2dd4bf' : '#0f766e',
-        // The selected section sits on a light orange: the logo's #FF9722 with 85% white (dark:
-        // orange-950).
-        tabBarActiveBackgroundColor: dark ? '#431407' : '#ffefde',
-      }}
-    >
-      {tabs.map((tab) => (
-        <Tabs.Screen
-          key={tab.name}
-          name={tab.name}
-          options={{
-            title: tab.title,
-            header: () => <TabHeader title={tab.title} description={tab.description} />,
-            ...(tab.activeTint ? { tabBarActiveTintColor: tab.activeTint } : {}),
-            tabBarIcon: ({ color }) => <TabIcon name={tab.icon} color={String(color)} />,
-          }}
-        />
-      ))}
-    </Tabs>
+    <ExploreViewProvider>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: dark ? '#2dd4bf' : '#0f766e',
+          // The selected section sits on a light orange: the logo's #FF9722 with 85% white (dark:
+          // orange-950).
+          tabBarActiveBackgroundColor: dark ? '#431407' : '#ffefde',
+        }}
+      >
+        {tabs.map((tab) => (
+          <Tabs.Screen
+            key={tab.name}
+            name={tab.name}
+            options={{
+              title: tab.title,
+              header: () => <TabHeader title={tab.title} description={tab.description} />,
+              ...(tab.activeTint ? { tabBarActiveTintColor: tab.activeTint } : {}),
+              tabBarIcon: ({ color }) => <TabIcon name={tab.icon} color={String(color)} />,
+            }}
+          />
+        ))}
+      </Tabs>
+    </ExploreViewProvider>
   );
 }
