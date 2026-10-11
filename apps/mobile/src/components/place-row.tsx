@@ -18,14 +18,26 @@ export function usePlaceName(place: Pick<Place, 'name'>): string {
 }
 
 /** The place's categories as a line ("Veterinaria · Estética para mascotas"). */
-export function CategoryLine({ place, selected }: { place: Place; selected: ChipCategory }) {
+export function CategoryLine({
+  place,
+  selected,
+  small = false,
+}: {
+  place: Place;
+  selected: ChipCategory;
+  /** List rows: one point smaller (13 pt). */
+  small?: boolean;
+}) {
   return (
     <View className="flex-row items-center gap-2">
       <View
         className="h-2.5 w-2.5 rounded-full"
         style={{ backgroundColor: pinColor(place, selected) }}
       />
-      <Text className="flex-1 text-sm text-neutral-600 dark:text-neutral-300" numberOfLines={1}>
+      <Text
+        className={`flex-1 ${small ? 'text-[13px]' : 'text-sm'} text-neutral-600 dark:text-neutral-300`}
+        numberOfLines={1}
+      >
         {place.categories.map((c) => c.name).join(' · ')}
       </Text>
     </View>
@@ -61,11 +73,11 @@ export function PlaceRow({
         className="gap-1 rounded-2xl border border-neutral-200 bg-white px-4 py-3 active:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:active:bg-neutral-800"
       >
         <View className="flex-row items-start justify-between gap-3">
-          <Text className="flex-1 text-base font-semibold text-neutral-900 dark:text-white">
+          <Text className="flex-1 text-[15px] font-semibold text-neutral-900 dark:text-white">
             {name}
           </Text>
           {place.distanceKm !== null ? (
-            <Text className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
+            <Text className="text-[13px] font-medium text-neutral-600 dark:text-neutral-300">
               {!away
                 ? formatDistance(place.distanceKm, locale, units)
                 : t('places.distanceKm', {
@@ -74,23 +86,26 @@ export function PlaceRow({
             </Text>
           ) : null}
         </View>
-        <CategoryLine place={place} selected={selected} />
-        <Text className="text-sm text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
+        <CategoryLine place={place} selected={selected} small />
+        <Text className="text-[13px] text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
           {place.address}
         </Text>
-        <Text className="text-sm text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
+        <Text className="text-[13px] text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
           {placeLine(place)}
         </Text>
         {policy ? (
-          <Text className="text-sm font-medium text-teal-800 dark:text-teal-300" numberOfLines={2}>
+          <Text
+            className="text-[13px] font-medium text-teal-800 dark:text-teal-300"
+            numberOfLines={2}
+          >
             {policy}
           </Text>
         ) : showPolicy ? (
-          <Text className="text-sm text-neutral-500 dark:text-neutral-400">
+          <Text className="text-[13px] text-neutral-500 dark:text-neutral-400">
             {t('places.pets.ask.rowUnknown')}
           </Text>
         ) : null}
-        <OpenStatus place={place} />
+        <OpenStatus place={place} small />
       </Pressable>
     </Link>
   );
