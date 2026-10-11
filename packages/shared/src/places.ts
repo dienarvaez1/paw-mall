@@ -158,6 +158,20 @@ export const searchAreaSchema = z.object({
 });
 export type SearchArea = z.infer<typeof searchAreaSchema>;
 
+/** Whether the whole search text is a place's name (to ask the user how to read it). */
+export const areaLookupQuerySchema = z.object({
+  q: z.string().trim().min(1).max(100),
+  lat: latitude,
+  lng: longitude,
+});
+export type AreaLookupQuery = z.infer<typeof areaLookupQuerySchema>;
+
+export const areaLookupResponseSchema = z.object({
+  /** The nearest place with that exact name (accents and case aside), or null. */
+  area: searchAreaSchema.omit({ radiusKm: true }).nullable(),
+});
+export type AreaLookupResponse = z.infer<typeof areaLookupResponseSchema>;
+
 export const placeListResponseSchema = z.object({
   /**
    * The area `q` named, when it did: places are then within area.radiusKm of it, nearest to it

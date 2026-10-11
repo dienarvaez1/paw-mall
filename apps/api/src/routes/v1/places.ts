@@ -9,6 +9,7 @@ import {
   policyAnswerSchema,
   type receivedResponseSchema,
   urgentQuerySchema,
+  areaLookupQuerySchema,
 } from '@paw-mall/shared';
 import { Hono } from 'hono';
 import type { z } from 'zod';
@@ -16,6 +17,7 @@ import type { z } from 'zod';
 import type { AppEnv } from '../../env';
 import { GoogleError } from '../../lib/google-places';
 import { errorResponse, parseInput } from '../../lib/http';
+import { resolveArea } from '../../queries/areas';
 import { lookupGoogleDetails, userKey } from '../../queries/google';
 import { getPlace, listPlaces, placesForMap, urgentPlaces } from '../../queries/places';
 import { answerPet, answerPolicy, createClaim, reportPlace } from '../../queries/trust';
@@ -28,11 +30,18 @@ export const placesRoute = new Hono<AppEnv>()
     if (!query.ok) return query.response;
     return c.json(await listPlaces(c.var.db, query.data, c.var.locale));
   })
-  // Before /:id, so "map" and "urgent" aren't read as place ids.
+  // Before /:id, so "map", "area" and "urgent" aren't read as place ids.
   .get('/map', async (c) => {
     const query = parseInput(c, placeMapQuerySchema, c.req.query());
     if (!query.ok) return query.response;
     return c.json(await placesForMap(c.var.db, query.data, c.var.locale));
+  })
+  // The search box text as a place's name, so the app can ask whether it means the place.
+  .get('/area', async (c) => {
+    const query = parseInput(c, areaLookupQuerySchema, c.req.query());
+    if (!query.ok) return query.response;
+    const { q, lat, lng } = query.data;
+    return c.json({ area: await resolveArea(c.var.db, q, { lat, lng }) });
   })
   .get('/urgent', async (c) => {
     const query = parseInput(c, urgentQuerySchema, c.req.query());

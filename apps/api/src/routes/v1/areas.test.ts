@@ -1,4 +1,9 @@
-import { KM_PER_MILE, placeListResponseSchema, placeMapResponseSchema } from '@paw-mall/shared';
+import {
+  KM_PER_MILE,
+  areaLookupResponseSchema,
+  placeListResponseSchema,
+  placeMapResponseSchema,
+} from '@paw-mall/shared';
 import postgres from 'postgres';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
@@ -199,6 +204,28 @@ describe('searching on the map', () => {
     expect(result.kind === 'places' && result.items.map((p) => p.name)).toEqual([
       'Veterinaria Junto al Usuario',
     ]);
+  });
+});
+
+describe('GET /v1/places/area', () => {
+  const lookup = async (q: string) =>
+    areaLookupResponseSchema.parse(
+      await (
+        await app.request(
+          `/v1/places/area?lat=${USER.lat}&lng=${USER.lng}&q=${encodeURIComponent(q)}`,
+          {},
+          testEnv,
+        )
+      ).json(),
+    );
+
+  it('names the place when the whole text is its name, and nothing otherwise', async () => {
+    expect((await lookup('PLAZA prueba paw')).area).toMatchObject({
+      name: 'Plaza Prueba Paw',
+      kind: 'landmark',
+    });
+    expect((await lookup('veterinaria en plaza prueba paw')).area).toBeNull();
+    expect((await lookup('tacos')).area).toBeNull();
   });
 });
 

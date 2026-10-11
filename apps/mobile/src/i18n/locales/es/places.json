@@ -241,5 +241,17 @@
   "searchUnconfirmed": "Buscar también en lugares sin confirmar",
   "widenedAuto": "Ningún lugar confirmado coincide con «{{query}}». Estos aún no tienen política de mascotas: abre uno y dinos si las acepta.",
   "introExplore": "Todo lo que tu peludo necesita, cerca de ti: veterinarias, estéticas, tiendas y más. Busca, filtra y llega directo, sin dar vueltas.",
-  "introPetFriendly": "Lugares donde tu lomito es bienvenido: restaurantes, cafés, hoteles, museos y parques. ¿Conoces uno? Cuéntanos si acepta mascotas y ayuda a toda la manada."
+  "introPetFriendly": "Lugares donde tu lomito es bienvenido: restaurantes, cafés, hoteles, museos y parques. ¿Conoces uno? Cuéntanos si acepta mascotas y ayuda a toda la manada.",
+  "placeAsk": {
+    "title": "¿Buscar en {{name}}?",
+    "message": "«{{text}}» es el nombre de una {{kind}}. ¿Buscamos alrededor de ese lugar o negocios que se llamen así?",
+    "asPlace": "Como lugar",
+    "asBusiness": "Como nombre de negocio",
+    "kind": {
+      "municipality": "ciudad o alcaldía",
+      "town": "población",
+      "colonia": "colonia",
+      "landmark": "zona o lugar conocido"
+    }
+  }
 }

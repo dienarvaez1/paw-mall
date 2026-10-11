@@ -241,5 +241,17 @@
   "searchUnconfirmed": "Also search places not yet confirmed",
   "widenedAuto": "No confirmed place matches “{{query}}”. These have no pet policy yet: open one and tell us whether it takes pets.",
   "introExplore": "Everything your furry friend needs, close by: vets, groomers, pet stores and more. Search, filter and head straight there, no detours.",
-  "introPetFriendly": "Places where your pup is welcome: restaurants, cafés, hotels, museums and parks. Know one? Tell us whether it takes pets and help the whole pack."
+  "introPetFriendly": "Places where your pup is welcome: restaurants, cafés, hotels, museums and parks. Know one? Tell us whether it takes pets and help the whole pack.",
+  "placeAsk": {
+    "title": "Search in {{name}}?",
+    "message": "“{{text}}” is the name of a {{kind}}. Search around that place, or for businesses with that name?",
+    "asPlace": "As a place",
+    "asBusiness": "As a business name",
+    "kind": {
+      "municipality": "city",
+      "town": "town",
+      "colonia": "neighborhood (colonia)",
+      "landmark": "landmark"
+    }
+  }
 }

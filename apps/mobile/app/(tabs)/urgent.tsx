@@ -7,7 +7,7 @@ import { Button } from '@/components/button';
 import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
-import { useExploreView } from '@/features/explore/explore-view';
+import { readsAsPlace, useExploreView } from '@/features/explore/explore-view';
 import { useUserLocation } from '@/features/location/location-context';
 import { useDebounced } from '@/lib/use-debounced';
 import { useSettings } from '@/features/settings/settings-context';
@@ -31,10 +31,12 @@ export default function UrgentScreen() {
   const location = useUserLocation();
   // The search box of Explorar and Pet-friendly: a place it names moves Urgencias there.
   // A map moved by hand (or a tapped cluster) moves Urgencias' center there too (owner's rule).
-  const { nearMe, text, focus } = useExploreView();
+  // A text the user said is a business name, not the place, doesn't move Urgencias.
+  const { nearMe, text, focus, placeChoice } = useExploreView();
+  const searched = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
   const urgent = useUrgentPlaces(
     focus ?? location.coords,
-    useDebounced(text.trim(), SEARCH_DEBOUNCE_MS),
+    readsAsPlace(placeChoice, searched) === false ? '' : searched,
   );
   const area = urgent.data?.area ?? null;
   const items = urgent.data?.items ?? [];

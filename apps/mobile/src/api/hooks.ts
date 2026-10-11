@@ -7,6 +7,7 @@ import {
 } from '@paw-mall/shared';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
+import { readsAsPlace, useExploreView } from '@/features/explore/explore-view';
 import { toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
@@ -51,6 +52,10 @@ export function usePlaces(
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = settings.radiusKm;
   const areaRadiusKm = presetAreaRadiusKm;
+  // Business names only: "Mi ubicación" on, or the user said the place-like text is a name.
+  const { placeChoice } = useExploreView();
+  const asPlace = readsAsPlace(placeChoice, name);
+  const namesOnly = name !== '' && (asPlace === false || (nearMe && asPlace !== true));
   return useInfiniteQuery({
     queryKey: [
       'places',
@@ -61,7 +66,7 @@ export function usePlaces(
       category,
       group,
       name,
-      nearMe,
+      namesOnly,
       areaRadiusKm,
     ],
     initialPageParam: 1,
@@ -75,7 +80,7 @@ export function usePlaces(
           group,
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,
-          namesOnly: (name && nearMe) || undefined,
+          namesOnly: namesOnly || undefined,
           ...filters,
           pageSize: PLACES_PAGE_SIZE,
           page: pageParam,
@@ -111,6 +116,10 @@ export function usePlacesMap(
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = settings.radiusKm;
   const areaRadiusKm = presetAreaRadiusKm;
+  // Business names only: "Mi ubicación" on, or the user said the place-like text is a name.
+  const { placeChoice } = useExploreView();
+  const asPlace = readsAsPlace(placeChoice, name);
+  const namesOnly = name !== '' && (asPlace === false || (nearMe && asPlace !== true));
   return useQuery({
     queryKey: [
       'places-map',
@@ -123,7 +132,7 @@ export function usePlacesMap(
       category,
       group,
       name,
-      nearMe,
+      namesOnly,
     ],
     enabled: area !== null,
     placeholderData: (previous) => previous,
@@ -140,7 +149,7 @@ export function usePlacesMap(
           // The search box, as in the list (see usePlaces).
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,
-          namesOnly: (name && nearMe) || undefined,
+          namesOnly: namesOnly || undefined,
           ...filters,
         },
         locale,
