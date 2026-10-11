@@ -236,5 +236,8 @@
       "thanksCounted": "Gracias. Tu respuesta ya cuenta."
     }
   },
-  "sourceOsm": "Datos: © colaboradores de OpenStreetMap (ODbL)."
+  "sourceOsm": "Datos: © colaboradores de OpenStreetMap (ODbL).",
+  "searchUnconfirmed": "Buscar también en lugares sin confirmar",
+  "noPetFriendlyMatches": "Ningún lugar que acepte mascotas coincide con «{{query}}» a menos de {{distance}}",
+  "unconfirmedHint": "Busca también en restaurantes y cafés que nadie ha confirmado todavía y cuéntanos si aceptan mascotas."
 }

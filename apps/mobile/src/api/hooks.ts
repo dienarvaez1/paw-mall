@@ -10,7 +10,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
-import { type ChipCategory, isPetFilterCategory } from '@/lib/categories';
+import type { ChipCategory } from '@/lib/categories';
 
 import { apiGet } from './client';
 
@@ -40,15 +40,14 @@ export function usePlaces(
   nearMe = false,
   /** A radius the user set by zooming the map by hand; replaces the presets while set. */
   customRadiusKm: number | null = null,
-  /** Pet-friendly "Todos"; the restaurant, café and lodging chips turn it on too. */
+  /** Only places whose pet policy takes pets (Pet-friendly decides when). */
   petFriendly = false,
   /** The tab's section: pet businesses (Explorar) or pet-friendly venues. */
   group?: CategoryGroup,
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  // A name search also finds venues nobody has answered for yet, to ask on their page.
-  const filters = usePlaceFilters(petFriendly || (isPetFilterCategory(category) && !name));
+  const filters = usePlaceFilters(petFriendly);
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
@@ -107,8 +106,7 @@ export function usePlacesMap(
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  // A name search also finds venues nobody has answered for yet, to ask on their page.
-  const filters = usePlaceFilters(petFriendly || (isPetFilterCategory(category) && !name));
+  const filters = usePlaceFilters(petFriendly);
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = customRadiusKm ?? settings.radiusKm;
   const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;

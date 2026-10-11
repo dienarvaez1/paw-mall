@@ -31,6 +31,7 @@ import {
   EXPLORE_CHIPS,
   PET_FRIENDLY_CHIPS,
   type ChipCategory,
+  isPetFilterCategory,
   isPetFriendlyCategory,
   pinColor,
 } from '@/lib/categories';
@@ -82,10 +83,16 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const [customRadiusKm, setCustomRadiusKm] = useState<number | null>(null);
   const [text, setText] = useState('');
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
-  // Pet-friendly "Todos": only places whose pet policy takes pets, narrowed by the pet profile.
-  // Its restaurant, café and lodging chips filter the same way; museums and parks list every place.
-  // A name search lists every venue, including those nobody has answered for yet.
-  const petFriendly = section === 'pet_friendly' && category === null && name === '';
+  // Pet-friendly searches show places that take pets; "Buscar también en lugares sin confirmar"
+  // widens the current search to venues nobody has answered for yet (to ask on their page).
+  const [unconfirmedFor, setUnconfirmedFor] = useState<string | null>(null);
+  const includeUnconfirmed = name !== '' && unconfirmedFor === name;
+  // Pet-friendly "Todos", Restaurantes, Cafés and Hospedaje: only places whose pet policy takes
+  // pets, narrowed by the pet profile. Museos and Parques list every place, including a no.
+  const petFriendly =
+    section === 'pet_friendly' &&
+    (category === null || isPetFilterCategory(category)) &&
+    !includeUnconfirmed;
   useDismissKeyboardOnBlur();
 
   return (
@@ -148,6 +155,11 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           customRadiusKm={customRadiusKm}
           petFriendly={petFriendly}
           group={section}
+          onIncludeUnconfirmed={
+            section === 'pet_friendly' && name !== '' && petFriendly
+              ? () => setUnconfirmedFor(name)
+              : undefined
+          }
         />
       ) : (
         <PlacesMap
@@ -228,6 +240,7 @@ function PlacesList({
   customRadiusKm,
   petFriendly,
   group,
+  onIncludeUnconfirmed,
 }: {
   name: string;
   category: ChipCategory;
@@ -235,6 +248,8 @@ function PlacesList({
   customRadiusKm: number | null;
   petFriendly: boolean;
   group: CategoryGroup;
+  /** Pet-friendly search: widen it to venues nobody has answered for yet. */
+  onIncludeUnconfirmed?: () => void;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
@@ -308,7 +323,15 @@ function PlacesList({
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         ListEmptyComponent={
-          name ? (
+          name && onIncludeUnconfirmed ? (
+            <View>
+              <EmptyState
+                title={t('places.noPetFriendlyMatches', { query: name, distance })}
+                hint={t('places.unconfirmedHint')}
+              />
+              <UnconfirmedLink onPress={onIncludeUnconfirmed} />
+            </View>
+          ) : name ? (
             <EmptyState
               title={t('places.noMatchesNearby', { query: name, distance })}
               hint={t('places.noMatchesHint')}
@@ -333,6 +356,9 @@ function PlacesList({
         ListFooterComponent={
           <>
             {places.isFetchingNextPage ? <SkeletonList rows={2} /> : null}
+            {onIncludeUnconfirmed && items.length > 0 && !places.hasNextPage ? (
+              <UnconfirmedLink onPress={onIncludeUnconfirmed} />
+            ) : null}
             <SourceNote places={items} />
           </>
         }
@@ -586,6 +612,22 @@ function PlacesMap({
         </View>
       ) : null}
     </View>
+  );
+}
+
+/** "Buscar también en lugares sin confirmar": the same search, with unanswered venues too. */
+function UnconfirmedLink({ onPress }: { onPress: () => void }) {
+  const { t } = useAppTranslation();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      onPress={onPress}
+      className="mx-4 my-3 min-h-11 items-center justify-center rounded-xl border border-teal-700 px-4 active:bg-teal-50 dark:border-teal-400 dark:active:bg-teal-950"
+    >
+      <Text className="text-center text-sm font-semibold text-teal-800 dark:text-teal-300">
+        {t('places.searchUnconfirmed')}
+      </Text>
+    </Pressable>
   );
 }
 

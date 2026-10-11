@@ -236,5 +236,8 @@
       "thanksCounted": "Thanks. Your answer counts."
     }
   },
-  "sourceOsm": "Data: © OpenStreetMap contributors (ODbL)."
+  "sourceOsm": "Data: © OpenStreetMap contributors (ODbL).",
+  "searchUnconfirmed": "Also search places not yet confirmed",
+  "noPetFriendlyMatches": "No place that takes pets matches “{{query}}” within {{distance}}",
+  "unconfirmedHint": "Also search restaurants and cafés nobody has confirmed yet, and tell us whether they take pets."
 }
