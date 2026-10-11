@@ -149,7 +149,9 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           nearMe={nearMe}
           onToggle={() => {
             setFocus(null);
-            setNearMe((value) => !value);
+            // Turning it on starts over around the user: the search box empties (owner's rule).
+            if (!nearMe) setText('');
+            setNearMe(!nearMe);
           }}
         />
         {/* The same row in both modes, so Lista and Mapa never resize. */}
