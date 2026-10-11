@@ -85,8 +85,9 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
   const name = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
   // Pet-friendly searches show places that take pets; "Buscar también en lugares sin confirmar"
   // widens the current search to venues nobody has answered for yet (to ask on their page).
-  const [unconfirmedFor, setUnconfirmedFor] = useState<string | null>(null);
-  const includeUnconfirmed = name !== '' && unconfirmedFor === name;
+  // When no confirmed place matches, the search widens by itself (`auto`), with a notice.
+  const [widenedFor, setWidenedFor] = useState<{ name: string; auto: boolean } | null>(null);
+  const includeUnconfirmed = name !== '' && widenedFor?.name === name;
   // Pet-friendly "Todos", Restaurantes, Cafés and Hospedaje: only places whose pet policy takes
   // pets, narrowed by the pet profile. Museos and Parques list every place, including a no.
   const petFriendly =
@@ -155,9 +156,10 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           customRadiusKm={customRadiusKm}
           petFriendly={petFriendly}
           group={section}
-          onIncludeUnconfirmed={
+          widened={includeUnconfirmed ? (widenedFor?.auto ? 'auto' : 'manual') : null}
+          onWiden={
             section === 'pet_friendly' && name !== '' && petFriendly
-              ? () => setUnconfirmedFor(name)
+              ? (auto) => setWidenedFor({ name, auto })
               : undefined
           }
         />
@@ -240,7 +242,8 @@ function PlacesList({
   customRadiusKm,
   petFriendly,
   group,
-  onIncludeUnconfirmed,
+  widened,
+  onWiden,
 }: {
   name: string;
   category: ChipCategory;
@@ -248,8 +251,10 @@ function PlacesList({
   customRadiusKm: number | null;
   petFriendly: boolean;
   group: CategoryGroup;
+  /** Pet-friendly search widened to unanswered venues: by the user, or because none matched. */
+  widened: 'auto' | 'manual' | null;
   /** Pet-friendly search: widen it to venues nobody has answered for yet. */
-  onIncludeUnconfirmed?: () => void;
+  onWiden?: (auto: boolean) => void;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
@@ -271,6 +276,11 @@ function PlacesList({
     [places.data],
   );
   const total = places.data?.pages[0]?.total ?? 0;
+  // No place that takes pets matches the search: show unanswered venues instead, with a notice.
+  const noConfirmedMatch = onWiden !== undefined && places.isSuccess && total === 0;
+  useEffect(() => {
+    if (noConfirmedMatch) onWiden?.(true);
+  }, [noConfirmedMatch, onWiden]);
   // Area searches use 5 km (3 mi); everything around the user uses the shared radius.
   const distance = formatDistance(
     area ? area.radiusKm : (customRadiusKm ?? radiusKm),
@@ -309,6 +319,8 @@ function PlacesList({
       >
         {shownSummary}
       </Text>
+      {onWiden ? <UnconfirmedLink onPress={() => onWiden(false)} /> : null}
+      {widened === 'auto' ? <Notice text={t('places.widenedAuto', { query: name })} /> : null}
       <FlatList
         data={items}
         keyExtractor={(place) => String(place.id)}
@@ -323,15 +335,7 @@ function PlacesList({
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         ListEmptyComponent={
-          name && onIncludeUnconfirmed ? (
-            <View>
-              <EmptyState
-                title={t('places.noPetFriendlyMatches', { query: name, distance })}
-                hint={t('places.unconfirmedHint')}
-              />
-              <UnconfirmedLink onPress={onIncludeUnconfirmed} />
-            </View>
-          ) : name ? (
+          name ? (
             <EmptyState
               title={t('places.noMatchesNearby', { query: name, distance })}
               hint={t('places.noMatchesHint')}
@@ -356,9 +360,6 @@ function PlacesList({
         ListFooterComponent={
           <>
             {places.isFetchingNextPage ? <SkeletonList rows={2} /> : null}
-            {onIncludeUnconfirmed && items.length > 0 && !places.hasNextPage ? (
-              <UnconfirmedLink onPress={onIncludeUnconfirmed} />
-            ) : null}
             <SourceNote places={items} />
           </>
         }
@@ -622,9 +623,9 @@ function UnconfirmedLink({ onPress }: { onPress: () => void }) {
     <Pressable
       accessibilityRole="button"
       onPress={onPress}
-      className="mx-4 my-3 min-h-11 items-center justify-center rounded-xl border border-teal-700 px-4 active:bg-teal-50 dark:border-teal-400 dark:active:bg-teal-950"
+      className="min-h-11 justify-center border-b border-neutral-100 px-4 active:bg-teal-50 dark:border-neutral-900 dark:active:bg-teal-950"
     >
-      <Text className="text-center text-sm font-semibold text-teal-800 dark:text-teal-300">
+      <Text className="text-sm font-semibold text-teal-800 underline dark:text-teal-300">
         {t('places.searchUnconfirmed')}
       </Text>
     </Pressable>

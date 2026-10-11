@@ -688,9 +688,10 @@ a task (and a note in the phase that applies it).
   - [ ] Done-when check on a phone
 - **Notes:**
   - **Owner decisions (2026-10-10):** 2 phones agreeing, more than disagree, within 365 days.
-    Searches in Pet-friendly show only places that take pets; after the results (or when none
-    match), "Buscar también en lugares sin confirmar" widens that search to unanswered venues,
-    whose page asks "¿Acepta mascotas?" (changed from listing unanswered venues in every search).
+    Searches in Pet-friendly show places that take pets, with "Buscar también en lugares sin
+    confirmar" under the count to widen them to unanswered venues; when no confirmed place matches
+    (e.g. "taco"), the search widens by itself, with a notice. Unanswered venues' pages ask
+    "¿Acepta mascotas?".
   - **DENUE:** SCIAN 7225xx in Ciudad de México only: 45,879 restaurants and 9,862 cafés
     (722515), no policy until users answer. Names that match the cruelty rule (e.g. "Taquería y
     Carnicería") are left out, as everywhere. Explorar never shows them (`group` filter).
