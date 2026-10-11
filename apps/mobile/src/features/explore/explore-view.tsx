@@ -146,7 +146,14 @@ function usePlaceQuestion(
   const asked = useRef<string | null>(null);
   const area = lookup.data?.area ?? null;
   const current = text.trim();
+  // Typing something else forgets the answer, so the same text typed again is asked again.
+  const [answerFor, setAnswerFor] = useState(current);
+  if (answerFor !== current) {
+    setAnswerFor(current);
+    if (choice && choice.text !== current) setChoice(null);
+  }
   useEffect(() => {
+    if (asked.current !== null && asked.current !== current) asked.current = null;
     if (!area || answered || asked.current === settled || current !== settled) return;
     asked.current = settled;
     Alert.alert(
