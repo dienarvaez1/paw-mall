@@ -38,7 +38,7 @@ checked) · **Blocked**.
 | 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done        | 2026-10-10 | 2026-10-10 |
 | 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done        | 2026-10-10 | 2026-10-11 |
 | 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done        | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | In progress | 2026-10-11 | —          |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done        | 2026-10-11 | 2026-10-12 |
 
 ## Pending owner reviews
 
@@ -782,7 +782,8 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
   "Monterrey", "Mérida") moves the map there with its pet businesses and pet-friendly places, and
   this log records the data volumes and import times.
 - **Branch / PR:** `phase-10/all-mexico` / #14
-- **Status:** In progress
+- **Status:** Done, squash-merged 2026-10-12 on the owner's request ("merge all code up to this
+  point"). The done-when check wasn't run as a separate step; the owner merged after the import.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm test`: 257 tests
   - [x] Imports run on all states (volumes and times below)
@@ -847,3 +848,4 @@ Play readiness").
 | 2026-10-11 | Phase 8 merged (`3673c52`) | #11 |
 | 2026-10-11 | Phase 9 merged (`faaaf68`) | #12 |
 | 2026-10-11 | Phase 10 started           | #14 |
+| 2026-10-12 | Phase 10 merged            | #14 |
