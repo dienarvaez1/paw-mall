@@ -1,6 +1,5 @@
 import {
   AREA_NAME_RADIUS_KM,
-  CITY_AREA_RADIUS_KM,
   CITY_BUSY_MATCHES,
   type Category,
   type CategorySlug,
@@ -232,6 +231,7 @@ type SearchQuery = PlaceFilters & {
   radiusKm: number;
   areaRadiusKm: number;
   fixedAreaRadius?: boolean;
+  cityRadiusKm: number;
 };
 
 /**
@@ -264,10 +264,10 @@ async function interpretSearch(db: Database, query: SearchQuery) {
   if (area && !query.fixedAreaRadius && (area.kind === 'municipality' || area.kind === 'town')) {
     const matches = await countPlaces(db, [
       visibleSql,
-      searchCircleSql(point, CITY_AREA_RADIUS_KM, namedAfter),
+      searchCircleSql(point, query.cityRadiusKm, namedAfter),
     ]);
     if (matches > CITY_BUSY_MATCHES) {
-      radiusKm = CITY_AREA_RADIUS_KM;
+      radiusKm = query.cityRadiusKm;
       area = { ...area, radiusKm };
     }
   }

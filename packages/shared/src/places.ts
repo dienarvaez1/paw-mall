@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { CITY_AREA_RADIUS_KM } from './constants';
 import { CATEGORY_GROUPS, CATEGORY_SLUGS } from './categories';
 import { placeHoursSchema } from './hours';
 import { DOG_SIZES, PET_SPECIES, petPolicySchema } from './pet-policy';
@@ -142,6 +143,8 @@ export const placeListQuerySchema = z.object({
   areaRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(AREA_RADIUS_KM),
   /** "true" when the user picked areaRadiusKm (radius button, zoom): no busy-city 3 mi rule. */
   fixedAreaRadius: z.stringbool().optional(),
+  /** A busy city's radius in the user's units: 3 mi, or 5 km (the closest km preset). */
+  cityRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(CITY_AREA_RADIUS_KM),
   /** "true" searches `q` in business names only, even when it names an area. */
   namesOnly: z.stringbool().optional(),
   ...placeFilters,
@@ -200,6 +203,8 @@ export const placeMapQuerySchema = z.object({
   areaRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(AREA_RADIUS_KM),
   /** "true" when the user picked areaRadiusKm (radius button, zoom): no busy-city 3 mi rule. */
   fixedAreaRadius: z.stringbool().optional(),
+  /** A busy city's radius in the user's units: 3 mi, or 5 km (the closest km preset). */
+  cityRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(CITY_AREA_RADIUS_KM),
   namesOnly: z.stringbool().optional(),
   ...placeFilters,
   /** Most places to return one by one before clustering (tests use a small number). */

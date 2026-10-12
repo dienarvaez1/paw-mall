@@ -8,7 +8,7 @@ import {
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { readsAsPlace, useExploreView } from '@/features/explore/explore-view';
-import { toKm } from '@/features/settings/radius';
+import { startRadiusKm, toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
 import type { ChipCategory } from '@/lib/categories';
@@ -85,6 +85,8 @@ export function usePlaces(
           areaRadiusKm: name ? areaRadiusKm : undefined,
           namesOnly: namesOnly || undefined,
           fixedAreaRadius: (name && pickedKm !== null) || undefined,
+          // A busy city's circle in the user's units, so the radius button shows it as a preset.
+          cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,
           ...filters,
           pageSize: PLACES_PAGE_SIZE,
           page: pageParam,
@@ -158,6 +160,8 @@ export function usePlacesMap(
           areaRadiusKm: name ? areaRadiusKm : undefined,
           namesOnly: namesOnly || undefined,
           fixedAreaRadius: (name && pickedKm !== null) || undefined,
+          // A busy city's circle in the user's units, so the radius button shows it as a preset.
+          cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,
           ...filters,
         },
         locale,
