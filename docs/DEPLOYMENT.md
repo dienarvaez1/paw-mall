@@ -646,7 +646,9 @@ a task (and a note in the phase that applies it).
 - **Done when:** each reported bug is fixed and checked on a phone, and the full test run passes
   while a `pnpm places:*` command runs at the same time.
 - **Branch / PR:** `phase-8/bug-fixes` / #11
-- **Status:** In progress
+- **Status:** Done, squash-merged 2026-10-11 (`3673c52`) on the owner's request ("merge all code
+  up to this point"). The owner tried each fix on a phone while asking for the next one; there
+  was no separate done-when run.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`
   - [x] `pnpm test`: 218 tests, also while `pnpm places:curated` runs alongside
@@ -677,9 +679,18 @@ a task (and a note in the phase that applies it).
 - **Done when:** a name search in Pet-friendly finds an unanswered restaurant, two phones
   answering yes make it appear under Restaurantes with "Según usuarios de Paw Mall", and
   OpenStreetMap is credited on its places.
-- **Branch / PR:** `phase-9/pet-friendly-scale` / #12, stacked on Phase 8 (#11), which stays open
-  for more owner bugs; it merges after #11.
-- **Status:** In progress
+- **Branch / PR:** `phase-9/pet-friendly-scale` / #12, stacked on Phase 8 (#11); rebased onto
+  `main` after #11 merged.
+- **Status:** Done, squash-merged 2026-10-11 on the owner's request, right after Phase 8. The
+  done-when check wasn't run as a separate step; the owner used the app on a phone throughout.
+- **Also on this branch (owner's UI requests, 2026-10-11):** radius only on the maps (gone from
+  Ajustes) and shared by Explorar, Pet-friendly and Urgencias; every launch starts at 3 mi (5 km
+  in km) with Mi ubicación on; both maps always show the same view (pans, zooms, cluster taps,
+  searches); category icons on pins, rows and chips; clusters only past 100 places; Urgencias
+  closest first, following a searched place or a moved map, with the same summary wording; a
+  dialog asks whether a place-like search ("Tlaxcala") means the place or a business name; a
+  searched area's circle follows the radius button, and a busy city opens at the preset closest
+  to 3 mi.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
   - [x] `pnpm test`: 249 tests (shared 30, api 64, importers 95, mobile 60)
