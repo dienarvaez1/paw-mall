@@ -784,7 +784,7 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
 - **Branch / PR:** `phase-10/all-mexico` / #14
 - **Status:** In progress
 - **Checks:**
-  - [ ] `pnpm lint`, `pnpm typecheck`, `pnpm test`
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm test`: 257 tests
   - [ ] Imports run on all states (volumes and times below)
   - [ ] Done-when check on a phone
 - **Notes:**
@@ -798,6 +798,21 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
     states with DENUE's state names. Snapshot: 1,102 → 2,065 landmarks.
   - **Overture:** the download box covers all of Mexico (it also takes in some of the US and
     Guatemala, harmless: Overture only adds phones and websites to our own places).
+  - **Import run on dev data (2026-10-11), in order:**
+    | Step                                           | Result                                                                                                          | Time                      |
+    | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
+    | `places:import`                                | 813,254 places (was 336,588); 573 cruelty-linked names left out                                                 | 128 s                     |
+    | `places:areas`                                 | 80,922 search areas (71,111 colonias, 3,646 towns, 2,476 municipalities, 3,689 landmarks) from 6.1 M DENUE rows | 60 s                      |
+    | `places:enrich-overture`                       | 44,018 pet-type Overture places; 8,284 matched; 3,292 phones, 1,553 websites saved                              | 407 s (download included) |
+    | `places:curated`                               | 36 places; 9 DENUE copies hidden                                                                                | 38 s                      |
+    | `places:osm`                                   | 275 places (137 dog parks, 125 parks, 15 venues; 11 say no); 10 DENUE copies hidden                             | 47 s                      |
+    | `places:osm-hours`                             | 1,747 places with OpenStreetMap hours (was 687)                                                                 | 6 s                       |
+    | `places:chains`                                | City Express on 63 branches (was 7)                                                                             | <1 s                      |
+    | Database: 813,565 places, 697 MB (was 281 MB). |
+  - **Query speed:** after the import, Pet-friendly with "sin confirmar" around Guadalajara (16 km)
+    took 2.2 s; `ANALYZE` brought it to 0.14 s (CDMX 0.63 s). `places:import` now runs `ANALYZE
+places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tijuana") resolve
+    to their municipality; the map query answers in 0.1 s.
 - **Follow-ups:** —
 
 ## Production deployment

@@ -231,6 +231,9 @@ try {
       .where(sql`${importRuns.id} = ${run?.id}`);
     console.log(`Saved ${rows.length} places; removed ${removed.count} no longer in DENUE.`);
   });
+  // Fresh planner statistics after a big write: with stale ones, Pet-friendly's "sin confirmar"
+  // query in a dense city took 2.2 s instead of 0.14 s (Phase 10, all of Mexico).
+  await db.execute(sql`ANALYZE places`);
 } finally {
   await client.end();
 }
