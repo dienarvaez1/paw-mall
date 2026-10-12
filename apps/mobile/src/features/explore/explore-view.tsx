@@ -1,4 +1,4 @@
-import { areaLookupResponseSchema } from '@paw-mall/shared';
+import { type SearchArea, areaLookupResponseSchema } from '@paw-mall/shared';
 import { useQuery } from '@tanstack/react-query';
 import {
   type ReactNode,
@@ -44,7 +44,15 @@ type ExploreView = {
    * (search around it, "Mi ubicación" turned off) or as a business name.
    */
   placeChoice: PlaceChoice | null;
+  /** The area the search moved the circle to ("Iztapalapa"), as the list or map got it. */
+  shownArea: SearchArea | null;
+  setShownArea: (area: SearchArea | null) => void;
+  /** A radius the user picked for this search's area (radius button, zoom), until the text changes. */
+  areaRadius: AreaRadius | null;
+  setAreaRadius: (areaRadius: AreaRadius | null) => void;
 };
+
+export type AreaRadius = { text: string; km: number };
 
 type Point = { lat: number; lng: number };
 export type PlaceChoice = { text: string; asPlace: boolean };
@@ -69,6 +77,10 @@ const ExploreViewContext = createContext<ExploreView>({
   readMapView: () => null,
   saveMapView: () => {},
   placeChoice: null,
+  shownArea: null,
+  setShownArea: () => {},
+  areaRadius: null,
+  setAreaRadius: () => {},
 });
 
 /**
@@ -83,6 +95,8 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const [nearMe, setNearMe] = useState(true);
   const [text, setText] = useState('');
   const [focus, setFocus] = useState<Point | null>(null);
+  const [shownArea, setShownArea] = useState<SearchArea | null>(null);
+  const [areaRadius, setAreaRadius] = useState<AreaRadius | null>(null);
   const mapView = useRef<Region | null>(null);
   const [mapViewAccess] = useState(() => ({
     readMapView: () => mapView.current,
@@ -111,8 +125,12 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       setFocus,
       ...mapViewAccess,
       placeChoice,
+      shownArea,
+      setShownArea,
+      areaRadius,
+      setAreaRadius,
     }),
-    [mode, nearMe, text, focus, mapViewAccess, placeChoice],
+    [mode, nearMe, text, focus, mapViewAccess, placeChoice, shownArea, areaRadius],
   );
   return <ExploreViewContext.Provider value={value}>{children}</ExploreViewContext.Provider>;
 }

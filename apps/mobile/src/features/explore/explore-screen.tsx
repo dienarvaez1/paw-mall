@@ -299,6 +299,11 @@ function PlacesList({
   );
   const petMode = petFriendly || isPetFriendlyCategory(category);
   const area = places.data?.pages[0]?.area ?? null;
+  // The radius button shows and changes this area's radius while it's shown.
+  const { setShownArea } = useExploreView();
+  useEffect(() => {
+    if (places.data) setShownArea(area);
+  }, [places.data, area, setShownArea]);
   const items = useMemo(
     () => uniqueById(places.data?.pages.flatMap((page) => page.items) ?? []),
     [places.data],
@@ -545,6 +550,10 @@ function PlacesMap({
   // A searched area ("Zócalo") moves the circle there with its own radius; otherwise the circle is
   // the user's radius around the user.
   const searchedArea = places.data?.area ?? null;
+  const { setShownArea, setAreaRadius } = useExploreView();
+  useEffect(() => {
+    if (places.data) setShownArea(searchedArea);
+  }, [places.data, searchedArea, setShownArea]);
   const circle = searchedArea
     ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
     : { center, radiusKm };
@@ -553,8 +562,9 @@ function PlacesMap({
   const loaded = places.data !== undefined;
   const { lat: centerLat, lng: centerLng } = circle.center;
   const circleKm = circle.radiusKm;
-  // By place only: a zoom by hand changes the radius but must not fly the map anywhere.
-  const areaKey = searchedArea ? `${centerLat},${centerLng}` : null;
+  // By place and radius (the radius button refits the area's circle); a zoom by hand records its
+  // own key first, so it doesn't fly the map anywhere.
+  const areaKey = searchedArea ? `${centerLat},${centerLng},${circleKm}` : null;
   useEffect(() => {
     if (!loaded || areaKey === shownArea.current) return;
     shownArea.current = areaKey;
@@ -618,9 +628,15 @@ function PlacesMap({
             // Zoomed: the radius exactly as zoomed, even between the presets. Panned: the circle
             // follows to the map's new center. Both maps take it (owner's rules).
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
-            const zoomed = !searchedArea && Math.abs(handRadiusKm - circle.radiusKm) >= 0.05;
+            const zoomed = Math.abs(handRadiusKm - circle.radiusKm) >= 0.05;
             const panned = !searchedArea && isAwayFrom(next, circle.center);
-            if (zoomed || panned) {
+            // Zoomed around a searched area: its circle takes the zoomed radius (owner's rule).
+            if (searchedArea && zoomed) {
+              shownArea.current = `${centerLat},${centerLng},${handRadiusKm}`;
+              setAreaRadius({ text: name, km: handRadiusKm });
+              setRadiusKm(handRadiusKm);
+            }
+            if ((zoomed && !searchedArea) || panned) {
               saveCircle(
                 zoomed ? handRadiusKm : radiusKm,
                 panned ? { lat: next.latitude, lng: next.longitude } : null,
@@ -908,17 +924,25 @@ function MapCountLegend({
 function RadiusButton({ className }: { className: string }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
-  const { radiusKm, units, setRadiusKm } = useSettings();
+  const { radiusKm: settingKm, units, setRadiusKm } = useSettings();
+  // Around a searched area ("Iztapalapa") the button shows and changes that circle's radius.
+  const { shownArea, setAreaRadius, text } = useExploreView();
+  const radiusKm = shownArea?.radiusKm ?? settingKm;
   const distance = formatDistance(radiusKm, locale, units);
   // A radius from zooming the map (or a tapped cluster) is off the presets: the button shows off
   // (amber) until pressed, which moves to the next preset and turns it on (owner's rule).
   const preset = isRadiusOption(radiusKm, units);
+  const press = () => {
+    const next = nextRadiusKm(radiusKm, units);
+    if (shownArea) setAreaRadius({ text: text.trim(), km: next });
+    setRadiusKm(next);
+  };
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={t('places.radiusButton', { distance })}
       accessibilityHint={t('places.radiusButtonHint')}
-      onPress={() => setRadiusKm(nextRadiusKm(radiusKm, units))}
+      onPress={press}
       hitSlop={BUTTON_HIT_SLOP}
       accessibilityState={{ checked: preset }}
       className={`min-w-[38px] items-center justify-center rounded-full border px-2.5 ${

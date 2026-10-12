@@ -140,6 +140,8 @@ export const placeListQuerySchema = z.object({
   q: z.string().trim().min(1).max(100).optional(),
   /** Radius around an area named by `q`; the Settings radius (radiusKm) stays as it is. */
   areaRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(AREA_RADIUS_KM),
+  /** "true" when the user picked areaRadiusKm (radius button, zoom): no busy-city 3 mi rule. */
+  fixedAreaRadius: z.stringbool().optional(),
   /** "true" searches `q` in business names only, even when it names an area. */
   namesOnly: z.stringbool().optional(),
   ...placeFilters,
@@ -196,6 +198,8 @@ export const placeMapQuerySchema = z.object({
   /** The search box, as in the list: an area moves the map's search there; other text filters names. */
   q: z.string().trim().min(1).max(100).optional(),
   areaRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(AREA_RADIUS_KM),
+  /** "true" when the user picked areaRadiusKm (radius button, zoom): no busy-city 3 mi rule. */
+  fixedAreaRadius: z.stringbool().optional(),
   namesOnly: z.stringbool().optional(),
   ...placeFilters,
   /** Most places to return one by one before clustering (tests use a small number). */

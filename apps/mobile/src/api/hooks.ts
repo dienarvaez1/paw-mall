@@ -51,9 +51,12 @@ export function usePlaces(
   const filters = usePlaceFilters(petFriendly, withUnconfirmed);
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = settings.radiusKm;
-  const areaRadiusKm = presetAreaRadiusKm;
+  // Around a searched area: the radius the user picked for it, else the preset (the API may
+  // narrow a busy city to 3 mi).
+  const { placeChoice, areaRadius } = useExploreView();
+  const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
+  const areaRadiusKm = pickedKm ?? presetAreaRadiusKm;
   // Business names only: "Mi ubicación" on, or the user said the place-like text is a name.
-  const { placeChoice } = useExploreView();
   const asPlace = readsAsPlace(placeChoice, name);
   const namesOnly = name !== '' && (asPlace === false || (nearMe && asPlace !== true));
   return useInfiniteQuery({
@@ -81,6 +84,7 @@ export function usePlaces(
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,
           namesOnly: namesOnly || undefined,
+          fixedAreaRadius: (name && pickedKm !== null) || undefined,
           ...filters,
           pageSize: PLACES_PAGE_SIZE,
           page: pageParam,
@@ -115,9 +119,12 @@ export function usePlacesMap(
   const filters = usePlaceFilters(petFriendly, withUnconfirmed);
   const presetAreaRadiusKm = useAreaRadiusKm();
   const radiusKm = settings.radiusKm;
-  const areaRadiusKm = presetAreaRadiusKm;
+  // Around a searched area: the radius the user picked for it, else the preset (the API may
+  // narrow a busy city to 3 mi).
+  const { placeChoice, areaRadius } = useExploreView();
+  const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
+  const areaRadiusKm = pickedKm ?? presetAreaRadiusKm;
   // Business names only: "Mi ubicación" on, or the user said the place-like text is a name.
-  const { placeChoice } = useExploreView();
   const asPlace = readsAsPlace(placeChoice, name);
   const namesOnly = name !== '' && (asPlace === false || (nearMe && asPlace !== true));
   return useQuery({
@@ -150,6 +157,7 @@ export function usePlacesMap(
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,
           namesOnly: namesOnly || undefined,
+          fixedAreaRadius: (name && pickedKm !== null) || undefined,
           ...filters,
         },
         locale,

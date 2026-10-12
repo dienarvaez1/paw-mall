@@ -86,6 +86,9 @@ describe('searching an area', () => {
     const busy = await search('ciudad llena paw');
     expect(busy.area).toMatchObject({ kind: 'municipality', radiusKm: 3 * KM_PER_MILE });
     expect(busy.total).toBe(11);
+    // A radius the user picked (radius button, zoom) wins over the 3 mi rule.
+    const picked = await search('ciudad llena paw', '&areaRadiusKm=8&fixedAreaRadius=true');
+    expect(picked.area?.radiusKm).toBe(8);
     // Pueblo Nombre Paw has one place nearby: the usual 5 km.
     expect((await search('pueblo nombre paw')).area?.radiusKm).toBe(5);
   });
