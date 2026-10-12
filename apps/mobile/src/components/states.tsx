@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ApiError } from '@/api/client';
 import { useIsOffline } from '@/features/network/network';
 import { useAppTranslation } from '@/i18n/use-app-translation';
+import { BUTTON_HIT_SLOP } from '@/components/button';
 
 export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
   const { t } = useAppTranslation();
@@ -24,9 +25,10 @@ export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () =>
         <Pressable
           accessibilityRole="button"
           onPress={onRetry}
-          className="min-h-12 justify-center rounded-xl bg-neutral-900 px-6 dark:bg-white"
+          hitSlop={BUTTON_HIT_SLOP}
+          className="min-h-[38px] justify-center rounded-xl bg-neutral-900 px-5 dark:bg-white"
         >
-          <Text className="text-base font-semibold text-white dark:text-neutral-900">
+          <Text className="text-[13px] font-semibold text-white dark:text-neutral-900">
             {t('common.retry')}
           </Text>
         </Pressable>

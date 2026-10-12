@@ -1,14 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  DEFAULT_RADIUS_KM,
   DOG_SIZES,
   type DogSize,
+  MAX_RADIUS_KM,
   PET_SPECIES,
   type PetSpecies,
 } from '@paw-mall/shared';
 import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-import { type DistanceUnit, UNIT_OPTIONS, closestRadiusKm, isRadiusOption } from './radius';
+import { closestRadiusKm, startRadiusKm, type DistanceUnit, UNIT_OPTIONS } from './radius';
 
 export { type DistanceUnit, UNIT_OPTIONS } from './radius';
 
@@ -29,6 +29,8 @@ type Settings = {
   petSpecies: PetSpecies | null;
   /** The dog's size, for dogs; null when not set. */
   dogSize: DogSize | null;
+  /** Pet-friendly shows only places confirmed to take pets; off, also unanswered venues. */
+  onlyConfirmedPetPlaces: boolean;
 };
 type SettingsContextValue = Settings & {
   setRadiusKm: (radiusKm: number) => void;
@@ -40,11 +42,13 @@ type SettingsContextValue = Settings & {
   setOnlyOpenNow: (onlyOpenNow: boolean) => void;
   setPetSpecies: (petSpecies: PetSpecies | null) => void;
   setDogSize: (dogSize: DogSize | null) => void;
+  setOnlyConfirmedPetPlaces: (onlyConfirmedPetPlaces: boolean) => void;
 };
 
 const STORAGE_KEY = 'settings.preferences';
 const DEFAULTS: Settings = {
-  radiusKm: DEFAULT_RADIUS_KM,
+  // A first launch: 3 miles, as 5 km (the default unit).
+  radiusKm: startRadiusKm('km'),
   units: 'km',
   onlyWithPhone: false,
   onlyWithWebsite: false,
@@ -53,6 +57,7 @@ const DEFAULTS: Settings = {
   onlyOpenNow: false,
   petSpecies: null,
   dogSize: null,
+  onlyConfirmedPetPlaces: true,
 };
 
 /**
@@ -65,10 +70,14 @@ export function parseSettings(raw: string | null): Settings {
     const units = (UNIT_OPTIONS as readonly string[]).includes(value.units ?? '')
       ? (value.units as DistanceUnit)
       : DEFAULTS.units;
-    const stored = typeof value.radiusKm === 'number' ? value.radiusKm : DEFAULTS.radiusKm;
+    // Any radius from the presets or from zooming the map (0.1 to MAX_RADIUS_KM) is kept as is.
+    const stored =
+      typeof value.radiusKm === 'number' && value.radiusKm >= 0.1 && value.radiusKm <= MAX_RADIUS_KM
+        ? value.radiusKm
+        : DEFAULTS.radiusKm;
     return {
       units,
-      radiusKm: isRadiusOption(stored, units) ? stored : closestRadiusKm(stored, units),
+      radiusKm: stored,
       onlyWithPhone: value.onlyWithPhone === true,
       onlyWithWebsite: value.onlyWithWebsite === true,
       onlyWithSocial: value.onlyWithSocial === true,
@@ -80,6 +89,7 @@ export function parseSettings(raw: string | null): Settings {
       dogSize: (DOG_SIZES as readonly unknown[]).includes(value.dogSize)
         ? (value.dogSize as DogSize)
         : null,
+      onlyConfirmedPetPlaces: value.onlyConfirmedPetPlaces !== false,
     };
   } catch {
     return DEFAULTS;
@@ -97,14 +107,21 @@ const SettingsContext = createContext<SettingsContextValue>({
   setOnlyOpenNow: () => {},
   setPetSpecies: () => {},
   setDogSize: () => {},
+  setOnlyConfirmedPetPlaces: () => {},
 });
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
 
+  // Ajustes has the last word (owner's rule): what's saved here holds across launches and every
+  // page follows it, except the radius, which every launch resets to the 3 mi preset (5 km in
+  // km) (owner's rule; the map's radius button and zoom change it during the session).
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
-      .then((raw) => setSettings(parseSettings(raw)))
+      .then((raw) => {
+        const saved = parseSettings(raw);
+        setSettings({ ...saved, radiusKm: startRadiusKm(saved.units) });
+      })
       .catch(() => {});
   }, []);
 
@@ -127,6 +144,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setOnlyOpenNow: (onlyOpenNow) => update({ onlyOpenNow }),
       setPetSpecies: (petSpecies) => update({ petSpecies }),
       setDogSize: (dogSize) => update({ dogSize }),
+      setOnlyConfirmedPetPlaces: (onlyConfirmedPetPlaces) => update({ onlyConfirmedPetPlaces }),
     };
   }, [settings]);
 
@@ -143,7 +161,7 @@ export function useSettings() {
  * Explorar toggle, or a pet-friendly category chip), only places whose policy takes pets, and the
  * pet profile narrows them: a cat, or a dog of that size.
  */
-export function usePlaceFilters(petFriendly = false) {
+export function usePlaceFilters(petFriendly = false, withUnconfirmed = false) {
   const {
     onlyWithPhone,
     onlyWithWebsite,
@@ -160,7 +178,7 @@ export function usePlaceFilters(petFriendly = false) {
       withSocial: onlyWithSocial || undefined,
       named: hideUnnamed || undefined,
       openNow: onlyOpenNow || undefined,
-      ...petProfileFilters(petFriendly, petSpecies, dogSize),
+      ...petProfileFilters(petFriendly, petSpecies, dogSize, withUnconfirmed),
     }),
     [
       onlyWithPhone,
@@ -169,21 +187,32 @@ export function usePlaceFilters(petFriendly = false) {
       hideUnnamed,
       onlyOpenNow,
       petFriendly,
+      withUnconfirmed,
       petSpecies,
       dogSize,
     ],
   );
 }
 
-/** The pet-friendly API parameters; the dog size counts only for dogs. */
+/**
+ * The pet-friendly API parameters; the dog size counts only for dogs. `withUnconfirmed` adds
+ * venues without a policy yet.
+ */
 export function petProfileFilters(
   petFriendly: boolean,
   petSpecies: PetSpecies | null,
   dogSize: DogSize | null,
-): { petFriendly?: true; petSpecies?: PetSpecies; dogSize?: DogSize } {
+  withUnconfirmed = false,
+): {
+  petFriendly?: true;
+  withUnconfirmed?: true;
+  petSpecies?: PetSpecies;
+  dogSize?: DogSize;
+} {
   if (!petFriendly) return {};
   return {
     petFriendly: true,
+    ...(withUnconfirmed ? { withUnconfirmed: true as const } : {}),
     ...(petSpecies ? { petSpecies } : {}),
     ...(petSpecies === 'dog' && dogSize ? { dogSize } : {}),
   };

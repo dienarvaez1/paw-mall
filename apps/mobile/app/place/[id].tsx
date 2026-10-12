@@ -2,20 +2,22 @@ import { type Place, type PlaceReportReason, WEEK_ORDER } from '@paw-mall/shared
 import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 
 import { usePlace } from '@/api/hooks';
-import { Button } from '@/components/button';
+import { BUTTON_HIT_SLOP, Button } from '@/components/button';
+import { CategoryPin } from '@/components/category-pin';
 import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { ErrorState, SkeletonList } from '@/components/states';
 import { GoogleHours } from '@/features/google/google-hours';
+import { PetQuestionCard } from '@/features/pet-policy/pet-question';
 import { PolicyCard } from '@/features/pet-policy/policy-card';
 import { useReportPlace } from '@/features/reports/place-reports';
 import { formatClockTime, formatDate, formatMonthYear, formatWeekday } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
-import { pinColor } from '@/lib/categories';
+import { isPetFriendlyCategory } from '@/lib/categories';
 import { phoneUrl } from '@/lib/links';
 import { useOpenDirections } from '@/lib/open-url';
 import { placeLine } from '@/lib/place-line';
@@ -47,7 +49,7 @@ function PlaceDetail({ place: p }: { place: Place }) {
         pitchEnabled={false}
         rotateEnabled={false}
       >
-        <Marker coordinate={coordinate} title={name} pinColor={pinColor(p, null)} />
+        <CategoryPin place={p} category={null} title={name} />
       </MapView>
 
       <View className="gap-2 px-4 pt-5">
@@ -102,7 +104,11 @@ function PlaceDetail({ place: p }: { place: Place }) {
         ) : null}
       </View>
 
-      {p.petPolicy ? <PolicyCard placeId={p.id} policy={p.petPolicy} /> : null}
+      {p.petPolicy ? (
+        <PolicyCard placeId={p.id} policy={p.petPolicy} />
+      ) : p.categories.some((c) => isPetFriendlyCategory(c.slug)) ? (
+        <PetQuestionCard placeId={p.id} />
+      ) : null}
 
       <HoursSection place={p} />
 
@@ -116,9 +122,10 @@ function PlaceDetail({ place: p }: { place: Place }) {
           <Link href={{ pathname: '/claim/[placeId]', params: { placeId: p.id } }} asChild>
             <Pressable
               accessibilityRole="link"
-              className="min-h-12 flex-1 items-center justify-center rounded-xl px-4 active:bg-neutral-100 dark:active:bg-neutral-900"
+              hitSlop={BUTTON_HIT_SLOP}
+              className="min-h-[38px] flex-1 items-center justify-center rounded-xl px-3 active:bg-neutral-100 dark:active:bg-neutral-900"
             >
-              <Text className="text-base font-semibold text-teal-800 dark:text-teal-300">
+              <Text className="text-[13px] font-semibold text-teal-800 dark:text-teal-300">
                 {t('places.claim.button')}
               </Text>
             </Pressable>
@@ -152,6 +159,13 @@ function PlaceDetail({ place: p }: { place: Place }) {
           </Text>
         </View>
       ) : null}
+      {p.source === 'osm' ? (
+        <View className="gap-1 px-4 pt-6">
+          <Text className="text-xs text-neutral-500 dark:text-neutral-400">
+            {t('places.sourceOsm')}
+          </Text>
+        </View>
+      ) : null}
     </ScrollView>
   );
 }
@@ -173,27 +187,34 @@ function HoursSection({ place: p }: { place: Place }) {
           {t('places.hours.allDayEveryDay')}
         </Text>
       ) : p.hours ? (
-        WEEK_ORDER.map((day) => {
-          const hours = p.hours?.[day] ?? null;
-          const allDay = hours?.open === '00:00' && ['24:00', '00:00'].includes(hours.close);
-          return (
-            <View key={day} className="flex-row justify-between py-1">
-              <Text className="text-base capitalize text-neutral-700 dark:text-neutral-300">
-                {formatWeekday(day, locale)}
-              </Text>
-              <Text className="text-base text-neutral-900 dark:text-white">
-                {!hours
-                  ? t('places.hours.closed')
-                  : allDay
-                    ? t('places.hours.allDay')
-                    : t('places.hours.range', {
-                        open: formatClockTime(hours.open, locale),
-                        close: formatClockTime(hours.close, locale),
-                      })}
-              </Text>
-            </View>
-          );
-        })
+        <>
+          {WEEK_ORDER.map((day) => {
+            const hours = p.hours?.[day] ?? null;
+            const allDay = hours?.open === '00:00' && ['24:00', '00:00'].includes(hours.close);
+            return (
+              <View key={day} className="flex-row justify-between py-1">
+                <Text className="text-base capitalize text-neutral-700 dark:text-neutral-300">
+                  {formatWeekday(day, locale)}
+                </Text>
+                <Text className="text-base text-neutral-900 dark:text-white">
+                  {!hours
+                    ? t('places.hours.closed')
+                    : allDay
+                      ? t('places.hours.allDay')
+                      : t('places.hours.range', {
+                          open: formatClockTime(hours.open, locale),
+                          close: formatClockTime(hours.close, locale),
+                        })}
+                </Text>
+              </View>
+            );
+          })}
+          {p.hoursSource ? (
+            <Text className="pt-1 text-xs text-neutral-500 dark:text-neutral-400">
+              {t(`places.hours.source.${p.hoursSource}`)}
+            </Text>
+          ) : null}
+        </>
       ) : (
         <>
           {p.open24h?.value ? (

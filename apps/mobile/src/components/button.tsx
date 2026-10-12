@@ -1,5 +1,11 @@
 import { Pressable, Text } from 'react-native';
 
+/**
+ * Buttons are drawn 20% smaller than the 44–48 pt touch targets guidelines ask for (owner's
+ * choice); this keeps the touchable area at about that size around them.
+ */
+export const BUTTON_HIT_SLOP = 6;
+
 type Props = {
   label: string;
   onPress: () => void;
@@ -14,15 +20,16 @@ export function Button({ label, onPress, accessibilityLabel, variant = 'primary'
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}
-      className={`min-h-12 flex-1 items-center justify-center rounded-xl px-4 ${
+      hitSlop={BUTTON_HIT_SLOP}
+      className={`min-h-[38px] flex-1 items-center justify-center rounded-xl border px-3 ${
         primary
-          ? 'bg-brand active:bg-brand-dark'
-          : 'bg-neutral-100 active:bg-neutral-200 dark:bg-neutral-800'
+          ? 'border-paw bg-paw active:bg-paw-dark'
+          : 'active:bg-off-pressed border-off-border bg-off-bg dark:bg-off-bg-dark'
       }`}
     >
       <Text
-        className={`text-base font-semibold ${
-          primary ? 'text-white' : 'text-neutral-900 dark:text-white'
+        className={`text-[13px] font-semibold ${
+          primary ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'
         }`}
       >
         {label}

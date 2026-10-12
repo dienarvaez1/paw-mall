@@ -6,6 +6,7 @@ export const EXPLORE_CHIPS = [
   'veterinarian',
   'vet_hospital',
   'pet_store',
+  'boutique',
   'groomer',
   'boarding',
   'feed_store',
@@ -29,34 +30,43 @@ export const CHIP_CATEGORIES = [...EXPLORE_CHIPS, ...PET_FRIENDLY_CHIPS.slice(1)
 export type ChipCategory = (typeof CHIP_CATEGORIES)[number];
 
 /** Pin and chip colors by category; the first match in this order wins for a place's pin. */
+// Owner's rules: only hospitals get the bright red; no turquoise, orange, blue, pink, maroon,
+// brown or yellow. Colors repeat only across tabs: Explorar
+// shows pet businesses, Pet-friendly shows venues.
 export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
-  vet_hospital: '#dc2626',
-  veterinarian: '#2563eb',
-  public_vet_service: '#475569',
-  groomer: '#9333ea',
-  // Not green: green is for map clusters (owner's rule).
-  boarding: '#4f46e5',
-  boutique: '#db2777',
-  pet_store: '#ea580c',
-  feed_store: '#ca8a04',
-  pet_funeral: '#854d0e',
-  dog_trainer: '#0369a1',
-  restaurant: '#e11d48',
-  cafe: '#d946ef',
-  lodging: '#0891b2',
-  museum: '#6d28d9',
-  // Brown, not green (owner's rule).
-  park: '#92400e',
-  tourist_site: '#1e3a8a',
+  vet_hospital: '#dc2626', // red-600: hospitals only
+  veterinarian: '#16a34a', // green-600
+  public_vet_service: '#4d7c0f', // lime-800 (olive)
+  groomer: '#9333ea', // purple-600
+  boarding: '#84cc16', // lime-500
+  boutique: '#c026d3', // fuchsia-600
+  pet_store: '#5b21b6', // violet-800
+  feed_store: '#14532d', // green-900 (forest)
+  pet_funeral: '#6b7280', // gray-500
+  dog_trainer: '#262626', // neutral-800
+  restaurant: '#262626', // neutral-800
+  cafe: '#a855f7', // purple-500
+  lodging: '#6d28d9', // violet-700
+  museum: '#c026d3', // fuchsia-600
+  park: '#15803d', // green-700
+  tourist_site: '#52525b', // zinc-600
 };
 const DEFAULT_COLOR = '#525252';
 
+/** The category a place's pin shows: the selected chip's, or its most specific one. */
+export function pinCategory(
+  place: Pick<Place, 'categories'>,
+  selected: ChipCategory,
+): CategorySlug | null {
+  if (selected) return selected;
+  const slugs = new Set(place.categories.map((c) => c.slug));
+  return (Object.keys(CATEGORY_COLORS) as CategorySlug[]).find((slug) => slugs.has(slug)) ?? null;
+}
+
 /** The pin color for a place: its selected category's, or its most specific one's. */
 export function pinColor(place: Pick<Place, 'categories'>, selected: ChipCategory): string {
-  if (selected) return CATEGORY_COLORS[selected] ?? DEFAULT_COLOR;
-  const slugs = new Set(place.categories.map((c) => c.slug));
-  const first = (Object.keys(CATEGORY_COLORS) as CategorySlug[]).find((slug) => slugs.has(slug));
-  return first ? (CATEGORY_COLORS[first] ?? DEFAULT_COLOR) : DEFAULT_COLOR;
+  const slug = pinCategory(place, selected);
+  return (slug && CATEGORY_COLORS[slug]) || DEFAULT_COLOR;
 }
 
 /** Pet-friendly venues (restaurants to parks): their rows and callouts show the pet policy. */

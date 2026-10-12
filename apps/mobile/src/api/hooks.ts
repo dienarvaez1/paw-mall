@@ -7,10 +7,11 @@ import {
 } from '@paw-mall/shared';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import { toKm } from '@/features/settings/radius';
+import { readsAsPlace, useExploreView } from '@/features/explore/explore-view';
+import { startRadiusKm, toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
-import { type ChipCategory, isPetFilterCategory } from '@/lib/categories';
+import type { ChipCategory } from '@/lib/categories';
 
 import { apiGet } from './client';
 
@@ -38,19 +39,26 @@ export function usePlaces(
   category: ChipCategory,
   name = '',
   nearMe = false,
-  /** A radius the user set by zooming the map by hand; replaces the presets while set. */
-  customRadiusKm: number | null = null,
-  /** Pet-friendly "Todos"; the restaurant, café and lodging chips turn it on too. */
+  /** Only places whose pet policy takes pets (Pet-friendly decides when). */
   petFriendly = false,
   /** The tab's section: pet businesses (Explorar) or pet-friendly venues. */
   group?: CategoryGroup,
+  /** With petFriendly: also venues without a pet policy yet. */
+  withUnconfirmed = false,
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters(petFriendly || isPetFilterCategory(category));
+  const filters = usePlaceFilters(petFriendly, withUnconfirmed);
   const presetAreaRadiusKm = useAreaRadiusKm();
-  const radiusKm = customRadiusKm ?? settings.radiusKm;
-  const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
+  const radiusKm = settings.radiusKm;
+  // Around a searched area: the radius the user picked for it, else the preset (the API may
+  // narrow a busy city to 3 mi).
+  const { placeChoice, areaRadius } = useExploreView();
+  const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
+  const areaRadiusKm = pickedKm ?? presetAreaRadiusKm;
+  // Business names only: "Mi ubicación" on, or the user said the place-like text is a name.
+  const asPlace = readsAsPlace(placeChoice, name);
+  const namesOnly = name !== '' && (asPlace === false || (nearMe && asPlace !== true));
   return useInfiniteQuery({
     queryKey: [
       'places',
@@ -61,7 +69,7 @@ export function usePlaces(
       category,
       group,
       name,
-      nearMe,
+      namesOnly,
       areaRadiusKm,
     ],
     initialPageParam: 1,
@@ -75,7 +83,10 @@ export function usePlaces(
           group,
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,
-          namesOnly: (name && nearMe) || undefined,
+          namesOnly: namesOnly || undefined,
+          fixedAreaRadius: (name && pickedKm !== null) || undefined,
+          // A busy city's circle in the user's units, so the radius button shows it as a preset.
+          cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,
           ...filters,
           pageSize: PLACES_PAGE_SIZE,
           page: pageParam,
@@ -100,16 +111,24 @@ export function usePlacesMap(
   category: ChipCategory,
   name = '',
   nearMe = false,
-  customRadiusKm: number | null = null,
   petFriendly = false,
   group?: CategoryGroup,
+  /** With petFriendly: also venues without a pet policy yet. */
+  withUnconfirmed = false,
 ) {
   const locale = useLocale();
   const settings = useSettings();
-  const filters = usePlaceFilters(petFriendly || isPetFilterCategory(category));
+  const filters = usePlaceFilters(petFriendly, withUnconfirmed);
   const presetAreaRadiusKm = useAreaRadiusKm();
-  const radiusKm = customRadiusKm ?? settings.radiusKm;
-  const areaRadiusKm = customRadiusKm ?? presetAreaRadiusKm;
+  const radiusKm = settings.radiusKm;
+  // Around a searched area: the radius the user picked for it, else the preset (the API may
+  // narrow a busy city to 3 mi).
+  const { placeChoice, areaRadius } = useExploreView();
+  const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
+  const areaRadiusKm = pickedKm ?? presetAreaRadiusKm;
+  // Business names only: "Mi ubicación" on, or the user said the place-like text is a name.
+  const asPlace = readsAsPlace(placeChoice, name);
+  const namesOnly = name !== '' && (asPlace === false || (nearMe && asPlace !== true));
   return useQuery({
     queryKey: [
       'places-map',
@@ -122,7 +141,7 @@ export function usePlacesMap(
       category,
       group,
       name,
-      nearMe,
+      namesOnly,
     ],
     enabled: area !== null,
     placeholderData: (previous) => previous,
@@ -139,7 +158,10 @@ export function usePlacesMap(
           // The search box, as in the list (see usePlaces).
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,
-          namesOnly: (name && nearMe) || undefined,
+          namesOnly: namesOnly || undefined,
+          fixedAreaRadius: (name && pickedKm !== null) || undefined,
+          // A busy city's circle in the user's units, so the radius button shows it as a preset.
+          cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,
           ...filters,
         },
         locale,
@@ -160,12 +182,25 @@ export function usePlace(id: number) {
 /** "Open now" changes by the minute, so Urgencias refreshes while it's on screen. */
 const URGENT_REFRESH_MS = 60 * 1000;
 
-/** Urgencias: the nearest vet hospitals and 24-hour vets, open ones first. */
-export function useUrgentPlaces(coords: Coords) {
+/**
+ * Urgencias: the nearest vet hospitals and 24-hour vets, within the radius set on the Explorar and
+ * Pet-friendly maps and with the Ajustes place switches; around the area the search box names
+ * ("Xochimilco"), if it does, else around the user.
+ */
+export function useUrgentPlaces(coords: Coords, q = '') {
   const locale = useLocale();
+  const { radiusKm } = useSettings();
+  const { withPhone, withWebsite, withSocial, named, openNow } = usePlaceFilters();
+  const filters = { withPhone, withWebsite, withSocial, named, openNow };
   return useQuery({
-    queryKey: ['urgent', locale, coords],
-    queryFn: () => apiGet('/v1/places/urgent', { ...coords }, locale, urgentResponseSchema),
+    queryKey: ['urgent', locale, coords, radiusKm, filters, q],
+    queryFn: () =>
+      apiGet(
+        '/v1/places/urgent',
+        { ...coords, radiusKm, ...filters, q: q || undefined },
+        locale,
+        urgentResponseSchema,
+      ),
     staleTime: 0,
     refetchInterval: URGENT_REFRESH_MS,
   });

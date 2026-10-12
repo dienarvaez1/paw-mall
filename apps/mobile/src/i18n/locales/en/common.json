@@ -13,5 +13,8 @@
     "google": "Google Maps",
     "waze": "Waze"
   },
-  "approximateLocation": "Using an approximate location: Mexico City"
+  "approximateLocation": "Using an approximate location: Mexico City",
+  "aboutSectionHint": "Shows what this section is about",
+  "close": "Close",
+  "hideKeyboard": "Hide keyboard"
 }

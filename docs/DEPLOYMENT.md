@@ -27,16 +27,17 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                | Branch                    | PR  | Status      | Started    | Merged     |
-| ----- | ------------------- | ------------------------- | --- | ----------- | ---------- | ---------- |
-| 1     | Foundation          | `phase-1/foundation`      | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses      | `phase-2/pet-businesses`  | #3  | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map      | `phase-3/search-and-map`  | #4  | Done        | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets      | `phase-4/emergency-vets`  | #5  | Done        | 2026-10-05 | 2026-10-05 |
-| 5     | Trust               | `phase-5/trust`           | #6  | Done        | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer  | `phase-6/pet-friendly`    | #8  | Done        | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums | `phase-7/tourism-museums` | #9  | Done        | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes           | `phase-8/bug-fixes`       | #11 | In progress | 2026-10-10 | —          |
+| Phase | Name                  | Branch                       | PR  | Status      | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | ----------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done        | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done        | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done        | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done        | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done        | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done        | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | In progress | 2026-10-10 | —          |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | In progress | 2026-10-10 | —          |
 
 ## Pending owner reviews
 
@@ -645,7 +646,9 @@ a task (and a note in the phase that applies it).
 - **Done when:** each reported bug is fixed and checked on a phone, and the full test run passes
   while a `pnpm places:*` command runs at the same time.
 - **Branch / PR:** `phase-8/bug-fixes` / #11
-- **Status:** In progress
+- **Status:** Done, squash-merged 2026-10-11 (`3673c52`) on the owner's request ("merge all code
+  up to this point"). The owner tried each fix on a phone while asking for the next one; there
+  was no separate done-when run.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`
   - [x] `pnpm test`: 218 tests, also while `pnpm places:curated` runs alongside
@@ -668,6 +671,107 @@ a task (and a note in the phase that applies it).
     Pinos have no colonia in their address and were checked by hand. Parque México and Parque
     España were already corrected in Phase 7.
 - **Follow-ups:** —
+
+### Phase 9 — Pet-friendly at scale
+
+- **Scope:** OpenStreetMap dog parks, parks and venues with a dog rule; DENUE restaurants and
+  cafés in Ciudad de México with users' "¿Acepta mascotas?" answers making their policy.
+- **Done when:** a name search in Pet-friendly finds an unanswered restaurant, two phones
+  answering yes make it appear under Restaurantes with "Según usuarios de Paw Mall", and
+  OpenStreetMap is credited on its places.
+- **Branch / PR:** `phase-9/pet-friendly-scale` / #12, stacked on Phase 8 (#11); rebased onto
+  `main` after #11 merged.
+- **Status:** Done, squash-merged 2026-10-11 on the owner's request, right after Phase 8. The
+  done-when check wasn't run as a separate step; the owner used the app on a phone throughout.
+- **Also on this branch (owner's UI requests, 2026-10-11):** radius only on the maps (gone from
+  Ajustes) and shared by Explorar, Pet-friendly and Urgencias; every launch starts at 3 mi (5 km
+  in km) with Mi ubicación on; both maps always show the same view (pans, zooms, cluster taps,
+  searches); category icons on pins, rows and chips; clusters only past 100 places; Urgencias
+  closest first, following a searched place or a moved map, with the same summary wording; a
+  dialog asks whether a place-like search ("Tlaxcala") means the place or a business name; a
+  searched area's circle follows the radius button, and a busy city opens at the preset closest
+  to 3 mi.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm format:check`, `pnpm i18n:check`
+  - [x] `pnpm test`: 249 tests (shared 30, api 64, importers 95, mobile 60)
+  - [x] API check on dev data: two "yes, up to mediano" answers on a DENUE taquería publish a
+        users' policy (source `community`, mediano); test answers removed after
+  - [ ] Done-when check on a phone
+- **Notes:**
+  - **Owner decisions (2026-10-10):** 2 phones agreeing, more than disagree, within 365 days.
+    Searches in Pet-friendly show places that take pets, with "Buscar también en lugares sin
+    confirmar" under the count to widen them to unanswered venues; when no confirmed place matches
+    (e.g. "taco"), the search widens by itself, with a notice. Unanswered venues' pages ask
+    "¿Acepta mascotas?".
+  - **Ajustes → Mi mascota → "Solo lugares confirmados"** (on by default): off, Pet-friendly also
+    lists venues without a policy yet, never those that say no (API `withUnconfirmed=true` with
+    `petFriendly=true`; a widened search uses the same filter).
+  - **DENUE:** SCIAN 7225xx in Ciudad de México only: 45,879 restaurants and 9,862 cafés
+    (722515), no policy until users answer. Names that match the cruelty rule (e.g. "Taquería y
+    Carnicería") are left out, as everywhere. Explorar never shows them (`group` filter).
+  - **Users' answers:** `POST /v1/places/:id/pet-answers` (`takesDogs`, optional `maxDogSize`,
+    `clientId`), table `pet_answers` (migration 0012), one row per phone. Same privacy rule as
+    reports. The policy (source `community`) is published, updated or withdrawn on each answer;
+    its size is the lower median of the sizes given. Venues with an owner, curated or OSM policy
+    answer "¿Sigue siendo así?" instead (409 `POLICY_EXISTS`); non-venues get 409
+    `NOT_A_PET_VENUE`.
+  - **OpenStreetMap:** snapshot `data/osm-dogs-cdmx.json` (54 elements, 2026-10-11; `pnpm
+places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, Col. …" from
+    the nearest colonia), 17 parks and 2 venues; 4 say no to dogs; 2 skipped next to a curated
+    park. ODbL 1.0: credited on each card ("© colaboradores de OpenStreetMap") and in Ajustes, and
+    kept in their own rows (source `osm`). Footpaths tagged dog=* are ignored.
+  - **Duplicates:** DENUE restaurants and cafés within 100 m of a curated or OSM venue of the same
+    kind with a similar name (pg_trgm > 0.4) are hidden (`duplicate_of_curated` / `_osm`),
+    re-checked on every run: 4 hidden (Cardinal ×2, Juana Juana, Q' Pedro Pablo).
+  - Pet-friendly places within 160 km: 34 → 81 before any user answer.
+  - **Fixed after the first phone try:** the Pet-friendly tab showed "Algo salió mal": the
+    place `source` enum in `packages/shared` lacked `osm`, so every list with an OpenStreetMap
+    place failed validation in the app. Added it, an OSM credit line on the place page and list,
+    and an API test that lists an OSM place.
+  - **Test fix (belongs to Phase 8):** `places.test.ts` cleaned up with `external_id LIKE
+'test-%'`, deleting other files' test places when files ran in parallel (a second cause of the
+    flaky Google tests); it now uses `test-places-`.
+  - **Free sources instead of Google (owner, 2026-10-11):** Google's dog and hours fields cost
+    $25 per 1,000 requests and can't be stored, so:
+    - **OpenStreetMap hours** (`pnpm places:osm-hours`, snapshot `data/osm-hours.json`): restaurants
+      and cafés in CDMX, vets and pet stores in the region. 1,120 elements, 978 readable (one range
+      per day; split shifts, holidays and the like are skipped), 375 matched to listed places
+      (same kind, within 100 m, similar name).
+    - **Business homepages**, on the website check's single visit: schema.org hours and "pet
+      friendly" wording (never next to a no). Only when the site speaks for that one place: its
+      host belongs to no other place, it isn't a hotel group's homepage, and it names the place.
+      The first run without that rule picked up chain sites ("sucursales pet friendly",
+      wyndhamhotels.com); with it: hours for 44 places, 12 venues say pets are welcome (source
+      `website`, credited to the site).
+    - **Chain-wide policies** (`pnpm places:chains`, `data/pet-friendly-chains.json`): no
+      restaurant or café chain in Mexico states one policy for all branches; City Express by
+      Marriott does (1 pet up to 15 kg). DENUE hotels in CDMX (721111, 721112, 721190; 794) are
+      imported so chains and users can fill them; City Express adds 2 branches beyond the 5
+      curated ones.
+    - Hours priority: owner > website > OpenStreetMap; the place page says where they came from.
+    - Pet-friendly places within 160 km: 81 → 95.
+  - **Ajustes has the last word (owner, 2026-10-11):** the radius and language chosen in Ajustes
+    hold across launches (a first launch: Spanish, 3 mi / 5 km); a zoom by hand or a tapped cluster
+    saves its radius to Ajustes as the closest choice (no separate "custom" radius any more);
+    Urgencias follows the Ajustes radius and place switches. Launch and wake still reset the
+    location, the map view and Mi ubicación.
+  - **Backfill to every supported state (owner, 2026-10-11):** DENUE restaurants, cafés and hotels
+    in all 9 states (about 311,000 venues; 336,588 places in all), OpenStreetMap dog places and
+    opening hours across the region (snapshot `data/osm-dogs.json`, renamed from
+    `osm-dogs-cdmx.json`: 187 elements, 173 places saved, 101 dog parks; hours: 2,874 elements,
+    687 matched), City Express policy on 7 branches. Pet-friendly places within 160 km of CDMX:
+    95 → 154 (177 after the website check). Curated places stay CDMX-only (hand research).
+    Website check over 6,934 sites: hours for 70 places, 54 venues say pets are welcome (mostly
+    hotels with their own site; one restaurant inside a hotel takes the hotel's wording).
+  - **List duplicates (fixed):** pages fetched at different times could repeat a place when
+    policies changed in between (React "two children with the same key"); the list keeps each
+    place once.
+- **Follow-ups:**
+  - Pet-friendly with "Solo lugares confirmados" off takes 0.6–1.1 s in dense areas (sorting
+    about 13,000 places); worth an index or a cheaper count.
+  - `pnpm places:enrich-overture` and `pnpm places:check-websites` now also cover 55,741
+    restaurants and cafés; consider limiting website checks to pet businesses before running them.
+  - Answers from abusive phones: no rate limit beyond one answer per place and phone.
 
 ## Production deployment
 
@@ -696,3 +800,4 @@ Play readiness").
 | 2026-10-10 | Phase 7 started            | #9  |
 | 2026-10-10 | Phase 7 merged (`146991b`) | #9  |
 | 2026-10-10 | Phase 8 started            | #11 |
+| 2026-10-10 | Phase 9 started            | #12 |

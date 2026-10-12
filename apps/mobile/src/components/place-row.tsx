@@ -2,13 +2,14 @@ import type { Place } from '@paw-mall/shared';
 import { Link } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
+import { CategoryBadge } from '@/components/category-badge';
 import { OpenStatus } from '@/components/open-status';
 import { usePolicySummary } from '@/features/pet-policy/policy-text';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
-import { type ChipCategory, pinColor } from '@/lib/categories';
+import { type ChipCategory, pinCategory, pinColor } from '@/lib/categories';
 import { placeLine } from '@/lib/place-line';
 
 /** The place's name, or a translated label for businesses registered without one. */
@@ -18,14 +19,27 @@ export function usePlaceName(place: Pick<Place, 'name'>): string {
 }
 
 /** The place's categories as a line ("Veterinaria · Estética para mascotas"). */
-export function CategoryLine({ place, selected }: { place: Place; selected: ChipCategory }) {
+export function CategoryLine({
+  place,
+  selected,
+  small = false,
+}: {
+  place: Place;
+  selected: ChipCategory;
+  /** List rows: one point smaller (13 pt). */
+  small?: boolean;
+}) {
   return (
     <View className="flex-row items-center gap-2">
-      <View
-        className="h-2.5 w-2.5 rounded-full"
-        style={{ backgroundColor: pinColor(place, selected) }}
+      <CategoryBadge
+        slug={pinCategory(place, selected)}
+        color={pinColor(place, selected)}
+        size={small ? 18 : 20}
       />
-      <Text className="flex-1 text-sm text-neutral-600 dark:text-neutral-300" numberOfLines={1}>
+      <Text
+        className={`flex-1 ${small ? 'text-[13px]' : 'text-sm'} text-neutral-600 dark:text-neutral-300`}
+        numberOfLines={1}
+      >
         {place.categories.map((c) => c.name).join(' · ')}
       </Text>
     </View>
@@ -33,9 +47,10 @@ export function CategoryLine({ place, selected }: { place: Place; selected: Chip
 }
 
 /**
- * A place in a list. Its distance reads "0.3 mi away" with `away` (Explorar's "Mi ubicación" on:
- * distances from the user) and just "0.3 mi" otherwise (owner's rule). With `showPolicy`
- * (pet-friendly mode), a line tells the pet policy, its source and last confirmation.
+ * A place in a list, in a bordered card; tapping it opens the place. Its distance reads "0.3 mi
+ * away" with `away` (Explorar's "Mi ubicación" on: distances from the user) and just "0.3 mi"
+ * otherwise (owner's rule). With `showPolicy` (pet-friendly mode), a line tells the pet policy, its
+ * source and last confirmation, or that nobody has confirmed it yet.
  */
 export function PlaceRow({
   place,
@@ -57,14 +72,14 @@ export function PlaceRow({
     <Link href={{ pathname: '/place/[id]', params: { id: place.id } }} asChild>
       <Pressable
         accessibilityRole="button"
-        className="gap-1 px-4 py-3 active:bg-neutral-100 dark:active:bg-neutral-900"
+        className="gap-1 rounded-2xl border border-neutral-200 bg-white px-4 py-3 active:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:active:bg-neutral-800"
       >
         <View className="flex-row items-start justify-between gap-3">
-          <Text className="flex-1 text-base font-semibold text-neutral-900 dark:text-white">
+          <Text className="flex-1 text-[15px] font-semibold text-neutral-900 dark:text-white">
             {name}
           </Text>
           {place.distanceKm !== null ? (
-            <Text className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
+            <Text className="text-[13px] font-medium text-neutral-600 dark:text-neutral-300">
               {!away
                 ? formatDistance(place.distanceKm, locale, units)
                 : t('places.distanceKm', {
@@ -73,19 +88,26 @@ export function PlaceRow({
             </Text>
           ) : null}
         </View>
-        <CategoryLine place={place} selected={selected} />
-        <Text className="text-sm text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
+        <CategoryLine place={place} selected={selected} small />
+        <Text className="text-[13px] text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
           {place.address}
         </Text>
-        <Text className="text-sm text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
+        <Text className="text-[13px] text-neutral-500 dark:text-neutral-400" numberOfLines={1}>
           {placeLine(place)}
         </Text>
         {policy ? (
-          <Text className="text-sm font-medium text-teal-800 dark:text-teal-300" numberOfLines={2}>
+          <Text
+            className="text-[13px] font-medium text-teal-800 dark:text-teal-300"
+            numberOfLines={2}
+          >
             {policy}
           </Text>
+        ) : showPolicy ? (
+          <Text className="text-[13px] text-neutral-500 dark:text-neutral-400">
+            {t('places.pets.ask.rowUnknown')}
+          </Text>
         ) : null}
-        <OpenStatus place={place} />
+        <OpenStatus place={place} small />
       </Pressable>
     </Link>
   );

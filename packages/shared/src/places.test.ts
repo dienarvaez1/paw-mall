@@ -11,6 +11,7 @@ describe('placeListQuerySchema', () => {
       lng: -99.1332,
       radiusKm: DEFAULT_RADIUS_KM,
       areaRadiusKm: 5,
+      cityRadiusKm: 3 * 1.609344,
       page: 1,
       pageSize: 20,
     });

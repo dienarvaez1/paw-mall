@@ -31,7 +31,7 @@ async function addPlace(
   const [row] = await sql<{ id: number }[]>`
     INSERT INTO places (source, external_id, name, address, city, state, location, website,
                         website_source, website_status, hidden_at, phone)
-    VALUES ('curated', ${`test-${externalId}`}, ${name}, 'Calle 1', ${extra.city ?? 'Ciudad'}, 'Estado',
+    VALUES ('curated', ${`test-places-${externalId}`}, ${name}, 'Calle 1', ${extra.city ?? 'Ciudad'}, 'Estado',
             ST_SetSRID(ST_MakePoint(${lng}, ${ORIGIN.lat}), 4326)::geography,
             'https://example.com', 'denue', ${extra.deadWebsite ? 'dead' : null},
             ${extra.hidden ? sql`now()` : null}, ${extra.phone ?? null})
@@ -46,7 +46,7 @@ async function addPlace(
 }
 
 beforeAll(async () => {
-  await sql`DELETE FROM places WHERE source = 'curated' AND external_id LIKE 'test-%'`;
+  await sql`DELETE FROM places WHERE source = 'curated' AND external_id LIKE 'test-places-%'`;
   await addPlace('vet-near', 'Veterinaria Cercana', 0.5, ['veterinarian', 'groomer'], {
     open24h: true,
     phone: '55 1234 5678',
@@ -58,7 +58,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await sql`DELETE FROM places WHERE source = 'curated' AND external_id LIKE 'test-%'`;
+  await sql`DELETE FROM places WHERE source = 'curated' AND external_id LIKE 'test-places-%'`;
   await sql.end();
 });
 
@@ -194,6 +194,13 @@ describe('GET /v1/places/map', () => {
     expect(result.total).toBe(3);
   });
 
+  it('names the city of the place nearest the circle, with clusters too', async () => {
+    expect((await map('radiusKm=5')).nearestCity).toBe('Ciudad');
+    expect((await map('radiusKm=5&limit=2')).nearestCity).toBe('Ciudad');
+    // Without the nearer two, Veterinaria Lejana (Coyoacán) is the nearest.
+    expect((await map('radiusKm=5&q=lejana')).nearestCity).toBe('Coyoacán');
+  });
+
   it('filters the map by category', async () => {
     expect(await map('radiusKm=5&category=pet_store')).toMatchObject({ total: 1, radiusTotal: 1 });
   });
@@ -211,7 +218,7 @@ describe('GET /v1/places/:id', () => {
 
   it('answers 404 for hidden or unknown places', async () => {
     const [hidden] = await sql<{ id: number }[]>`
-      SELECT id FROM places WHERE external_id = 'test-vet-hidden'`;
+      SELECT id FROM places WHERE external_id = 'test-places-vet-hidden'`;
     for (const id of [hidden?.id, 999999999]) {
       const res = await app.request(`/v1/places/${id}`, {}, testEnv);
       expect(res.status).toBe(404);

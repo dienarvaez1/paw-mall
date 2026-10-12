@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { closestRadiusKm, isRadiusOption, nextRadiusKm, radiusOptionsKm, toKm } from './radius';
+import {
+  closestRadiusKm,
+  isRadiusOption,
+  nextRadiusKm,
+  radiusOptionsKm,
+  coveringRadiusKm,
+  startRadiusKm,
+  toKm,
+} from './radius';
 
 describe('search radius by unit', () => {
   it('keeps km choices as they are', () => {
@@ -50,7 +58,25 @@ describe('nextRadiusKm', () => {
     expect(nextRadiusKm(toKm(100, 'mi'), 'mi')).toBeCloseTo(toKm(3, 'mi'));
   });
 
-  it('starts from the smallest when the radius is not a choice', () => {
-    expect(nextRadiusKm(7, 'km')).toBe(5);
+  it('goes to the next choice above a radius set by zooming the map', () => {
+    expect(nextRadiusKm(7, 'km')).toBe(10);
+    expect(nextRadiusKm(toKm(4, 'mi'), 'mi')).toBeCloseTo(toKm(5, 'mi'));
+    expect(nextRadiusKm(200, 'km')).toBe(5);
+  });
+});
+
+describe('coveringRadiusKm', () => {
+  it('covers the cluster in whole kilometers', () => {
+    expect(coveringRadiusKm(7)).toBe(7);
+    expect(coveringRadiusKm(7.2)).toBe(8);
+    expect(coveringRadiusKm(0.2)).toBe(1);
+    expect(coveringRadiusKm(400)).toBe(161);
+  });
+});
+
+describe('startRadiusKm', () => {
+  it('starts a first launch at 3 miles, or the closest choice in km', () => {
+    expect(startRadiusKm('mi')).toBeCloseTo(4.828, 3);
+    expect(startRadiusKm('km')).toBe(5);
   });
 });

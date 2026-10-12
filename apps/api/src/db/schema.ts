@@ -254,6 +254,26 @@ export const policyAnswers = pgTable(
 );
 
 /**
+ * Users' "¿Acepta mascotas?" answers on pet-friendly venues without an owner or sourced policy. As
+ * with reports: only the answer, the date and the app's random id, one row per phone.
+ */
+export const petAnswers = pgTable(
+  'pet_answers',
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    placeId: integer()
+      .notNull()
+      .references(() => places.id, { onDelete: 'cascade' }),
+    takesDogs: boolean().notNull(),
+    /** 'small' | 'medium' | 'large'; null when the user didn't know. */
+    maxDogSize: text(),
+    clientId: text().notNull(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('pet_answers_place_client_idx').on(t.placeId, t.clientId)],
+);
+
+/**
  * Places a search can name instead of a business: landmarks (curated, data/landmarks.json),
  * municipalities and towns, and colonias. Centers of municipalities, towns and colonias are the
  * median position of all DENUE businesses there (`pnpm places:areas`).

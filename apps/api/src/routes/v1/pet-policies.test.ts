@@ -80,6 +80,24 @@ describe('pet-friendly filter', () => {
     ]);
   });
 
+  it('with unconfirmed places, adds venues without a policy, never those that say no', async () => {
+    expect(await names({ petFriendly: 'true', withUnconfirmed: 'true' })).toEqual([
+      'Café Gatos',
+      'Café Perros',
+      'Hotel Grande',
+      'Hotel Mediano',
+      'Restaurante Sin Política',
+    ]);
+    expect(
+      await names({
+        petFriendly: 'true',
+        petSpecies: 'dog',
+        dogSize: 'large',
+        withUnconfirmed: 'true',
+      }),
+    ).toEqual(['Hotel Grande', 'Restaurante Sin Política']);
+  });
+
   it('with a "perro grande" profile, keeps only places that allow large dogs', async () => {
     expect(await names({ petFriendly: 'true', petSpecies: 'dog', dogSize: 'large' })).toEqual([
       'Hotel Grande',
@@ -110,6 +128,26 @@ describe('pet-friendly filter', () => {
   it('keeps only places in a category of the group', async () => {
     expect(await names({ group: 'pet_friendly' })).toEqual(['Hotel Grande']);
     expect(await names({ group: 'pet_business' })).toEqual([]);
+  });
+
+  it('lists OpenStreetMap places with their policy', async () => {
+    const [row] = await sql<{ id: number }[]>`
+      INSERT INTO places (source, external_id, name, address, city, state, location)
+      VALUES ('osm', 'test-pets-osm', 'Parque canino', 'Col. Prueba', 'Ciudad', 'Estado',
+              ST_SetSRID(ST_MakePoint(-131, 3), 4326)::geography)
+      RETURNING id`;
+    await sql`
+      INSERT INTO pet_policies (place_id, dogs, max_dog_size, source, source_name, source_url,
+                                last_confirmed_on)
+      VALUES (${row!.id}, true, 'large', 'osm', 'OpenStreetMap',
+              'https://www.openstreetmap.org/node/1', '2026-10-11')`;
+    const response = await app.request(
+      '/v1/places?lat=3&lng=-131&radiusKm=1&petFriendly=true',
+      {},
+      testEnv,
+    );
+    const body = placeListResponseSchema.parse(await response.json());
+    expect(body.items[0]).toMatchObject({ source: 'osm', petPolicy: { source: 'osm' } });
   });
 
   it('returns the policy with its source and last confirmation', async () => {
@@ -190,5 +228,56 @@ describe('POST /v1/places/:id/policy-answers', () => {
     const [row] =
       await sql`SELECT count(*)::int AS n FROM policy_answers WHERE place_id = ${ids.noPolicy!}`;
     expect(row?.n).toBe(0);
+  });
+});
+
+const addCategory = (id: number, slug: string) =>
+  sql`INSERT INTO place_categories (place_id, category_id, source)
+      SELECT ${id}, id, 'activity' FROM categories WHERE slug = ${slug}`;
+const answerPet = (id: number, n: number, takesDogs: boolean, maxDogSize?: string) =>
+  post(`/v1/places/${id}/pet-answers`, { takesDogs, maxDogSize, clientId: phone(n) });
+
+describe('POST /v1/places/:id/pet-answers', () => {
+  it('publishes a users policy once 2 phones agree, more than disagree', async () => {
+    const id = await addPlace('Taquería Sin Política', null);
+    await addCategory(id, 'restaurant');
+    expect((await answerPet(id, 1, true, 'large')).status).toBe(201);
+    expect(await policyOf(id)).toBeNull();
+    await answerPet(id, 2, true, 'medium');
+    expect(await policyOf(id)).toMatchObject({
+      source: 'community',
+      dogs: true,
+      maxDogSize: 'medium',
+      sourceName: null,
+    });
+    expect(await names({ petFriendly: 'true', petSpecies: 'dog', dogSize: 'medium' })).toContain(
+      'Taquería Sin Política',
+    );
+    // Two phones saying no: a tie withdraws it.
+    await answerPet(id, 3, false);
+    await answerPet(id, 4, false);
+    expect(await policyOf(id)).toBeNull();
+    const [row] = await sql`SELECT count(*)::int AS n FROM pet_answers WHERE place_id = ${id}`;
+    expect(row?.n).toBe(4);
+  });
+
+  it('only for pet-friendly venues without an owner or sourced policy', async () => {
+    const vet = await addPlace('Veterinaria Pregunta', null);
+    await addCategory(vet, 'veterinarian');
+    const notVenue = await answerPet(vet, 1, true);
+    expect(notVenue.status).toBe(409);
+    expect(await notVenue.json()).toEqual({ error: { code: 'NOT_A_PET_VENUE' } });
+
+    await addCategory(ids.anySize!, 'restaurant');
+    const sourced = await answerPet(ids.anySize!, 1, false);
+    expect(sourced.status).toBe(409);
+    expect(await sourced.json()).toEqual({ error: { code: 'POLICY_EXISTS' } });
+
+    const extra = await post(`/v1/places/${vet}/pet-answers`, {
+      takesDogs: true,
+      clientId: phone(1),
+      lat: 19.4,
+    });
+    expect(extra.status).toBe(400);
   });
 });

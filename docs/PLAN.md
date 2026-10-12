@@ -180,6 +180,17 @@ before starting the next. No deploys in any phase until the owner decides.
    from official cultural and tourism sources once their licensing is verified, plus curated
    entries.
    - Done when: museums and parks appear with their pet policy, and each source is credited.
+8. **Bug fixes.** Owner-reported bugs and known issues (flaky tests, map pins).
+   - Done when: each bug is fixed and checked on a phone.
+9. **Pet-friendly at scale (added 2026-10-10).** OpenStreetMap dog parks, parks and venues with a
+   dog rule; DENUE restaurants, cafés and hotels in every supported state (CDMX first, all states
+   from 2026-10-11), whose pet policy comes from users'
+   "¿Acepta mascotas?" answers (2 phones agreeing, more than disagree, within a year). Free
+   sources for hours and policies instead of Google: OpenStreetMap opening hours, businesses'
+   homepages (schema.org hours, "pet friendly" wording) and chain-wide policies.
+   - Done when: a name search in Pet-friendly finds an unanswered restaurant, two phones answering
+     yes make it appear under Restaurantes with "Según usuarios de Paw Mall", and OpenStreetMap is
+     credited on its places.
 
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when

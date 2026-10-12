@@ -1,3 +1,5 @@
+import { type PageFindings, readPage } from './page.ts';
+
 /** Outcome of visiting a store's website once. */
 export type WebsiteCheck = 'ok' | 'blocked' | 'unreachable' | 'dead';
 
@@ -21,22 +23,58 @@ export function classifyError(error: unknown): WebsiteCheck {
   return code && DEFINITELY_DEAD.has(code) ? 'dead' : 'unreachable';
 }
 
-export async function checkWebsite(
+/** Homepages are read up to this size; the rest isn't downloaded. */
+const MAX_PAGE_BYTES = 1_500_000;
+
+async function readLimited(response: Response): Promise<string> {
+  const reader = response.body?.getReader();
+  if (!reader) return '';
+  const decoder = new TextDecoder();
+  let text = '';
+  let bytes = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    bytes += value.byteLength;
+    text += decoder.decode(value, { stream: true });
+    if (bytes >= MAX_PAGE_BYTES) {
+      await reader.cancel();
+      break;
+    }
+  }
+  return text;
+}
+
+/**
+ * Visits a website once: its status, and for a working HTML homepage what it says about hours
+ * and pets (see page.ts). Findings are null when the page couldn't be read.
+ */
+export async function inspectWebsite(
   url: string,
   fetcher: typeof fetch = fetch,
-): Promise<WebsiteCheck> {
+): Promise<{ check: WebsiteCheck; findings: PageFindings | null }> {
   try {
     const response = await fetcher(url, {
       redirect: 'follow',
       signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PawMall link check)' },
     });
-    // Only the status matters; don't download the page.
-    await response.body?.cancel();
-    return classifyStatus(response.status);
+    const check = classifyStatus(response.status);
+    if (check !== 'ok' || !(response.headers.get('content-type') ?? '').includes('html')) {
+      await response.body?.cancel();
+      return { check, findings: null };
+    }
+    return { check, findings: readPage(await readLimited(response)) };
   } catch (error) {
-    return classifyError(error);
+    return { check: classifyError(error), findings: null };
   }
+}
+
+export async function checkWebsite(
+  url: string,
+  fetcher: typeof fetch = fetch,
+): Promise<WebsiteCheck> {
+  return (await inspectWebsite(url, fetcher)).check;
 }
 
 /**

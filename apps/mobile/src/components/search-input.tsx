@@ -1,5 +1,7 @@
 import { Pressable, Text, TextInput, View } from 'react-native';
 
+import { KEYBOARD_BAR_ID } from './keyboard-bar';
+
 // A symbol, not text, so it doesn't need translating.
 const CLEAR_GLYPH = '✕';
 
@@ -39,6 +41,7 @@ export function SearchInput({
         accessibilityLabel={placeholder}
         placeholderTextColor="#737373"
         returnKeyType="search"
+        inputAccessoryViewID={KEYBOARD_BAR_ID}
         autoCorrect={false}
         className="min-h-12 flex-1 text-base text-neutral-900 dark:text-white"
       />

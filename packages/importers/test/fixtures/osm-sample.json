@@ -1,0 +1,53 @@
+{
+  "about": "A small sample of data/osm-dogs-cdmx.json for tests. © OpenStreetMap contributors, ODbL 1.0.",
+  "fetchedOn": "2026-10-11",
+  "elements": [
+    { "type": "node", "id": 1, "lat": 19.41, "lon": -99.17, "tags": { "leisure": "dog_park" } },
+    {
+      "type": "way",
+      "id": 2,
+      "center": { "lat": 19.42, "lon": -99.18 },
+      "tags": { "leisure": "park", "name": "Parque de Prueba", "dog": "leashed" }
+    },
+    {
+      "type": "node",
+      "id": 3,
+      "lat": 19.43,
+      "lon": -99.19,
+      "tags": {
+        "amenity": "restaurant",
+        "name": "Fonda Perruna",
+        "dog": "yes",
+        "addr:street": "Calle Durango",
+        "addr:housenumber": "12",
+        "website": "https://fonda.example.mx"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4,
+      "lat": 19.44,
+      "lon": -99.2,
+      "tags": { "amenity": "cafe", "name": "Café Sin Perros", "dog": "no" }
+    },
+    {
+      "type": "way",
+      "id": 5,
+      "center": { "lat": 19.45, "lon": -99.21 },
+      "tags": { "highway": "footway", "dog": "yes" }
+    },
+    {
+      "type": "node",
+      "id": 6,
+      "lat": 19.46,
+      "lon": -99.22,
+      "tags": { "amenity": "restaurant", "name": "Sin Regla" }
+    },
+    {
+      "type": "way",
+      "id": 7,
+      "center": { "lat": 19.47, "lon": -99.23 },
+      "tags": { "leisure": "park", "dog": "yes" }
+    }
+  ]
+}

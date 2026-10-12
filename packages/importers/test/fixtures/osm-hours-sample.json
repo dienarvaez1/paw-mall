@@ -1,0 +1,49 @@
+{
+  "about": "A small sample of data/osm-hours.json for tests. © OpenStreetMap contributors, ODbL 1.0.",
+  "fetchedOn": "2026-10-11",
+  "elements": [
+    {
+      "type": "node",
+      "id": 11,
+      "lat": 2,
+      "lon": -131,
+      "tags": {
+        "name": "Taquería El Prueba",
+        "amenity": "fast_food",
+        "opening_hours": "Mo-Sa 09:00-22:00"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12,
+      "lat": 2.001,
+      "lon": -131,
+      "tags": { "name": "Veterinaria Prueba", "amenity": "veterinary", "opening_hours": "24/7" }
+    },
+    {
+      "type": "node",
+      "id": 13,
+      "lat": 2.002,
+      "lon": -131,
+      "tags": {
+        "name": "Café Turnos",
+        "amenity": "cafe",
+        "opening_hours": "Mo-Fr 08:00-12:00,16:00-20:00"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14,
+      "lat": 2.003,
+      "lon": -131,
+      "tags": { "amenity": "cafe", "opening_hours": "Mo-Fr 08:00-12:00" }
+    },
+    {
+      "type": "node",
+      "id": 15,
+      "lat": 2.004,
+      "lon": -131,
+      "tags": { "name": "Ferretería", "shop": "hardware", "opening_hours": "Mo-Fr 08:00-12:00" }
+    }
+  ]
+}

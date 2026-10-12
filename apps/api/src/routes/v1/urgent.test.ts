@@ -9,6 +9,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { TEST_DATABASE_URL, testEnv } from '../../../test/env';
 import app from '../../index';
+import { nameKey } from '../../queries/areas';
 
 // Test places sit in the open Pacific (away from places.test.ts too) and are removed afterwards.
 const ORIGIN = { lat: -0.5, lng: -140 };
@@ -67,15 +68,23 @@ beforeAll(async () => {
   await addPlace('hospital-open', 3, ['veterinarian', 'vet_hospital'], { hours: ALWAYS });
   await addPlace('plain-vet', 0.1, ['veterinarian']);
   await addPlace('store-open', 0.3, ['pet_store'], { hours: ALWAYS });
+  // An area 100 km east with a hospital next to it, far outside the user's radius.
+  await sql`DELETE FROM search_areas WHERE name = 'Pueblo Urgente Paw'`;
+  await sql`
+    INSERT INTO search_areas (kind, name, name_key, state, location)
+    VALUES ('town', 'Pueblo Urgente Paw', ${nameKey('Pueblo Urgente Paw')}, 'Estado',
+            ST_SetSRID(ST_MakePoint(${ORIGIN.lng + 100 / 111.32}, ${ORIGIN.lat}), 4326)::geography)`;
+  await addPlace('hospital-in-town', 100.4, ['veterinarian', 'vet_hospital']);
 });
 
 afterAll(async () => {
   await sql`DELETE FROM places WHERE external_id LIKE 'test-urgent-%'`;
+  await sql`DELETE FROM search_areas WHERE name = 'Pueblo Urgente Paw'`;
   await sql.end();
 });
 
 describe('GET /v1/places/urgent', () => {
-  it('lists vet hospitals and 24-hour vets: open first, then unknown, then closed', async () => {
+  it('lists vet hospitals and 24-hour vets, closest first', async () => {
     const res = await app.request(
       `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10`,
       {},
@@ -84,16 +93,55 @@ describe('GET /v1/places/urgent', () => {
     expect(res.headers.get('Cache-Control')).toBe('no-store');
     const { items } = urgentResponseSchema.parse(await res.json());
     expect(items.map((p) => [p.name, p.openNow])).toEqual([
-      ['hospital-open', true],
-      ['owner-24h-far', true],
+      ['hospital-closed-nearest', false],
       ['hospital-unknown-near', null],
       ['hint-24h', null],
-      ['hospital-closed-nearest', false],
+      ['hospital-open', true],
+      ['owner-24h-far', true],
     ]);
     expect(items.find((p) => p.name === 'hint-24h')?.open24h).toEqual({
       value: true,
       source: 'name',
     });
+  });
+});
+
+describe('GET /v1/places/urgent with a searched area', () => {
+  it('moves the radius to the area the search names', async () => {
+    const res = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10&q=pueblo%20urgente%20paw`,
+      {},
+      testEnv,
+    );
+    const { area, items } = urgentResponseSchema.parse(await res.json());
+    expect(area).toMatchObject({ name: 'Pueblo Urgente Paw', radiusKm: 10 });
+    expect(items.map((p) => [p.name, p.distanceKm])).toEqual([['hospital-in-town', 0.4]]);
+  });
+
+  it('stays around the user when the text names no area', async () => {
+    const res = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10&q=zzzz`,
+      {},
+      testEnv,
+    );
+    const { area, items } = urgentResponseSchema.parse(await res.json());
+    expect(area).toBeNull();
+    expect(items).toHaveLength(5);
+  });
+});
+
+describe('GET /v1/places/urgent with the Ajustes switches', () => {
+  it('applies the radius and "only open now", like the other pages', async () => {
+    const urgent = async (params: string) => {
+      const res = await app.request(
+        `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&${params}`,
+        {},
+        testEnv,
+      );
+      return urgentResponseSchema.parse(await res.json()).items.map((p) => p.name);
+    };
+    expect(await urgent('radiusKm=10&openNow=true')).toEqual(['hospital-open', 'owner-24h-far']);
+    expect(await urgent('radiusKm=10&withPhone=true')).toEqual([]);
   });
 });
 

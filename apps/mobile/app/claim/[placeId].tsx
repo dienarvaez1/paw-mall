@@ -21,7 +21,8 @@ import {
 
 import { apiPost } from '@/api/client';
 import { usePlace } from '@/api/hooks';
-import { Button } from '@/components/button';
+import { BUTTON_HIT_SLOP, Button } from '@/components/button';
+import { KEYBOARD_BAR_ID } from '@/components/keyboard-bar';
 import { usePlaceName } from '@/components/place-row';
 import { ErrorState } from '@/components/states';
 import {
@@ -124,6 +125,7 @@ export default function ClaimScreen() {
         <Section title={t('places.claim.storeSection')}>
           <Field label={t('places.claim.phone')}>
             <TextInput
+              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={phone}
               onChangeText={setPhone}
@@ -133,6 +135,7 @@ export default function ClaimScreen() {
           </Field>
           <Field label={t('places.claim.website')}>
             <TextInput
+              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={website}
               onChangeText={setWebsite}
@@ -189,6 +192,7 @@ export default function ClaimScreen() {
         <Section title={t('places.claim.contactSection')} hint={t('places.claim.contactHint')}>
           <Field label={t('places.claim.contactName')}>
             <TextInput
+              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={contactName}
               onChangeText={setContactName}
@@ -197,6 +201,7 @@ export default function ClaimScreen() {
           </Field>
           <Field label={t('places.claim.contact')}>
             <TextInput
+              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={contact}
               onChangeText={setContact}
@@ -212,7 +217,7 @@ export default function ClaimScreen() {
             value={consent}
             onValueChange={setConsent}
             accessibilityLabel={t('places.claim.consent')}
-            trackColor={{ true: '#0f766e' }}
+            trackColor={{ true: '#46d2d1' }}
           />
           <Text className="flex-1 text-sm leading-5 text-neutral-700 dark:text-neutral-300">
             {t('places.claim.consent')}
@@ -295,6 +300,7 @@ function DayRow({
       {!value.closed ? (
         <View className="flex-row gap-3">
           <TextInput
+            inputAccessoryViewID={KEYBOARD_BAR_ID}
             className={`${INPUT} flex-1`}
             value={value.open}
             onChangeText={(open) => onChange({ ...value, open })}
@@ -303,6 +309,7 @@ function DayRow({
             keyboardType="numbers-and-punctuation"
           />
           <TextInput
+            inputAccessoryViewID={KEYBOARD_BAR_ID}
             className={`${INPUT} flex-1`}
             value={value.close}
             onChangeText={(close) => onChange({ ...value, close })}
@@ -356,6 +363,7 @@ function PetPolicyFields({
           </View>
           <Field label={t('places.claim.petMaxWeight')}>
             <TextInput
+              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={value.maxWeightKg}
               onChangeText={(maxWeightKg) => set({ maxWeightKg })}
@@ -390,6 +398,7 @@ function PetPolicyFields({
       </View>
       <Field label={t('places.claim.petRules')}>
         <TextInput
+          inputAccessoryViewID={KEYBOARD_BAR_ID}
           className={`${INPUT} py-2`}
           value={value.rules}
           onChangeText={(rules) => set({ rules })}
@@ -416,15 +425,14 @@ function Choice({
       accessibilityRole="checkbox"
       accessibilityState={{ checked: selected }}
       onPress={onPress}
-      className={`min-h-10 justify-center rounded-full border px-4 ${
-        selected
-          ? 'border-teal-700 bg-teal-700'
-          : 'border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900'
+      hitSlop={BUTTON_HIT_SLOP}
+      className={`min-h-8 justify-center rounded-full border px-3 ${
+        selected ? 'border-paw bg-paw' : 'border-off-border bg-off-bg dark:bg-off-bg-dark'
       }`}
     >
       <Text
-        className={`text-sm font-semibold ${
-          selected ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
+        className={`text-xs font-semibold ${
+          selected ? 'text-teal-950' : 'text-amber-900 dark:text-amber-200'
         }`}
       >
         {label}
@@ -441,7 +449,7 @@ function SwitchRow(props: { label: string; value: boolean; onChange: (value: boo
         value={props.value}
         onValueChange={props.onChange}
         accessibilityLabel={props.label}
-        trackColor={{ true: '#0f766e' }}
+        trackColor={{ true: '#46d2d1' }}
       />
     </View>
   );

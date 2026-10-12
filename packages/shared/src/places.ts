@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { CITY_AREA_RADIUS_KM } from './constants';
 import { CATEGORY_GROUPS, CATEGORY_SLUGS } from './categories';
 import { placeHoursSchema } from './hours';
 import { DOG_SIZES, PET_SPECIES, petPolicySchema } from './pet-policy';
@@ -19,7 +20,17 @@ export const categoryListResponseSchema = z.object({ items: z.array(categorySche
 export type CategoryListResponse = z.infer<typeof categoryListResponseSchema>;
 
 /** Where a value came from. Owner-verified values always win over the others. */
-export const valueSourceSchema = z.enum(['denue', 'overture', 'owner', 'shoppers', 'curated']);
+/** Who gave a place's weekly hours (Google's are never stored). */
+export const HOURS_SOURCES = ['owner', 'website', 'osm'] as const;
+
+export const valueSourceSchema = z.enum([
+  'denue',
+  'overture',
+  'owner',
+  'shoppers',
+  'curated',
+  'osm',
+]);
 export type ValueSource = z.infer<typeof valueSourceSchema>;
 
 export const placeSchema = z.object({
@@ -39,8 +50,9 @@ export const placeSchema = z.object({
   distanceKm: z.number().nullable(),
   /** Vets only: open 24 hours. A 'name' source is an unconfirmed hint from the business name. */
   open24h: z.object({ value: z.boolean(), source: z.enum(['name', 'owner']) }).nullable(),
-  /** Confirmed weekly hours (owner-verified from Phase 5); null when unknown. */
+  /** Weekly hours from the owner, the business's website or OpenStreetMap; null when unknown. */
   hours: placeHoursSchema.nullable(),
+  hoursSource: z.enum(HOURS_SOURCES).nullable(),
   /**
    * Open right now by confirmed hours (or an owner's 24-hour answer); null when unknown. A "24
    * horas" name hint alone stays null.
@@ -73,7 +85,7 @@ export const MAX_PAGE_SIZE = 200;
 export const AREA_RADIUS_KM = 5;
 
 /** Most places the map shows one by one; with more in view it shows clusters. */
-export const MAP_MAX_PLACES = 200;
+export const MAP_MAX_PLACES = 100;
 
 const latitude = z.coerce.number().min(-90).max(90);
 const longitude = z.coerce.number().min(-180).max(180);
@@ -96,6 +108,8 @@ const placeFilters = {
    * taking that species, and dogs of that size.
    */
   petFriendly: z.stringbool().optional(),
+  /** With petFriendly: also venues without a pet policy yet (never those that say no). */
+  withUnconfirmed: z.stringbool().optional(),
   petSpecies: z.enum(PET_SPECIES).optional(),
   dogSize: z.enum(DOG_SIZES).optional(),
 };
@@ -127,6 +141,10 @@ export const placeListQuerySchema = z.object({
   q: z.string().trim().min(1).max(100).optional(),
   /** Radius around an area named by `q`; the Settings radius (radiusKm) stays as it is. */
   areaRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(AREA_RADIUS_KM),
+  /** "true" when the user picked areaRadiusKm (radius button, zoom): no busy-city 3 mi rule. */
+  fixedAreaRadius: z.stringbool().optional(),
+  /** A busy city's radius in the user's units: 3 mi, or 5 km (the closest km preset). */
+  cityRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(CITY_AREA_RADIUS_KM),
   /** "true" searches `q` in business names only, even when it names an area. */
   namesOnly: z.stringbool().optional(),
   ...placeFilters,
@@ -144,6 +162,20 @@ export const searchAreaSchema = z.object({
   radiusKm: z.number(),
 });
 export type SearchArea = z.infer<typeof searchAreaSchema>;
+
+/** Whether the whole search text is a place's name (to ask the user how to read it). */
+export const areaLookupQuerySchema = z.object({
+  q: z.string().trim().min(1).max(100),
+  lat: latitude,
+  lng: longitude,
+});
+export type AreaLookupQuery = z.infer<typeof areaLookupQuerySchema>;
+
+export const areaLookupResponseSchema = z.object({
+  /** The nearest place with that exact name (accents and case aside), or null. */
+  area: searchAreaSchema.omit({ radiusKm: true }).nullable(),
+});
+export type AreaLookupResponse = z.infer<typeof areaLookupResponseSchema>;
 
 export const placeListResponseSchema = z.object({
   /**
@@ -169,6 +201,10 @@ export const placeMapQuerySchema = z.object({
   /** The search box, as in the list: an area moves the map's search there; other text filters names. */
   q: z.string().trim().min(1).max(100).optional(),
   areaRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(AREA_RADIUS_KM),
+  /** "true" when the user picked areaRadiusKm (radius button, zoom): no busy-city 3 mi rule. */
+  fixedAreaRadius: z.stringbool().optional(),
+  /** A busy city's radius in the user's units: 3 mi, or 5 km (the closest km preset). */
+  cityRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(CITY_AREA_RADIUS_KM),
   namesOnly: z.stringbool().optional(),
   ...placeFilters,
   /** Most places to return one by one before clustering (tests use a small number). */
@@ -193,6 +229,8 @@ const mapCounts = {
   total: z.number().int(),
   /** Every place within radiusKm, in view or not. */
   radiusTotal: z.number().int(),
+  /** The city of the place in view nearest the circle's center, to name where the circle is. */
+  nearestCity: z.string().nullable().default(null),
 };
 
 export const placeMapResponseSchema = z.discriminatedUnion('kind', [
@@ -203,18 +241,30 @@ export type PlaceMapResponse = z.infer<typeof placeMapResponseSchema>;
 
 export const idParamSchema = z.object({ id: z.coerce.number().int().positive() });
 
-/** Urgencias: the nearest vet hospitals and 24-hour vets, open ones first. */
+/**
+ * Urgencias: the nearest vet hospitals and 24-hour vets, open ones first, within the Ajustes radius
+ * and with its place switches (phone, website, social, named, open now).
+ */
 export const urgentQuerySchema = z.object({
   lat: latitude,
   lng: longitude,
   radiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(25),
+  withPhone: placeFilters.withPhone,
+  withWebsite: placeFilters.withWebsite,
+  withSocial: placeFilters.withSocial,
+  named: placeFilters.named,
+  openNow: placeFilters.openNow,
+  /** The search box: when it names an area ("Xochimilco"), the radius is around it instead. */
+  q: z.string().trim().min(1).max(100).optional(),
 });
 export type UrgentQuery = z.infer<typeof urgentQuerySchema>;
 
 export const URGENT_LIMIT = 20;
 
 export const urgentResponseSchema = z.object({
-  /** Open now (confirmed) first, then unconfirmed, then closed; nearest first within each. */
+  /** The area the search named, when it did: distances are then from it. */
+  area: searchAreaSchema.nullable().default(null),
+  /** Closest first. */
   items: z.array(placeSchema),
 });
 export type UrgentResponse = z.infer<typeof urgentResponseSchema>;

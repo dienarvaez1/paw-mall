@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
+import { KeyboardBar } from '@/components/keyboard-bar';
 import { OfflineBanner } from '@/components/states';
 import { LocationProvider } from '@/features/location/location-context';
 import { connectQueryOnlineState } from '@/features/network/network';
@@ -56,6 +57,7 @@ export default function RootLayout() {
             <OfflineBanner />
             <RootStack />
             <StatusBar style="auto" />
+            <KeyboardBar />
           </LocationProvider>
         </SettingsProvider>
       </QueryClientProvider>

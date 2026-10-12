@@ -47,7 +47,8 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
   Michoacán and Querétaro (added 2026-10-05 with the 100-mile radius); locale `es-MX`.
 - Shared code with Ferre Mall: copy now, extract a package later.
 - Audience: pet owners, no login.
-- Pet-friendly coverage at launch: curated CDMX restaurants and lodging.
+- Pet-friendly coverage: curated CDMX places, plus every supported state's DENUE restaurants,
+  cafés and hotels and OpenStreetMap dog places (extended 2026-10-11).
 - Vet license check: off until the registry's terms are confirmed.
 - Live animal sales: listed. Municipal animal control centers: listed as public services.
 - Feed stores (DENUE 434112): imported as forrajerías.
@@ -63,6 +64,12 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
   `pnpm places:enrich-overture` and `pnpm places:check-websites` (visits each business website
   once), then `pnpm places:areas` (colonias, cities and landmarks for the search box). Each is
   safe to re-run; `pnpm places:import --dry-run` reports without writing.
+- Pet-friendly and hours: after `pnpm places:import`, run `pnpm places:curated` (hand-collected
+  places), `pnpm places:osm` (OpenStreetMap dog parks and venues, snapshot
+  `data/osm-dogs.json`), `pnpm places:osm-hours` (OpenStreetMap opening hours, snapshot
+  `data/osm-hours.json`) and `pnpm places:chains` (chain-wide policies,
+  `data/pet-friendly-chains.json`). `--refresh` fetches a new OpenStreetMap snapshot. The website
+  check also reads hours and "pet friendly" wording from each homepage.
 - Landmarks: `pnpm places:landmarks` refreshes the committed Wikidata snapshot
   (`packages/importers/data/landmarks-wikidata.json`); run `pnpm places:areas` after it. The
   curated `data/landmarks.json` wins over Wikidata on the same name.

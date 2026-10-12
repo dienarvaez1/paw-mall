@@ -18,7 +18,7 @@
   "registeredSince": "Registered by INEGI in {{year}}",
   "listCount_one": "{{total}} place within {{distance}}",
   "listCount_other": "{{total}} places within {{distance}}",
-  "searchPlaceholder": "Search a colonia, city or landmark (e.g. Zócalo)",
+  "searchPlaceholder": "Business name, city, colonia or landmark",
   "clearSearch": "Clear search",
   "noMatchesNearby": "No places matching “{{query}}” within {{distance}}.",
   "noMatchesHint": "Check the spelling or try fewer words. Search covers your radius; you can widen it in Settings.",
@@ -26,8 +26,6 @@
   "clusterLabel_other": "{{count}} places. Tap to zoom in.",
   "mapCount_one": "{{total}} place within {{distance}}",
   "mapCount_other": "{{total}} places within {{distance}}",
-  "mapCountPartial_one": "{{shown}} of {{total}} place within {{distance}}",
-  "mapCountPartial_other": "{{shown}} of {{total}} places within {{distance}}",
   "mapShowAll": "Tap to see the whole radius",
   "compass": "Compass. Tap to turn the map north.",
   "categoriesLabel": "Categories",
@@ -37,6 +35,7 @@
     "veterinarian": "Vets",
     "vet_hospital": "Hospitals",
     "pet_store": "Stores",
+    "boutique": "Boutiques",
     "groomer": "Grooming",
     "boarding": "Boarding",
     "feed_store": "Feed stores",
@@ -60,7 +59,12 @@
     "closed": "Closed",
     "allDay": "Open 24 hours",
     "allDayEveryDay": "Open 24 hours, every day (confirmed by the owner)",
-    "range": "{{open}} – {{close}}"
+    "range": "{{open}} – {{close}}",
+    "source": {
+      "owner": "Hours confirmed by the owner.",
+      "website": "Hours from the business's website.",
+      "osm": "Hours: © OpenStreetMap contributors (ODbL)."
+    }
   },
   "google": {
     "showHours": "See hours",
@@ -133,18 +137,13 @@
   "areaCount_other": "{{total}} places within {{distance}} of {{area}}",
   "nearMe": "My location",
   "nearMeHint": "On: searches business names near you, within the chosen radius. Off: searches around a colonia, city or landmark.",
-  "searchPlaceholderNearMe": "Search a business near you",
+  "searchPlaceholderNearMe": "Business name, city, colonia or landmark",
   "radiusButton": "Search radius: {{distance}}",
   "radiusButtonHint": "Tap for the next radius. It's used by the list, the map and “My location”, and saved in Settings.",
-  "mapAreaCountPartial_one": "{{shown}} of {{total}} place within {{distance}} of {{area}}",
-  "mapAreaCountPartial_other": "{{shown}} of {{total}} places within {{distance}} of {{area}}",
   "categorySummary": "{{category}}: {{summary}}",
-  "radiusButtonCustom": "Custom radius: {{distance}}",
-  "radiusButtonCustomHint": "Set by zooming the map. Tap to go back to the Settings radius.",
   "petFriendly": {
     "tabTitle": "Pet-friendly",
-    "forProfile": "For your pet: {{profile}}. Change it in Settings.",
-    "noProfile": "Choose your pet in Settings to see only the places that take it."
+    "forProfile": "For your pet: {{profile}}. Change it in Settings."
   },
   "noPetFriendlyPlaces": "No pet-friendly places within {{distance}} for your pet",
   "noPetFriendlyPlacesHint": "For now we have restaurants, cafés, hotels, museums and parks in Mexico City. Try a larger radius or change your pet in Settings.",
@@ -193,7 +192,12 @@
     "source": {
       "owner": "Declared by the owner",
       "ownerShort": "Owner",
-      "curated": "Source: {{name}}"
+      "curated": "Source: {{name}}",
+      "community": "According to Paw Mall users",
+      "communityShort": "Users",
+      "osm": "Source: OpenStreetMap (© OpenStreetMap contributors)",
+      "chain": "{{name}} chain policy",
+      "website": "According to its website ({{name}})"
     },
     "lastConfirmed": "Last confirmed: {{date}}",
     "confirmations_one": "confirmed by {{count}} person",
@@ -215,6 +219,39 @@
       "dog_small": "small dog",
       "dog_medium": "medium dog",
       "dog_large": "large dog"
+    },
+    "ask": {
+      "unknown": "We don't know yet whether it takes pets.",
+      "rowUnknown": "Takes pets? Not confirmed",
+      "question": "Does it take dogs?",
+      "yes": "Yes",
+      "no": "No",
+      "sizeQuestion": "Up to what size of dog?",
+      "size": {
+        "small": "Small (up to 10 kg)",
+        "medium": "Medium (10–25 kg)",
+        "large": "Large (over 25 kg)",
+        "unknown": "Don't know"
+      },
+      "thanks": "Thanks. Once {{count}} people agree, it will show in Pet-friendly.",
+      "thanksCounted": "Thanks. Your answer counts."
+    }
+  },
+  "sourceOsm": "Data: © OpenStreetMap contributors (ODbL).",
+  "searchUnconfirmed": "Also search places not yet confirmed",
+  "widenedAuto": "No confirmed place matches “{{query}}”. These have no pet policy yet: open one and tell us whether it takes pets.",
+  "introExplore": "Everything your furry friend needs, close by: vets, groomers, pet stores and more. Search, filter and head straight there, no detours.",
+  "introPetFriendly": "Places where your pup is welcome: restaurants, cafés, hotels, museums and parks. Know one? Tell us whether it takes pets and help the whole pack.",
+  "placeAsk": {
+    "title": "Search in {{name}}?",
+    "message": "“{{text}}” is the name of a {{kind}}. Search around that place, or for businesses with that name?",
+    "asPlace": "As a place",
+    "asBusiness": "As a business name",
+    "kind": {
+      "municipality": "city",
+      "town": "town",
+      "colonia": "neighborhood (colonia)",
+      "landmark": "landmark"
     }
   }
 }

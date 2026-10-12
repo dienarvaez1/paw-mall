@@ -1,0 +1,26 @@
+{
+  "about": "Pet policies that a chain states the same way for its branches (docs/PLAN.md, Phase 9), applied to every DENUE branch in Ciudad de México whose name matches. Researched by hand from the chain's own pages, each with its source and check date. Restaurant and café chains in Mexico publish no chain-wide policy (Starbucks, for one, has dog-friendly terraces only at some branches), so none are listed. Load with `pnpm places:chains`.",
+  "chains": [
+    {
+      "id": "city-express",
+      "name": "City Express by Marriott",
+      "match": "CITY EXPRESS",
+      "categories": ["lodging"],
+      "policy": {
+        "dogs": true,
+        "cats": null,
+        "otherPets": null,
+        "maxWeightKg": 15,
+        "maxPets": 1,
+        "fee": null,
+        "areas": ["indoor"],
+        "rules": "Una mascota de hasta 15 kg por habitación, con certificado de vacunas y correa. Cargo por noche según el hotel (MXN 350 en la mayoría)."
+      },
+      "source": {
+        "name": "City Express by Marriott",
+        "url": "https://www.marriott.com/es/hotels/mexjs-city-express-junior-ciudad-de-mexico-sullivan/overview/",
+        "checkedOn": "2026-10-11"
+      }
+    }
+  ]
+}

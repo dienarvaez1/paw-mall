@@ -1,4 +1,6 @@
 import {
+  AREA_NAME_RADIUS_KM,
+  CITY_BUSY_MATCHES,
   type Category,
   type CategorySlug,
   DEFAULT_LOCALE,
@@ -85,7 +87,12 @@ function filterConditions(filters: PlaceFilters): SQL[] {
       ? sql`(p.name IS NOT NULL AND lower(f_unaccent(p.name)) NOT LIKE '%sin nombre%')`
       : null,
     filters.openNow ? sql`${openNowSql} IS TRUE` : null,
-    filters.petFriendly ? petFriendlySql(filters) : null,
+    filters.petFriendly
+      ? filters.withUnconfirmed
+        ? sql`(${petFriendlySql(filters)}
+             OR NOT EXISTS (SELECT 1 FROM pet_policies pp WHERE pp.place_id = p.id))`
+        : petFriendlySql(filters)
+      : null,
   ].filter((condition) => condition !== null);
 }
 
@@ -106,6 +113,7 @@ type PlaceRow = {
   open24h: boolean | null;
   open24h_source: 'name' | 'owner' | null;
   hours: PlaceHours | null;
+  hours_source: Place['hoursSource'];
   open_now: boolean | null;
   source: ValueSource;
   phone_source: ValueSource | null;
@@ -146,7 +154,7 @@ function placeColumnsSql(locale: Locale, point?: Point) {
     (p.owner_verified_at AT TIME ZONE 'America/Mexico_City')::date::text AS owner_verified_on,
     ST_Y(p.location::geometry) AS lat, ST_X(p.location::geometry) AS lng,
     ${point ? sql`round((ST_Distance(p.location, ${pointSql(point)}) / 1000)::numeric, 1)` : sql`NULL`} AS distance_km,
-    v.open24h, v.open24h_source, p.hours, ${openNowSql} AS open_now,
+    v.open24h, v.open24h_source, p.hours, p.hours_source, ${openNowSql} AS open_now,
     ${petPolicySql} AS pet_policy,
     (SELECT coalesce(json_agg(json_build_object('slug', c.slug, 'name', coalesce(t.name, d.name))
                               ORDER BY c.sort_order), '[]')
@@ -176,6 +184,7 @@ function toPlace(row: PlaceRow): Place {
         ? null
         : { value: row.open24h, source: row.open24h_source },
     hours: row.hours,
+    hoursSource: row.hours ? row.hours_source : null,
     openNow: row.open_now,
     source: row.source,
     phoneSource: row.phone_source,
@@ -209,17 +218,20 @@ export async function listPlaces(
       category: query.category ?? search.category ?? undefined,
     },
     locale,
+    search.namedAfter,
   );
   return { ...result, area: search.area, searchCategory: search.category };
 }
 
-type SearchQuery = {
+type SearchQuery = PlaceFilters & {
   q?: string;
   namesOnly?: boolean;
   lat: number;
   lng: number;
   radiusKm: number;
   areaRadiusKm: number;
+  fixedAreaRadius?: boolean;
+  cityRadiusKm: number;
 };
 
 /**
@@ -233,17 +245,52 @@ async function interpretSearch(db: Database, query: SearchQuery) {
   let radiusKm = query.radiusKm;
   let area: PlaceListResponse['area'] = null;
   let text = query.q ?? '';
+  // The whole search is a place's name ("Tlaxcala"): businesses named after it count too.
+  let namedAfter: string | null = null;
   if (text && !query.namesOnly) {
     const found = await findAreaSearch(db, text, point);
     if (found) {
       point = found.area.location;
       radiusKm = query.areaRadiusKm;
       area = { ...found.area, radiusKm };
+      if (!found.business) namedAfter = text;
       text = found.business ?? '';
     }
   }
   const { category, words } = detectCategory(text);
-  return { point, radiusKm, area, category, words };
+  // A city or town (not a colonia or landmark) with more than CITY_BUSY_MATCHES places: 3 mi
+  // around it (owner's rule). Counted over every visible place, not the tab's filters, so
+  // Explorar's and Pet-friendly's maps get the same circle (owner's rule: the maps stay in sync).
+  if (area && !query.fixedAreaRadius && (area.kind === 'municipality' || area.kind === 'town')) {
+    const matches = await countPlaces(db, [
+      visibleSql,
+      searchCircleSql(point, query.cityRadiusKm, namedAfter),
+    ]);
+    if (matches > CITY_BUSY_MATCHES) {
+      radiusKm = query.cityRadiusKm;
+      area = { ...area, radiusKm };
+    }
+  }
+  return { point, radiusKm, area, category, words, namedAfter };
+}
+
+/**
+ * The search circle (places aliased `p`). When the search was just a place's name, it also takes
+ * businesses with every word of that name in their own name, up to AREA_NAME_RADIUS_KM away
+ * ("Tlaxcala": Tlaxcala's places, plus "Veterinaria Tlaxcala" 20 miles out).
+ */
+function searchCircleSql(point: Point, radiusKm: number, namedAfter: string | null): SQL {
+  if (!namedAfter) return withinRadiusSql(point, radiusKm);
+  const name = sql`lower(f_unaccent(coalesce(p.name, '')))`;
+  const named = sql.join(
+    searchWords(namedAfter).map((word) => {
+      const text = sql`lower(f_unaccent(${word}))`;
+      return sql`(${name} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!')`;
+    }),
+    sql` AND `,
+  );
+  return sql`(${withinRadiusSql(point, radiusKm)}
+    OR (${withinRadiusSql(point, Math.max(radiusKm, AREA_NAME_RADIUS_KM))} AND ${named}))`;
 }
 
 /**
@@ -289,11 +336,12 @@ async function searchPlaces(
   db: Database,
   query: PlaceListQuery,
   locale: Locale,
+  namedAfter: string | null = null,
 ): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory'>> {
   const point = { lat: query.lat, lng: query.lng };
   const conditions = [
     visibleSql,
-    withinRadiusSql(point, query.radiusKm),
+    searchCircleSql(point, query.radiusKm, namedAfter),
     ...filterConditions(query),
   ];
   if (!query.q) return pageOfPlaces(db, query, locale, conditions);
@@ -378,12 +426,12 @@ export async function placesForMap(
   const { minLng, minLat, maxLng, maxLat } = query.bbox;
   // The search box, as in the list: a place moves the circle there, keywords pick a category,
   // and other words must appear in the names.
-  const { point, radiusKm, area, category, words } = await interpretSearch(db, query);
+  const { point, radiusKm, area, category, words, namedAfter } = await interpretSearch(db, query);
   const filters = { ...query, category: query.category ?? category ?? undefined };
   const inBox = sql`p.location && ST_MakeEnvelope(${minLng}, ${minLat}, ${maxLng}, ${maxLat}, 4326)::geography`;
   const inRadius = [
     visibleSql,
-    withinRadiusSql(point, radiusKm),
+    searchCircleSql(point, radiusKm, namedAfter),
     ...filterConditions(filters),
     ...(words ? [allWordsSql(words)] : []),
   ];
@@ -392,6 +440,8 @@ export async function placesForMap(
     pageOfPlaces(db, { ...point, page: 1, pageSize: query.limit }, locale, [...inRadius, inBox]),
     countPlaces(db, inRadius),
   ]);
+  // The page is nearest first, so its first place names the circle's city.
+  const nearestCity = places.items[0]?.city ?? null;
   if (places.total <= query.limit) {
     return {
       kind: 'places',
@@ -400,6 +450,7 @@ export async function placesForMap(
       items: places.items,
       total: places.total,
       radiusTotal,
+      nearestCity,
     };
   }
 
@@ -434,6 +485,7 @@ export async function placesForMap(
     clusters,
     total: places.total,
     radiusTotal,
+    nearestCity,
   };
 }
 
@@ -461,24 +513,27 @@ export async function listCategories(db: Database, locale: Locale): Promise<Cate
 }
 
 /**
- * Urgencias: the nearest vet hospitals and 24-hour vets (confirmed or hinted by name), open now
- * first, then unknown hours, then closed; nearest first within each group.
+ * Urgencias: the nearest vet hospitals and 24-hour vets (confirmed or hinted by name), closest
+ * to farthest (owner's rule); each card tells whether it's open.
  */
 export async function urgentPlaces(
   db: Database,
   query: UrgentQuery,
   locale: Locale,
 ): Promise<UrgentResponse> {
-  const point = { lat: query.lat, lng: query.lng };
+  // The search box naming an area ("Xochimilco", "vet en Xochimilco"): the radius goes around it.
+  const found = query.q ? await findAreaSearch(db, query.q, query) : null;
+  const point = found ? found.area.location : { lat: query.lat, lng: query.lng };
+  const area = found ? { ...found.area, radiusKm: query.radiusKm } : null;
   const rows = await db.execute<PlaceRow>(sql`
     SELECT ${placeColumnsSql(locale, point)}
     FROM places p
     LEFT JOIN vet_details v ON v.place_id = p.id
-    WHERE ${visibleSql} AND ${withinRadiusSql(point, query.radiusKm)}
+    WHERE ${sql.join([visibleSql, withinRadiusSql(point, query.radiusKm), ...filterConditions(query)], sql` AND `)}
       AND (v.open24h IS TRUE OR v.accepts_emergencies IS TRUE OR EXISTS (
         SELECT 1 FROM place_categories pc JOIN categories c ON c.id = pc.category_id
         WHERE pc.place_id = p.id AND c.slug = 'vet_hospital'))
-    ORDER BY CASE ${openNowSql} WHEN true THEN 0 WHEN false THEN 2 ELSE 1 END, distance_km, p.id
+    ORDER BY distance_km, p.id
     LIMIT ${URGENT_LIMIT}`);
-  return { items: rows.map(toPlace) };
+  return { area, items: rows.map(toPlace) };
 }

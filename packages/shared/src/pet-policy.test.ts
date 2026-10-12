@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import {
   allowsDogSize,
+  communityPolicy,
   dogSizeForWeightLimit,
+  petAnswerSchema,
   petPolicyInputSchema,
   policyAnswerSchema,
 } from './pet-policy';
@@ -61,5 +63,38 @@ describe('policyAnswerSchema', () => {
       false,
     );
     expect(policyAnswerSchema.safeParse({ answer: 'maybe', clientId }).success).toBe(false);
+  });
+});
+
+describe('communityPolicy', () => {
+  const yes = (maxDogSize: 'small' | 'medium' | 'large' | null = null) => ({
+    takesDogs: true,
+    maxDogSize,
+  });
+  const no = { takesDogs: false, maxDogSize: null };
+
+  it('needs 2 phones agreeing, more than disagree', () => {
+    expect(communityPolicy([yes()])).toBeNull();
+    expect(communityPolicy([yes(), no])).toBeNull();
+    expect(communityPolicy([yes(), yes(), no, no])).toBeNull();
+    expect(communityPolicy([yes(), yes(), no])).toEqual({ dogs: true, maxDogSize: null });
+    expect(communityPolicy([no, no, yes()])).toEqual({ dogs: false, maxDogSize: null });
+  });
+
+  it('takes the lower median of the sizes given', () => {
+    expect(communityPolicy([yes('large'), yes('medium')])?.maxDogSize).toBe('medium');
+    expect(communityPolicy([yes('large'), yes('large'), yes('small')])?.maxDogSize).toBe('large');
+    expect(communityPolicy([yes('large'), yes()])?.maxDogSize).toBe('large');
+  });
+});
+
+describe('petAnswerSchema', () => {
+  it('takes only the answer and the random id', () => {
+    const clientId = 'phone-0000000000000001';
+    expect(
+      petAnswerSchema.safeParse({ takesDogs: true, maxDogSize: 'large', clientId }).success,
+    ).toBe(true);
+    expect(petAnswerSchema.safeParse({ takesDogs: false, clientId }).success).toBe(true);
+    expect(petAnswerSchema.safeParse({ takesDogs: true, clientId, lat: 19.4 }).success).toBe(false);
   });
 });

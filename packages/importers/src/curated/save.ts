@@ -88,6 +88,36 @@ export async function saveCuratedPlaces(
     const removed = removeMissing
       ? (await tx`DELETE FROM places WHERE source = 'curated' AND id <> ALL(${ids}::int[])`).count
       : 0;
-    return { saved: ids.length, policies, ownerKept, removed };
+    const duplicates = await hideDenueCopies(tx, 'curated');
+    return { saved: ids.length, policies, ownerKept, removed, duplicates };
   });
+}
+
+/** Same kind, this close, and names this similar (pg_trgm): the DENUE row is the same venue. */
+const COPY_METERS = 100;
+const COPY_NAME_SIMILARITY = 0.4;
+
+/**
+ * Hides DENUE restaurants, cafés and hotels that copy a venue from `source` (curated or OpenStreetMap), so
+ * search shows the venue once, with its policy. Re-checked on every run: copies whose venue left
+ * come back. Returns how many are hidden.
+ */
+export async function hideDenueCopies(
+  sql: postgres.Sql | postgres.TransactionSql,
+  source: 'curated' | 'osm',
+) {
+  const reason = `duplicate_of_${source}`;
+  await sql`UPDATE places SET hidden_at = NULL, hidden_reason = NULL WHERE hidden_reason = ${reason}`;
+  const hidden = await sql`
+    UPDATE places d SET hidden_at = now(), hidden_reason = ${reason}
+    WHERE d.source = 'denue' AND d.hidden_at IS NULL
+      AND EXISTS (
+        SELECT 1 FROM places v
+        JOIN place_categories vc ON vc.place_id = v.id
+        JOIN place_categories dc ON dc.place_id = d.id AND dc.category_id = vc.category_id
+        JOIN categories k ON k.id = vc.category_id AND k.slug IN ('restaurant', 'cafe', 'lodging')
+        WHERE v.source = ${source}
+          AND ST_DWithin(v.location, d.location, ${COPY_METERS})
+          AND similarity(lower(f_unaccent(v.name)), lower(f_unaccent(d.name))) > ${COPY_NAME_SIMILARITY})`;
+  return hidden.count;
 }

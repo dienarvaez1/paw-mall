@@ -1,31 +1,36 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DEFAULT_LOCALE, type Locale, SUPPORTED_LOCALES } from '@paw-mall/shared';
-import { getLocales } from 'expo-localization';
+import {
+  DEFAULT_LOCALE,
+  type Locale,
+  SUPPORTED_LOCALES,
+  isSupportedLocale,
+} from '@paw-mall/shared';
 import { createInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 import { NAMESPACES, resources } from './resources';
-import { resolveLanguage } from './resolve-language';
 
 export const i18n = createInstance();
 
 const LANGUAGE_STORAGE_KEY = 'settings.language';
 
-async function loadSavedLanguage(): Promise<string | null> {
+/**
+ * The language chosen in Ajustes (owner's rule: Ajustes has the last word), or Spanish when none
+ * was chosen; the device language doesn't decide.
+ */
+async function savedLanguage(): Promise<Locale> {
   try {
-    return await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+    const saved = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+    return isSupportedLocale(saved) ? saved : DEFAULT_LOCALE;
   } catch {
-    return null;
+    return DEFAULT_LOCALE;
   }
 }
 
 export async function initI18n(): Promise<void> {
-  const savedLanguage = await loadSavedLanguage();
-  const deviceLanguageCodes = getLocales().map((locale) => locale.languageCode);
-
   await i18n.use(initReactI18next).init({
     resources,
-    lng: resolveLanguage(savedLanguage, deviceLanguageCodes),
+    lng: await savedLanguage(),
     fallbackLng: DEFAULT_LOCALE,
     supportedLngs: SUPPORTED_LOCALES,
     ns: NAMESPACES,

@@ -1,4 +1,9 @@
-import { placeListResponseSchema, placeMapResponseSchema } from '@paw-mall/shared';
+import {
+  KM_PER_MILE,
+  areaLookupResponseSchema,
+  placeListResponseSchema,
+  placeMapResponseSchema,
+} from '@paw-mall/shared';
 import postgres from 'postgres';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
@@ -36,6 +41,11 @@ beforeAll(async () => {
   await addPlace('at-plaza', 'Veterinaria de la Plaza', 50.3);
   await addPlace('plaza-4km', 'Estetica Cerca de la Plaza', 54, 'groomer');
   await addPlace('plaza-8km', 'Veterinaria Lejos de la Plaza', 58);
+  // A town, with businesses named after it within 25 miles (40 km) of it, and beyond.
+  await addArea('town', 'Pueblo Nombre Paw', 200);
+  await addPlace('in-town', 'Veterinaria del Centro', 200.5);
+  await addPlace('named-30km', 'Veterinaria Pueblo Nombre Paw', 230);
+  await addPlace('named-45km', 'Estetica Pueblo Nombre Paw', 245, 'groomer');
   await addArea('landmark', 'Plaza Prueba Paw', 50);
   // The same colonia name twice: the one near the user wins.
   await addArea('colonia', 'Colonia Gemela Paw', 1);
@@ -58,6 +68,31 @@ async function search(q: string, extra = '') {
 }
 
 describe('searching an area', () => {
+  it('also lists businesses named after the place, up to 25 miles away', async () => {
+    const result = await search('pueblo nombre paw');
+    expect(result.items.map((p) => [p.name, p.distanceKm])).toEqual([
+      ['Veterinaria del Centro', 0.5],
+      ['Veterinaria Pueblo Nombre Paw', 30],
+    ]);
+    // With a business word too, only the town's own circle counts.
+    const vets = await search('veterinaria en pueblo nombre paw');
+    expect(vets.items.map((p) => p.name)).toEqual(['Veterinaria del Centro']);
+  });
+
+  it('narrows a busy city or town to 3 miles, but not a quiet one or a landmark', async () => {
+    await addArea('municipality', 'Ciudad Llena Paw', 400);
+    for (let i = 0; i < 11; i += 1)
+      await addPlace(`busy-${i}`, `Veterinaria Llena ${i}`, 400.2 + i * 0.3);
+    const busy = await search('ciudad llena paw');
+    expect(busy.area).toMatchObject({ kind: 'municipality', radiusKm: 3 * KM_PER_MILE });
+    expect(busy.total).toBe(11);
+    // A radius the user picked (radius button, zoom) wins over the 3 mi rule.
+    const picked = await search('ciudad llena paw', '&areaRadiusKm=8&fixedAreaRadius=true');
+    expect(picked.area?.radiusKm).toBe(8);
+    // Pueblo Nombre Paw has one place nearby: the usual 5 km.
+    expect((await search('pueblo nombre paw')).area?.radiusKm).toBe(5);
+  });
+
   it('moves the search to the area, within 5 km of it, leaving the radius setting alone', async () => {
     const result = await search('plaza prueba paw');
     expect(result.area).toMatchObject({ name: 'Plaza Prueba Paw', kind: 'landmark', radiusKm: 5 });
@@ -172,6 +207,28 @@ describe('searching on the map', () => {
     expect(result.kind === 'places' && result.items.map((p) => p.name)).toEqual([
       'Veterinaria Junto al Usuario',
     ]);
+  });
+});
+
+describe('GET /v1/places/area', () => {
+  const lookup = async (q: string) =>
+    areaLookupResponseSchema.parse(
+      await (
+        await app.request(
+          `/v1/places/area?lat=${USER.lat}&lng=${USER.lng}&q=${encodeURIComponent(q)}`,
+          {},
+          testEnv,
+        )
+      ).json(),
+    );
+
+  it('names the place when the whole text is its name, and nothing otherwise', async () => {
+    expect((await lookup('PLAZA prueba paw')).area).toMatchObject({
+      name: 'Plaza Prueba Paw',
+      kind: 'landmark',
+    });
+    expect((await lookup('veterinaria en plaza prueba paw')).area).toBeNull();
+    expect((await lookup('tacos')).area).toBeNull();
   });
 });
 

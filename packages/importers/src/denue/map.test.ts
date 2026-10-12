@@ -11,6 +11,7 @@ import {
   dedupeChainBranches,
   formatPhone,
   isCrueltyLinked,
+  venueCategory,
   mapDenueRow,
   normalizeWebsite,
   parseEditionDate,
@@ -201,5 +202,16 @@ describe('helpers', () => {
 
   it('reads the edition date from the data dictionary', () => {
     expect(parseEditionDate('DICCIONARIO DE DATOS DENUE (20/05/2026),,,,')).toBe('2026-05-20');
+  });
+});
+
+describe('venueCategory', () => {
+  it('imports restaurants, cafés and hotels (not motels)', () => {
+    expect(venueCategory('722511')).toBe('restaurant');
+    expect(venueCategory('722514')).toBe('restaurant');
+    expect(venueCategory('722515')).toBe('cafe');
+    expect(venueCategory('721111')).toBe('lodging');
+    expect(venueCategory('721113')).toBeNull();
+    expect(venueCategory('465911')).toBeNull();
   });
 });

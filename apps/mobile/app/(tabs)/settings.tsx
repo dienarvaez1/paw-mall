@@ -3,10 +3,8 @@ import Constants from 'expo-constants';
 import type { ReactNode } from 'react';
 import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
 
-import { RADIUS_OPTIONS, toKm } from '@/features/settings/radius';
 import { UNIT_OPTIONS, useSettings } from '@/features/settings/settings-context';
 import { setLanguage } from '@/i18n';
-import { formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 
@@ -33,21 +31,6 @@ export default function SettingsScreen() {
         ))}
       </Section>
 
-      <Section title={t('settings.searchRadius')} hint={t('settings.searchRadiusHint')}>
-        {RADIUS_OPTIONS[settings.units].map((value) => {
-          // Shown in the selected unit; stored and sent to the API in km.
-          const km = toKm(value, settings.units);
-          return (
-            <Option
-              key={`${settings.units}-${value}`}
-              label={formatDistance(km, locale, settings.units)}
-              selected={Math.abs(settings.radiusKm - km) < 1e-6}
-              onPress={() => settings.setRadiusKm(km)}
-            />
-          );
-        })}
-      </Section>
-
       <Section title={t('settings.units')}>
         {UNIT_OPTIONS.map((unit) => (
           <Option
@@ -68,6 +51,12 @@ export default function SettingsScreen() {
             onPress={() => settings.setPetSpecies(species)}
           />
         ))}
+        <SwitchRow
+          label={t('settings.pet.onlyConfirmed')}
+          hint={t('settings.pet.onlyConfirmedHint')}
+          value={settings.onlyConfirmedPetPlaces}
+          onChange={settings.setOnlyConfirmedPetPlaces}
+        />
       </Section>
 
       {settings.petSpecies === 'dog' ? (
@@ -163,7 +152,7 @@ function SwitchRow(props: {
         value={props.value}
         onValueChange={props.onChange}
         accessibilityLabel={props.label}
-        trackColor={{ true: '#0f766e' }}
+        trackColor={{ true: '#46d2d1' }}
       />
     </View>
   );

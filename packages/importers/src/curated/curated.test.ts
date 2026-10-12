@@ -7,7 +7,7 @@ import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { databaseUrl } from '../db-url.ts';
 import { type CuratedPlace, dogSizeForWeightLimit, readCuratedFile } from './curated.ts';
-import { saveCuratedPlaces } from './save.ts';
+import { hideDenueCopies, saveCuratedPlaces } from './save.ts';
 
 const sample = () =>
   readCuratedFile(
@@ -107,6 +107,27 @@ describe('saveCuratedPlaces', () => {
       source: 'owner',
       max_dog_size: 'large',
     });
+  });
+
+  it('hides DENUE copies of curated restaurants and cafés', async () => {
+    const add = async (source: string, id: string, name: string, lng: number, slug: string) => {
+      const [row] = await sql<{ id: number }[]>`
+        INSERT INTO places (source, external_id, name, address, city, state, location)
+        VALUES (${source}, ${id}, ${name}, 'Calle 1', 'Ciudad', 'Estado',
+                ST_SetSRID(ST_MakePoint(${lng}, 2), 4326)::geography)
+        RETURNING id`;
+      await sql`INSERT INTO place_categories (place_id, category_id, source)
+                SELECT ${row!.id}, id, 'activity' FROM categories WHERE slug = ${slug}`;
+    };
+    await add('curated', 'test-curated-cafe', 'Cardinal Casa de Café', -131, 'cafe');
+    await add('denue', 'test-curated-copy', 'Cafe Cardinal', -131.0001, 'cafe');
+    await add('denue', 'test-curated-other', 'Tacos El Güero', -131.0001, 'restaurant');
+    await add('denue', 'test-curated-far', 'Cafe Cardinal', -131.01, 'cafe');
+    expect(await hideDenueCopies(sql, 'curated')).toBe(1);
+    const hidden = await sql`
+      SELECT external_id FROM places WHERE hidden_reason = 'duplicate_of_curated'
+        AND external_id LIKE 'test-curated-%'`;
+    expect(hidden.map((r) => r.external_id)).toEqual(['test-curated-copy']);
   });
 
   it('clears shopper answers when a curated policy changes', async () => {

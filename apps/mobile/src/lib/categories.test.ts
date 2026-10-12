@@ -4,6 +4,7 @@ import {
   CATEGORY_COLORS,
   isPetFilterCategory,
   isPetFriendlyCategory,
+  pinCategory,
   pinColor,
 } from './categories';
 
@@ -43,5 +44,13 @@ describe('isPetFilterCategory', () => {
     expect(isPetFilterCategory('park')).toBe(false);
     expect(isPetFriendlyCategory('park')).toBe(true);
     expect(isPetFilterCategory(null)).toBe(false);
+  });
+});
+
+describe('pinCategory', () => {
+  it('picks the icon by the selected chip, else the most specific category', () => {
+    expect(pinCategory(place('veterinarian', 'groomer'), 'groomer')).toBe('groomer');
+    expect(pinCategory(place('veterinarian', 'vet_hospital'), null)).toBe('vet_hospital');
+    expect(pinCategory(place(), null)).toBeNull();
   });
 });

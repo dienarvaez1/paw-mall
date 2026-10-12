@@ -7,23 +7,49 @@ import { Button } from '@/components/button';
 import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { EmptyState, ErrorState, Notice, SkeletonList } from '@/components/states';
+import { readsAsPlace, useExploreView } from '@/features/explore/explore-view';
 import { useUserLocation } from '@/features/location/location-context';
+import { useDebounced } from '@/lib/use-debounced';
 import { useSettings } from '@/features/settings/settings-context';
-import { formatDistance } from '@/i18n/format';
+import { formatCount, formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 import { phoneUrl } from '@/lib/links';
 import { useOpenDirections } from '@/lib/open-url';
 
+/** As on Explorar: wait for the typing to pause. */
+const SEARCH_DEBOUNCE_MS = 300;
+
 /**
- * Urgencias: the nearest vet hospitals and 24-hour vets from the device's location, open ones
- * first, each with call and directions up front. Most hours aren't confirmed yet, and each card
- * says so.
+ * Urgencias: the nearest vet hospitals and 24-hour vets from the device's location (or where the
+ * map was moved by hand, or the area the search box names), closest first, each with call and directions up front. The closest is
+ * highlighted only while "Mi ubicación" is on and no searched area moved the list (owner's
+ * rules). Most hours aren't confirmed yet, and each card says so.
  */
 export default function UrgentScreen() {
   const { t } = useAppTranslation();
   const location = useUserLocation();
-  const urgent = useUrgentPlaces(location.coords);
+  // The search box of Explorar and Pet-friendly: a place it names moves Urgencias there.
+  // A map moved by hand (or a tapped cluster) moves Urgencias' center there too (owner's rule).
+  // A text the user said is a business name, not the place, doesn't move Urgencias.
+  const { nearMe, text, focus, placeChoice } = useExploreView();
+  const searched = useDebounced(text.trim(), SEARCH_DEBOUNCE_MS);
+  const urgent = useUrgentPlaces(
+    focus ?? location.coords,
+    readsAsPlace(placeChoice, searched) === false ? '' : searched,
+  );
+  const area = urgent.data?.area ?? null;
+  const items = urgent.data?.items ?? [];
+  // Measured from the user ("Mi ubicación" on, no searched area, map not moved): only then is the
+  // first card highlighted and do distances read "0.7 km away" (owner's rules).
+  const fromUser = nearMe && !area && !focus;
+  const summaryArea = area
+    ? area.municipality
+      ? `${area.name}, ${area.municipality}`
+      : area.name
+    : (items[0]?.city ?? null);
+  const locale = useLocale();
+  const { units, radiusKm } = useSettings();
 
   return (
     <View className="flex-1 bg-white dark:bg-neutral-950">
@@ -38,13 +64,25 @@ export default function UrgentScreen() {
         <FlatList
           data={urgent.data.items}
           keyExtractor={(place) => String(place.id)}
-          renderItem={({ item, index }) => <UrgentCard place={item} first={index === 0} />}
+          renderItem={({ item, index }) => (
+            <UrgentCard place={item} first={fromUser && index === 0} away={fromUser} />
+          )}
           ItemSeparatorComponent={() => <View className="h-3" />}
           contentContainerClassName="p-4"
           ListHeaderComponent={
-            <Text className="pb-3 text-sm text-neutral-600 dark:text-neutral-300">
-              {t('urgent.intro')}
-            </Text>
+            // The same summary as Explorar's: around a searched area ("8 lugares a menos de 3 mi
+            // de Xochimilco"), or around the user or a moved map, named by the closest place's
+            // city ("7 lugares a menos de 5 km de Tlalnepantla de Baz").
+            summaryArea && items.length > 0 ? (
+              <Text className="pb-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
+                {t('places.areaCount', {
+                  count: items.length,
+                  total: formatCount(items.length, locale),
+                  distance: formatDistance(area?.radiusKm ?? radiusKm, locale, units),
+                  area: summaryArea,
+                })}
+              </Text>
+            ) : null
           }
           ListEmptyComponent={<EmptyState title={t('urgent.none')} hint={t('urgent.noneHint')} />}
           ListFooterComponent={
@@ -60,7 +98,7 @@ export default function UrgentScreen() {
   );
 }
 
-function UrgentCard({ place, first }: { place: Place; first: boolean }) {
+function UrgentCard({ place, first, away }: { place: Place; first: boolean; away: boolean }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const { units } = useSettings();
@@ -78,7 +116,11 @@ function UrgentCard({ place, first }: { place: Place; first: boolean }) {
         <Text className="flex-1 text-lg font-bold text-neutral-900 dark:text-white">{name}</Text>
         {place.distanceKm !== null ? (
           <Text className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
-            {t('places.distanceKm', { distance: formatDistance(place.distanceKm, locale, units) })}
+            {away
+              ? t('places.distanceKm', {
+                  distance: formatDistance(place.distanceKm, locale, units),
+                })
+              : formatDistance(place.distanceKm, locale, units)}
           </Text>
         ) : null}
       </View>
