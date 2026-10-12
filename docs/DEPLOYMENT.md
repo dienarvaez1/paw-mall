@@ -785,7 +785,7 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
 - **Status:** In progress
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm test`: 257 tests
-  - [ ] Imports run on all states (volumes and times below)
+  - [x] Imports run on all states (volumes and times below)
   - [ ] Done-when check on a phone
 - **Notes:**
   - **DENUE:** `STATE_FILES` lists all 32 states (INEGI files `denue_NN_csv.zip`; only Estado de
@@ -808,6 +808,7 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
     | `places:osm`                                   | 275 places (137 dog parks, 125 parks, 15 venues; 11 say no); 10 DENUE copies hidden                             | 47 s                      |
     | `places:osm-hours`                             | 1,747 places with OpenStreetMap hours (was 687)                                                                 | 6 s                       |
     | `places:chains`                                | City Express on 63 branches (was 7)                                                                             | <1 s                      |
+    | `places:check-websites`                        | 16,933 sites: 6,965 working, 256 blocking checks, 1,138 unreachable, 8,574 dead (hidden); hours for 171 places; 125 venues say pets are welcome | 4,389 s (73 min)          |
     | Database: 813,565 places, 697 MB (was 281 MB). |
   - **Query speed:** after the import, Pet-friendly with "sin confirmar" around Guadalajara (16 km)
     took 2.2 s; `ANALYZE` brought it to 0.14 s (CDMX 0.63 s). `places:import` now runs `ANALYZE
