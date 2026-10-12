@@ -38,7 +38,7 @@ checked) · **Blocked**.
 | 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done        | 2026-10-10 | 2026-10-10 |
 | 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done        | 2026-10-10 | 2026-10-11 |
 | 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done        | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | —   | In progress | 2026-10-11 | —          |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | In progress | 2026-10-11 | —          |
 
 ## Pending owner reviews
 
@@ -781,7 +781,7 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
 - **Done when:** a search for a place in a newly covered state (e.g. "Guadalajara",
   "Monterrey", "Mérida") moves the map there with its pet businesses and pet-friendly places, and
   this log records the data volumes and import times.
-- **Branch / PR:** `phase-10/all-mexico` / —
+- **Branch / PR:** `phase-10/all-mexico` / #14
 - **Status:** In progress
 - **Checks:**
   - [ ] `pnpm lint`, `pnpm typecheck`, `pnpm test`
@@ -830,4 +830,4 @@ Play readiness").
 | 2026-10-10 | Phase 9 started            | #12 |
 | 2026-10-11 | Phase 8 merged (`3673c52`) | #11 |
 | 2026-10-11 | Phase 9 merged (`faaaf68`) | #12 |
-| 2026-10-11 | Phase 10 started           | —   |
+| 2026-10-11 | Phase 10 started           | #14 |
