@@ -22,7 +22,6 @@ import {
 import { apiPost } from '@/api/client';
 import { usePlace } from '@/api/hooks';
 import { BUTTON_HIT_SLOP, Button } from '@/components/button';
-import { KEYBOARD_BAR_ID } from '@/components/keyboard-bar';
 import { usePlaceName } from '@/components/place-row';
 import { ErrorState } from '@/components/states';
 import {
@@ -125,7 +124,6 @@ export default function ClaimScreen() {
         <Section title={t('places.claim.storeSection')}>
           <Field label={t('places.claim.phone')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={phone}
               onChangeText={setPhone}
@@ -135,7 +133,6 @@ export default function ClaimScreen() {
           </Field>
           <Field label={t('places.claim.website')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={website}
               onChangeText={setWebsite}
@@ -192,7 +189,6 @@ export default function ClaimScreen() {
         <Section title={t('places.claim.contactSection')} hint={t('places.claim.contactHint')}>
           <Field label={t('places.claim.contactName')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={contactName}
               onChangeText={setContactName}
@@ -201,7 +197,6 @@ export default function ClaimScreen() {
           </Field>
           <Field label={t('places.claim.contact')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={contact}
               onChangeText={setContact}
@@ -300,7 +295,6 @@ function DayRow({
       {!value.closed ? (
         <View className="flex-row gap-3">
           <TextInput
-            inputAccessoryViewID={KEYBOARD_BAR_ID}
             className={`${INPUT} flex-1`}
             value={value.open}
             onChangeText={(open) => onChange({ ...value, open })}
@@ -309,7 +303,6 @@ function DayRow({
             keyboardType="numbers-and-punctuation"
           />
           <TextInput
-            inputAccessoryViewID={KEYBOARD_BAR_ID}
             className={`${INPUT} flex-1`}
             value={value.close}
             onChangeText={(close) => onChange({ ...value, close })}
@@ -363,7 +356,6 @@ function PetPolicyFields({
           </View>
           <Field label={t('places.claim.petMaxWeight')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={value.maxWeightKg}
               onChangeText={(maxWeightKg) => set({ maxWeightKg })}
@@ -398,7 +390,6 @@ function PetPolicyFields({
       </View>
       <Field label={t('places.claim.petRules')}>
         <TextInput
-          inputAccessoryViewID={KEYBOARD_BAR_ID}
           className={`${INPUT} py-2`}
           value={value.rules}
           onChangeText={(rules) => set({ rules })}
