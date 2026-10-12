@@ -76,6 +76,14 @@ const MAP_FIT_MS = 500;
 const HAND_MOVE_GRACE_MS = 2500;
 /** Extra time after an automatic move during which region changes are still the app's own. */
 const AUTO_MOVE_GRACE_MS = 400;
+
+/**
+ * Two radii read from the map are the same zoom: within 5% (at least 0.05 km). The map rounds the
+ * view to the screen's shape, so a fitted circle never reads back exactly.
+ */
+function sameRadius(aKm: number, bKm: number): boolean {
+  return Math.abs(aKm - bKm) < Math.max(0.05, 0.05 * Math.max(aKm, bKm));
+}
 /** The radius circle in the brand teal (teal-700 / teal-400), lightly filled. */
 const RADIUS_COLORS = {
   light: { stroke: '#0f766e', fill: 'rgba(15, 118, 110, 0.10)' },
@@ -444,13 +452,25 @@ function PlacesMap({
   // move goes through moveMap, and a finger on the map marks the rest as the user's.
   const autoMoveUntil = useRef(0);
   const touch = useRef({ down: false, liftedAt: 0 });
+  // Where the last automatic move went: a map busy drawing pins can report the end of that move
+  // late, and it must still not count as the user's zoom (it would save an off-preset radius).
+  const autoTarget = useRef<Region | null>(null);
   const moveMap = useCallback((region: Region) => {
     autoMoveUntil.current = Date.now() + MAP_FIT_MS + AUTO_MOVE_GRACE_MS;
+    autoTarget.current = region;
     mapRef.current?.animateToRegion(region, MAP_FIT_MS);
   }, []);
-  const movedByHand = useCallback((isGesture: boolean | undefined) => {
+  const movedByHand = useCallback((isGesture: boolean | undefined, next: Region) => {
     const now = Date.now();
     if (now < autoMoveUntil.current) return false;
+    const target = autoTarget.current;
+    if (
+      target &&
+      !isAwayFrom(next, { lat: target.latitude, lng: target.longitude }) &&
+      sameRadius(radiusForRegion(next, MAX_RADIUS_KM), radiusForRegion(target, MAX_RADIUS_KM))
+    ) {
+      return false;
+    }
     return (
       isGesture === true || touch.current.down || now - touch.current.liftedAt < HAND_MOVE_GRACE_MS
     );
@@ -624,11 +644,12 @@ function PlacesMap({
           // Only the user's own zooms and pans: the map's own moves (fitting a circle, a cluster,
           // the location button) keep the radius as it is.
           // A pan alone leaves the scale (and so the radius) as it was.
-          if (movedByHand(details?.isGesture)) {
+          if (movedByHand(details?.isGesture, next)) {
+            autoTarget.current = null;
             // Zoomed: the radius exactly as zoomed, even between the presets. Panned: the circle
             // follows to the map's new center. Both maps take it (owner's rules).
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
-            const zoomed = Math.abs(handRadiusKm - circle.radiusKm) >= 0.05;
+            const zoomed = !sameRadius(handRadiusKm, circle.radiusKm);
             const panned = !searchedArea && isAwayFrom(next, circle.center);
             // Zoomed around a searched area: its circle takes the zoomed radius (owner's rule).
             if (searchedArea && zoomed) {
