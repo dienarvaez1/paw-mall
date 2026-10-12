@@ -681,7 +681,7 @@ a task (and a note in the phase that applies it).
   OpenStreetMap is credited on its places.
 - **Branch / PR:** `phase-9/pet-friendly-scale` / #12, stacked on Phase 8 (#11); rebased onto
   `main` after #11 merged.
-- **Status:** Done, squash-merged 2026-10-11 on the owner's request, right after Phase 8. The
+- **Status:** Done, squash-merged 2026-10-11 (`faaaf68`) on the owner's request, right after Phase 8. The
   done-when check wasn't run as a separate step; the owner used the app on a phone throughout.
 - **Also on this branch (owner's UI requests, 2026-10-11):** radius only on the maps (gone from
   Ajustes) and shared by Explorar, Pet-friendly and Urgencias; every launch starts at 3 mi (5 km
