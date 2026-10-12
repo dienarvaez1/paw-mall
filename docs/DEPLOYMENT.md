@@ -36,8 +36,9 @@ checked) · **Blocked**.
 | 5     | Trust                 | `phase-5/trust`              | #6  | Done        | 2026-10-05 | 2026-10-06 |
 | 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done        | 2026-10-10 | 2026-10-10 |
 | 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done        | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | In progress | 2026-10-10 | —          |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | In progress | 2026-10-10 | —          |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done        | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done        | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done        | 2026-10-11 | 2026-10-12 |
 
 ## Pending owner reviews
 
@@ -773,6 +774,49 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
     restaurants and cafés; consider limiting website checks to pet businesses before running them.
   - Answers from abusive phones: no rate limit beyond one answer per place and phone.
 
+### Phase 10 — All of Mexico
+
+- **Scope:** every data source extended from the nine states to all 32 (owner's request,
+  2026-10-11: "backfill data to cover all mexico").
+- **Done when:** a search for a place in a newly covered state (e.g. "Guadalajara",
+  "Monterrey", "Mérida") moves the map there with its pet businesses and pet-friendly places, and
+  this log records the data volumes and import times.
+- **Branch / PR:** `phase-10/all-mexico` / #14
+- **Status:** Done, squash-merged 2026-10-12 on the owner's request ("merge all code up to this
+  point"). The done-when check wasn't run as a separate step; the owner merged after the import.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm test`: 257 tests
+  - [x] Imports run on all states (volumes and times below)
+  - [ ] Done-when check on a phone
+- **Notes:**
+  - **DENUE:** `STATE_FILES` lists all 32 states (INEGI files `denue_NN_csv.zip`; only Estado de
+    México is split, `denue_15_1/2`). The other 23 states' zips add about 400 MB to the cache.
+  - **OpenStreetMap:** both Overpass queries use Mexico's boundary
+    (`area["ISO3166-1"="MX"][admin_level=2]`) instead of a box, so no US or Guatemalan elements.
+    Dog places snapshot: 187 → 295 elements; opening hours snapshot: 5,378 elements, 4,561 with
+    readable hours (2026-10-12).
+  - **Wikidata landmarks:** 12 boxes over Mexico (one box times out); `STATE_IDS` has all 32
+    states with DENUE's state names. Snapshot: 1,102 → 2,065 landmarks.
+  - **Overture:** the download box covers all of Mexico (it also takes in some of the US and
+    Guatemala, harmless: Overture only adds phones and websites to our own places).
+  - **Import run on dev data (2026-10-11), in order:**
+    | Step                                           | Result                                                                                                          | Time                      |
+    | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
+    | `places:import`                                | 813,254 places (was 336,588); 573 cruelty-linked names left out                                                 | 128 s                     |
+    | `places:areas`                                 | 80,922 search areas (71,111 colonias, 3,646 towns, 2,476 municipalities, 3,689 landmarks) from 6.1 M DENUE rows | 60 s                      |
+    | `places:enrich-overture`                       | 44,018 pet-type Overture places; 8,284 matched; 3,292 phones, 1,553 websites saved                              | 407 s (download included) |
+    | `places:curated`                               | 36 places; 9 DENUE copies hidden                                                                                | 38 s                      |
+    | `places:osm`                                   | 275 places (137 dog parks, 125 parks, 15 venues; 11 say no); 10 DENUE copies hidden                             | 47 s                      |
+    | `places:osm-hours`                             | 1,747 places with OpenStreetMap hours (was 687)                                                                 | 6 s                       |
+    | `places:chains`                                | City Express on 63 branches (was 7)                                                                             | <1 s                      |
+    | `places:check-websites`                        | 16,933 sites: 6,965 working, 256 blocking checks, 1,138 unreachable, 8,574 dead (hidden); hours for 171 places; 125 venues say pets are welcome | 4,389 s (73 min)          |
+    | Database: 813,565 places, 697 MB (was 281 MB). |
+  - **Query speed:** after the import, Pet-friendly with "sin confirmar" around Guadalajara (16 km)
+    took 2.2 s; `ANALYZE` brought it to 0.14 s (CDMX 0.63 s). `places:import` now runs `ANALYZE
+places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tijuana") resolve
+    to their municipality; the map query answers in 0.1 s.
+- **Follow-ups:** —
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -801,3 +845,7 @@ Play readiness").
 | 2026-10-10 | Phase 7 merged (`146991b`) | #9  |
 | 2026-10-10 | Phase 8 started            | #11 |
 | 2026-10-10 | Phase 9 started            | #12 |
+| 2026-10-11 | Phase 8 merged (`3673c52`) | #11 |
+| 2026-10-11 | Phase 9 merged (`faaaf68`) | #12 |
+| 2026-10-11 | Phase 10 started           | #14 |
+| 2026-10-12 | Phase 10 merged            | #14 |

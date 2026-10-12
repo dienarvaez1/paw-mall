@@ -30,7 +30,8 @@ Principles:
 
 Region: the same six states as Ferre Mall (Ciudad de México, Estado de México, Morelos, Hidalgo,
 Puebla, Tlaxcala), so the data work is known, plus Guerrero, Michoacán and Querétaro, added on
-2026-10-05 when the owner extended the search radius to 100 miles (160 km).
+2026-10-05 when the owner extended the search radius to 100 miles (160 km). All of Mexico from
+Phase 10 (owner's decision, 2026-10-11).
 
 ## Relationship to Ferre Mall
 
@@ -191,6 +192,13 @@ before starting the next. No deploys in any phase until the owner decides.
    - Done when: a name search in Pet-friendly finds an unanswered restaurant, two phones answering
      yes make it appear under Restaurantes with "Según usuarios de Paw Mall", and OpenStreetMap is
      credited on its places.
+10. **All of Mexico (added 2026-10-11).** Every data source extended from the nine states to all
+    32: DENUE pet businesses and restaurants, cafés and hotels; search areas (colonias, cities,
+    Wikidata landmarks); OpenStreetMap dog places and opening hours; Overture phones and websites;
+    the website check.
+    - Done when: a search for a place in a newly covered state (e.g. "Guadalajara", "Monterrey",
+      "Mérida") moves the map there with its pet businesses and pet-friendly places, and the
+      rollout log records the data volumes and import times.
 
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when
@@ -231,7 +239,7 @@ Copy these rules into `CLAUDE.md` at the repo root.
 | ------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
 | Repo visibility                 | Private                                      | Public exposes plans and data work                                                   |
 | App name and bundle ID          | "Paw Mall" as a working name                 | Hard to change after store release                                                   |
-| Region                          | Ferre Mall's six states + Gro., Mich., Qro.  | Data volume and the map center                                                       |
+| Region                          | All of Mexico (from Phase 10)                | Data volume and the map center                                                       |
 | Shared code with Ferre Mall     | Copy now, extract a package later            | Avoids coupling two young projects                                                   |
 | Who uses it                     | Pet owners, no login                         | Owner claims and policy confirmations work without accounts; reviews would need them |
 | Pet-friendly coverage at launch | Curated CDMX restaurants and lodging         | Quality over breadth; the data is user-sourced                                       |
