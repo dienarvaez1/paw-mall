@@ -93,10 +93,14 @@ describe('wikidataLandmarkAreas', () => {
     const list = JSON.parse(
       readFileSync(join(import.meta.dirname, '../../data/landmarks-wikidata.json'), 'utf8'),
     ) as WikidataLandmark[];
-    expect(list.length).toBeGreaterThan(500);
+    expect(list.length).toBeGreaterThan(1500);
+    // All of Mexico (Phase 10): inside the country's box, and every one with a state.
     for (const l of list) {
-      expect(l.lat).toBeGreaterThan(16.3);
-      expect(l.lat).toBeLessThan(21.7);
+      expect(l.lat).toBeGreaterThan(14.5);
+      expect(l.lat).toBeLessThan(32.8);
+      expect(l.lng).toBeGreaterThan(-118.5);
+      expect(l.lng).toBeLessThan(-86.5);
+      expect(l.state).toBeTruthy();
       expect(l.name).not.toMatch(/^Q\d+$/);
     }
   });

@@ -7,7 +7,14 @@
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { STATE_IDS, adminIds, landmarksQuery, parseLandmarks, statesQuery } from './wikidata.ts';
+import {
+  MEXICO_BOXES,
+  STATE_IDS,
+  adminIds,
+  landmarksQuery,
+  parseLandmarks,
+  statesQuery,
+} from './wikidata.ts';
 
 const ENDPOINT = 'https://query.wikidata.org/sparql';
 const USER_AGENT = 'PawMall/0.1 (development; landmark search areas)';
@@ -31,7 +38,12 @@ async function sparql(query: string): Promise<Bindings> {
   return ((await response.json()) as { results: { bindings: Bindings } }).results.bindings;
 }
 
-const rows = await sparql(landmarksQuery());
+const rows: Bindings = [];
+for (const box of MEXICO_BOXES) {
+  const part = await sparql(landmarksQuery(box));
+  console.log(`Box ${box.join(',')}: ${part.length} rows`);
+  rows.push(...part);
+}
 const admins = adminIds(rows);
 const stateOf = new Map<string, string>();
 for (let i = 0; i < admins.length; i += 200) {

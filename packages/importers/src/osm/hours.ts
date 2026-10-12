@@ -1,20 +1,21 @@
 // Weekly hours from OpenStreetMap's opening_hours tag, matched to places already listed:
-// restaurants, cafés, vets and pet stores across the supported states. A match is
+// restaurants, cafés, vets and pet stores across Mexico. A match is
 // the same kind of place within MATCH_METERS with a similar name (pg_trgm). © OpenStreetMap
 // contributors, ODbL 1.0; the app credits the hours' source. Snapshot: data/osm-hours.json.
 import type { CategorySlug, PlaceHours } from '@paw-mall/shared';
 import type postgres from 'postgres';
 
 import { parseOpeningHours } from '../hours/opening-hours.ts';
-import type { OsmElement } from './osm.ts';
+import { MEXICO_AREA, type OsmElement } from './osm.ts';
 
-/** The supported states: south, west, north, east. */
-const REGION_BBOX = '16.3,-103.8,21.7,-97.0';
-export const OSM_HOURS_QUERY = `[out:json][timeout:120];
+/** All of Mexico (Phase 10), by the country's boundary (see osm.ts). */
+const REGION = 'area.mx';
+export const OSM_HOURS_QUERY = `[out:json][timeout:300];
+${MEXICO_AREA}
 (
-  nwr["amenity"~"^(restaurant|fast_food|cafe|ice_cream)$"]["opening_hours"]["name"](${REGION_BBOX});
-  nwr["amenity"="veterinary"]["opening_hours"]["name"](${REGION_BBOX});
-  nwr["shop"~"^(pet|pet_grooming)$"]["opening_hours"]["name"](${REGION_BBOX});
+  nwr["amenity"~"^(restaurant|fast_food|cafe|ice_cream)$"]["opening_hours"]["name"](${REGION});
+  nwr["amenity"="veterinary"]["opening_hours"]["name"](${REGION});
+  nwr["shop"~"^(pet|pet_grooming)$"]["opening_hours"]["name"](${REGION});
 );
 out tags center;`;
 export const HOURS_KEPT_TAGS = ['name', 'amenity', 'shop', 'opening_hours'] as const;

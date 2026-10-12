@@ -21,10 +21,10 @@ const STAC_CATALOG = 'https://stac.overturemaps.org/catalog.json';
 const PLACES = (release: string) =>
   `s3://overturemaps-us-west-2/release/${release}/theme=places/type=place/*`;
 /**
- * A box around the states of docs/PLAN.md: CDMX, Edomex, Morelos, Hidalgo, Puebla, Tlaxcala,
- * Guerrero, Michoacán and Querétaro.
+ * A box around all of Mexico (Phase 10). It also takes in some of the US and Guatemala, which is
+ * harmless: Overture places only add phones and websites to our own places, all in Mexico.
  */
-const REGION = { minLng: -103.8, maxLng: -96.7, minLat: 16.3, maxLat: 21.7 };
+const REGION = { minLng: -118.5, maxLng: -86.7, minLat: 14.5, maxLat: 32.8 };
 const BATCH_SIZE = 500;
 
 const { values: args } = parseArgs({

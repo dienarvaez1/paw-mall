@@ -1,6 +1,6 @@
 // Landmarks from Wikidata (CC0): museums, metro stations, churches, universities,
-// archaeological sites, monuments, parks, plazas, stadiums, airports… in the nine states of
-// docs/PLAN.md, with their coordinates and Spanish names and aliases. Only items with a Spanish
+// archaeological sites, monuments, parks, plazas, stadiums, airports… across Mexico,
+// with their coordinates and Spanish names and aliases. Only items with a Spanish
 // Wikipedia article are kept (a notability filter).
 // The keyword list itself, not the package entry: plain Node can't resolve the package's
 // extensionless imports, and this file only imports types.
@@ -8,7 +8,7 @@ import { detectCategory } from '../../../shared/src/search-keywords.ts';
 
 import { type SearchArea, nameKey } from './build.ts';
 
-/** Wikidata ids of the nine states. */
+/** Wikidata ids of Mexico's 32 states, with the state names DENUE uses. */
 export const STATE_IDS: Record<string, string> = {
   Q1489: 'Ciudad de México',
   Q82112: 'México',
@@ -19,6 +19,29 @@ export const STATE_IDS: Record<string, string> = {
   Q60158: 'Guerrero',
   Q79861: 'Michoacán de Ocampo',
   Q79754: 'Querétaro',
+  Q79952: 'Aguascalientes',
+  Q58731: 'Baja California',
+  Q46508: 'Baja California Sur',
+  Q80908: 'Campeche',
+  Q53079: 'Coahuila de Zaragoza',
+  Q61309: 'Colima',
+  Q60123: 'Chiapas',
+  Q655: 'Chihuahua',
+  Q79918: 'Durango',
+  Q46475: 'Guanajuato',
+  Q13160: 'Jalisco',
+  Q79920: 'Nayarit',
+  Q15282: 'Nuevo León',
+  Q34110: 'Oaxaca',
+  Q80245: 'Quintana Roo',
+  Q78980: 'San Luis Potosí',
+  Q80252: 'Sinaloa',
+  Q46422: 'Sonora',
+  Q80914: 'Tabasco',
+  Q80007: 'Tamaulipas',
+  Q60130: 'Veracruz de Ignacio de la Llave',
+  Q60176: 'Yucatán',
+  Q80269: 'Zacatecas',
 };
 
 /** Kinds of landmark, as Wikidata labels them in Spanish. */
@@ -85,18 +108,34 @@ export type WikidataLandmark = {
   lng: number;
 };
 
+/** A box [west, south, east, north] to query Wikidata in. */
+export type Box = [number, number, number, number];
+
 /**
- * Landmark-type items with coordinates in the nine states' box, each with its direct "located in"
- * (P131) places. Which state they're in comes from statesQuery: following P131 to any depth for
- * every item at once times out on Wikidata's servers.
+ * Mexico in 12 boxes (4 × 3): one box for the whole country times out on Wikidata's servers.
+ * Boxes overlap the borders; items outside Mexico have no state and are dropped.
  */
-export function landmarksQuery(): string {
+export const MEXICO_BOXES: Box[] = [-118.5, -110.5, -102.5, -94.5].flatMap((west) =>
+  [14.5, 20.6, 26.7].map((south): Box => [
+    west,
+    south,
+    west + 8,
+    Math.round((south + 6.1) * 10) / 10,
+  ]),
+);
+
+/**
+ * Landmark-type items with coordinates in a box, each with its direct "located in" (P131)
+ * places. Which state they're in comes from statesQuery: following P131 to any depth for every
+ * item at once times out on Wikidata's servers.
+ */
+export function landmarksQuery([west, south, east, north]: Box): string {
   return `SELECT ?item ?itemLabel ?typeLabel ?coord
     (GROUP_CONCAT(DISTINCT ?admin; separator="|") AS ?admins)
     (GROUP_CONCAT(DISTINCT ?alias; separator="|") AS ?aliases) WHERE {
   SERVICE wikibase:box { ?item wdt:P625 ?coord .
-    bd:serviceParam wikibase:cornerSouthWest "Point(-103.8 16.3)"^^geo:wktLiteral .
-    bd:serviceParam wikibase:cornerNorthEast "Point(-96.7 21.7)"^^geo:wktLiteral . }
+    bd:serviceParam wikibase:cornerSouthWest "Point(${west} ${south})"^^geo:wktLiteral .
+    bd:serviceParam wikibase:cornerNorthEast "Point(${east} ${north})"^^geo:wktLiteral . }
   ?item wdt:P31 ?type . ?type rdfs:label ?tl .
   FILTER(lang(?tl) = "es" && STR(?tl) IN (${LANDMARK_TYPES.map((t) => JSON.stringify(t)).join(', ')}))
   ?es schema:about ?item ; schema:isPartOf <https://es.wikipedia.org/> .
@@ -107,7 +146,7 @@ export function landmarksQuery(): string {
 } GROUP BY ?item ?itemLabel ?typeLabel ?coord`;
 }
 
-/** Which of the nine states each "located in" place belongs to (a short P131 chain from each). */
+/** Which state each "located in" place belongs to (a short P131 chain from each). */
 export function statesQuery(adminIds: string[]): string {
   return `SELECT ?admin ?state WHERE {
   VALUES ?admin { ${adminIds.map((id) => `wd:${id}`).join(' ')} }
@@ -133,7 +172,7 @@ export function adminIds(bindings: Binding[]): string[] {
 
 /**
  * One landmark per Wikidata item, merging its types, with the state its "located in" places
- * belong to (`stateOf`: place id → state name). Items outside the nine states, or without a
+ * belong to (`stateOf`: place id → state name). Items outside Mexico's states, or without a
  * Spanish name, are dropped.
  */
 export function parseLandmarks(

@@ -36,8 +36,9 @@ checked) · **Blocked**.
 | 5     | Trust                 | `phase-5/trust`              | #6  | Done        | 2026-10-05 | 2026-10-06 |
 | 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done        | 2026-10-10 | 2026-10-10 |
 | 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done        | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | In progress | 2026-10-10 | —          |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | In progress | 2026-10-10 | —          |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done        | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done        | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | —   | In progress | 2026-10-11 | —          |
 
 ## Pending owner reviews
 
@@ -773,6 +774,32 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
     restaurants and cafés; consider limiting website checks to pet businesses before running them.
   - Answers from abusive phones: no rate limit beyond one answer per place and phone.
 
+### Phase 10 — All of Mexico
+
+- **Scope:** every data source extended from the nine states to all 32 (owner's request,
+  2026-10-11: "backfill data to cover all mexico").
+- **Done when:** a search for a place in a newly covered state (e.g. "Guadalajara",
+  "Monterrey", "Mérida") moves the map there with its pet businesses and pet-friendly places, and
+  this log records the data volumes and import times.
+- **Branch / PR:** `phase-10/all-mexico` / —
+- **Status:** In progress
+- **Checks:**
+  - [ ] `pnpm lint`, `pnpm typecheck`, `pnpm test`
+  - [ ] Imports run on all states (volumes and times below)
+  - [ ] Done-when check on a phone
+- **Notes:**
+  - **DENUE:** `STATE_FILES` lists all 32 states (INEGI files `denue_NN_csv.zip`; only Estado de
+    México is split, `denue_15_1/2`). The other 23 states' zips add about 400 MB to the cache.
+  - **OpenStreetMap:** both Overpass queries use Mexico's boundary
+    (`area["ISO3166-1"="MX"][admin_level=2]`) instead of a box, so no US or Guatemalan elements.
+    Dog places snapshot: 187 → 295 elements; opening hours snapshot: 5,378 elements, 4,561 with
+    readable hours (2026-10-12).
+  - **Wikidata landmarks:** 12 boxes over Mexico (one box times out); `STATE_IDS` has all 32
+    states with DENUE's state names. Snapshot: 1,102 → 2,065 landmarks.
+  - **Overture:** the download box covers all of Mexico (it also takes in some of the US and
+    Guatemala, harmless: Overture only adds phones and websites to our own places).
+- **Follow-ups:** —
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -801,3 +828,6 @@ Play readiness").
 | 2026-10-10 | Phase 7 merged (`146991b`) | #9  |
 | 2026-10-10 | Phase 8 started            | #11 |
 | 2026-10-10 | Phase 9 started            | #12 |
+| 2026-10-11 | Phase 8 merged (`3673c52`) | #11 |
+| 2026-10-11 | Phase 9 merged (`faaaf68`) | #12 |
+| 2026-10-11 | Phase 10 started           | —   |

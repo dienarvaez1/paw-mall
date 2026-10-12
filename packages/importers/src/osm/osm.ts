@@ -1,4 +1,4 @@
-// OpenStreetMap places with a dog rule in the supported states: dog parks, and parks and venues
+// OpenStreetMap places with a dog rule across Mexico: dog parks, and parks and venues
 // tagged dog=yes|leashed|designated|no. © OpenStreetMap contributors, under the Open Database License
 // (ODbL 1.0): credited wherever shown, and kept in their own rows (source 'osm'), never merged
 // into another source's records. The snapshot is data/osm-dogs.json (`pnpm places:osm`).
@@ -7,14 +7,16 @@ import type { CategorySlug } from '@paw-mall/shared';
 import { isCrueltyLinked } from '../denue/map.ts';
 
 export const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
-/** The supported states' bounding box: south, west, north, east (as in hours.ts). */
-const REGION_BBOX = '16.3,-103.8,21.7,-97.0';
-export const OVERPASS_QUERY = `[out:json][timeout:90];
+/** All of Mexico (Phase 10): the country's boundary, not a box, so no US or Guatemalan places. */
+export const MEXICO_AREA = 'area["ISO3166-1"="MX"][admin_level=2]->.mx;';
+const REGION = 'area.mx';
+export const OVERPASS_QUERY = `[out:json][timeout:180];
+${MEXICO_AREA}
 (
-  nwr["leisure"="dog_park"](${REGION_BBOX});
-  nwr["dog"]["leisure"~"^(park|garden|nature_reserve)$"](${REGION_BBOX});
-  nwr["dog"]["amenity"~"^(restaurant|fast_food|cafe|ice_cream|bar|pub)$"](${REGION_BBOX});
-  nwr["dog"]["tourism"~"^(hotel|hostel|guest_house|motel|museum|attraction|zoo)$"](${REGION_BBOX});
+  nwr["leisure"="dog_park"](${REGION});
+  nwr["dog"]["leisure"~"^(park|garden|nature_reserve)$"](${REGION});
+  nwr["dog"]["amenity"~"^(restaurant|fast_food|cafe|ice_cream|bar|pub)$"](${REGION});
+  nwr["dog"]["tourism"~"^(hotel|hostel|guest_house|motel|museum|attraction|zoo)$"](${REGION});
 );
 out tags center;`;
 

@@ -46,7 +46,7 @@ if (args.refresh) {
   }));
   const snapshot: Snapshot = {
     about:
-      'OpenStreetMap opening_hours of restaurants, cafés, vets and pet stores in the supported states. © OpenStreetMap contributors, ODbL 1.0 (https://www.openstreetmap.org/copyright). Refresh with `pnpm places:osm-hours --refresh`.',
+      'OpenStreetMap opening_hours of restaurants, cafés, vets and pet stores across Mexico. © OpenStreetMap contributors, ODbL 1.0 (https://www.openstreetmap.org/copyright). Refresh with `pnpm places:osm-hours --refresh`.',
     fetchedOn: new Date().toISOString().slice(0, 10),
     elements: slim.sort((a, b) => `${a.type}${a.id}`.localeCompare(`${b.type}${b.id}`)),
   };
