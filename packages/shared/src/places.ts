@@ -82,6 +82,8 @@ const radiusKm = z.coerce.number().positive().max(MAX_RADIUS_KM).default(DEFAULT
 /** Contact filters from Settings: "true" keeps only places that have it. */
 const placeFilters = {
   category: categorySlugSchema.optional(),
+  /** Only places in a category of this group (Explorar: pet businesses; Pet-friendly: venues). */
+  group: z.enum(CATEGORY_GROUPS).optional(),
   withPhone: z.stringbool().optional(),
   withWebsite: z.stringbool().optional(),
   withSocial: z.stringbool().optional(),

@@ -73,6 +73,10 @@ function filterConditions(filters: PlaceFilters): SQL[] {
       ? sql`EXISTS (SELECT 1 FROM place_categories pc JOIN categories c ON c.id = pc.category_id
                     WHERE pc.place_id = p.id AND c.slug = ${filters.category})`
       : null,
+    filters.group
+      ? sql`EXISTS (SELECT 1 FROM place_categories pc JOIN categories c ON c.id = pc.category_id
+                    WHERE pc.place_id = p.id AND c."group" = ${filters.group})`
+      : null,
     filters.withPhone ? sql`(p.phone IS NOT NULL AND p.phone <> '')` : null,
     filters.withWebsite ? liveWebsiteSql : null,
     filters.withSocial ? sql`(p.social_url IS NOT NULL)` : null,
