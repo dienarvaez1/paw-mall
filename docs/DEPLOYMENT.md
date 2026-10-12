@@ -782,7 +782,7 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
   "Monterrey", "Mérida") moves the map there with its pet businesses and pet-friendly places, and
   this log records the data volumes and import times.
 - **Branch / PR:** `phase-10/all-mexico` / #14
-- **Status:** Done, squash-merged 2026-10-12 on the owner's request ("merge all code up to this
+- **Status:** Done, squash-merged 2026-10-12 (`d7384e2`) on the owner's request ("merge all code up to this
   point"). The done-when check wasn't run as a separate step; the owner merged after the import.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm test`: 257 tests
@@ -848,4 +848,4 @@ Play readiness").
 | 2026-10-11 | Phase 8 merged (`3673c52`) | #11 |
 | 2026-10-11 | Phase 9 merged (`faaaf68`) | #12 |
 | 2026-10-11 | Phase 10 started           | #14 |
-| 2026-10-12 | Phase 10 merged            | #14 |
+| 2026-10-12 | Phase 10 merged (`d7384e2`) | #14 |
