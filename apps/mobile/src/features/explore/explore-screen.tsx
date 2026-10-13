@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Keyboard,
-  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -662,6 +661,23 @@ function PlacesMap({
         ref={mapRef}
         style={{ flex: 1 }}
         initialRegion={initialRegion}
+        // iOS can open the map on a later initialRegion (the real location arrives after the
+        // fallback) without a region change event, so the places would be asked for the old area:
+        // read the area actually shown once the map is ready.
+        onMapReady={() => {
+          mapRef.current
+            ?.getMapBoundaries()
+            .then(({ northEast, southWest }) => {
+              if (!mounted.current) return;
+              setRegion({
+                latitude: (northEast.latitude + southWest.latitude) / 2,
+                longitude: (northEast.longitude + southWest.longitude) / 2,
+                latitudeDelta: northEast.latitude - southWest.latitude,
+                longitudeDelta: northEast.longitude - southWest.longitude,
+              });
+            })
+            .catch(() => {});
+        }}
         onRegionChange={readHeading}
         onRegionChangeComplete={(next, details) => {
           setRegion(next);
@@ -909,8 +925,6 @@ function ClusterMarker({
   const size = 20 + Math.min(label.length, 5) * 4;
   // Android draws a marker from a snapshot; taken before the count's text is laid out, the
   // circle shows empty. Keep tracking until the first frames are drawn, then stop (cheap).
-  // On an iPhone (not the simulator) a bubble that stops tracking doesn't show at all, so iOS
-  // keeps tracking; a map holds a few dozen clusters at most.
   const [drawn, setDrawn] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setDrawn(true), CLUSTER_SNAPSHOT_MS);
@@ -920,7 +934,7 @@ function ClusterMarker({
     <Marker
       coordinate={{ latitude: cluster.location.lat, longitude: cluster.location.lng }}
       onPress={onPress}
-      tracksViewChanges={Platform.OS === 'ios' || !drawn}
+      tracksViewChanges={!drawn}
       accessibilityLabel={t('places.clusterLabel', { count: cluster.count })}
     >
       <View
