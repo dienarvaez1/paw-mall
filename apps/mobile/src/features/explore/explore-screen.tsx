@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Keyboard,
+  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -908,6 +909,8 @@ function ClusterMarker({
   const size = 20 + Math.min(label.length, 5) * 4;
   // Android draws a marker from a snapshot; taken before the count's text is laid out, the
   // circle shows empty. Keep tracking until the first frames are drawn, then stop (cheap).
+  // On an iPhone (not the simulator) a bubble that stops tracking doesn't show at all, so iOS
+  // keeps tracking; a map holds a few dozen clusters at most.
   const [drawn, setDrawn] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setDrawn(true), CLUSTER_SNAPSHOT_MS);
@@ -917,7 +920,7 @@ function ClusterMarker({
     <Marker
       coordinate={{ latitude: cluster.location.lat, longitude: cluster.location.lng }}
       onPress={onPress}
-      tracksViewChanges={!drawn}
+      tracksViewChanges={Platform.OS === 'ios' || !drawn}
       accessibilityLabel={t('places.clusterLabel', { count: cluster.count })}
     >
       <View
