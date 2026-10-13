@@ -1,8 +1,10 @@
 import type { Place } from '@paw-mall/shared';
+import { Image } from 'expo-image';
 import { Link } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, useColorScheme, View } from 'react-native';
 
 import { CategoryBadge } from '@/components/category-badge';
+import { ICONS } from '@/components/icons';
 import { OpenStatus } from '@/components/open-status';
 import { usePolicySummary } from '@/features/pet-policy/policy-text';
 import { useSettings } from '@/features/settings/settings-context';
@@ -50,29 +52,40 @@ export function CategoryLine({
  * A place in a list, in a bordered card; tapping it opens the place. Its distance reads "0.3 mi
  * away" with `away` (Explorar's "Mi ubicación" on: distances from the user) and just "0.3 mi"
  * otherwise (owner's rule). With `showPolicy` (pet-friendly mode), a line tells the pet policy, its
- * source and last confirmation, or that nobody has confirmed it yet.
+ * source and last confirmation, or that nobody has confirmed it yet. Small icons in the
+ * bottom-right corner tell which contacts the place has: phone, website, social media (they
+ * only tell; tapping anywhere opens the place). `highlight` marks the card (Urgencias' closest
+ * place).
  */
 export function PlaceRow({
   place,
   selected,
   away = true,
   showPolicy = false,
+  highlight = false,
 }: {
   place: Place;
   selected: ChipCategory;
   away?: boolean;
   showPolicy?: boolean;
+  highlight?: boolean;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const { units } = useSettings();
   const name = usePlaceName(place);
   const policy = usePolicySummary(showPolicy ? place.petPolicy : null);
+  const scheme = useColorScheme();
   return (
     <Link href={{ pathname: '/place/[id]', params: { id: place.id } }} asChild>
       <Pressable
+        testID="place-row"
         accessibilityRole="button"
-        className="gap-1 rounded-2xl border border-neutral-200 bg-white px-4 py-3 active:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:active:bg-neutral-800"
+        className={`gap-1 rounded-2xl border px-4 py-3 ${
+          highlight
+            ? 'border-brand bg-teal-50 active:bg-teal-100 dark:bg-teal-950 dark:active:bg-teal-900'
+            : 'border-neutral-200 bg-white active:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:active:bg-neutral-800'
+        }`}
       >
         <View className="flex-row items-start justify-between gap-3">
           <Text className="flex-1 text-[15px] font-semibold text-neutral-900 dark:text-white">
@@ -107,8 +120,29 @@ export function PlaceRow({
             {t('places.pets.ask.rowUnknown')}
           </Text>
         ) : null}
-        <OpenStatus place={place} small />
+        <View className="flex-row items-center gap-2">
+          <View className="flex-1">
+            <OpenStatus place={place} small />
+          </View>
+          {contactIcons(place).map((icon) => (
+            <Image
+              key={icon}
+              source={ICONS[icon]}
+              style={{ width: 16, height: 16 }}
+              tintColor={scheme === 'dark' ? '#5eead4' : '#115e59'}
+            />
+          ))}
+        </View>
       </Pressable>
     </Link>
   );
+}
+
+/** The contacts a place has, as list-row icons, in a fixed order. */
+function contactIcons(place: Place): ('phone' | 'website' | 'social')[] {
+  return [
+    place.phone ? ('phone' as const) : null,
+    place.website ? ('website' as const) : null,
+    place.socialUrl ? ('social' as const) : null,
+  ].filter((icon) => icon !== null);
 }

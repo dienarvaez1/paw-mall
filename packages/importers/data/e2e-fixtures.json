@@ -1,0 +1,116 @@
+{
+  "_comment": "Fixed places for the Maestro flows (docs/TESTING-E2E.md). All fake, around the Zócalo (19.4326, -99.1332), plus Tlaxcala as a place's name. Loaded into paw_mall_e2e by `pnpm e2e:seed`.",
+  "user": {
+    "lat": 19.4326,
+    "lng": -99.1332
+  },
+  "places": [
+    {
+      "key": "vet-centro",
+      "name": "Veterinaria Paw Centro",
+      "category": "veterinarian",
+      "kmNorth": 0.3,
+      "kmEast": 0,
+      "address": "Calle de Prueba 1, Col. Centro",
+      "phone": "55 1000 0001",
+      "website": "https://example.com/vet-centro",
+      "socialUrl": "https://example.com/vet-centro-social",
+      "hours": "allDay"
+    },
+    {
+      "key": "hospital-24h",
+      "name": "Hospital Veterinario Paw 24 Horas",
+      "category": "vet_hospital",
+      "kmNorth": 0,
+      "kmEast": 0.8,
+      "address": "Avenida de Prueba 24, Col. Centro",
+      "phone": "55 1000 0024",
+      "open24h": true
+    },
+    {
+      "key": "hospital-sin-telefono",
+      "name": "Hospital Veterinario Sin Teléfono",
+      "category": "vet_hospital",
+      "kmNorth": -1.5,
+      "kmEast": 0,
+      "address": "Calle de Prueba 3, Col. Obrera"
+    },
+    {
+      "key": "estetica",
+      "name": "Estética Canina Paw",
+      "category": "groomer",
+      "kmNorth": 0,
+      "kmEast": -1.2,
+      "address": "Calle de Prueba 4, Col. Guerrero",
+      "phone": "55 1000 0004"
+    },
+    {
+      "key": "tienda",
+      "name": "Tienda de Mascotas Paw",
+      "category": "pet_store",
+      "kmNorth": 2,
+      "kmEast": 0,
+      "address": "Calle de Prueba 5, Col. Morelos"
+    },
+    {
+      "key": "mascotas-tlaxcala",
+      "name": "Mascotas Tlaxcala",
+      "category": "pet_store",
+      "kmNorth": 0.5,
+      "kmEast": 0.5,
+      "address": "Calle Tlaxcala 6, Col. Centro",
+      "phone": "55 1000 0006"
+    },
+    {
+      "key": "vet-tlaxcala",
+      "name": "Veterinaria Paw Tlaxcala",
+      "category": "veterinarian",
+      "lat": 19.3139,
+      "lng": -98.2404,
+      "address": "Calle de Prueba 7, Centro",
+      "city": "Tlaxcala",
+      "state": "Tlaxcala"
+    },
+    {
+      "key": "cafe-perruno",
+      "name": "Café Perruno Paw",
+      "category": "cafe",
+      "kmNorth": -0.4,
+      "kmEast": 0.4,
+      "address": "Calle de Prueba 8, Col. Centro",
+      "petPolicy": {
+        "dogs": true,
+        "maxDogSize": "large",
+        "areas": ["terrace"],
+        "sourceName": "Datos de prueba",
+        "lastConfirmedOn": "2026-10-01"
+      }
+    },
+    {
+      "key": "restaurante-sin-politica",
+      "name": "Restaurante Sin Política Paw",
+      "category": "restaurant",
+      "kmNorth": 0.6,
+      "kmEast": -0.6,
+      "address": "Calle de Prueba 9, Col. Centro"
+    },
+    {
+      "key": "hotel-sin-politica",
+      "name": "Hotel Sin Política Paw",
+      "category": "lodging",
+      "kmNorth": -0.6,
+      "kmEast": 0.6,
+      "address": "Calle de Prueba 10, Col. Centro"
+    }
+  ],
+  "areas": [
+    {
+      "kind": "municipality",
+      "name": "Tlaxcala",
+      "state": "Tlaxcala",
+      "lat": 19.3139,
+      "lng": -98.2404,
+      "businessCount": 5000
+    }
+  ]
+}

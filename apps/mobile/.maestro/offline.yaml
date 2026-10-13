@@ -1,0 +1,26 @@
+# No connection: the offline banner shows; back online, the list loads again.
+appId: dev.pawmall.app
+# Always back online, even when a step fails (or every later flow fails to load).
+onFlowComplete:
+  - setAirplaneMode: disabled
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- extendedWaitUntil:
+    visible: Veterinaria Paw Centro
+    timeout: 30000
+- setAirplaneMode: enabled
+- extendedWaitUntil:
+    visible: Sin conexión.*|No connection.*|You're offline.*
+    timeout: 30000
+- setAirplaneMode: disabled
+- extendedWaitUntil:
+    notVisible: Sin conexión.*|No connection.*|You're offline.*
+    timeout: 60000
+- tapOn:
+    id: chip-vet_hospital
+- extendedWaitUntil:
+    notVisible: Veterinaria Paw Centro
+    timeout: 60000
+- assertVisible: Hospital Veterinario Paw 24 Horas

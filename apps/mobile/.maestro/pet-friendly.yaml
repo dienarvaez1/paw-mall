@@ -1,0 +1,22 @@
+# Pet-friendly lists places confirmed to take pets; unconfirmed ones stay out by default.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+# Tap again if the first tap came while the dev menu was still closing.
+- retry:
+    maxRetries: 2
+    commands:
+      - tapOn:
+          id: tab-pet-friendly
+      - extendedWaitUntil:
+          visible:
+            id: chip-cafe
+          timeout: 10000
+- tapOn:
+    id: mode-list
+- extendedWaitUntil:
+    visible: Café Perruno Paw
+    timeout: 30000
+# The hotel, not the restaurant: pet-friendly-widen answers "yes" for the restaurant, and that
+# answer stays until the next `pnpm e2e:seed`.
+- assertNotVisible: Hotel Sin Política Paw

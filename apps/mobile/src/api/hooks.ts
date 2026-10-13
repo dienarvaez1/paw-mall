@@ -1,5 +1,6 @@
 import {
   type CategoryGroup,
+  type Locale,
   placeListResponseSchema,
   placeMapResponseSchema,
   placeSchema,
@@ -171,12 +172,17 @@ export function usePlacesMap(
   });
 }
 
-export function usePlace(id: number) {
-  const locale = useLocale();
-  return useQuery({
+/** One place's page; Favoritos reads its saved places with the same query. */
+export function placeQuery(id: number, locale: Locale) {
+  return {
     queryKey: ['place', locale, id],
     queryFn: () => apiGet(`/v1/places/${id}`, {}, locale, placeSchema),
-  });
+  };
+}
+
+export function usePlace(id: number) {
+  const locale = useLocale();
+  return useQuery(placeQuery(id, locale));
 }
 
 /** "Open now" changes by the minute, so Urgencias refreshes while it's on screen. */

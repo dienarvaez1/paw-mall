@@ -28,7 +28,8 @@
     "places:landmarks": "pnpm --filter @paw-mall/importers landmarks",
     "places:osm": "pnpm --filter @paw-mall/importers osm",
     "places:osm-hours": "pnpm --filter @paw-mall/importers osm-hours",
-    "places:chains": "pnpm --filter @paw-mall/importers chains"
+    "places:chains": "pnpm --filter @paw-mall/importers chains",
+    "e2e:seed": "pnpm --filter @paw-mall/importers e2e-seed"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

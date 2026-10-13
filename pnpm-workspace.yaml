@@ -1,6 +1,10 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+# NativeWind's Babel preset names this plugin without depending on it; release bundles
+# (`expo export:embed`, Android assembleRelease) resolve it from the app, so hoist it to the root.
+publicHoistPattern:
+  - '@babel/plugin-transform-react-jsx'
 allowBuilds:
   esbuild: true
   unrs-resolver: true
@@ -17,3 +21,6 @@ minimumReleaseAgeExclude:
   - '@typescript-eslint/utils@8.71.1'
   - '@typescript-eslint/visitor-keys@8.71.1'
   - typescript-eslint@8.71.1
+  - expo-dev-client@57.0.20
+  - expo-dev-launcher@57.0.21
+  - expo-dev-menu@57.0.20

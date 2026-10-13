@@ -1,0 +1,3 @@
+# Maestro end-to-end flows for the Android development build on fixed test data (docs/TESTING-E2E.md).
+flows:
+  - "*.yaml"

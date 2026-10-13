@@ -1,0 +1,16 @@
+# Ajustes km → miles: distances and the radius read in miles.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: tab-settings
+- tapOn: Millas|Miles
+- tapOn:
+    id: tab-explore
+- tapOn:
+    id: mode-list
+- extendedWaitUntil:
+    visible: Veterinaria Paw Centro
+    timeout: 30000
+- assertVisible: .*\d mi.*
+- assertVisible: 3 mi

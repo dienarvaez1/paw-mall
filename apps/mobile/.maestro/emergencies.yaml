@@ -1,0 +1,16 @@
+# Urgencias: vet hospitals closest first, the closest highlighted; a card opens its page.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: tab-urgent
+- extendedWaitUntil:
+    visible: Hospital Veterinario Paw 24 Horas
+    timeout: 30000
+- assertVisible: Hospital Veterinario Sin Teléfono
+- tapOn: Hospital Veterinario Paw 24 Horas
+- extendedWaitUntil:
+    visible:
+      id: place-name
+      text: Hospital Veterinario Paw 24 Horas
+    timeout: 15000

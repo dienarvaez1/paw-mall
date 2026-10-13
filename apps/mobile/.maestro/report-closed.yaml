@@ -1,0 +1,15 @@
+# "¿Este lugar cerró?" asks to confirm, then thanks the user (only a random id is sent).
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn: Estética Canina Paw
+- scrollUntilVisible:
+    element: ¿Este lugar cerró\?|Has this place closed\?
+    timeout: 20000
+- tapOn: ¿Este lugar cerró\?|Has this place closed\?
+- tapOn: Sí, reportar|Yes, report
+- extendedWaitUntil:
+    visible: Gracias. Revisaremos este lugar.|Thanks.*
+    timeout: 15000

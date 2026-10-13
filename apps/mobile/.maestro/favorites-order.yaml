@@ -1,0 +1,23 @@
+# Favoritos lists saved places newest first.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn: Veterinaria Paw Centro
+- tapOn:
+    id: favorite-button
+- back
+- tapOn: Estética Canina Paw
+- tapOn:
+    id: favorite-button
+- back
+- tapOn:
+    id: tab-favorites
+- extendedWaitUntil:
+    visible: Veterinaria Paw Centro
+    timeout: 15000
+- copyTextFrom:
+    id: place-row
+    index: 0
+- assertTrue: ${maestro.copiedText.includes('Estética Canina Paw')}

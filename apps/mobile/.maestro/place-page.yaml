@@ -1,0 +1,36 @@
+# The place page: contact links only for what the place has; tapping the address copies it.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn: Veterinaria Paw Centro
+- extendedWaitUntil:
+    visible:
+      id: place-name
+      text: Veterinaria Paw Centro
+    timeout: 15000
+- assertVisible: Llamar|Call
+- assertVisible: Sitio web|Website
+- assertVisible: Redes sociales|Social media
+- waitForAnimationToEnd
+# The note shows for 3 seconds.
+- tapOn:
+    id: place-address
+    # Don't wait for the map to stop moving, or the note is gone before the check.
+    waitToSettleTimeoutMs: 300
+- extendedWaitUntil:
+    visible: Nombre y dirección copiados|Name and address copied
+    timeout: 3000
+- back
+- scrollUntilVisible:
+    element: Hospital Veterinario Sin Teléfono
+    timeout: 15000
+- tapOn: Hospital Veterinario Sin Teléfono
+- extendedWaitUntil:
+    visible:
+      id: place-name
+      text: Hospital Veterinario Sin Teléfono
+    timeout: 15000
+- assertVisible: Cómo llegar|Directions
+- assertNotVisible: Llamar|Call

@@ -1,0 +1,117 @@
+# Maestro end-to-end flows (apps/mobile/.maestro, docs/TESTING-E2E.md) on an Android emulator,
+# against the fixed test data. Slow (about an hour), so not on every pull request: nightly, by
+# hand (Actions > E2E > Run workflow), or on a pull request with the `run-e2e` label.
+#
+# Needs the repository secret GOOGLE_MAPS_ANDROID_KEY (Paw Mall's Maps SDK for Android key; see
+# docs/GOOGLE-PLACES.md). Without it the map screens show "map unavailable" and their flows fail.
+name: E2E
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # 02:00 in Mexico City
+  workflow_dispatch:
+  pull_request:
+    types: [labeled, synchronize]
+
+permissions:
+  contents: read
+  checks: write # the test report
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  maestro:
+    if: >-
+      github.event_name != 'pull_request' ||
+      contains(github.event.pull_request.labels.*.name, 'run-e2e')
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      API_LEVEL: 34
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - run: pnpm install --frozen-lockfile
+
+      # Test data and the API on it (port 8788), as in docs/TESTING-E2E.md.
+      - name: Start Postgres + PostGIS
+        run: pnpm db:up
+      - run: pnpm e2e:seed
+      - name: Start the API on the test data
+        run: |
+          pnpm --filter api dev:e2e > api-e2e.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -fsS http://localhost:8788/health && exit 0
+            sleep 2
+          done
+          cat api-e2e.log
+          exit 1
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+
+      # A release build: the code bundled in (no Metro) and pointed at the e2e API (10.0.2.2 is
+      # the runner as the emulator sees it). Signed with React Native's standard debug key, so the
+      # Maps key's package + SHA-1 restriction matches.
+      - name: Build the release APK
+        working-directory: apps/mobile
+        env:
+          EXPO_PUBLIC_API_URL: http://10.0.2.2:8788
+          GOOGLE_MAPS_ANDROID_KEY: ${{ secrets.GOOGLE_MAPS_ANDROID_KEY }}
+          NODE_ENV: production
+        run: |
+          npx expo prebuild --platform android --clean --no-install
+          # Release builds refuse plain http; the e2e API has no https.
+          sed -i 's/<application /<application android:usesCleartextTraffic="true" /' \
+            android/app/src/main/AndroidManifest.xml
+          cd android && ./gradlew assembleRelease --no-daemon
+
+      - name: Install Maestro
+        run: |
+          curl -fsSL https://get.maestro.mobile.dev | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run the flows on the emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ env.API_LEVEL }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: bash apps/mobile/scripts/e2e-ci.sh
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: |
+            apps/mobile/e2e-results/
+            api-e2e.log
+          if-no-files-found: ignore
+
+      - name: Test report
+        if: always()
+        uses: mikepenz/action-junit-report@v5
+        with:
+          report_paths: apps/mobile/e2e-results/report.xml
+          check_name: Maestro flows

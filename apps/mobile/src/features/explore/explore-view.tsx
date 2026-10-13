@@ -30,6 +30,11 @@ type ExploreView = {
   /** The search box's text. */
   text: string;
   setText: (text: string) => void;
+  /**
+   * The text the searches act on: the box's text once it's known not to be a place's name, or
+   * once the user said how to read it; until then, the last such text (owner's rule).
+   */
+  searchText: string;
   /** The search circle's center when it isn't the user: a tapped cluster or a hand pan. */
   focus: Point | null;
   setFocus: (focus: Point | null) => void;
@@ -59,6 +64,8 @@ export type PlaceChoice = { text: string; asPlace: boolean };
 
 /** Ask only once the typing has settled, so "Roma" isn't asked on the way to "Roma Norte". */
 const PLACE_ASK_MS = 900;
+/** Shorter texts are never looked up as places. */
+const MIN_PLACE_LOOKUP = 3;
 
 /** The user's answer for this search text, if they gave one: true as a place, false as a name. */
 export function readsAsPlace(choice: PlaceChoice | null, text: string): boolean | null {
@@ -72,6 +79,7 @@ const ExploreViewContext = createContext<ExploreView>({
   setNearMe: () => {},
   text: '',
   setText: () => {},
+  searchText: '',
   focus: null,
   setFocus: () => {},
   readMapView: () => null,
@@ -112,7 +120,7 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
     setText('');
     setFocus(null);
   });
-  const placeChoice = usePlaceQuestion(text, focus, setNearMe);
+  const { choice: placeChoice, searchText } = usePlaceQuestion(text, focus, setNearMe);
   const value = useMemo(
     () => ({
       mode,
@@ -121,6 +129,7 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       setNearMe,
       text,
       setText,
+      searchText,
       focus,
       setFocus,
       ...mapViewAccess,
@@ -130,7 +139,7 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       areaRadius,
       setAreaRadius,
     }),
-    [mode, nearMe, text, focus, mapViewAccess, placeChoice, shownArea, areaRadius],
+    [mode, nearMe, text, searchText, focus, mapViewAccess, placeChoice, shownArea, areaRadius],
   );
   return <ExploreViewContext.Provider value={value}>{children}</ExploreViewContext.Provider>;
 }
@@ -140,12 +149,16 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
  * a business name, so the app asks once how to read it (owner's rule). As a place: the search
  * goes around it and "Mi ubicación" turns off (turning it back on clears the text). As a name: only
  * business names match. One dialog for both tabs, since the text is shared.
+ *
+ * Nothing searches a text that may be a place until that's settled (owner's rule): while the
+ * typing settles, while the lookup runs and while the question is open, `searchText` stays on the
+ * last text that was settled.
  */
 function usePlaceQuestion(
   text: string,
   focus: Point | null,
   setNearMe: (nearMe: boolean) => void,
-): PlaceChoice | null {
+): { choice: PlaceChoice | null; searchText: string } {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const location = useUserLocation();
@@ -158,12 +171,21 @@ function usePlaceQuestion(
     queryKey: ['area-lookup', locale, settled],
     queryFn: () =>
       apiGet('/v1/places/area', { q: settled, ...center }, locale, areaLookupResponseSchema),
-    enabled: settled.length >= 3 && !answered,
+    enabled: settled.length >= MIN_PLACE_LOOKUP && !answered,
     staleTime: Infinity,
   });
   const asked = useRef<string | null>(null);
   const area = lookup.data?.area ?? null;
   const current = text.trim();
+  const pending = isPlaceQuestionPending({
+    current,
+    settled,
+    answered: choice?.text === current,
+    looking: lookup.isFetching,
+    foundArea: area !== null && lookup.data !== undefined,
+  });
+  const [searchText, setSearchText] = useState(current);
+  if (!pending && searchText !== current) setSearchText(current);
   // Typing something else forgets the answer, so the same text typed again is asked again.
   const [answerFor, setAnswerFor] = useState(current);
   if (answerFor !== current) {
@@ -197,7 +219,29 @@ function usePlaceQuestion(
       { cancelable: false },
     );
   }, [area, answered, settled, current, t, setNearMe]);
-  return choice;
+  return { choice, searchText };
+}
+
+/** Whether the searches wait on this text: it may still turn out to be a place's name. */
+export function isPlaceQuestionPending({
+  current,
+  settled,
+  answered,
+  looking,
+  foundArea,
+}: {
+  /** The box's text, trimmed. */
+  current: string;
+  /** The same text once the typing paused (the place lookup asks about this one). */
+  settled: string;
+  answered: boolean;
+  /** The place lookup for `settled` is running. */
+  looking: boolean;
+  /** The lookup found a place with that name. */
+  foundArea: boolean;
+}): boolean {
+  if (current.length < MIN_PLACE_LOOKUP || answered) return false;
+  return settled !== current || looking || foundArea;
 }
 
 export function useExploreView(): ExploreView {

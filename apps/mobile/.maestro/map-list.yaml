@@ -1,0 +1,15 @@
+# Map and List count the same places around the user.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- extendedWaitUntil:
+    visible: 6 lugares a menos de 5 km.*|6 places within 5 km.*
+    timeout: 30000
+- tapOn:
+    id: mode-list
+- extendedWaitUntil:
+    visible: 6 lugares a menos de 5 km.*|6 places within 5 km.*
+    timeout: 30000
+- tapOn:
+    id: mode-map
+- assertVisible: 6 lugares a menos de 5 km.*|6 places within 5 km.*

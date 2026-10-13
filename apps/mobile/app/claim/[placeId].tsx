@@ -97,7 +97,7 @@ export default function ClaimScreen() {
 
   if (submit.isSuccess) {
     return (
-      <View className="flex-1 bg-white p-6 dark:bg-neutral-950">
+      <View className="flex-1 bg-off-bg p-6 dark:bg-neutral-950">
         <Text className="text-base leading-6 text-neutral-800 dark:text-neutral-200">
           {t('places.claim.thanks')}
         </Text>
@@ -110,7 +110,7 @@ export default function ClaimScreen() {
 
   return (
     <KeyboardAvoidingView
-      className="flex-1 bg-white dark:bg-neutral-950"
+      className="flex-1 bg-off-bg dark:bg-neutral-950"
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerClassName="gap-6 p-4 pb-16" keyboardShouldPersistTaps="handled">
@@ -128,6 +128,7 @@ export default function ClaimScreen() {
               value={phone}
               onChangeText={setPhone}
               keyboardType="phone-pad"
+              testID="claim-phone"
               accessibilityLabel={t('places.claim.phone')}
             />
           </Field>
@@ -192,6 +193,7 @@ export default function ClaimScreen() {
               className={INPUT}
               value={contactName}
               onChangeText={setContactName}
+              testID="claim-contact-name"
               accessibilityLabel={t('places.claim.contactName')}
             />
           </Field>
@@ -202,6 +204,7 @@ export default function ClaimScreen() {
               onChangeText={setContact}
               autoCapitalize="none"
               autoCorrect={false}
+              testID="claim-contact"
               accessibilityLabel={t('places.claim.contact')}
             />
           </Field>
@@ -211,6 +214,7 @@ export default function ClaimScreen() {
           <Switch
             value={consent}
             onValueChange={setConsent}
+            testID="claim-consent"
             accessibilityLabel={t('places.claim.consent')}
             trackColor={{ true: '#46d2d1' }}
           />
@@ -228,6 +232,7 @@ export default function ClaimScreen() {
 
         <View className="flex-row">
           <Button
+            testID="claim-submit"
             label={t('places.claim.submit')}
             onPress={() => {
               if (!submit.isPending) send();

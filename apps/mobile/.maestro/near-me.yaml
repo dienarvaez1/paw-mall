@@ -1,0 +1,26 @@
+# Moving the map by hand turns "Mi ubicación" off and searches there; turning it on comes back.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- extendedWaitUntil:
+    visible: 6 lugares a menos de 5 km.*|6 places within 5 km.*
+    timeout: 30000
+- repeat:
+    times: 3
+    commands:
+      - swipe:
+          start: 80%, 60%
+          end: 10%, 60%
+- extendedWaitUntil:
+    visible:
+      id: near-me
+      checked: false
+    timeout: 15000
+- tapOn:
+    id: near-me
+- extendedWaitUntil:
+    visible: 6 lugares a menos de 5 km.*|6 places within 5 km.*
+    timeout: 30000
+- assertVisible:
+    id: near-me
+    checked: true
