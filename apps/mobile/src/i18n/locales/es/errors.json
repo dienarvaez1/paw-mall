@@ -9,6 +9,7 @@
     "POLICY_NOT_FOUND": "No encontramos la política de mascotas de este lugar.",
     "INTERNAL_ERROR": "Algo salió mal en el servidor.",
     "POLICY_EXISTS": "Este lugar ya tiene una política de mascotas.",
-    "NOT_A_PET_VENUE": "Solo se puede responder en restaurantes, cafés, hospedaje, museos y parques."
+    "NOT_A_PET_VENUE": "Solo se puede responder en restaurantes, cafés, hospedaje, museos y parques.",
+    "RATE_LIMITED": "Demasiadas solicitudes seguidas. Espera un minuto e inténtalo de nuevo."
   }
 }
