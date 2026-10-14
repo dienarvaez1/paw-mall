@@ -27,24 +27,24 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status      | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ----------- | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done        | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done        | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done        | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done        | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done        | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done        | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done        | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done        | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done        | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done        | 2026-10-13 | 2026-10-13 |
-| 13    | Load test             | `phase-13/load-test`         | #24 | Done        | 2026-10-14 | 2026-10-14 |
-| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done        | 2026-10-14 | 2026-10-14 |
-| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done        | 2026-10-14 | 2026-10-14 |
-| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | —   | In progress | 2026-10-14 | —          |
+| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
+| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done      | 2026-10-14 | 2026-10-14 |
+| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done      | 2026-10-14 | 2026-10-14 |
+| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | In review | 2026-10-14 | —          |
 
 ## Pending owner reviews
 
@@ -1046,9 +1046,34 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 
 ### Phase 16 — Bug fixes 2
 
-- **Scope:** bugs the owner found after Phase 15 (list to come).
-- **Branch / PR:** `phase-16/bug-fixes` / —
-- **Status:** In progress.
+- **Scope:** bugs the owner found after Phase 15 (2026-10-14).
+- **Branch / PR:** `phase-16/bug-fixes` / #28
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 340 tests (shared 36, mobile 93, api 103, importers 108)
+  - [x] Android emulator (release build of this branch): new `search-pan` flow, plus
+        `search-zoom`, `search-zoom-out`, `place-question`, `place-question-business`,
+        `search-clear`, `near-me`, `search-section`, `search-typed-fit`, `map-buttons`,
+        `emergencies`, `map-list`: all pass
+- **Fixes:**
+  1. **A hand pan lets go of a searched place.** After picking a place from the suggestions or
+     answering "As a place", the map ignored pans. Now a pan away from the place empties the
+     search box and the search follows the map. It keeps the place's radius, or the zoomed one,
+     and "Mi ubicación" stays off (`leaveArea` in `explore-view.tsx`). A zoom alone still keeps
+     the place and changes its radius. Business-name searches never fix the map on a place, so
+     they already followed pans.
+  2. **Urgencias agrees with the map.**
+     - Its counter counts every urgent place in the circle; it used to count the cards, which
+       stop at 20. The API now returns `total`.
+     - Around a searched place it uses the place's radius from the map, not Ajustes'.
+     - It names the circle by the same city as the list or map (`circleCity`).
+  3. **Pins up to 200:** the map shows places one by one up to 200 in view (was 100), then
+     clusters (`MAP_MAX_PLACES`).
+- **Notes:**
+  - The first E2E attempt "failed" because `common/hide-keyboard.yaml` pressed Back after picking a
+    suggestion had already closed the keyboard, which sent the app home; `search-pan` doesn't use
+    it.
 
 ## Production deployment
 
@@ -1097,4 +1122,4 @@ Play readiness").
 | 2026-10-14 | Phase 14 merged (`472c7cc`)                                  | #25 |
 | 2026-10-14 | Phase 15 started                                             | #27 |
 | 2026-10-14 | Phase 15 merged (`1e95d14`)                                  | #27 |
-| 2026-10-14 | Phase 16 started                                             | —   |
+| 2026-10-14 | Phase 16 started                                             | #28 |

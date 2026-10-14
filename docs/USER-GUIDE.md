@@ -27,7 +27,7 @@ search — the other shows too.
 - **Map / List** switch the view; both count the same places.
 - The **green circle** is the search radius around you (or around a place you searched). The
   count at the bottom says how many places are inside it; tap it to see the whole circle.
-- With many places the map groups them into **clusters** (turquoise bubbles with a count). Tap one
+- With more than 200 places in view the map groups them into **clusters** (turquoise bubbles with a count). Tap one
   to zoom to it: the circle moves to where those places are.
 - **Pins** have their category's color and icon; tap a pin, then its bubble, to open the place.
 - **Satellite** (layers button) and the **compass** (turns the map north up) are at the bottom
@@ -63,11 +63,13 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
   first, then businesses nearby. Every word you type must start a word of the suggestion, in any
   order: "puerto vall", "vallarta puerto" and "v puerto" all suggest Puerto Vallarta.
   "CDMX" and "DF" mean Ciudad de México; small words like "en", "near" or "para" are ignored.
-  - Tap a **place** to search around it (the circle moves there).
+  - Tap a **place** to search around it (the circle moves there). Moving the map by hand
+    afterwards lets go of the place: the search box empties and the search follows the map, with
+    the place's radius ("Mi ubicación" stays off). Zooming keeps the place and changes its radius.
   - Tap a **business** to open its page.
 - **A place's name with the search key** (e.g. type "Guadalajara" and press 🔍): the app asks
   whether you mean the place or businesses with that name:
-  - **As a place** — search around Guadalajara.
+  - **As a place** — search around Guadalajara (moving the map lets go of it, as above).
   - **As a business name** — businesses called "Guadalajara" near you.
   - **Cancel** — keep editing.
 - **Other text with the search key** (e.g. "Tlaxcala Casona", not a place's name): searched as

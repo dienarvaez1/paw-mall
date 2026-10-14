@@ -74,7 +74,7 @@ Responses are localized by `Accept-Language` (`es` default, `en`).
 | `GET /health`                        | API and database status (PostGIS version)                                                              |
 | `GET /v1/categories`                 | Categories with names and counts                                                                       |
 | `GET /v1/places`                     | The list: places within a radius, nearest first, paged; text search, category, filters                 |
-| `GET /v1/places/map`                 | The map: places in the visible box and the radius — one by one up to 100, otherwise a grid of clusters |
+| `GET /v1/places/map`                 | The map: places in the visible box and the radius — one by one up to 200, otherwise a grid of clusters |
 | `GET /v1/places/area`                | Whether a text is exactly a place's name (for the place-or-business question)                          |
 | `GET /v1/places/area-suggestions`    | Place names for the search box's autocomplete (order-invariant word starts)                            |
 | `GET /v1/places/urgent`              | Emergency vets: hospitals and 24-hour vets, nearest and open first                                     |
@@ -98,7 +98,7 @@ Responses are localized by `Accept-Language` (`es` default, `en`).
   (`p.location <-> point`), so a page stops after its places; the total comes from a separate
   count. Connections run with JIT off: compiling these short queries cost more than running
   them (found with `pnpm load`).
-- **Map clusters:** above 100 places in view, the API groups places with `ST_SnapToGrid` on a grid
+- **Map clusters:** above 200 places in view (owner's rule, 2026-10-14; was 100), the API groups places with `ST_SnapToGrid` on a grid
   of 6 columns across the visible width (anchored at 0,0 so cells don't move when panning); each
   cluster has its count, average position and bounding box.
 - **`areas.ts`** — place names. `resolveArea` matches an exact name (accents and case aside);
@@ -204,7 +204,7 @@ use `Intl` with the active locale.
   database down (`database-down.test.ts`: `/health` reports it, every route answers a bare
   `INTERNAL_ERROR`), and a DENUE import that fails part way (`denue/save.test.ts`: one
   transaction, so nothing is left behind).
-- **End to end:** Maestro flows in `apps/mobile/.maestro` (23 flows, 27 journeys) on fixed test
+- **End to end:** Maestro flows in `apps/mobile/.maestro` (28 flows, 32 journeys) on fixed test
   data, on the Android build and on iOS in Expo Go — see [TESTING-E2E.md](TESTING-E2E.md).
 - **CI:** `.github/workflows/ci.yml` (lint, typecheck, tests on every PR) and `e2e.yml` (Maestro on
   an Android emulator: nightly, manual or the `run-e2e` label).

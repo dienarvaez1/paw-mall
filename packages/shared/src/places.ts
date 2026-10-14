@@ -88,7 +88,7 @@ export const MAX_PAGE_SIZE = 200;
 export const AREA_RADIUS_KM = 5;
 
 /** Most places the map shows one by one; with more in view it shows clusters. */
-export const MAP_MAX_PLACES = 100;
+export const MAP_MAX_PLACES = 200;
 
 const latitude = z.coerce.number().min(-90).max(90);
 const longitude = z.coerce.number().min(-180).max(180);
@@ -303,7 +303,9 @@ export const URGENT_LIMIT = 20;
 export const urgentResponseSchema = z.object({
   /** The area the search named, when it did: distances are then from it. */
   area: searchAreaSchema.nullable().default(null),
-  /** Closest first. */
+  /** Closest first, up to URGENT_LIMIT. */
   items: z.array(placeSchema),
+  /** Every urgent place in the radius, beyond the URGENT_LIMIT shown (the summary counts them). */
+  total: z.number().int().nonnegative(),
 });
 export type UrgentResponse = z.infer<typeof urgentResponseSchema>;

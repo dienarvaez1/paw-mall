@@ -130,6 +130,24 @@ describe('GET /v1/places/urgent with a searched area', () => {
   });
 });
 
+describe('GET /v1/places/urgent total', () => {
+  it('counts every urgent place in the radius', async () => {
+    const res = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10`,
+      {},
+      testEnv,
+    );
+    const { items, total } = urgentResponseSchema.parse(await res.json());
+    expect(total).toBe(items.length);
+    const tight = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10&openNow=true`,
+      {},
+      testEnv,
+    );
+    expect(urgentResponseSchema.parse(await tight.json()).total).toBe(2);
+  });
+});
+
 describe('GET /v1/places/urgent with the Ajustes switches', () => {
   it('applies the radius and "only open now", like the other pages', async () => {
     const urgent = async (params: string) => {

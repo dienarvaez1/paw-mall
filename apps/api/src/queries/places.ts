@@ -623,8 +623,8 @@ export async function urgentPlaces(
   const found = query.q ? await findAreaSearch(db, query.q, query) : null;
   const point = found ? found.area.location : { lat: query.lat, lng: query.lng };
   const area = found ? { ...found.area, radiusKm: query.radiusKm } : null;
-  const rows = await db.execute<PlaceRow>(sql`
-    SELECT ${placeColumnsSql(locale, point)}
+  const rows = await db.execute<PlaceRow & { total: number }>(sql`
+    SELECT ${placeColumnsSql(locale, point)}, count(*) OVER ()::int AS total
     FROM places p
     LEFT JOIN vet_details v ON v.place_id = p.id
     WHERE ${sql.join([visibleSql, withinRadiusSql(point, query.radiusKm), ...filterConditions(query)], sql` AND `)}
@@ -636,5 +636,5 @@ export async function urgentPlaces(
         WHERE c.slug = 'vet_hospital')
     ORDER BY ${nearestFirstSql(point)}
     LIMIT ${URGENT_LIMIT}`);
-  return { area, items: rows.map(toPlace) };
+  return { area, items: rows.map(toPlace), total: rows[0]?.total ?? 0 };
 }

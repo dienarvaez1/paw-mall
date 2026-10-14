@@ -52,6 +52,18 @@ type ExploreView = {
   /** A radius the user picked for this search's area (radius button, zoom), until the text changes. */
   areaRadius: AreaRadius | null;
   setAreaRadius: (areaRadius: AreaRadius | null) => void;
+  /**
+   * The map panned by hand off a searched place: the search lets go of it and follows the map
+   * (owner's rule, 2026-10-14). The box empties, the circle goes to `center`, and "Mi ubicación"
+   * stays off (unlike emptying the box by hand, which goes back to the user).
+   */
+  leaveArea: (center: Point) => void;
+  /**
+   * The city the list or map names its circle by (its nearest place's), so Urgencias names the
+   * same one; null around a searched place.
+   */
+  circleCity: string | null;
+  setCircleCity: (city: string | null) => void;
 };
 
 export type AreaRadius = { text: string; km: number };
@@ -92,6 +104,9 @@ const ExploreViewContext = createContext<ExploreView>({
   setShownArea: () => {},
   areaRadius: null,
   setAreaRadius: () => {},
+  leaveArea: () => {},
+  circleCity: null,
+  setCircleCity: () => {},
 });
 
 /**
@@ -108,6 +123,7 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const [focus, setFocus] = useState<Point | null>(null);
   const [shownArea, setShownArea] = useState<SearchArea | null>(null);
   const [areaRadius, setAreaRadius] = useState<AreaRadius | null>(null);
+  const [circleCity, setCircleCity] = useState<string | null>(null);
   const [satellite, setSatellite] = useState(false);
   const [locateRequest, setLocateRequest] = useState(0);
   const requestLocate = useCallback(() => setLocateRequest((n) => n + 1), []);
@@ -124,6 +140,11 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
     },
     [text, requestLocate],
   );
+  const leaveArea = useCallback((center: Point) => {
+    setTextValue('');
+    setAreaRadius(null);
+    setFocus(center);
+  }, []);
   useOnWake(() => {
     // After a search, or with "Mi ubicación" off, the app comes back as it was (owner's rules:
     // only the location button, a place pick, the place question and its answer, emptying the
@@ -186,6 +207,9 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       setShownArea,
       areaRadius,
       setAreaRadius,
+      leaveArea,
+      circleCity,
+      setCircleCity,
     }),
     [
       mode,
@@ -202,6 +226,8 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       placeChoice,
       shownArea,
       areaRadius,
+      leaveArea,
+      circleCity,
     ],
   );
   return <ExploreViewContext.Provider value={value}>{children}</ExploreViewContext.Provider>;

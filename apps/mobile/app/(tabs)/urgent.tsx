@@ -26,12 +26,12 @@ export default function UrgentScreen() {
   // The search box of Explorar and Pet-friendly: a place it names moves Urgencias there.
   // A map moved by hand (or a tapped cluster) moves Urgencias' center there too (owner's rule).
   // A text the user said is a business name, not the place, doesn't move Urgencias.
-  const { nearMe, searchText, focus, placeChoice } = useExploreView();
+  // Around a searched place, the radius the map gives it (owner's rule: Urgencias, the list and
+  // the map show the same circle).
+  const { nearMe, searchText, focus, placeChoice, shownArea, circleCity } = useExploreView();
   const searched = useDebounced(searchText, SEARCH_DEBOUNCE_MS);
-  const urgent = useUrgentPlaces(
-    focus ?? location.coords,
-    readsAsPlace(placeChoice, searched) === false ? '' : searched,
-  );
+  const q = readsAsPlace(placeChoice, searched) === false ? '' : searched;
+  const urgent = useUrgentPlaces(focus ?? location.coords, q, q ? shownArea?.radiusKm : undefined);
   const area = urgent.data?.area ?? null;
   const items = urgent.data?.items ?? [];
   // Measured from the user ("Mi ubicación" on, no searched area, map not moved): only then is the
@@ -41,7 +41,9 @@ export default function UrgentScreen() {
     ? area.municipality
       ? `${area.name}, ${area.municipality}`
       : area.name
-    : (items[0]?.city ?? null);
+    : (circleCity ?? items[0]?.city ?? null);
+  // Every urgent place in the circle, not only the URGENT_LIMIT cards shown.
+  const total = urgent.data?.total ?? 0;
   const locale = useLocale();
   const { units, radiusKm } = useSettings();
 
@@ -76,8 +78,8 @@ export default function UrgentScreen() {
             summaryArea && items.length > 0 ? (
               <Text className="pb-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
                 {t('places.areaCount', {
-                  count: items.length,
-                  total: formatCount(items.length, locale),
+                  count: total,
+                  total: formatCount(total, locale),
                   distance: formatDistance(area?.radiusKm ?? radiusKm, locale, units),
                   area: summaryArea,
                 })}

@@ -426,6 +426,14 @@ function PlacesList({
   }, [noConfirmedMatch, onWiden]);
   // Area searches use 5 km (3 mi); everything around the user uses the shared radius.
   const distance = formatDistance(area ? area.radiusKm : radiusKm, locale, units);
+  // The list is nearest first: its first place's city names the circle (Urgencias names it too).
+  const nearestCity = places.data?.pages[0]?.items[0]?.city ?? null;
+  const { setCircleCity } = useExploreView();
+  const listCity = area ? null : nearestCity;
+  const listLoaded = places.data !== undefined;
+  useEffect(() => {
+    if (listLoaded) setCircleCity(listCity);
+  }, [listLoaded, listCity, setCircleCity]);
 
   if (places.isPending) return <SkeletonList />;
   if (places.isError)
@@ -434,7 +442,6 @@ function PlacesList({
   // The summary stays put above the list while it scrolls: "69 lugares a menos de 5 km de
   // Tlaxcala", or around the user (or a moved circle) named by the nearest place's city: "1,237
   // lugares a menos de 5 km de Coyoacán" (the list is nearest first).
-  const nearestCity = places.data?.pages[0]?.items[0]?.city ?? null;
   const summaryArea = area
     ? area.municipality
       ? `${area.name}, ${area.municipality}`
@@ -647,7 +654,7 @@ function PlacesMap({
     return () => clearTimeout(timer);
   }, [region]);
 
-  // Places inside the radius circle: up to 100 one by one; with more in view, clusters (counting
+  // Places inside the radius circle: up to 200 one by one; with more in view, clusters (counting
   // only places inside the circle) that zoom in when tapped.
   const center = focus ?? location.coords;
   const places = usePlacesMap(
@@ -664,10 +671,14 @@ function PlacesMap({
   // A searched area ("Zócalo") moves the circle there with its own radius; otherwise the circle is
   // the user's radius around the user.
   const searchedArea = places.data?.area ?? null;
-  const { setShownArea, setAreaRadius } = useExploreView();
+  const { setShownArea, setAreaRadius, leaveArea, setCircleCity } = useExploreView();
   useEffect(() => {
     if (places.data) setShownArea(searchedArea);
   }, [places.data, searchedArea, setShownArea]);
+  const mapCity = searchedArea ? null : (places.data?.nearestCity ?? null);
+  useEffect(() => {
+    if (places.data) setCircleCity(mapCity);
+  }, [places.data, mapCity, setCircleCity]);
   const circle = searchedArea
     ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
     : { center, radiusKm };
@@ -774,14 +785,22 @@ function PlacesMap({
             // follows to the map's new center. Both maps take it (owner's rules).
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
             const zoomed = !sameRadius(handRadiusKm, circle.radiusKm);
-            const panned = !searchedArea && isAwayFrom(next, circle.center);
-            // Zoomed around a searched area: its circle takes the zoomed radius (owner's rule).
-            if (searchedArea && zoomed) {
+            const panned = isAwayFrom(next, circle.center);
+            if (searchedArea && panned) {
+              // Panned off a searched place: the search lets go of it and follows the map, with
+              // the place's radius (or the zoomed one); the box empties (owner's rule, 2026-10-14).
+              shownArea.current = null;
+              showingArea.current = false;
+              const center = { lat: next.latitude, lng: next.longitude };
+              saveCircle(zoomed ? handRadiusKm : circle.radiusKm, center);
+              leaveArea(center);
+            } else if (searchedArea && zoomed) {
+              // Zoomed around a searched area: its circle takes the zoomed radius (owner's rule).
               shownArea.current = `${centerLat},${centerLng},${handRadiusKm}`;
               setAreaRadius({ text: name, km: handRadiusKm });
               setRadiusKm(handRadiusKm);
             }
-            if ((zoomed && !searchedArea) || panned) {
+            if (!searchedArea && (zoomed || panned)) {
               saveCircle(
                 zoomed ? handRadiusKm : radiusKm,
                 panned ? { lat: next.latitude, lng: next.longitude } : null,
