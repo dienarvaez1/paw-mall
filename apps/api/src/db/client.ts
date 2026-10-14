@@ -8,6 +8,8 @@ export function createDb(connectionString: string) {
     connect_timeout: 3,
     fetch_types: false,
     onnotice: () => {},
+    // The queries are short; compiling them (JIT) cost more than running them (pnpm load).
+    connection: { jit: 'off' },
   });
   const db = drizzle(client, { casing: 'snake_case' });
   return { db, client, close: () => client.end() };

@@ -53,6 +53,10 @@ pet policy), `owner_verified`, `community_confirmed` (users' pet policy), `websi
 website answered a check within a year), `listed` (only a directory says so), with the date of
 the evidence.
 
+**Pet businesses:** `places.pet_business` is true for places with a pet-business category, kept
+by triggers on `place_categories` (migration 0013); a location index on those places only lets
+Explorar skip the restaurants, cafés and hotels (94% of the places).
+
 **Visibility:** queries only return places where `hidden_at IS NULL`. Reports and confirmed
 closures hide a place; the owner-review commands (`pnpm places:reports`, `places:claims`) decide.
 
@@ -90,6 +94,10 @@ Responses are localized by `Accept-Language` (`es` default, `en`).
   ("Coyoacán", "Zócalo", or "vet en Coyoacán") moves the circle there; the remaining words must
   each appear in the name, city or state (`searchWords`; "CDMX"/"DF" read as Ciudad de México).
   The app can force "business names only" (`namesOnly`) or "around this place".
+- **Nearest first:** pages are read from the location index in distance order
+  (`p.location <-> point`), so a page stops after its places; the total comes from a separate
+  count. Connections run with JIT off: compiling these short queries cost more than running
+  them (found with `pnpm load`).
 - **Map clusters:** above 100 places in view, the API groups places with `ST_SnapToGrid` on a grid
   of 6 columns across the visible width (anchored at 0,0 so cells don't move when panning); each
   cluster has its count, average position and bounding box.

@@ -80,6 +80,8 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 - Owner review: `pnpm places:claims` (owner claims) and `pnpm places:reports` (closed and
   animal-cruelty reports); see each command's header for options. `pnpm places:integrity` is a
   read-only data-integrity report (about 20 s on the full data).
+- Load test: `pnpm --filter api dev:load`, then `pnpm load` (k6, local only; see
+  `docs/DEVELOPMENT.md`, "Load test").
 - End-to-end: Maestro flows in `apps/mobile/.maestro/` on the Android development build and fixed
   test data (`pnpm e2e:seed` → `paw_mall_e2e`), `pnpm --filter mobile e2e`; setup and the journey
   list in `docs/TESTING-E2E.md`.

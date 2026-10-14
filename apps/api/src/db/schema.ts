@@ -105,9 +105,18 @@ export const places = pgTable(
     /** 'matched' or 'no_match' (Google has no matching listing; don't search again). */
     googleMatchStatus: text(),
     googleMatchedAt: timestamp({ withTimezone: true }),
+    /**
+     * In a pet-business category (Explorar). Kept by a trigger on place_categories (migration
+     * 0013); never set it by hand. Its own location index skips the restaurants, cafés and hotels,
+     * 94% of the places.
+     */
+    petBusiness: boolean().notNull().default(false),
   },
   (t) => [
     index('places_location_idx').using('gist', t.location),
+    index('places_pet_business_location_idx')
+      .using('gist', t.location)
+      .where(sql`${t.petBusiness}`),
     uniqueIndex('places_source_external_id_idx').on(t.source, t.externalId),
     // Name search: accent- and case-insensitive substring and typo matching.
     index('places_name_search_idx').using(
