@@ -40,7 +40,7 @@ checked) · **Blocked**.
 | 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
 | 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
 | 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | —   | In review | 2026-10-13 | —          |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | In review | 2026-10-13 | —          |
 
 ## Pending owner reviews
 
@@ -915,7 +915,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 
 - **Scope:** review items 5–6: E2E gaps (animal-cruelty report, API down while online, iOS) and
   failure tests (database outage, interrupted import, slow API).
-- **Branch / PR:** `phase-12/failure-coverage` / —
+- **Branch / PR:** `phase-12/failure-coverage` / #20
 - **Status:** In review.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
@@ -984,4 +984,4 @@ Play readiness").
 | 2026-10-13 | Project documentation started (`docs/project-documentation`) | —   |
 | 2026-10-13 | Phase 11 started                                             | #18 |
 | 2026-10-13 | Phase 11 merged (`bf1d4e7`)                                  | #18 |
-| 2026-10-13 | Phase 12 started                                             | —   |
+| 2026-10-13 | Phase 12 started                                             | #20 |
