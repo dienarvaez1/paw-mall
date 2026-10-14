@@ -1088,6 +1088,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
      100, 150, 200 and 300 (`MAP_PIN_LIMITS`; default 200). It's saved with Ajustes (`mapPinLimit`)
      and both maps follow it. The app sends it as `limit`, and the API now accepts up to 300.
      `map-buttons` checks the steps.
+  7. **Bigger compass icon:** 28 pt instead of 20, in the same 36 pt circle.
 - **Notes:**
   - The first E2E attempt "failed" because `common/hide-keyboard.yaml` pressed Back after picking a
     suggestion had already closed the keyboard, which sent the app home; `search-pan` doesn't use

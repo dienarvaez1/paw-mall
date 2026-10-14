@@ -935,7 +935,8 @@ function PlacesMap({
       >
         <Image
           source={ICONS.compass}
-          style={{ width: 20, height: 20, transform: [{ rotate: `${-heading}deg` }] }}
+          // Larger than the other map icons, in the same 36 pt circle (owner's rule, 2026-10-14).
+          style={{ width: 28, height: 28, transform: [{ rotate: `${-heading}deg` }] }}
         />
       </Pressable>
       {places.isError ? (
