@@ -39,7 +39,22 @@ export async function reportPlace(db: Database, placeId: number, report: PlaceRe
 }
 
 /** Saves a pending claim for the owner's review (`pnpm places:claims`). */
-export async function createClaim(db: Database, placeId: number, claim: PlaceClaim) {
+/**
+ * Pending claims a place can have at once: more are refused until the owner reviews them, so a
+ * flood of fake claims can't bury the real one or pile up contacts.
+ */
+export const MAX_PENDING_CLAIMS = 3;
+
+/** Saves an owner's claim; false when the place already has MAX_PENDING_CLAIMS pending. */
+export async function createClaim(
+  db: Database,
+  placeId: number,
+  claim: PlaceClaim,
+): Promise<boolean> {
+  const [pending] = await db.execute<{ count: number }>(sql`
+    SELECT count(*)::int AS count FROM place_claims
+    WHERE place_id = ${placeId} AND status = 'pending'`);
+  if ((pending?.count ?? 0) >= MAX_PENDING_CLAIMS) return false;
   await db.execute(sql`
     INSERT INTO place_claims (place_id, phone, website, hours, open24h, accepts_emergencies,
                               pet_policy, contact_name, contact)
@@ -48,6 +63,7 @@ export async function createClaim(db: Database, placeId: number, claim: PlaceCla
             ${claim.open24h ?? null}, ${claim.acceptsEmergencies ?? null},
             ${claim.petPolicy ? JSON.stringify(claim.petPolicy) : null}::jsonb,
             ${claim.contactName}, ${claim.contact})`);
+  return true;
 }
 
 /**

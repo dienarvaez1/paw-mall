@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev --ip 0.0.0.0",
-    "dev:e2e": "wrangler dev --ip 0.0.0.0 --port 8788 --var DATABASE_URL:postgres://paw:paw@localhost:5434/paw_mall_e2e",
+    "dev:e2e": "wrangler dev --ip 0.0.0.0 --port 8788 --var DATABASE_URL:postgres://paw:paw@localhost:5434/paw_mall_e2e --var WRITE_RATE_LIMIT:off",
     "lint": "eslint .",
     "typecheck": "tsc",
     "test": "vitest run",
