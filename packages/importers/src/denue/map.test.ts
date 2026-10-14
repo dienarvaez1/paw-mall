@@ -9,6 +9,7 @@ import {
   buildAddress,
   categorize,
   dedupeChainBranches,
+  dedupeSameBusiness,
   formatPhone,
   isCrueltyLinked,
   venueCategory,
@@ -123,6 +124,45 @@ describe('mapDenueRow on the sample file', () => {
     const independent = await placeFromSample('1');
     const kept = dedupeChainBranches([...twins, independent]);
     expect(kept.map((p) => p.externalId).sort()).toEqual(['1', '17']);
+  });
+
+  it('merges a business registered twice with one name and phone, keeping both categories', () => {
+    const base: DenuePlace = {
+      externalId: '1',
+      activityCode: '434112',
+      name: 'Acuarama Imperial',
+      chain: null,
+      categories: [{ slug: 'feed_store', source: 'activity' }],
+      open24hHint: false,
+      address: 'Calle 1',
+      city: 'Juárez',
+      state: 'Chihuahua',
+      phone: '656 363 9886',
+      website: null,
+      lat: 31.7,
+      lng: -106.4,
+      registeredOn: '2015-01-01',
+    };
+    const twin: DenuePlace = {
+      ...base,
+      externalId: '2',
+      activityCode: '465911',
+      name: 'ACUARAMA IMPERIAL',
+      categories: [{ slug: 'pet_store', source: 'activity' }],
+      phone: '6563639886',
+      lat: 31.7001,
+      registeredOn: '2019-01-01',
+    };
+    // A market stall with the same name but another phone, and the same business 1 km away.
+    const stall = { ...base, externalId: '3', phone: '656 000 0000' };
+    const branch = { ...base, externalId: '4', lat: 31.71 };
+
+    const kept = dedupeSameBusiness([base, twin, stall, branch]);
+    expect(kept.map((p) => p.externalId).sort()).toEqual(['2', '3', '4']);
+    expect(kept.find((p) => p.externalId === '2')?.categories.map((c) => c.slug)).toEqual([
+      'pet_store',
+      'feed_store',
+    ]);
   });
 });
 

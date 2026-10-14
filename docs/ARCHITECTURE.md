@@ -111,19 +111,19 @@ Responses are localized by `Accept-Language` (`es` default, `en`).
 
 Each loader is a command (`pnpm places:*`), safe to re-run, writing to the same database:
 
-| Order | Command                                              | Loads                                                                                                   |
-| ----- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| 1     | `places:import`                                      | INEGI DENUE for all 32 states: pet businesses by activity class and name, restaurants, cafés and hotels |
-| 2     | `places:enrich-overture`                             | Overture Maps (DuckDB over the Parquet release): phones, websites, social pages                         |
-| 3     | `places:check-websites`                              | Visits each website once: dead sites hidden; hours and "pet friendly" wording read from the homepage    |
-| 4     | `places:areas`                                       | Colonias, towns, municipalities and landmarks for the search box (`search_areas`)                       |
-| 5     | `places:curated`                                     | Hand-collected pet-friendly places (`data/pet-friendly-cdmx.json`)                                      |
-| 6     | `places:osm`, `places:osm-hours`                     | OpenStreetMap dog parks and venues, and opening hours (committed snapshots)                             |
-| 7     | `places:chains`                                      | Chain-wide pet policies (`data/pet-friendly-chains.json`)                                               |
-| —     | `places:landmarks`                                   | Refreshes the Wikidata landmarks snapshot                                                               |
-| —     | `places:claims`, `places:reports`, `places:policies` | Owner review of claims, reports and policy answers                                                      |
-| —     | `places:integrity`                                   | Read-only data-integrity report: duplicates, bad coordinates or hours, Urgencias gaps, stale data       |
-| —     | `e2e:seed`                                           | The fixed test data for end-to-end tests (`paw_mall_e2e`)                                               |
+| Order | Command                                              | Loads                                                                                                                                                                     |
+| ----- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | `places:import`                                      | INEGI DENUE for all 32 states: pet businesses by activity class and name, restaurants, cafés and hotels; twins merged (a chain branch, or one name and phone within 50 m) |
+| 2     | `places:enrich-overture`                             | Overture Maps (DuckDB over the Parquet release): phones, websites, social pages                                                                                           |
+| 3     | `places:check-websites`                              | Visits each website once: dead sites hidden; hours and "pet friendly" wording read from the homepage                                                                      |
+| 4     | `places:areas`                                       | Colonias, towns, municipalities and landmarks for the search box (`search_areas`)                                                                                         |
+| 5     | `places:curated`                                     | Hand-collected pet-friendly places (`data/pet-friendly-cdmx.json`)                                                                                                        |
+| 6     | `places:osm`, `places:osm-hours`                     | OpenStreetMap dog parks and venues, and opening hours (committed snapshots)                                                                                               |
+| 7     | `places:chains`                                      | Chain-wide pet policies (`data/pet-friendly-chains.json`)                                                                                                                 |
+| —     | `places:landmarks`                                   | Refreshes the Wikidata landmarks snapshot                                                                                                                                 |
+| —     | `places:claims`, `places:reports`, `places:policies` | Owner review of claims, reports and policy answers                                                                                                                        |
+| —     | `places:integrity`                                   | Read-only data-integrity report: duplicates, bad coordinates or hours, Urgencias gaps, stale data                                                                         |
+| —     | `e2e:seed`                                           | The fixed test data for end-to-end tests (`paw_mall_e2e`)                                                                                                                 |
 
 The importers exclude cruelty-linked businesses (puppy mills, slaughterhouses, butchers) by
 activity and name, and merge duplicates across sources by name and distance.

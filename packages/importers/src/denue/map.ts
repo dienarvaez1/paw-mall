@@ -365,3 +365,45 @@ export function dedupeChainBranches<T extends DenuePlace>(places: T[]): T[] {
   }
   return [...places.filter((p) => p.chain === null), ...kept];
 }
+
+/** Entries of one business, with the same name and phone, closer than this are merged. */
+const SAME_BUSINESS_METERS = 50;
+
+/**
+ * INEGI also registers some businesses twice under one name and phone, often in two classes (a
+ * feed store that is also a pet store). Keeps the better entry with every category of the twins;
+ * the name and the phone must both match, so stalls of a market that share a name ("Cocina
+ * Económica") stay apart. Chains are left to dedupeChainBranches.
+ */
+export function dedupeSameBusiness<T extends DenuePlace>(places: T[]): T[] {
+  const groups = new Map<string, T[]>();
+  const kept: T[] = [];
+  for (const place of places) {
+    const phone = place.phone?.replace(/\D/g, '') ?? '';
+    if (place.chain !== null || !place.name || !phone) {
+      kept.push(place);
+      continue;
+    }
+    const key = `${plain(place.name)}|${phone}`;
+    groups.set(key, [...(groups.get(key) ?? []), place]);
+  }
+  for (const group of groups.values()) {
+    const merged: T[] = [];
+    for (const place of group.sort(preferred)) {
+      const index = merged.findIndex((k) => meters(k, place) < SAME_BUSINESS_METERS);
+      const twin = merged[index];
+      if (!twin) {
+        merged.push(place);
+        continue;
+      }
+      const slugs = new Set(twin.categories.map((c) => c.slug));
+      merged[index] = {
+        ...twin,
+        categories: [...twin.categories, ...place.categories.filter((c) => !slugs.has(c.slug))],
+        open24hHint: twin.open24hHint || place.open24hHint,
+      };
+    }
+    kept.push(...merged);
+  }
+  return kept;
+}

@@ -41,7 +41,8 @@ checked) · **Blocked**.
 | 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
 | 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
 | 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
-| 13    | Load test             | `phase-13/load-test`         | #24 | In review | 2026-10-14 | —          |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
+| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | In review | 2026-10-14 | —          |
 
 ## Pending owner reviews
 
@@ -954,7 +955,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Scope:** review item 7: a load test of the API (k6, approved by the owner 2026-10-14; no
   cost: local only, no cloud service), and fixes for what it finds.
 - **Branch / PR:** `phase-13/load-test` / #24
-- **Status:** In review.
+- **Status:** Done. Squash-merged into `main` as `e3c564f` on 2026-10-14; branch deleted.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
   - [x] `pnpm test`: 334 tests (shared 36, mobile 93, api 102, importers 103)
@@ -983,6 +984,39 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Follow-ups:**
   - E2E flows weren't rerun on this branch (the order change can only reorder places within
     0.1 km); the nightly run or the `run-e2e` label covers it.
+
+### Phase 14 — Data cleanup
+
+- **Scope:** act on the first `pnpm places:integrity` report (Phase 11): 5,782 probable
+  duplicates, 165 Urgencias places without a phone, 5 name-only "24 horas" vets.
+- **Branch / PR:** `phase-14/data-cleanup` / #25
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`
+  - [x] `pnpm test`: 336 tests with Phase 13 (shared 36, mobile 93, api 102, importers 105)
+  - [x] `pnpm places:import` on the dev data, then `pnpm places:integrity`
+- **Notes:**
+  - **Duplicates:** almost all the 5,782 pairs are different businesses with one name at one
+    spot: market and food-court stalls ("Cocina Económica" 363 pairs, "Antojitos Mexicanos" 187),
+    school co-ops, Herbalife clubs. DENUE gives each stall the market's address and point. Only
+    468 pairs also share the phone (762 places, 86 pet businesses, none with reports, claims,
+    policies or answers).
+  - The DENUE import now merges those (`dedupeSameBusiness`, next to the chain-branch merge):
+    same name and phone digits within 50 m, no chain. It keeps the better entry (contact data,
+    newest registration) with every twin's category (a feed store that is also a pet store).
+    377 merged on the dev data; the import removed the extra rows (no linked data).
+  - The integrity report splits the check: `duplicates` (same name and phone; 21 left, all with
+    the phone from Overture, which the import can't see) and `same_name_nearby` (5,212; phones
+    differ or missing; check by hand, not merged).
+  - **Urgencias without a phone (165):** 164 are DENUE vet hospitals (of 616) with no phone,
+    and 133 have no website or social page either. No source in the pipeline has their phones.
+    "Ver horario" (Google, on demand) can show a phone. Left as is.
+  - **"24 horas" by name only (5):** the app already shows "Says “24 horas” · not confirmed";
+    nothing to clean.
+- **Follow-ups (owner):**
+  - Vet hospitals without a phone: import OpenStreetMap vets' phones (free, ODbL credit), ask
+    owners to claim them, or leave them to Google on demand.
+  - The 21 Overture-phone twins: merge by hand or teach `places:enrich-overture` to hide one.
 
 ## Production deployment
 
@@ -1026,3 +1060,5 @@ Play readiness").
 | 2026-10-14 | A lone keyword no longer lists a chip's category (`009f4c5`) | #22 |
 | 2026-10-14 | Phase 12 bookkeeping                                         | #23 |
 | 2026-10-14 | Phase 13 started                                             | #24 |
+| 2026-10-14 | Phase 13 merged (`e3c564f`)                                  | #24 |
+| 2026-10-14 | Phase 14 started                                             | #25 |

@@ -44,6 +44,21 @@ export async function integrityReport(sql: Sql, sampleSize = 5): Promise<Integri
     };
   };
   const { south, north, west, east } = MEXICO_BOUNDS;
+  type Fragment = ReturnType<typeof sql>;
+  const digits = (phone: Fragment) => sql`nullif(regexp_replace(${phone}, '\D', '', 'g'), '')`;
+  const samePhone = sql`(${digits(sql`a.phone`)} = ${digits(sql`b.phone`)})`;
+  // Pairs of visible places with the same name (accents and case aside) this close, and `pair`.
+  const sameNameNearby = (pair: Fragment) => sql<Row[]>`
+    SELECT a.id, a.name, a.city, count(*) OVER ()::int AS total,
+      'same as ' || b.id || ' (' || b.source || ', ' ||
+      round(ST_Distance(a.location, b.location)::numeric) || ' m)' AS detail
+    FROM places a
+    JOIN places b ON b.id > a.id AND b.hidden_at IS NULL
+      AND ST_DWithin(a.location, b.location, ${DUPLICATE_DISTANCE_M})
+      AND lower(f_unaccent(b.name)) = lower(f_unaccent(a.name))
+    WHERE a.hidden_at IS NULL AND a.name IS NOT NULL
+      AND lower(f_unaccent(a.name)) NOT LIKE '%sin nombre%' AND ${pair}
+    ORDER BY a.id LIMIT ${sampleSize}`;
 
   const checks: IntegrityCheck[] = [
     await check(
@@ -60,18 +75,13 @@ export async function integrityReport(sql: Sql, sampleSize = 5): Promise<Integri
     ),
     await check(
       'duplicates',
-      `Same name within ${DUPLICATE_DISTANCE_M} m (probable duplicates)`,
-      sql<Row[]>`
-        SELECT a.id, a.name, a.city, count(*) OVER ()::int AS total,
-          'same as ' || b.id || ' (' || b.source || ', ' ||
-          round(ST_Distance(a.location, b.location)::numeric) || ' m)' AS detail
-        FROM places a
-        JOIN places b ON b.id > a.id AND b.hidden_at IS NULL
-          AND ST_DWithin(a.location, b.location, ${DUPLICATE_DISTANCE_M})
-          AND lower(f_unaccent(b.name)) = lower(f_unaccent(a.name))
-        WHERE a.hidden_at IS NULL AND a.name IS NOT NULL
-          AND lower(f_unaccent(a.name)) NOT LIKE '%sin nombre%'
-        ORDER BY a.id LIMIT ${sampleSize}`,
+      `Same name and phone within ${DUPLICATE_DISTANCE_M} m (duplicates; the DENUE import merges its own)`,
+      sameNameNearby(sql`${samePhone} IS TRUE`),
+    ),
+    await check(
+      'same_name_nearby',
+      `Same name within ${DUPLICATE_DISTANCE_M} m, phones differ or missing (often market stalls; check by hand)`,
+      sameNameNearby(sql`${samePhone} IS NOT TRUE`),
     ),
     await invalidHours(sql, sampleSize),
     await check(

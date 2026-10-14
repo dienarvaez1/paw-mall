@@ -24,6 +24,7 @@ import {
   type DenuePlace,
   type MappedRow,
   dedupeChainBranches,
+  dedupeSameBusiness,
   mapDenueRow,
   parseEditionDate,
 } from './map.ts';
@@ -100,13 +101,13 @@ for (const code of states) {
   }
 }
 
-const rows = dedupeChainBranches([...found.values()]);
+const rows = dedupeSameBusiness(dedupeChainBranches([...found.values()]));
 const countBy = (key: (p: DenuePlace) => string[]) => {
   const counts = new Map<string, number>();
   for (const place of rows) for (const k of key(place)) counts.set(k, (counts.get(k) ?? 0) + 1);
   return [...counts].sort((a, b) => a[0].localeCompare(b[0]));
 };
-console.log(`Found ${rows.length} places (${found.size - rows.length} chain duplicates merged).`);
+console.log(`Found ${rows.length} places (${found.size - rows.length} duplicates merged).`);
 console.log('By DENUE class:', Object.fromEntries(countBy((p) => [p.activityCode])));
 console.log('By category:', Object.fromEntries(countBy((p) => p.categories.map((c) => c.slug))));
 console.log('By state:', Object.fromEntries(countBy((p) => [p.state])));
