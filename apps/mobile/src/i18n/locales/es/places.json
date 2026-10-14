@@ -36,6 +36,8 @@
   "mapUnavailableHint": "Esta versión de prueba de Android no tiene la clave de Google Maps. Usa Lista mientras tanto.",
   "mapSatellite": "Ver mapa satelital",
   "mapStandard": "Ver mapa normal",
+  "mapPins": "Pines hasta {{count}} lugares en pantalla; con más, grupos.",
+  "mapPinsHint": "Toca para cambiar: 50, 100, 150, 200 o 300.",
   "categoriesLabel": "Categorías",
   "open24hHint": "Su nombre dice «24 horas». Horario sin confirmar.",
   "chips": {

@@ -27,8 +27,10 @@ search — the other shows too.
 - **Map / List** switch the view; both count the same places.
 - The **green circle** is the search radius around you (or around a place you searched). The
   count at the bottom says how many places are inside it; tap it to see the whole circle.
-- With more than 200 places in view the map groups them into **clusters** (turquoise bubbles with a count). Tap one
-  to zoom to it: the circle moves to where those places are.
+- With more places in view than the **pin button** shows (200 at first), the map groups them into
+  **clusters** (turquoise bubbles with a count). Tap one to zoom to it: the circle moves to where
+  those places are. The pin button, above the layers button, steps through 50, 100, 150, 200 and
+  300; the choice is kept.
 - With nothing in the circle, the count and the empty message still say where: "No places within
   5 km of Chiautempan" (the nearest municipality, or the place you searched).
 - **Pins** have their category's color and icon; tap a pin, then its bubble, to open the place.

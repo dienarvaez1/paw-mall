@@ -9,7 +9,7 @@ describe('parseSettings', () => {
   it('reads stored values', () => {
     expect(
       parseSettings(
-        '{"radiusKm":25,"units":"km","onlyWithPhone":true,"onlyWithWebsite":true,"onlyWithSocial":true,"hideUnnamed":true,"onlyOpenNow":true,"petSpecies":"dog","dogSize":"large","onlyConfirmedPetPlaces":false}',
+        '{"radiusKm":25,"units":"km","onlyWithPhone":true,"onlyWithWebsite":true,"onlyWithSocial":true,"hideUnnamed":true,"onlyOpenNow":true,"petSpecies":"dog","dogSize":"large","onlyConfirmedPetPlaces":false,"mapPinLimit":50}',
       ),
     ).toEqual({
       radiusKm: 25,
@@ -22,10 +22,16 @@ describe('parseSettings', () => {
       petSpecies: 'dog',
       dogSize: 'large',
       onlyConfirmedPetPlaces: false,
+      mapPinLimit: 50,
     });
     const miles = parseSettings(`{"radiusKm":${10 * 1.609344},"units":"mi"}`);
     expect(miles.units).toBe('mi');
     expect(miles.radiusKm).toBeCloseTo(16.09344, 5);
+  });
+
+  it('keeps only the map pin presets', () => {
+    expect(parseSettings('{"mapPinLimit":300}').mapPinLimit).toBe(300);
+    expect(parseSettings('{"mapPinLimit":120}').mapPinLimit).toBe(200);
   });
 
   it('keeps a radius set by zooming the map, and drops impossible ones', () => {
@@ -47,6 +53,7 @@ describe('parseSettings', () => {
       petSpecies: null,
       dogSize: null,
       onlyConfirmedPetPlaces: true,
+      mapPinLimit: 200,
     };
     expect(parseSettings(null)).toEqual(defaults);
     expect(

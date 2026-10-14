@@ -52,6 +52,8 @@ import { uniqueById } from '@/lib/unique';
 import { circleForCluster, isAwayFrom, radiusForRegion, regionForRadius } from '@/lib/map-region';
 import { MAP_TYPE, MAPS_AVAILABLE } from '@/lib/map-type';
 import { useScreenFocused } from '@/lib/use-screen-focused';
+
+import { nextPinLimit } from './pin-limit';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 import { useOnWake } from '@/lib/use-on-wake';
@@ -570,7 +572,8 @@ function PlacesMap({
   onLeaveMyLocation: () => void;
 }) {
   const { t } = useAppTranslation();
-  const { radiusKm, setRadiusKm } = useSettings();
+  const { radiusKm, setRadiusKm, mapPinLimit, setMapPinLimit } = useSettings();
+  const locale = useLocale();
   const router = useRouter();
   const location = useUserLocation();
   const scheme = useColorScheme();
@@ -888,6 +891,21 @@ function PlacesMap({
           onPress={fitCircle}
         />
       ) : null}
+      {/* Pins up to this many places in view, then clusters: steps through MAP_PIN_LIMITS (owner's
+          rule, 2026-10-14). Saved in Ajustes' storage; both maps follow it. */}
+      <Pressable
+        accessibilityRole="button"
+        testID="map-pins"
+        accessibilityLabel={t('places.mapPins', { count: mapPinLimit })}
+        accessibilityHint={t('places.mapPinsHint')}
+        onPress={() => setMapPinLimit(nextPinLimit(mapPinLimit))}
+        hitSlop={BUTTON_HIT_SLOP}
+        className="absolute bottom-[120px] right-3 h-9 w-9 items-center justify-center rounded-full bg-white shadow active:bg-neutral-100 dark:bg-neutral-900 dark:active:bg-neutral-800"
+      >
+        <Text className="text-[11px] font-bold text-teal-800 dark:text-teal-300">
+          {formatCount(mapPinLimit, locale)}
+        </Text>
+      </Pressable>
       <Pressable
         accessibilityRole="button"
         testID="map-layers"

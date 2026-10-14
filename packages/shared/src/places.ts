@@ -87,8 +87,14 @@ export const MAX_PAGE_SIZE = 200;
  */
 export const AREA_RADIUS_KM = 5;
 
-/** Most places the map shows one by one; with more in view it shows clusters. */
-export const MAP_MAX_PLACES = 200;
+/**
+ * How many places in view the map shows one by one before it groups them into clusters: the
+ * map's pin button steps through these (owner's rule, 2026-10-14); 200 until changed.
+ */
+export const MAP_PIN_LIMITS = [50, 100, 150, 200, 300] as const;
+export const MAP_DEFAULT_PINS = 200;
+/** The largest of MAP_PIN_LIMITS: the most places the map API returns one by one. */
+export const MAP_MAX_PLACES = 300;
 
 const latitude = z.coerce.number().min(-90).max(90);
 const longitude = z.coerce.number().min(-180).max(180);
@@ -251,7 +257,7 @@ export const placeMapQuerySchema = z.object({
   namesOnly: z.stringbool().optional(),
   ...placeFilters,
   /** Most places to return one by one before clustering (tests use a small number). */
-  limit: z.coerce.number().int().min(1).max(MAP_MAX_PLACES).default(MAP_MAX_PLACES),
+  limit: z.coerce.number().int().min(1).max(MAP_MAX_PLACES).default(MAP_DEFAULT_PINS),
 });
 export type PlaceMapQuery = z.infer<typeof placeMapQuerySchema>;
 

@@ -1051,7 +1051,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Status:** In review.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
-  - [x] `pnpm test`: 342 tests (shared 36, mobile 93, api 105, importers 108)
+  - [x] `pnpm test`: 345 tests (shared 36, mobile 96, api 105, importers 108)
   - [x] Android emulator (release build of this branch): new `search-pan` flow, plus
         `search-zoom`, `search-zoom-out`, `place-question`, `place-question-business`,
         `search-clear`, `near-me`, `search-section`, `search-typed-fit`, `map-buttons`,
@@ -1083,6 +1083,11 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
      within 5 km of Chiautempan." The name is the searched area, or the nearest municipality: the
      list response's `nearestMunicipality`, and the map's `nearestCity`, which falls back to it.
      `search-pan` checks the map, the list and Urgencias.
+  6. **Pin button on the map:** a round button above the map-style button shows how many places
+     in view the map draws as pins before it groups them into clusters. Each tap steps through 50,
+     100, 150, 200 and 300 (`MAP_PIN_LIMITS`; default 200). It's saved with Ajustes (`mapPinLimit`)
+     and both maps follow it. The app sends it as `limit`, and the API now accepts up to 300.
+     `map-buttons` checks the steps.
 - **Notes:**
   - The first E2E attempt "failed" because `common/hide-keyboard.yaml` pressed Back after picking a
     suggestion had already closed the keyboard, which sent the app home; `search-pan` doesn't use

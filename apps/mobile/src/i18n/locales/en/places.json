@@ -36,6 +36,8 @@
   "mapUnavailableHint": "This Android test build has no Google Maps key. Use List meanwhile.",
   "mapSatellite": "Show satellite map",
   "mapStandard": "Show standard map",
+  "mapPins": "Pins for up to {{count}} places in view; more are grouped.",
+  "mapPinsHint": "Tap to change: 50, 100, 150, 200 or 300.",
   "categoriesLabel": "Categories",
   "open24hHint": "Its name says “24 horas”. Hours not confirmed.",
   "chips": {

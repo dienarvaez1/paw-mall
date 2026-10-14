@@ -204,6 +204,7 @@ export function usePlacesMap(
       group,
       name,
       namesOnly,
+      settings.mapPinLimit,
     ],
     enabled: area !== null,
     placeholderData: (previous) => previous,
@@ -224,6 +225,8 @@ export function usePlacesMap(
           fixedAreaRadius: (name && pickedKm !== null) || undefined,
           // A busy city's circle in the user's units, so the radius button shows it as a preset.
           cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,
+          // Pins up to this many places in view, then clusters (the map's pin button).
+          limit: settings.mapPinLimit,
           ...filters,
         },
         locale,

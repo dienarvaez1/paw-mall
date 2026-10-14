@@ -105,7 +105,7 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | Explore      | A category chip narrows the list; Todos brings everything back             | `chips`                   |
 | Explore      | Radius button steps up to 160 km; the vet 110 km away appears              | `radius`                  |
 | Explore      | Moving the map turns "Mi ubicación" off; turning it on comes back          | `near-me`                 |
-| Explore      | Satellite toggle on/off; compass                                           | `map-buttons`             |
+| Explore      | Satellite toggle on/off; compass; pin button 200 → 300 → 50                | `map-buttons`             |
 | Explore      | No places in the radius → "No hay lugares…"                                | `empty`                   |
 | Pet-friendly | Confirmed place listed; unconfirmed left out by default                    | `pet-friendly`            |
 | Pet-friendly | No confirmed match → widens to unconfirmed venues, with a notice           | `pet-friendly-widen`      |
