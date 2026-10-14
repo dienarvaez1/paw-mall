@@ -113,7 +113,8 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const requestLocate = useCallback(() => setLocateRequest((n) => n + 1), []);
   useOnWake(() => {
     // After a search, or with "Mi ubicación" off, the app comes back as it was (owner's rules:
-    // only the location button, a place pick or answer, and moving the map change "Mi ubicación").
+    // only the location button, a place pick, the place question and its answer, and moving the
+    // map change "Mi ubicación").
     if (text.trim() || !nearMe) return;
     setMode('map');
     setFocus(null);
@@ -187,9 +188,12 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
 /**
  * How a place's name is searched. Picked from the suggestions (choosePlace): around that place,
  * no question. Typed and sent with the search key (askAboutPlace): the place-or-business question.
- * As a place: the search goes around it and "Mi ubicación" turns off (turning it back on clears
- * the text). As a business name: only business names match, around the user ("Mi ubicación" on). Either puts the name in the box and
- * hides the keyboard; Cancel changes nothing. Typing something else forgets the answer.
+ * "Mi ubicación" turns off as soon as a place is picked or the question comes up (owner's rule,
+ * 2026-10-13), and stays off unless the answer is "as a business name". As a place: the search
+ * goes around it (turning "Mi ubicación" back on clears the text). As a business name: only
+ * business names match, around the user ("Mi ubicación" on again). Either puts the name in the
+ * box and hides the keyboard; Cancel leaves the text as typed. Typing something else forgets the
+ * answer.
  */
 function usePlaceChoice(
   text: string,
@@ -223,6 +227,7 @@ function usePlaceChoice(
   );
   const askAboutPlace = useCallback(
     (place: Pick<SearchArea, 'name' | 'kind'>) => {
+      setNearMe(false);
       Alert.alert(
         t('places.placeAsk.title', { name: place.name }),
         t('places.placeAsk.message', {
@@ -237,7 +242,7 @@ function usePlaceChoice(
         { cancelable: false },
       );
     },
-    [t, answer],
+    [t, answer, setNearMe],
   );
   return { choice, choosePlace, askAboutPlace };
 }

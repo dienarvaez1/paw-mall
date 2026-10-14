@@ -39,8 +39,9 @@ The location button (crosshair) brings the map back to you, zoomed to the smalle
 or 3 mi in miles). It's **on** (filled) while the search is around you.
 
 It turns **off** when you move or zoom the map by hand, tap a cluster, pick a place from the
-suggestions, or answer "As a place". It turns **on** with the button, or when you answer "As a
-business name". Nothing else changes it.
+suggestions, or press 🔍 on a place's name (as soon as the question comes up; it stays off for
+"As a place" and Cancel). It turns **on** with the button, or when you answer "As a business
+name". Nothing else changes it.
 
 ### Radius
 
