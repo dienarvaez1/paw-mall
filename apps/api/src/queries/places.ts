@@ -20,6 +20,8 @@ import {
   URGENT_LIMIT,
   type UrgentResponse,
   type ValueSource,
+  type Verification,
+  WEBSITE_VERIFIED_DAYS,
   detectCategory,
   SEARCH_ALIASES,
 } from '@paw-mall/shared';
@@ -123,6 +125,7 @@ type PlaceRow = {
   registered_on: string | null;
   owner_verified_on: string | null;
   pet_policy: PetPolicy | null;
+  verification: Verification;
 };
 
 /** A place's pet policy as JSON in the API's shape, with recent shopper answers counted. */
@@ -142,6 +145,30 @@ const petPolicySql = sql`(SELECT json_build_object(
   FROM pet_policies pp WHERE pp.place_id = p.id)`;
 
 /**
+ * How far the place's details are confirmed, as VERIFICATION_STATUSES describes: the first rule
+ * that applies wins.
+ */
+const verificationSql = sql`(SELECT json_build_object('status', k.status, 'checkedOn', c.checked_on)
+  FROM (SELECT CASE
+      WHEN EXISTS (SELECT 1 FROM place_reports r WHERE r.place_id = p.id)
+        OR EXISTS (SELECT 1 FROM pet_policies pp WHERE pp.place_id = p.id
+                   AND pp.review_since IS NOT NULL) THEN 'needs_review'
+      WHEN p.owner_verified_at IS NOT NULL THEN 'owner_verified'
+      WHEN EXISTS (SELECT 1 FROM pet_policies pp WHERE pp.place_id = p.id
+                   AND pp.source = 'community') THEN 'community_confirmed'
+      WHEN p.website_status = 'ok'
+        AND p.website_checked_at > now() - make_interval(days => ${WEBSITE_VERIFIED_DAYS})
+        THEN 'website_verified'
+      ELSE 'listed' END AS status) k,
+  LATERAL (SELECT CASE k.status
+      WHEN 'needs_review' THEN NULL
+      WHEN 'owner_verified' THEN (p.owner_verified_at AT TIME ZONE 'America/Mexico_City')::date::text
+      WHEN 'community_confirmed' THEN (SELECT pp.last_confirmed_on::text FROM pet_policies pp
+                                       WHERE pp.place_id = p.id)
+      WHEN 'website_verified' THEN (p.website_checked_at AT TIME ZONE 'America/Mexico_City')::date::text
+      ELSE p.source_updated_on::text END AS checked_on) c)`;
+
+/**
  * Place columns where the places table is aliased `p` and vet_details `v`, with category names in
  * `locale` and the distance from `point` when given.
  */
@@ -156,7 +183,7 @@ function placeColumnsSql(locale: Locale, point?: Point) {
     ST_Y(p.location::geometry) AS lat, ST_X(p.location::geometry) AS lng,
     ${point ? sql`round((ST_Distance(p.location, ${pointSql(point)}) / 1000)::numeric, 1)` : sql`NULL`} AS distance_km,
     v.open24h, v.open24h_source, p.hours, p.hours_source, ${openNowSql} AS open_now,
-    ${petPolicySql} AS pet_policy,
+    ${petPolicySql} AS pet_policy, ${verificationSql} AS verification,
     (SELECT coalesce(json_agg(json_build_object('slug', c.slug, 'name', coalesce(t.name, d.name))
                               ORDER BY c.sort_order), '[]')
      FROM place_categories pc
@@ -194,6 +221,7 @@ function toPlace(row: PlaceRow): Place {
     registeredOn: row.registered_on,
     ownerVerifiedOn: row.owner_verified_on,
     petPolicy: row.pet_policy,
+    verification: row.verification,
   };
 }
 

@@ -4,6 +4,7 @@ import { CITY_AREA_RADIUS_KM } from './constants';
 import { CATEGORY_GROUPS, CATEGORY_SLUGS } from './categories';
 import { placeHoursSchema } from './hours';
 import { DOG_SIZES, PET_SPECIES, petPolicySchema } from './pet-policy';
+import { verificationSchema } from './verification';
 
 export const categorySlugSchema = z.enum(CATEGORY_SLUGS);
 
@@ -69,6 +70,8 @@ export const placeSchema = z.object({
   ownerVerifiedOn: z.string().nullable(),
   /** Pet-friendly venues: what pets they take, who said so and when; null when unknown. */
   petPolicy: petPolicySchema.nullable(),
+  /** How far the place's details are confirmed (see VERIFICATION_STATUSES). */
+  verification: verificationSchema,
 });
 export type Place = z.infer<typeof placeSchema>;
 

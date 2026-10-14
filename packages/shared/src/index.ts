@@ -9,3 +9,4 @@ export * from './places';
 export * from './search-keywords';
 export * from './search-tokens';
 export * from './trust';
+export * from './verification';
