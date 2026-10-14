@@ -878,7 +878,11 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - [x] Verification on dev data: place 18501 `website_verified` (checked 2026-10-11), DENUE-only
         places `listed` (edition 2026-05-20); list of 200 places near the Zócalo ~75 ms (main ~70)
   - [x] `pnpm places:integrity` on the full data: 22 s
-  - [ ] On a phone: a reported place shows "En revisión"; Urgencias cards say to call first
+  - [x] iOS simulator (iPhone 17 Pro Max, iOS 26.5, Expo Go, app in English), dev data: after one
+        "closed" report, place 18501 shows "Under review: users reported this place or its pet
+        policy" in amber under the address; Urgencias (5 km, Cuauhtémoc) cards say "Call before
+        going: details aren't confirmed by the owner." Test report removed with
+        `pnpm places:reports --restore 18501` (back to `website_verified`).
 - **Notes:**
   - Rate limit: Cloudflare's Workers rate-limit binding (`WRITE_LIMITER`, 20 POSTs per minute per
     user), simulated by `wrangler dev`, no cost when deployed. The key is the IP hashed with the
