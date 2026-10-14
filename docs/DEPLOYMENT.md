@@ -822,8 +822,8 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Scope:** the owner's UI requests of 2026-10-12 and 2026-10-13, Android development build,
   Maestro end-to-end tests and GitHub Actions, on one branch (not a numbered phase).
 - **Branch / PR:** `fix/ui-bugs` / #16
-- **Status:** Merged 2026-10-13 on the owner's request ("add the DEPLOYMENT.md entry and merge");
-  the merge commit is recorded in the follow-up PR.
+- **Status:** Done, squash-merged 2026-10-13 (`ed5c432`) on the owner's request ("add the
+  DEPLOYMENT.md entry and merge").
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm test`: 297 tests (shared 35, mobile 82, API 85,
         importers 95); GitHub Actions `CI` green on the PR
@@ -870,28 +870,29 @@ Play readiness").
 
 ## Change log
 
-| Date       | Change                                     | PR  |
-| ---------- | ------------------------------------------ | --- |
-| 2026-10-05 | Rollout log created                        | #1  |
-| 2026-10-05 | Phase 1 started                            | #2  |
-| 2026-10-05 | Phase 1 merged (`a0199db`)                 | #2  |
-| 2026-10-05 | Phase 2 started                            | #3  |
-| 2026-10-05 | Phase 2 merged (`97d6019`)                 | #3  |
-| 2026-10-05 | Phase 3 started                            | #4  |
-| 2026-10-05 | Phase 3 merged (`df26ef2`)                 | #4  |
-| 2026-10-05 | Phase 4 started                            | #5  |
-| 2026-10-05 | Phase 4 merged (`c30d151`)                 | #5  |
-| 2026-10-05 | Phase 5 started                            | #6  |
-| 2026-10-06 | Phase 5 merged (`80118ac`)                 | #6  |
-| 2026-10-10 | Diary files git-ignored                    | #7  |
-| 2026-10-10 | Phase 6 started                            | #8  |
-| 2026-10-10 | Phase 6 merged (`cb7b3b6`)                 | #8  |
-| 2026-10-10 | Phase 7 started                            | #9  |
-| 2026-10-10 | Phase 7 merged (`146991b`)                 | #9  |
-| 2026-10-10 | Phase 8 started                            | #11 |
-| 2026-10-10 | Phase 9 started                            | #12 |
-| 2026-10-11 | Phase 8 merged (`3673c52`)                 | #11 |
-| 2026-10-11 | Phase 9 merged (`faaaf68`)                 | #12 |
-| 2026-10-11 | Phase 10 started                           | #14 |
-| 2026-10-12 | Phase 10 merged (`d7384e2`)                | #14 |
-| 2026-10-13 | UI refresh, end-to-end tests and CI merged | #16 |
+| Date       | Change                                                       | PR  |
+| ---------- | ------------------------------------------------------------ | --- |
+| 2026-10-05 | Rollout log created                                          | #1  |
+| 2026-10-05 | Phase 1 started                                              | #2  |
+| 2026-10-05 | Phase 1 merged (`a0199db`)                                   | #2  |
+| 2026-10-05 | Phase 2 started                                              | #3  |
+| 2026-10-05 | Phase 2 merged (`97d6019`)                                   | #3  |
+| 2026-10-05 | Phase 3 started                                              | #4  |
+| 2026-10-05 | Phase 3 merged (`df26ef2`)                                   | #4  |
+| 2026-10-05 | Phase 4 started                                              | #5  |
+| 2026-10-05 | Phase 4 merged (`c30d151`)                                   | #5  |
+| 2026-10-05 | Phase 5 started                                              | #6  |
+| 2026-10-06 | Phase 5 merged (`80118ac`)                                   | #6  |
+| 2026-10-10 | Diary files git-ignored                                      | #7  |
+| 2026-10-10 | Phase 6 started                                              | #8  |
+| 2026-10-10 | Phase 6 merged (`cb7b3b6`)                                   | #8  |
+| 2026-10-10 | Phase 7 started                                              | #9  |
+| 2026-10-10 | Phase 7 merged (`146991b`)                                   | #9  |
+| 2026-10-10 | Phase 8 started                                              | #11 |
+| 2026-10-10 | Phase 9 started                                              | #12 |
+| 2026-10-11 | Phase 8 merged (`3673c52`)                                   | #11 |
+| 2026-10-11 | Phase 9 merged (`faaaf68`)                                   | #12 |
+| 2026-10-11 | Phase 10 started                                             | #14 |
+| 2026-10-12 | Phase 10 merged (`d7384e2`)                                  | #14 |
+| 2026-10-13 | UI refresh, end-to-end tests and CI merged (`ed5c432`)       | #16 |
+| 2026-10-13 | Project documentation started (`docs/project-documentation`) | —   |
