@@ -244,6 +244,7 @@
     }
   },
   "sourceOsm": "Data: © OpenStreetMap contributors (ODbL).",
+  "sourceOsmPhone": "Phone: © OpenStreetMap contributors (ODbL).",
   "searchUnconfirmed": "Also search places not yet confirmed",
   "widenedAuto": "No confirmed place matches “{{query}}”. These have no pet policy yet: open one and tell us whether it takes pets.",
   "introExplore": "Everything your furry friend needs, close by: vets, groomers, pet stores and more. Search, filter and head straight there, no detours.",

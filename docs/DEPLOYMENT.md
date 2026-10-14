@@ -27,22 +27,23 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done   | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done   | 2026-10-13 | 2026-10-13 |
-| 13    | Load test             | `phase-13/load-test`         | #24 | Done   | 2026-10-14 | 2026-10-14 |
-| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done   | 2026-10-14 | 2026-10-14 |
+| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
+| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done      | 2026-10-14 | 2026-10-14 |
+| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | In review | 2026-10-14 | —          |
 
 ## Pending owner reviews
 
@@ -1018,6 +1019,30 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
     owners to claim them, or leave them to Google on demand.
   - The 21 Overture-phone twins: merge by hand or teach `places:enrich-overture` to hide one.
 
+### Phase 15 — OpenStreetMap vet phones
+
+- **Scope:** the owner's pick from Phase 14's follow-ups: fill phones of vets (and vet hospitals,
+  for Urgencias) that have none, from OpenStreetMap.
+- **Branch / PR:** `phase-15/osm-vet-phones` / #27
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 339 tests (shared 36, mobile 93, api 102, importers 108)
+  - [x] `pnpm places:osm-phones --refresh` on the dev data, then `pnpm places:integrity`
+- **Notes:**
+  - `pnpm places:osm-phones` (`src/osm/phones.ts`), like `places:osm-hours`: one Overpass
+    request for named `amenity=veterinary` with `phone` or `contact:phone`, committed snapshot
+    `data/osm-vet-phones.json` (2026-10-14). A vet or vet hospital without a phone within 100 m
+    with a similar name gets the first number, written as DENUE does (+52 and the old mobile 1
+    removed; 10 digits only), `phone_source = 'osm'`. Re-runs clear earlier OSM phones first.
+    DENUE, Overture and owner phones always win; the DENUE import keeps OSM phones.
+  - The app credits it: "Teléfono: © colaboradores de OpenStreetMap (ODbL)" on the place page,
+    and the OpenStreetMap line under the list.
+  - **Result is small:** OpenStreetMap has 327 Mexican vets with a phone (300 readable); 19
+    listed vets without a phone matched, 3 of them hospitals. Urgencias without a phone: 165 → 162. First Overpass request got 504 (busy); the retry worked.
+- **Follow-ups (owner):**
+  - The other 162: owner claims, or "Ver horario" (Google, on demand) for a phone.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -1063,3 +1088,4 @@ Play readiness").
 | 2026-10-14 | Phase 13 merged (`e3c564f`)                                  | #24 |
 | 2026-10-14 | Phase 14 started                                             | #25 |
 | 2026-10-14 | Phase 14 merged (`472c7cc`)                                  | #25 |
+| 2026-10-14 | Phase 15 started                                             | #27 |

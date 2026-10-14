@@ -1,0 +1,3144 @@
+{
+  "about": "OpenStreetMap phones of named vets across Mexico. © OpenStreetMap contributors, ODbL 1.0 (https://www.openstreetmap.org/copyright). Refresh with `pnpm places:osm-phones --refresh`.",
+  "fetchedOn": "2026-10-14",
+  "elements": [
+    {
+      "type": "node",
+      "id": 10128060760,
+      "lat": 20.6883315,
+      "lon": -103.4237767,
+      "tags": {
+        "name": "Hospital Veterinario VETPETS",
+        "amenity": "veterinary",
+        "phone": "+52 3336822817"
+      }
+    },
+    {
+      "type": "node",
+      "id": 10132477783,
+      "lat": 20.7429284,
+      "lon": -103.4257854,
+      "tags": { "name": "Clinican", "amenity": "veterinary", "phone": "+52 33 3569 0431" }
+    },
+    {
+      "type": "node",
+      "id": 10132583761,
+      "lat": 20.6697748,
+      "lon": -103.4375367,
+      "tags": {
+        "name": "HarryVet Clínica Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 3323850795"
+      }
+    },
+    {
+      "type": "node",
+      "id": 10132588003,
+      "lat": 20.7506017,
+      "lon": -103.4023651,
+      "tags": {
+        "name": "Walking Pet's Clínica Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+523314531319"
+      }
+    },
+    {
+      "type": "node",
+      "id": 10132628485,
+      "lat": 20.7325899,
+      "lon": -103.3931604,
+      "tags": {
+        "name": "Clinica Veterinaria San Gabriel",
+        "amenity": "veterinary",
+        "phone": "+52 3338323529"
+      }
+    },
+    {
+      "type": "node",
+      "id": 10196193566,
+      "lat": 18.8282448,
+      "lon": -97.086863,
+      "tags": { "name": "Pet SOS", "amenity": "veterinary", "phone": "+52 272 180 0358" }
+    },
+    {
+      "type": "node",
+      "id": 10257972621,
+      "lat": 19.5232207,
+      "lon": -99.1421557,
+      "tags": { "name": "La potra salina", "amenity": "veterinary", "phone": "53998716" }
+    },
+    {
+      "type": "node",
+      "id": 10270143424,
+      "lat": 19.5268051,
+      "lon": -99.1424127,
+      "tags": { "name": "Dr Mascota", "amenity": "veterinary", "phone": "+52 55 7886 2250" }
+    },
+    {
+      "type": "node",
+      "id": 10294424817,
+      "lat": 30.7228098,
+      "lon": -115.9891867,
+      "tags": { "name": "Chic Mascotas", "amenity": "veterinary", "phone": "+52 646 290 8815" }
+    },
+    {
+      "type": "node",
+      "id": 10556494324,
+      "lat": 20.7369803,
+      "lon": -103.4243861,
+      "tags": {
+        "name": "Clínica veterinaria anivalenz",
+        "amenity": "veterinary",
+        "phone": "+52 3336856750"
+      }
+    },
+    {
+      "type": "node",
+      "id": 10949708605,
+      "lat": 19.464324,
+      "lon": -99.1118571,
+      "tags": {
+        "name": "Clínica Veterinaria de Especialidades Inguarán",
+        "amenity": "veterinary",
+        "phone": "+52 55 5551 6961"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11047392765,
+      "lat": 19.3913695,
+      "lon": -99.1354184,
+      "tags": { "name": "Villa de Canes", "amenity": "veterinary", "phone": "+52 55 7197 4115" }
+    },
+    {
+      "type": "node",
+      "id": 11178822242,
+      "lat": 19.0487979,
+      "lon": -98.1975997,
+      "tags": {
+        "name": "Farmacia veterinaria Acuario",
+        "amenity": "veterinary",
+        "phone": "+52 222 232 2456"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11530361900,
+      "lat": 19.7758211,
+      "lon": -99.8127081,
+      "tags": {
+        "name": "Consultorio Veterinario San Pedro",
+        "amenity": "veterinary",
+        "phone": "+52 712 235 7235"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11621108385,
+      "lat": 32.5144705,
+      "lon": -116.9873853,
+      "tags": { "name": "Tijuana", "amenity": "veterinary", "phone": "+526641044221" }
+    },
+    {
+      "type": "node",
+      "id": 11749087969,
+      "lat": 19.3648145,
+      "lon": -99.2880747,
+      "tags": {
+        "name": "Medical Vet. Cedros",
+        "amenity": "veterinary",
+        "phone": "+52 55 2345 7059"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12150049421,
+      "lat": 28.181333,
+      "lon": -105.4759659,
+      "tags": { "name": "Papigochic", "amenity": "veterinary", "contact:phone": "+52 639 131 0290" }
+    },
+    {
+      "type": "node",
+      "id": 12177450059,
+      "lat": 20.678559,
+      "lon": -103.3276994,
+      "tags": { "name": "Animal Health", "amenity": "veterinary", "phone": "+52 33 3617 6971" }
+    },
+    {
+      "type": "node",
+      "id": 12181365925,
+      "lat": 20.6260877,
+      "lon": -103.3704844,
+      "tags": { "name": "VETZAL", "amenity": "veterinary", "phone": "+52 33 1733 6929" }
+    },
+    {
+      "type": "node",
+      "id": 12181365927,
+      "lat": 20.6839223,
+      "lon": -103.3561468,
+      "tags": {
+        "name": "VETRERINARIA ITZCUINCALLI",
+        "amenity": "veterinary",
+        "phone": "+52 33 3846 7101"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365929,
+      "lat": 20.6923408,
+      "lon": -103.3277583,
+      "tags": { "name": "VETERINARIAFIDO VET", "amenity": "veterinary", "phone": "33340557841" }
+    },
+    {
+      "type": "node",
+      "id": 12181365930,
+      "lat": 20.6863843,
+      "lon": -103.3089656,
+      "tags": {
+        "name": "VETERINARIA ZOOHEALTH",
+        "amenity": "veterinary",
+        "phone": "+52 33 1694 5442"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365933,
+      "lat": 20.672545,
+      "lon": -103.299557,
+      "tags": {
+        "name": "VETERINARIA Y ZOOTECNISTA SASHA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3342 3358"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365934,
+      "lat": 20.6656318,
+      "lon": -103.3595851,
+      "tags": {
+        "name": "VETERINARIA Y ESTETICA CANINA",
+        "amenity": "veterinary",
+        "phone": "33338128925"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365936,
+      "lat": 20.6981476,
+      "lon": -103.301798,
+      "tags": {
+        "name": "VETERINARIA XILONEN",
+        "amenity": "veterinary",
+        "phone": "+52 33 2158 2036"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365938,
+      "lat": 20.6371714,
+      "lon": -103.39291,
+      "tags": {
+        "name": "VETERINARIA VILLA CANINA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1063 7999"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365939,
+      "lat": 20.656727,
+      "lon": -103.3713294,
+      "tags": { "name": "VETERINARIA VIEFER", "amenity": "veterinary", "phone": "+52 33 1707 6689" }
+    },
+    {
+      "type": "node",
+      "id": 12181365943,
+      "lat": 20.619074,
+      "lon": -103.3866059,
+      "tags": {
+        "name": "VETERINARIA VALERIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1950 5153"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365946,
+      "lat": 20.6521488,
+      "lon": -103.3056346,
+      "tags": {
+        "name": "VETERINARIA TERRACOTA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1203 0866"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365956,
+      "lat": 20.7077735,
+      "lon": -103.3389281,
+      "tags": {
+        "name": "VETERINARIA SESAVET",
+        "amenity": "veterinary",
+        "phone": "+52 33 3854 1540"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365959,
+      "lat": 20.706918,
+      "lon": -103.2971105,
+      "tags": {
+        "name": "VETERINARIA SANMIGUEL",
+        "amenity": "veterinary",
+        "phone": "+52 33 3195 2056"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365961,
+      "lat": 20.6971084,
+      "lon": -103.3136455,
+      "tags": {
+        "name": "VETERINARIA SAN JOSE",
+        "amenity": "veterinary",
+        "phone": "+52 33 3699 3770"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365963,
+      "lat": 20.6620749,
+      "lon": -103.3081219,
+      "tags": {
+        "name": "VETERINARIA SAN ANDRES",
+        "amenity": "veterinary",
+        "phone": "+52 33 3644 4222"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365964,
+      "lat": 20.6502137,
+      "lon": -103.3000234,
+      "tags": {
+        "name": "VETERINARIA SAMMY Y SUS MASCOTAS",
+        "amenity": "veterinary",
+        "phone": "+52 33 1817 0015"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365965,
+      "lat": 20.6955203,
+      "lon": -103.285009,
+      "tags": { "name": "VETERINARIA SAMMY", "amenity": "veterinary", "phone": "+52 33 3638 0818" }
+    },
+    {
+      "type": "node",
+      "id": 12181365966,
+      "lat": 20.6354389,
+      "lon": -103.3821047,
+      "tags": { "name": "VETERINARIA SAFINA", "amenity": "veterinary", "phone": "+52 33 1473 9648" }
+    },
+    {
+      "type": "node",
+      "id": 12181365970,
+      "lat": 20.6867322,
+      "lon": -103.3694511,
+      "tags": {
+        "name": "VETERINARIA REINO ANIMALS",
+        "amenity": "veterinary",
+        "phone": "+52 33 2465 7493"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365971,
+      "lat": 20.7028168,
+      "lon": -103.3336676,
+      "tags": {
+        "name": "VETERINARIA REINO ANIMAL",
+        "amenity": "veterinary",
+        "phone": "+52 33 1118 8261"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365973,
+      "lat": 20.6496902,
+      "lon": -103.3716228,
+      "tags": { "name": "VETERINARIA PUPPYS", "amenity": "veterinary", "phone": "+52 33 3811 3044" }
+    },
+    {
+      "type": "node",
+      "id": 12181365974,
+      "lat": 20.6815725,
+      "lon": -103.3206619,
+      "tags": {
+        "name": "VETERINARIA PROVIDENCIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3474 1117"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365975,
+      "lat": 20.7032249,
+      "lon": -103.3171171,
+      "tags": {
+        "name": "VETERINARIA PETS INC",
+        "amenity": "veterinary",
+        "phone": "+52 33 3609 7747"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365976,
+      "lat": 20.6445482,
+      "lon": -103.311486,
+      "tags": {
+        "name": "VETERINARIA PETS HOUSE",
+        "amenity": "veterinary",
+        "phone": "+52 33 1370 5642"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365979,
+      "lat": 20.6848521,
+      "lon": -103.3643772,
+      "tags": {
+        "name": "VETERINARIA PET S SOLUTIONS",
+        "amenity": "veterinary",
+        "phone": "+52 33 4444 4214"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365980,
+      "lat": 20.6998573,
+      "lon": -103.3560104,
+      "tags": {
+        "name": "VETERINARIA PET MANIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 2072 9717"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365981,
+      "lat": 20.6503486,
+      "lon": -103.3291682,
+      "tags": {
+        "name": "VETERINARIA PET AMOUR",
+        "amenity": "veterinary",
+        "phone": "+52 33 1193 5875"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365984,
+      "lat": 20.6427202,
+      "lon": -103.3728507,
+      "tags": { "name": "VETERINARIA ORIGAM", "amenity": "veterinary", "phone": "+52 33 1194 9023" }
+    },
+    {
+      "type": "node",
+      "id": 12181365985,
+      "lat": 20.6738061,
+      "lon": -103.3001507,
+      "tags": { "name": "VETERINARIA NORMIS", "amenity": "veterinary", "phone": "+52 33 1293 9186" }
+    },
+    {
+      "type": "node",
+      "id": 12181365986,
+      "lat": 20.6736974,
+      "lon": -103.2997851,
+      "tags": { "name": "VETERINARIA NORMIS", "amenity": "veterinary", "phone": "+52 33 1293 9186" }
+    },
+    {
+      "type": "node",
+      "id": 12181365988,
+      "lat": 20.6723874,
+      "lon": -103.3256128,
+      "tags": {
+        "name": "VETERINARIA MONORTZ",
+        "amenity": "veterinary",
+        "phone": "+52 33 7617 8625"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365993,
+      "lat": 20.6776562,
+      "lon": -103.3971056,
+      "tags": { "name": "VETERINARIA MEXICO", "amenity": "veterinary", "phone": "+52 33 1248 4239" }
+    },
+    {
+      "type": "node",
+      "id": 12181365994,
+      "lat": 20.7024033,
+      "lon": -103.3300166,
+      "tags": {
+        "name": "VETERINARIA MERAKI PETS",
+        "amenity": "veterinary",
+        "phone": "+52 33 1395 0302"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365995,
+      "lat": 20.6929522,
+      "lon": -103.3728949,
+      "tags": {
+        "name": "VETERINARIA MEDI PET",
+        "amenity": "veterinary",
+        "phone": "+52 33 2384 0703"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365997,
+      "lat": 20.6180683,
+      "lon": -103.3620706,
+      "tags": {
+        "name": "VETERINARIA MAX CAN",
+        "amenity": "veterinary",
+        "phone": "+52 33 1307 5975"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181365999,
+      "lat": 20.6755512,
+      "lon": -103.3176874,
+      "tags": {
+        "name": "VETERINARIA MASCOVET",
+        "amenity": "veterinary",
+        "phone": "+52 33 2593 9801"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367503,
+      "lat": 20.7268093,
+      "lon": -103.3252278,
+      "tags": { "name": "VETERINARIA MARIN", "amenity": "veterinary", "phone": "+52 33 1048 5237" }
+    },
+    {
+      "type": "node",
+      "id": 12181367507,
+      "lat": 20.707119,
+      "lon": -103.3218697,
+      "tags": {
+        "name": "VETERINARIA- LITTLE TAILS",
+        "amenity": "veterinary",
+        "phone": "+52 33 1460 6477"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367508,
+      "lat": 20.6575571,
+      "lon": -103.3291387,
+      "tags": {
+        "name": "VETERINARIA LEON EL",
+        "amenity": "veterinary",
+        "phone": "+52 33 3619 9171"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367509,
+      "lat": 20.6207361,
+      "lon": -103.3561597,
+      "tags": {
+        "name": "VETERINARIA LA JUNGLA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3200 8434"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367511,
+      "lat": 20.652446,
+      "lon": -103.3626882,
+      "tags": {
+        "name": "VETERINARIA LA CASA DE TOBI",
+        "amenity": "veterinary",
+        "phone": "+52 33 3812 7171"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367512,
+      "lat": 20.7080639,
+      "lon": -103.324313,
+      "tags": {
+        "name": "VETERINARIA LA CASA DE LA MASCOTA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3637 8711"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367517,
+      "lat": 20.7203994,
+      "lon": -103.3176129,
+      "tags": {
+        "name": "VETERINARIA INDEPENDENCIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3674 5550"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367519,
+      "lat": 20.7160633,
+      "lon": -103.3410797,
+      "tags": { "name": "VETERINARIA HUIZAR", "amenity": "veterinary", "phone": "+52 33 1065 6792" }
+    },
+    {
+      "type": "node",
+      "id": 12181367520,
+      "lat": 20.7393013,
+      "lon": -103.3163766,
+      "tags": {
+        "name": "VETERINARIA HUENTITAN",
+        "amenity": "veterinary",
+        "phone": "+52 33 3698 5508"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367521,
+      "lat": 20.722501,
+      "lon": -103.3341496,
+      "tags": {
+        "name": "VETERINARIA HERRERA",
+        "amenity": "veterinary",
+        "phone": "+52 33 9627 2760"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367522,
+      "lat": 20.7112615,
+      "lon": -103.2950312,
+      "tags": {
+        "name": "VETERINARIA HEALTH PETS",
+        "amenity": "veterinary",
+        "phone": "+52 33 3334 0806"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367523,
+      "lat": 20.6658135,
+      "lon": -103.3293478,
+      "tags": {
+        "name": "VETERINARIA GREEN HEALTH",
+        "amenity": "veterinary",
+        "phone": "+52 33 3116 5345"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367526,
+      "lat": 20.6835756,
+      "lon": -103.3456089,
+      "tags": {
+        "name": "VETERINARIA GENTIL ANIMALS",
+        "amenity": "veterinary",
+        "phone": "+52 33 2989 4821"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367531,
+      "lat": 20.6443853,
+      "lon": -103.2915087,
+      "tags": {
+        "name": "VETERINARIA ESTILO ANIMAL",
+        "amenity": "veterinary",
+        "phone": "+52 33 3394 9781"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367535,
+      "lat": 20.6868541,
+      "lon": -103.2932451,
+      "tags": {
+        "name": "VETERINARIA EL QUINVA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3644 8201"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367536,
+      "lat": 20.674111,
+      "lon": -103.3015592,
+      "tags": {
+        "name": "VETERINARIA EL PATO",
+        "amenity": "veterinary",
+        "phone": "+52 33 3342 3241"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367538,
+      "lat": 20.6957269,
+      "lon": -103.3007713,
+      "tags": {
+        "name": "VETERINARIA EL ANGEL",
+        "amenity": "veterinary",
+        "phone": "+52 33 3651 7406"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367540,
+      "lat": 20.6962761,
+      "lon": -103.305733,
+      "tags": { "name": "VETERINARIA DPG", "amenity": "veterinary", "phone": "+52 33 1144 7254" }
+    },
+    {
+      "type": "node",
+      "id": 12181367543,
+      "lat": 20.7064554,
+      "lon": -103.3149695,
+      "tags": {
+        "name": "VETERINARIA DE MASCOTAS V&V CENTRO INTEGRAL VETERINARIO",
+        "amenity": "veterinary",
+        "phone": "+52 33 1083 6011"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367545,
+      "lat": 20.7041627,
+      "lon": -103.3649409,
+      "tags": {
+        "name": "VETERINARIA COUNTRY CAN",
+        "amenity": "veterinary",
+        "phone": "+52 33 3126 4085"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367547,
+      "lat": 20.7004417,
+      "lon": -103.3574884,
+      "tags": {
+        "name": "VETERINARIA CLINICKAN",
+        "amenity": "veterinary",
+        "phone": "+52 33 1819 9181"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367548,
+      "lat": 20.661883,
+      "lon": -103.2928439,
+      "tags": {
+        "name": "VETERINARIA CHIMANIMALS",
+        "amenity": "veterinary",
+        "phone": "+52 33 3678 8938"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367549,
+      "lat": 20.6677407,
+      "lon": -103.2845721,
+      "tags": {
+        "name": "VETERINARIA CHERSES",
+        "amenity": "veterinary",
+        "phone": "+52 33 1139 0941"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367551,
+      "lat": 20.6605347,
+      "lon": -103.3043679,
+      "tags": {
+        "name": "VETERINARIA CHAMIZAL",
+        "amenity": "veterinary",
+        "phone": "+52 33 1925 8402"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367553,
+      "lat": 20.6238297,
+      "lon": -103.3622797,
+      "tags": {
+        "name": "VETERINARIA CAT - DOG",
+        "amenity": "veterinary",
+        "phone": "+52 33 3800 8291"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367554,
+      "lat": 20.6840927,
+      "lon": -103.3633214,
+      "tags": { "name": "VETERINARIA CANNES", "amenity": "veterinary", "phone": "+52 33 3827 3840" }
+    },
+    {
+      "type": "node",
+      "id": 12181367555,
+      "lat": 20.628249,
+      "lon": -103.3286687,
+      "tags": {
+        "name": "VETERINARIA CANIS VITA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1621 8679"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367556,
+      "lat": 20.712,
+      "lon": -103.3453236,
+      "tags": { "name": "VETERINARIA CANINA", "amenity": "veterinary", "phone": "+52 33 1202 8741" }
+    },
+    {
+      "type": "node",
+      "id": 12181367557,
+      "lat": 20.6952646,
+      "lon": -103.3336036,
+      "tags": {
+        "name": "VETERINARIA CALIFORNIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3637 8517"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367560,
+      "lat": 20.6801833,
+      "lon": -103.3662137,
+      "tags": { "name": "VETERINARIA BLACKI", "amenity": "veterinary", "phone": "+52 33 3825 5445" }
+    },
+    {
+      "type": "node",
+      "id": 12181367561,
+      "lat": 20.6692268,
+      "lon": -103.356543,
+      "tags": {
+        "name": "VETERINARIA BLACK FOX",
+        "amenity": "veterinary",
+        "phone": "+52 33 1326 0035"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367566,
+      "lat": 20.7026637,
+      "lon": -103.3422754,
+      "tags": {
+        "name": "VETERINARIA ANIMAL LIFE",
+        "amenity": "veterinary",
+        "phone": "+52 33 1368 2381"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367567,
+      "lat": 20.6121443,
+      "lon": -103.3948703,
+      "tags": {
+        "name": "VETERINARIA ANIMAL HEART",
+        "amenity": "veterinary",
+        "phone": "+52 33 3135 1924"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367569,
+      "lat": 20.636306,
+      "lon": -103.3249071,
+      "tags": {
+        "name": "VETERINARIA ANIMAL FRIENDS",
+        "amenity": "veterinary",
+        "phone": "+52 33 1382 7669"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367572,
+      "lat": 20.6851435,
+      "lon": -103.3398621,
+      "tags": {
+        "name": "Veterinaria Alameda",
+        "amenity": "veterinary",
+        "phone": "+52 33 1732 8154"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367573,
+      "lat": 20.6728078,
+      "lon": -103.3177206,
+      "tags": { "name": "VETERINARIA 9 C", "amenity": "veterinary", "phone": "+52 33 1068 0787" }
+    },
+    {
+      "type": "node",
+      "id": 12181367580,
+      "lat": 20.6293466,
+      "lon": -103.3598055,
+      "tags": { "name": "VETERILANDIA", "amenity": "veterinary", "phone": "+52 33 1731 8440" }
+    },
+    {
+      "type": "node",
+      "id": 12181367584,
+      "lat": 20.7055089,
+      "lon": -103.3388668,
+      "tags": { "name": "TARA GROOMING", "amenity": "veterinary", "phone": "+52 33 3846 4920" }
+    },
+    {
+      "type": "node",
+      "id": 12181367585,
+      "lat": 20.723075,
+      "lon": -103.3196831,
+      "tags": {
+        "name": "SRVICIOS VETERINARIOS PROFESIONALES",
+        "amenity": "veterinary",
+        "phone": "+52 33 1321 9062"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367587,
+      "lat": 20.6655624,
+      "lon": -103.3717389,
+      "tags": {
+        "name": "SERVICIOS MEDICOS VETERINARIOS DE GUADALAJARA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3615 2425"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367588,
+      "lat": 20.6267425,
+      "lon": -103.3661815,
+      "tags": {
+        "name": "SERVICIOS MEDICOS VETERINARIOS",
+        "amenity": "veterinary",
+        "phone": "+52 33 2590 6962"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367591,
+      "lat": 20.6432434,
+      "lon": -103.3754914,
+      "tags": {
+        "name": "RONALD PETS VETERINARIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1453 5419"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367592,
+      "lat": 20.6287038,
+      "lon": -103.3908112,
+      "tags": { "name": "PUPPYS VETERINARIA", "amenity": "veterinary", "phone": "+52 33 3626 1778" }
+    },
+    {
+      "type": "node",
+      "id": 12181367593,
+      "lat": 20.6514498,
+      "lon": -103.2897024,
+      "tags": {
+        "name": "PUPPY VILLAGE PET SHOP AND GROOMING",
+        "amenity": "veterinary",
+        "phone": "335059239"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367594,
+      "lat": 20.6943145,
+      "lon": -103.3408852,
+      "tags": { "name": "PETZU ANIMAL CARE", "amenity": "veterinary", "phone": "+52 33 1850 5339" }
+    },
+    {
+      "type": "node",
+      "id": 12181367597,
+      "lat": 20.6397237,
+      "lon": -103.3825552,
+      "tags": {
+        "name": "PET MART VETERINARIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3812 9622"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367599,
+      "lat": 20.701389,
+      "lon": -103.3665541,
+      "tags": { "name": "PERROS DEL MUNDO", "amenity": "veterinary", "phone": "+52 33 1250 7860" }
+    },
+    {
+      "type": "node",
+      "id": 12181367601,
+      "lat": 20.6899442,
+      "lon": -103.3763581,
+      "tags": { "name": "OCICAT", "amenity": "veterinary", "phone": "+52 33 1177 4473" }
+    },
+    {
+      "type": "node",
+      "id": 12181367602,
+      "lat": 20.6456668,
+      "lon": -103.3793925,
+      "tags": { "name": "MUNDO VETERINARIO", "amenity": "veterinary", "phone": "+52 33 1512 7546" }
+    },
+    {
+      "type": "node",
+      "id": 12181367603,
+      "lat": 20.675578,
+      "lon": -103.3295159,
+      "tags": {
+        "name": "MULTISERVICIOS VETERINARIOS",
+        "amenity": "veterinary",
+        "phone": "+52 33 3618 3680"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367604,
+      "lat": 20.636113,
+      "lon": -103.3743262,
+      "tags": { "name": "MR.POCK", "amenity": "veterinary", "phone": "+52 33 2187 9920" }
+    },
+    {
+      "type": "node",
+      "id": 12181367605,
+      "lat": 20.6828079,
+      "lon": -103.3563099,
+      "tags": { "name": "MEDICAL PET", "amenity": "veterinary", "phone": "+52 33 1431 1050" }
+    },
+    {
+      "type": "node",
+      "id": 12181367606,
+      "lat": 20.6355699,
+      "lon": -103.3846447,
+      "tags": {
+        "name": "MEDICAL KING - VETERINARIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1251 4910"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367607,
+      "lat": 20.6957676,
+      "lon": -103.2978942,
+      "tags": { "name": "MAK VETERINARIA", "amenity": "veterinary", "phone": "+52 33 1129 5192" }
+    },
+    {
+      "type": "node",
+      "id": 12181367610,
+      "lat": 20.7009698,
+      "lon": -103.3300499,
+      "tags": { "name": "LA PANTERA ROSA", "amenity": "veterinary", "phone": "+52 33 3609 4243" }
+    },
+    {
+      "type": "node",
+      "id": 12181367613,
+      "lat": 20.6912853,
+      "lon": -103.340568,
+      "tags": { "name": "KA AN VETERINARIA", "amenity": "veterinary", "phone": "36133506" }
+    },
+    {
+      "type": "node",
+      "id": 12181367616,
+      "lat": 20.7344005,
+      "lon": -103.3131748,
+      "tags": {
+        "name": "HUENTIPETS VETERINARIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1048 3602"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367617,
+      "lat": 20.6665025,
+      "lon": -103.3066212,
+      "tags": {
+        "name": "HOUNDS FARMACIA VETERINARIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 2244 5685"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367619,
+      "lat": 20.6544539,
+      "lon": -103.3625757,
+      "tags": {
+        "name": "HOSPITAL VETERINARIO REAL SAN FRANCISCO",
+        "amenity": "veterinary",
+        "phone": "+52 33 3811 7832"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367620,
+      "lat": 20.6844361,
+      "lon": -103.382007,
+      "tags": {
+        "name": "HOSPITAL VETERINARIO PROVIDENCIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3640 1037"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367623,
+      "lat": 20.6863968,
+      "lon": -103.3791685,
+      "tags": {
+        "name": "HOSPITAL VETERINARIO GUADALAJARA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3630 1730"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367627,
+      "lat": 20.6170769,
+      "lon": -103.3851184,
+      "tags": {
+        "name": "HOSPITAL VETERINARIA LA GRANJA",
+        "amenity": "veterinary",
+        "phone": "+52 33 3646 5264"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367629,
+      "lat": 20.6874621,
+      "lon": -103.3947219,
+      "tags": {
+        "name": "GUARDERIA CANINA DOG DOG ENCAMINANDO A TU PERRO",
+        "amenity": "veterinary",
+        "phone": "+52 33 1109 4075"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367630,
+      "lat": 20.681549,
+      "lon": -103.299646,
+      "tags": { "name": "GOLDEN VETERINARIA", "amenity": "veterinary", "phone": "+52 33 1157 7189" }
+    },
+    {
+      "type": "node",
+      "id": 12181367635,
+      "lat": 20.6943038,
+      "lon": -103.3412463,
+      "tags": {
+        "name": "ESTETICA VETERINARIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1701 7722"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367638,
+      "lat": 20.670064,
+      "lon": -103.3312786,
+      "tags": { "name": "DHARMA VET", "amenity": "veterinary", "phone": "+52 33 2651 4463" }
+    },
+    {
+      "type": "node",
+      "id": 12181367640,
+      "lat": 20.6351571,
+      "lon": -103.3910052,
+      "tags": { "name": "DASHA", "amenity": "veterinary", "phone": "+52 33 1283 6007" }
+    },
+    {
+      "type": "node",
+      "id": 12181367642,
+      "lat": 20.6669945,
+      "lon": -103.3028791,
+      "tags": {
+        "name": "CONSULTORIO VETERINARIO DE MANCHAS",
+        "amenity": "veterinary",
+        "phone": "+52 33 1431 4293"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367644,
+      "lat": 20.7092761,
+      "lon": -103.3645267,
+      "tags": {
+        "name": "CONSULTORIO VETERINARIO",
+        "amenity": "veterinary",
+        "phone": "+52 33 3854 5311"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367647,
+      "lat": 20.7079321,
+      "lon": -103.3628423,
+      "tags": {
+        "name": "CONSULTORIO COUNTRY PETS",
+        "amenity": "veterinary",
+        "phone": "+52 33 3853 4542"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367648,
+      "lat": 20.6760169,
+      "lon": -103.311314,
+      "tags": { "name": "CLINICAN VET", "amenity": "veterinary", "phone": "+52 33 3665 3724" }
+    },
+    {
+      "type": "node",
+      "id": 12181367654,
+      "lat": 20.6869798,
+      "lon": -103.3760318,
+      "tags": {
+        "name": "CLINICA VETERINARIA SEÃOR DOGS",
+        "amenity": "veterinary",
+        "phone": "+52 33 3616 9726"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367656,
+      "lat": 20.7118644,
+      "lon": -103.3444177,
+      "tags": {
+        "name": "CLINICA VETERINARIA SAN FRANSCISCO DE ASIS, ESPECIALISTAS EN DERTAMATOLOGIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1349 3057"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367658,
+      "lat": 20.6922392,
+      "lon": -103.3137802,
+      "tags": {
+        "name": "CLINICA VETERINARIA POM S MANIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1559 7009"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367661,
+      "lat": 20.637825,
+      "lon": -103.3238787,
+      "tags": {
+        "name": "CLINICA VETERINARIA ODDY",
+        "amenity": "veterinary",
+        "phone": "+52 33 2829 5230"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367662,
+      "lat": 20.6816862,
+      "lon": -103.3105462,
+      "tags": {
+        "name": "CLINICA VETERINARIA MASCOVET",
+        "amenity": "veterinary",
+        "phone": "+52 33 1393 5662"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367664,
+      "lat": 20.6931304,
+      "lon": -103.334339,
+      "tags": {
+        "name": "CLINICA VETERINARIA GHENE",
+        "amenity": "veterinary",
+        "phone": "+52 33 3638 1101"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367665,
+      "lat": 20.6721768,
+      "lon": -103.3291499,
+      "tags": {
+        "name": "CLÃNICA VETERINARIA DROOPY",
+        "amenity": "veterinary",
+        "phone": "+52 33 1332 7882"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367666,
+      "lat": 20.645258,
+      "lon": -103.3086539,
+      "tags": {
+        "name": "CLINICA VETERINARIA DEL BOSQUE",
+        "amenity": "veterinary",
+        "phone": "+52 33 3838 5805"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367667,
+      "lat": 20.6812438,
+      "lon": -103.2975888,
+      "tags": {
+        "name": "CLINICA VETERINARIA COUNTRY",
+        "amenity": "veterinary",
+        "phone": "+52 33 1743 7950"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367668,
+      "lat": 20.6525327,
+      "lon": -103.3084552,
+      "tags": {
+        "name": "CLINICA VETERINARIA CARVET",
+        "amenity": "veterinary",
+        "phone": "+52 33 3639 4364"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367669,
+      "lat": 20.6913428,
+      "lon": -103.3677647,
+      "tags": {
+        "name": "CLINICA VETERINARIA BASENJI",
+        "amenity": "veterinary",
+        "phone": "+52 33 1149 7688"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367671,
+      "lat": 20.6834206,
+      "lon": -103.320138,
+      "tags": {
+        "name": "CLINICA VETERINARIA ANIMAL KINGDOMM",
+        "amenity": "veterinary",
+        "phone": "+52 33 3345 4104"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367672,
+      "lat": 20.6638138,
+      "lon": -103.2723624,
+      "tags": {
+        "name": "CLINICA VETERINARIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1893 2132"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367674,
+      "lat": 20.6503571,
+      "lon": -103.3095711,
+      "tags": {
+        "name": "CLINCA BETERINARIA EL ARCA DE RHOEL",
+        "amenity": "veterinary",
+        "phone": "+52 33 2252 8434"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367677,
+      "lat": 20.6946892,
+      "lon": -103.3328678,
+      "tags": {
+        "name": "CENTRO MEDICO VETERINARIO ARGOS",
+        "amenity": "veterinary",
+        "phone": "33313080"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367678,
+      "lat": 20.6342188,
+      "lon": -103.3917641,
+      "tags": {
+        "name": "CENTRO INTEGRAL VETERINARIO JARDINES",
+        "amenity": "veterinary",
+        "phone": "+52 33 3841 7898"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367679,
+      "lat": 20.6408112,
+      "lon": -103.378752,
+      "tags": {
+        "name": "CENTRO DE ECOGRAFIA CLINICA PARA MASCOTAS",
+        "amenity": "veterinary",
+        "phone": "+52 33 3120 3975"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367680,
+      "lat": 20.7088054,
+      "lon": -103.3694133,
+      "tags": { "name": "CANOPOLIS", "amenity": "veterinary", "phone": "+52 33 3823 6558" }
+    },
+    {
+      "type": "node",
+      "id": 12181367682,
+      "lat": 20.6925796,
+      "lon": -103.3292575,
+      "tags": {
+        "name": "CANE CLINICA VETERINARIA Y ESTETICA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1190 8996"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367684,
+      "lat": 20.6982028,
+      "lon": -103.3134849,
+      "tags": {
+        "name": "B2 HOSPITAL VETERINARIO",
+        "amenity": "veterinary",
+        "phone": "+52 33 1676 1209"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367685,
+      "lat": 20.6850784,
+      "lon": -103.3718467,
+      "tags": {
+        "name": "ASHOKA HOSPITAL VETERINARIO",
+        "amenity": "veterinary",
+        "phone": "+52 33 1466 3554"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367686,
+      "lat": 20.6284501,
+      "lon": -103.3933239,
+      "tags": {
+        "name": "ANIMALS VETERINARIA",
+        "amenity": "veterinary",
+        "phone": "+52 33 1610 2872"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12181367689,
+      "lat": 20.6834493,
+      "lon": -103.339659,
+      "tags": { "name": "ABYVET VETERINARIA", "amenity": "veterinary", "phone": "36581187" }
+    },
+    {
+      "type": "node",
+      "id": 12375043786,
+      "lat": 15.870234,
+      "lon": -97.0747219,
+      "tags": {
+        "name": "Veterinaria regional \"El puente\"",
+        "amenity": "veterinary",
+        "phone": "+52 954 582 3575"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12375169731,
+      "lat": 15.863346,
+      "lon": -97.0700072,
+      "tags": { "name": "Doctor Chon", "amenity": "veterinary", "phone": "+52 954 559 0045" }
+    },
+    {
+      "type": "node",
+      "id": 12410986717,
+      "lat": 16.9663428,
+      "lon": -96.7056781,
+      "tags": { "name": "Alimentos Nutrel", "amenity": "veterinary", "phone": "+52 951 228 6387" }
+    },
+    {
+      "type": "node",
+      "id": 12424963351,
+      "lat": 19.3431186,
+      "lon": -99.1508844,
+      "tags": {
+        "name": "Centro Veterinario Felino",
+        "amenity": "veterinary",
+        "phone": "+52 55 1739 4404"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12434814593,
+      "lat": 16.9823554,
+      "lon": -96.7788707,
+      "tags": {
+        "name": "Veterinaria Lavariega",
+        "amenity": "veterinary",
+        "phone": "+52 951 345 3107"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12442698359,
+      "lat": 16.9551183,
+      "lon": -96.7542948,
+      "tags": {
+        "name": "Agroinsumos La Sierra",
+        "amenity": "veterinary",
+        "phone": "+52 951 292 8543"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12445606756,
+      "lat": 17.1550732,
+      "lon": -96.7908261,
+      "tags": {
+        "name": "Veterinaria Santiaguito",
+        "amenity": "veterinary",
+        "phone": "+52 951 521 2264"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12446874369,
+      "lat": 16.9630164,
+      "lon": -96.4786524,
+      "tags": { "name": "Semah", "amenity": "veterinary", "phone": "+52 951 207 4471" }
+    },
+    {
+      "type": "node",
+      "id": 12446891350,
+      "lat": 17.2968072,
+      "lon": -96.9065345,
+      "tags": {
+        "name": "Servicios Veterinarios La Soledad",
+        "amenity": "veterinary",
+        "phone": "+52 951 210 1928"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12451117942,
+      "lat": 17.0630234,
+      "lon": -96.7168286,
+      "tags": { "name": "Conagro", "amenity": "veterinary", "phone": "+52 951 207 0618" }
+    },
+    {
+      "type": "node",
+      "id": 12451513997,
+      "lat": 17.1698298,
+      "lon": -96.8200449,
+      "tags": { "name": "Forrajes Leo", "amenity": "veterinary", "phone": "+52 951 309 1092" }
+    },
+    {
+      "type": "node",
+      "id": 12451697350,
+      "lat": 17.050236,
+      "lon": -96.6347095,
+      "tags": { "name": "Almaba", "amenity": "veterinary", "phone": "+52 951 228 3401" }
+    },
+    {
+      "type": "node",
+      "id": 12452392363,
+      "lat": 17.0572886,
+      "lon": -96.6778941,
+      "tags": { "name": "Forrajera Antonio", "amenity": "veterinary", "phone": "+52 951 125 8787" }
+    },
+    {
+      "type": "node",
+      "id": 12457999547,
+      "lat": 17.0571957,
+      "lon": -96.6721241,
+      "tags": {
+        "name": "Lopuesa forrajes e insumos para ganado",
+        "amenity": "veterinary",
+        "phone": "+52 951 521 3285"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12462071780,
+      "lat": 17.2054865,
+      "lon": -96.8007937,
+      "tags": {
+        "name": "Veterinaria El Pollito",
+        "amenity": "veterinary",
+        "phone": "+52 951 286 2782"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12463981053,
+      "lat": 17.0546199,
+      "lon": -96.7387092,
+      "tags": { "name": "Boutique Del Gallo", "amenity": "veterinary", "phone": "+52 951 208 0288" }
+    },
+    {
+      "type": "node",
+      "id": 12464080804,
+      "lat": 17.2004583,
+      "lon": -96.8203758,
+      "tags": {
+        "name": "Forrajera Los Reyes",
+        "amenity": "veterinary",
+        "phone": "+52 951 521 5853"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12465761337,
+      "lat": 16.9535878,
+      "lon": -96.747158,
+      "tags": {
+        "name": "Farmacia veterinaria Chacon",
+        "amenity": "veterinary",
+        "phone": "+52 951 198 3950"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12505007406,
+      "lat": 18.9538674,
+      "lon": -99.4967921,
+      "tags": {
+        "name": "Veterinaria San Juan",
+        "amenity": "veterinary",
+        "phone": "+52 714 147 0010"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12517634909,
+      "lat": 19.3553971,
+      "lon": -99.2983599,
+      "tags": {
+        "name": "Farmacia y consultorio veterinario Cuajimalpa",
+        "amenity": "veterinary",
+        "phone": "+52 55 5812 0132"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12521856200,
+      "lat": 19.3377235,
+      "lon": -99.632457,
+      "tags": { "name": "Del Sol", "amenity": "veterinary", "phone": "+52 722 227 4267" }
+    },
+    {
+      "type": "node",
+      "id": 12527842848,
+      "lat": 19.2469782,
+      "lon": -99.757577,
+      "tags": {
+        "name": "Veterinaria El Escarabajo",
+        "amenity": "veterinary",
+        "phone": "+52 722 412 2640"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12528322827,
+      "lat": 19.2576702,
+      "lon": -99.6644108,
+      "tags": {
+        "name": "Farmacia veterinaria Amatepec Sa",
+        "amenity": "veterinary",
+        "phone": "+52 722 100 8311"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12528327184,
+      "lat": 19.2463799,
+      "lon": -99.7594939,
+      "tags": { "name": "Veterinaria", "amenity": "veterinary", "phone": "+52 722 190 8827" }
+    },
+    {
+      "type": "node",
+      "id": 12530080991,
+      "lat": 19.5677307,
+      "lon": -99.7662002,
+      "tags": {
+        "name": "Veterinaria Cazadores",
+        "amenity": "veterinary",
+        "phone": "+52 712 105 8980"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12540820929,
+      "lat": 18.9546772,
+      "lon": -99.4966292,
+      "tags": {
+        "name": "Veterinaria San Juan",
+        "amenity": "veterinary",
+        "phone": "+52 714 147 0010"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12544792573,
+      "lat": 18.9903334,
+      "lon": -99.4216849,
+      "tags": {
+        "name": "Clinica Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 722 464 6841"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12544899934,
+      "lat": 19.0362013,
+      "lon": -99.5780123,
+      "tags": {
+        "name": "Veterinaria Aguilar",
+        "amenity": "veterinary",
+        "phone": "+52 722 362 4860"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12545676626,
+      "lat": 19.2844727,
+      "lon": -99.7258012,
+      "tags": { "name": "Veterinaria Y Forrajes", "amenity": "veterinary", "phone": "442776209" }
+    },
+    {
+      "type": "node",
+      "id": 12549621707,
+      "lat": 19.5614886,
+      "lon": -99.8385318,
+      "tags": {
+        "name": "Agroveterinaria Yire",
+        "amenity": "veterinary",
+        "phone": "+52 722 297 6363"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12560581419,
+      "lat": 19.2772719,
+      "lon": -99.6448675,
+      "tags": { "name": "Agroveterinaria Lerdo", "amenity": "veterinary", "phone": "+527222173434" }
+    },
+    {
+      "type": "node",
+      "id": 12563312901,
+      "lat": 20.5682524,
+      "lon": -100.3667493,
+      "tags": { "name": "PetSet", "amenity": "veterinary", "phone": "+52 442 495 8600" }
+    },
+    {
+      "type": "node",
+      "id": 12568447773,
+      "lat": 19.3018051,
+      "lon": -99.642249,
+      "tags": {
+        "name": "Veterinaria Tolotzin",
+        "amenity": "veterinary",
+        "phone": "+52 722 272 4367"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12574310795,
+      "lat": 19.4482037,
+      "lon": -99.2805961,
+      "tags": { "name": "Veterinario", "amenity": "veterinary", "phone": "+52 55 5302 7225" }
+    },
+    {
+      "type": "node",
+      "id": 12586044186,
+      "lat": 19.2916396,
+      "lon": -99.8221324,
+      "tags": { "name": "Veterinaria Santa Maria", "amenity": "veterinary", "phone": "23280166" }
+    },
+    {
+      "type": "node",
+      "id": 12619905788,
+      "lat": 20.3620766,
+      "lon": -103.7254471,
+      "tags": { "name": "VETERINARIA LA VAQUITA", "amenity": "veterinary", "phone": "3314224187.0" }
+    },
+    {
+      "type": "node",
+      "id": 12628468415,
+      "lat": 31.3260933,
+      "lon": -110.9468532,
+      "tags": { "name": "Veterinaria Vetson", "amenity": "veterinary", "phone": "+52 631 312 2210" }
+    },
+    {
+      "type": "node",
+      "id": 12731593015,
+      "lat": 19.2416595,
+      "lon": -103.709765,
+      "tags": {
+        "name": "Men Mar Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 312 312 3296"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12787489346,
+      "lat": 20.6009664,
+      "lon": -100.3627622,
+      "tags": {
+        "name": "Aztlan",
+        "amenity": "veterinary",
+        "phone": "+52 442 193 4702;+52 442 594 5747;+52 442 747 3148"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12972886501,
+      "lat": 19.1171546,
+      "lon": -104.3305747,
+      "tags": {
+        "name": "Arana Pet Center",
+        "amenity": "veterinary",
+        "phone": "+523143331199;+523148725480"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978740625,
+      "lat": 25.8663701,
+      "lon": -97.489637,
+      "tags": { "name": "Medical FranVet", "amenity": "veterinary", "phone": "+52 868 189 3236" }
+    },
+    {
+      "type": "node",
+      "id": 12978754596,
+      "lat": 25.8277293,
+      "lon": -97.5262873,
+      "tags": {
+        "name": "Centro Médico Veterinario AVR",
+        "amenity": "veterinary",
+        "phone": "+52 868 824 0277"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978771209,
+      "lat": 25.8659606,
+      "lon": -97.5583162,
+      "tags": {
+        "name": "Clínica Veterinaria Doberman´s House",
+        "amenity": "veterinary",
+        "phone": "+52 868 126 8515"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978789461,
+      "lat": 25.8582133,
+      "lon": -97.5725192,
+      "tags": {
+        "name": "Clínica Veterinaria Cárdenas",
+        "amenity": "veterinary",
+        "phone": "+52 868 218 6948"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978796070,
+      "lat": 25.860433,
+      "lon": -97.5351331,
+      "tags": {
+        "name": "Clínica y Veterinaria Clinicant",
+        "amenity": "veterinary",
+        "phone": "+52 868 797 9638"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978816312,
+      "lat": 25.8566779,
+      "lon": -97.5174092,
+      "tags": { "name": "Happy Pet", "amenity": "veterinary", "phone": "+52 868 126 4181" }
+    },
+    {
+      "type": "node",
+      "id": 12978819795,
+      "lat": 25.8353708,
+      "lon": -97.5211252,
+      "tags": {
+        "name": "Zoovet Consultorio Veterinario",
+        "amenity": "veterinary",
+        "phone": "+52 868 128 8640"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978824569,
+      "lat": 25.8222439,
+      "lon": -97.5054714,
+      "tags": {
+        "name": "Veterinaria y Acuario Animal Center",
+        "amenity": "veterinary",
+        "phone": "+52 868 247 6617"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978824579,
+      "lat": 25.8274357,
+      "lon": -97.5218438,
+      "tags": {
+        "name": "Veterinaria El perro elegante",
+        "amenity": "veterinary",
+        "phone": "+52 868 356 0421"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978828446,
+      "lat": 25.8841416,
+      "lon": -97.5089655,
+      "tags": {
+        "name": "Dr. González Barrón (Cuidados Veterinarios)",
+        "amenity": "veterinary",
+        "phone": "+52 868 813 4289"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978829774,
+      "lat": 25.8700482,
+      "lon": -97.5106717,
+      "tags": {
+        "name": "Veterinaria San Miguel",
+        "amenity": "veterinary",
+        "phone": "+52 868 812 4365"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978870043,
+      "lat": 25.8816667,
+      "lon": -97.5018142,
+      "tags": {
+        "name": "Clínica Hospital para Perros",
+        "amenity": "veterinary",
+        "phone": "+52 868 813 5377"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978877114,
+      "lat": 25.8630849,
+      "lon": -97.5077158,
+      "tags": {
+        "name": "Clínica y Veterinaria SpaPerros",
+        "amenity": "veterinary",
+        "phone": "+52 868 292 8361"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978902795,
+      "lat": 25.8613852,
+      "lon": -97.4785886,
+      "tags": {
+        "name": "Clínica Internacional para Animales",
+        "amenity": "veterinary",
+        "phone": "+52 868 111 7774"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12978934407,
+      "lat": 25.8433928,
+      "lon": -97.5080427,
+      "tags": { "name": "Veterinaria Ceron", "amenity": "veterinary", "phone": "+52 868 822 6403" }
+    },
+    {
+      "type": "node",
+      "id": 13120652302,
+      "lat": 19.1057213,
+      "lon": -104.3107687,
+      "tags": { "name": "Veterinaria CROCAN", "amenity": "veterinary", "phone": "+523141010195" }
+    },
+    {
+      "type": "node",
+      "id": 13140010712,
+      "lat": 19.1034514,
+      "lon": -104.3237352,
+      "tags": {
+        "name": "Florvet Hospital Veterinario",
+        "amenity": "veterinary",
+        "phone": "+523141502064"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13140012306,
+      "lat": 19.1032597,
+      "lon": -104.3244493,
+      "tags": { "name": "Veterinaria Leon", "amenity": "veterinary", "phone": "+523143369043" }
+    },
+    {
+      "type": "node",
+      "id": 13203803265,
+      "lat": 19.333833,
+      "lon": -101.9184002,
+      "tags": { "name": "Angovet Veterinaria", "amenity": "veterinary", "phone": "+524431704919" }
+    },
+    {
+      "type": "node",
+      "id": 13206891744,
+      "lat": 20.0070132,
+      "lon": -99.5242155,
+      "tags": {
+        "name": "Veterinaria VetRoy.",
+        "amenity": "veterinary",
+        "contact:phone": "+525540724847"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13206891837,
+      "lat": 19.9611188,
+      "lon": -99.5322639,
+      "tags": {
+        "name": "Grupo Medico Veterinario Patitas y Huellitas",
+        "amenity": "veterinary",
+        "contact:phone": "+525535548515"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13206891953,
+      "lat": 19.9546243,
+      "lon": -99.5355957,
+      "tags": {
+        "name": "Promotora Agropecuaria de Jilotepec",
+        "amenity": "veterinary",
+        "contact:phone": "+527617344214"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13243563747,
+      "lat": 19.5138009,
+      "lon": -96.9221865,
+      "tags": { "name": "Nord", "amenity": "veterinary", "phone": "+52 229 771 5461" }
+    },
+    {
+      "type": "node",
+      "id": 13338954987,
+      "lat": 24.8612159,
+      "lon": -99.5644612,
+      "tags": {
+        "name": "Elizondo Servicios Veterinarios",
+        "amenity": "veterinary",
+        "phone": "+528212143187"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13365949279,
+      "lat": 19.0585262,
+      "lon": -98.2258407,
+      "tags": {
+        "name": "Minerva Hospital Veterinario",
+        "amenity": "veterinary",
+        "phone": "+522222312511"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13462611199,
+      "lat": 20.6345897,
+      "lon": -87.0749786,
+      "tags": {
+        "name": "Pets & Health",
+        "amenity": "veterinary",
+        "contact:phone": "+52 984 218 7374"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13668155316,
+      "lat": 29.0567711,
+      "lon": -110.967463,
+      "tags": {
+        "name": "Veterinaria Los Parientes",
+        "amenity": "veterinary",
+        "phone": "+526623946735"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13712827303,
+      "lat": 21.8903309,
+      "lon": -102.2993333,
+      "tags": { "name": "Puppy Land", "amenity": "veterinary", "phone": "+52 449 916 1323" }
+    },
+    {
+      "type": "node",
+      "id": 13937962901,
+      "lat": 20.9816442,
+      "lon": -89.6604946,
+      "tags": {
+        "name": "La Casa de los Animales",
+        "amenity": "veterinary",
+        "phone": "+52 9991774818"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13966434601,
+      "lat": 25.7403953,
+      "lon": -100.3950515,
+      "tags": {
+        "name": "VetGotPet Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 81 8306 4831"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14072236561,
+      "lat": 19.4213474,
+      "lon": -99.105303,
+      "tags": { "name": "Pet's Cecilio Robelo", "amenity": "veterinary", "phone": "+525525982406" }
+    },
+    {
+      "type": "node",
+      "id": 14088316376,
+      "lat": 20.7408252,
+      "lon": -103.3471932,
+      "tags": {
+        "name": "Casa Veterinaria Picolinos",
+        "amenity": "veterinary",
+        "phone": "+52 33 4332 6088"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14132303891,
+      "lat": 20.6173638,
+      "lon": -87.0938441,
+      "tags": {
+        "name": "Clínica Veterinaria Sana Sana Colita de Rana",
+        "amenity": "veterinary",
+        "phone": "+52 984 254 2483"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14152261821,
+      "lat": 20.6508061,
+      "lon": -87.0726823,
+      "tags": { "name": "Animall", "amenity": "veterinary", "contact:phone": "+52 984 132 4343" }
+    },
+    {
+      "type": "node",
+      "id": 14160116115,
+      "lat": 21.2998595,
+      "lon": -100.5221517,
+      "tags": {
+        "name": "Veterinaria San Marcos",
+        "amenity": "veterinary",
+        "phone": "+52 468 101 0875"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14170414982,
+      "lat": 20.6617035,
+      "lon": -87.0679482,
+      "tags": {
+        "name": "Mundo Animal",
+        "amenity": "veterinary",
+        "contact:phone": "+52 984 147 0376"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14183821757,
+      "lat": 20.631022,
+      "lon": -87.0738533,
+      "tags": { "name": "Dogtor Cat", "amenity": "veterinary", "contact:phone": "+52 984 116 8456" }
+    },
+    {
+      "type": "node",
+      "id": 14190658537,
+      "lat": 20.6502716,
+      "lon": -87.0966805,
+      "tags": { "name": "EckoVet", "amenity": "veterinary", "contact:phone": "+52 984 128 9390" }
+    },
+    {
+      "type": "node",
+      "id": 14195591447,
+      "lat": 20.652101,
+      "lon": -87.098882,
+      "tags": { "name": "Clinivet", "amenity": "veterinary", "contact:phone": "+52 984 233 2488" }
+    },
+    {
+      "type": "node",
+      "id": 14216528867,
+      "lat": 20.6403814,
+      "lon": -87.0799976,
+      "tags": {
+        "name": "Coco's Bienestar Animal",
+        "amenity": "veterinary",
+        "contact:phone": "+52 984 120 0572"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14235697322,
+      "lat": 20.6687965,
+      "lon": -87.1103513,
+      "tags": {
+        "name": "Clínica Veterinaria Integral",
+        "amenity": "veterinary",
+        "contact:phone": "+52 984 163 3278"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14235697452,
+      "lat": 20.6689452,
+      "lon": -87.109028,
+      "tags": { "name": "Mascotitas", "amenity": "veterinary", "contact:phone": "+52 984 166 1313" }
+    },
+    {
+      "type": "node",
+      "id": 14268690451,
+      "lat": 19.4022651,
+      "lon": -99.5320097,
+      "tags": {
+        "name": "Clínica veterinaria Animal's Home",
+        "amenity": "veterinary",
+        "phone": "+52 722 316 4359"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2297787615,
+      "lat": 19.4982792,
+      "lon": -96.8587008,
+      "tags": {
+        "name": "Médico Veterinario Jaime Medina G.",
+        "amenity": "veterinary",
+        "phone": "812-8402"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2343645938,
+      "lat": 19.3208706,
+      "lon": -99.2318798,
+      "tags": {
+        "name": "Hospital de especialidades veterinarias San Jerónimo",
+        "amenity": "veterinary",
+        "phone": "+52 55 56812078"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2802314055,
+      "lat": 20.677945,
+      "lon": -103.3971134,
+      "tags": { "name": "Veterinaria México", "amenity": "veterinary", "phone": "+52 33 3647 9022" }
+    },
+    {
+      "type": "node",
+      "id": 3116010217,
+      "lat": 27.0690312,
+      "lon": -109.4413221,
+      "tags": {
+        "name": "Veterinaria Arca de Noé",
+        "amenity": "veterinary",
+        "phone": "+52 642 120 1584"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3216661613,
+      "lat": 20.6238952,
+      "lon": -100.4078179,
+      "tags": {
+        "name": "Rosalia Ladrón de Guevara Franco",
+        "amenity": "veterinary",
+        "phone": "4970903, urgencias: 442 160 3779"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3306623010,
+      "lat": 20.6229359,
+      "lon": -100.4114212,
+      "tags": { "name": "IRVET", "amenity": "veterinary", "phone": "2538439, 4421225914" }
+    },
+    {
+      "type": "node",
+      "id": 3306689361,
+      "lat": 20.6401648,
+      "lon": -100.4052044,
+      "tags": { "name": "La Granja", "amenity": "veterinary", "phone": "(44) 220-8821" }
+    },
+    {
+      "type": "node",
+      "id": 3427675725,
+      "lat": 20.5453698,
+      "lon": -100.4036924,
+      "tags": {
+        "name": "Spa Perros Spa Todos",
+        "amenity": "veterinary",
+        "phone": "196 5626, 044 442 319 4204, 62*12*29008"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3539480422,
+      "lat": 20.6312243,
+      "lon": -100.3989231,
+      "tags": { "name": "King-Kan", "amenity": "veterinary", "phone": "2206886" }
+    },
+    {
+      "type": "node",
+      "id": 3604043912,
+      "lat": 18.9846969,
+      "lon": -99.09613,
+      "tags": { "name": "Los Tepozcuates", "amenity": "veterinary", "phone": "+52 739 395 2789" }
+    },
+    {
+      "type": "node",
+      "id": 3626066448,
+      "lat": 28.7004741,
+      "lon": -106.1439152,
+      "tags": {
+        "name": "Clinica veterinaria Mi Mejor Amigo",
+        "amenity": "veterinary",
+        "phone": "+52 614 200 6627"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3812873540,
+      "lat": 20.6918817,
+      "lon": -88.1995959,
+      "tags": {
+        "name": "Veterinaria \"El Relincho\"",
+        "amenity": "veterinary",
+        "phone": "+52 1 985 107 7217; +52 1 985 858 73 33"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3866448395,
+      "lat": 17.9670876,
+      "lon": -102.2180178,
+      "tags": {
+        "name": "Centro Médico Veterinario de Michoacán",
+        "amenity": "veterinary",
+        "phone": "+52 753 532 4123"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4022406544,
+      "lat": 19.4616147,
+      "lon": -99.1365222,
+      "tags": {
+        "name": "Servicios Veterinarios Rodríguez",
+        "amenity": "veterinary",
+        "contact:phone": "+52 55 5583 9768"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4022423653,
+      "lat": 19.4599811,
+      "lon": -99.1271042,
+      "tags": {
+        "name": "Centro Veterinario Norte",
+        "amenity": "veterinary",
+        "phone": "+52 55 5517 3665"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4065328194,
+      "lat": 19.3780282,
+      "lon": -96.9330967,
+      "tags": {
+        "name": "Casa Campestre para Perros Maggy y Nelly",
+        "amenity": "veterinary",
+        "phone": "+52 228 201 1445"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4232426389,
+      "lat": 19.3154025,
+      "lon": -99.1472951,
+      "tags": { "name": "Veterinaria AMROTH", "amenity": "veterinary", "phone": "+52 55 6303 6010" }
+    },
+    {
+      "type": "node",
+      "id": 4269195291,
+      "lat": 19.3122572,
+      "lon": -99.1527515,
+      "tags": {
+        "name": "Clínica Veterinaria Amroth",
+        "amenity": "veterinary",
+        "phone": "+52 55 5610 2203"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4317375995,
+      "lat": 18.9887979,
+      "lon": -99.1065579,
+      "tags": {
+        "name": "Veterinaria Amacuatitla",
+        "amenity": "veterinary",
+        "phone": "+52 739 395 2928"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4329849007,
+      "lat": 17.0842439,
+      "lon": -96.7210723,
+      "tags": {
+        "name": "Del Carmen",
+        "amenity": "veterinary",
+        "contact:phone": "+52 951 51 5 76 86"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4351769189,
+      "lat": 21.0244773,
+      "lon": -89.573748,
+      "tags": { "name": "Misión Animal", "amenity": "veterinary", "phone": "+52 999 183 3102" }
+    },
+    {
+      "type": "node",
+      "id": 4394279591,
+      "lat": 19.3065961,
+      "lon": -99.1742908,
+      "tags": {
+        "name": "Veterinaria Villa Panamericana",
+        "amenity": "veterinary",
+        "phone": "56667518"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4432781689,
+      "lat": 20.605555,
+      "lon": -100.3969639,
+      "tags": {
+        "name": "Animal's",
+        "amenity": "veterinary",
+        "phone": "+52 442 217 6238; +52 442 185 6298"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4530295051,
+      "lat": 19.5309466,
+      "lon": -96.931867,
+      "tags": {
+        "name": "Centro Veterinario Xalapa",
+        "amenity": "veterinary",
+        "phone": "818-9943 / 817-4340"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4530505757,
+      "lat": 19.5181467,
+      "lon": -96.9260916,
+      "tags": {
+        "name": "Pet Care Clínica Veterinaria",
+        "amenity": "veterinary",
+        "phone": "812-0459"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4545510790,
+      "lat": 19.2930617,
+      "lon": -99.2257437,
+      "tags": {
+        "name": "Unidad Médica: Control canino",
+        "amenity": "veterinary",
+        "phone": "56303997"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4755047024,
+      "lat": 19.5558033,
+      "lon": -99.2551692,
+      "tags": { "name": "Pet Island", "amenity": "veterinary", "phone": "16681735" }
+    },
+    {
+      "type": "node",
+      "id": 4755055122,
+      "lat": 19.5313921,
+      "lon": -99.2248213,
+      "tags": { "name": "Pet Island", "amenity": "veterinary", "phone": "53619456" }
+    },
+    {
+      "type": "node",
+      "id": 4844606123,
+      "lat": 19.4615968,
+      "lon": -97.6786747,
+      "tags": {
+        "name": "Veterinaria Hidalgo",
+        "amenity": "veterinary",
+        "phone": "+52 276 473 1766"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4896143756,
+      "lat": 19.2583025,
+      "lon": -103.7316523,
+      "tags": {
+        "name": "Veterinaria Chummy",
+        "amenity": "veterinary",
+        "phone": "+52 312 113 1848; +52 312 113 1839"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4925282821,
+      "lat": 20.7138696,
+      "lon": -103.3612253,
+      "tags": {
+        "name": "Hospital Veterinario",
+        "amenity": "veterinary",
+        "phone": "+52 33 3171 1037"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5092482109,
+      "lat": 19.3321847,
+      "lon": -99.1761791,
+      "tags": {
+        "name": "Servicios Integrales Veterinarios",
+        "amenity": "veterinary",
+        "phone": "+525562674370"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5268225423,
+      "lat": 27.0268768,
+      "lon": -108.9438929,
+      "tags": { "name": "Happy Pet", "amenity": "veterinary", "phone": "4280269" }
+    },
+    {
+      "type": "node",
+      "id": 5294301222,
+      "lat": 23.2296696,
+      "lon": -106.426692,
+      "tags": { "name": "Clínica Veterinaria K9", "amenity": "veterinary", "phone": "9850862" }
+    },
+    {
+      "type": "node",
+      "id": 5514369929,
+      "lat": 19.523233,
+      "lon": -99.2315208,
+      "tags": { "name": "Veterinaria Pardo Satélite", "amenity": "veterinary", "phone": "53657864" }
+    },
+    {
+      "type": "node",
+      "id": 5526630124,
+      "lat": 19.391358,
+      "lon": -99.1561954,
+      "tags": {
+        "name": "Hospital Veterinario Delta",
+        "amenity": "veterinary",
+        "phone": "+52 55 5536 9137"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5651943881,
+      "lat": 27.2489974,
+      "lon": -100.1391631,
+      "tags": {
+        "name": "Veterinaria Montemayor",
+        "amenity": "veterinary",
+        "phone": "+52 873 100 4263"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5667278593,
+      "lat": 19.3623999,
+      "lon": -99.1488962,
+      "tags": {
+        "name": "Hospital Veterinario de Medicina Preventiva",
+        "amenity": "veterinary",
+        "phone": "+525556052263"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5758616989,
+      "lat": 27.4839914,
+      "lon": -99.5065105,
+      "tags": { "name": "El Chairel", "amenity": "veterinary", "phone": "+52 867 714 4882" }
+    },
+    {
+      "type": "node",
+      "id": 5816302939,
+      "lat": 15.8686048,
+      "lon": -97.0737244,
+      "tags": { "name": "San Antonio", "amenity": "veterinary", "phone": "+52 954 114 7437" }
+    },
+    {
+      "type": "node",
+      "id": 5859634096,
+      "lat": 20.6519941,
+      "lon": -103.4410248,
+      "tags": {
+        "name": "Hund Bud Estética y Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 33 1201 0085"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5908702042,
+      "lat": 20.6546978,
+      "lon": -103.4430138,
+      "tags": { "name": "Charlotte Pets", "amenity": "veterinary", "phone": "+52 33 1815 1001" }
+    },
+    {
+      "type": "node",
+      "id": 6001674495,
+      "lat": 20.655164,
+      "lon": -103.4324625,
+      "tags": { "name": "Caninos & Felinos", "amenity": "veterinary", "phone": "+52 33 31241227" }
+    },
+    {
+      "type": "node",
+      "id": 6088450109,
+      "lat": 19.3453152,
+      "lon": -99.1681142,
+      "tags": { "name": "Clínica Dr. Casaubon", "amenity": "veterinary", "phone": "55546933" }
+    },
+    {
+      "type": "node",
+      "id": 6141453852,
+      "lat": 20.6522611,
+      "lon": -103.4417122,
+      "tags": {
+        "name": "Borzoi Clínica Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 33 36735680"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6147695086,
+      "lat": 19.6951584,
+      "lon": -101.1567309,
+      "tags": { "name": "MascoPet", "amenity": "veterinary", "phone": "+52 443 282 5401" }
+    },
+    {
+      "type": "node",
+      "id": 6147695185,
+      "lat": 19.6924117,
+      "lon": -101.1812245,
+      "tags": { "name": "KaniVet", "amenity": "veterinary", "phone": "+524435209280" }
+    },
+    {
+      "type": "node",
+      "id": 6269808716,
+      "lat": 18.8192971,
+      "lon": -98.9519957,
+      "tags": { "name": "Veterinaria Cuautla", "amenity": "veterinary", "phone": "+527351141133" }
+    },
+    {
+      "type": "node",
+      "id": 6429178456,
+      "lat": 32.5299216,
+      "lon": -117.0304374,
+      "tags": {
+        "name": "VETERINARIA GUTIERREZ",
+        "amenity": "veterinary",
+        "phone": "+52 664 638 4164"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6566676387,
+      "lat": 19.343646,
+      "lon": -99.188773,
+      "tags": {
+        "name": "Hospital Veterinario",
+        "amenity": "veterinary",
+        "phone": "+52 55 5661 9320"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6732755038,
+      "lat": 21.5047542,
+      "lon": -104.8945441,
+      "tags": {
+        "name": "Clínica Veterinaría México",
+        "amenity": "veterinary",
+        "phone": "+52 311 214 6604"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6741654047,
+      "lat": 21.4845037,
+      "lon": -104.8786708,
+      "tags": { "name": "Clínica Kanina", "amenity": "veterinary", "phone": "+52 311 210 7499" }
+    },
+    {
+      "type": "node",
+      "id": 6836723861,
+      "lat": 19.296202,
+      "lon": -103.75102,
+      "tags": {
+        "name": "Veterinaria El Parotal",
+        "amenity": "veterinary",
+        "phone": "+52 312 118 4481"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6842438651,
+      "lat": 20.5912292,
+      "lon": -103.3492057,
+      "tags": {
+        "name": "Kamvet Clínica Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 33 1025 2383"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6983984977,
+      "lat": 20.6590586,
+      "lon": -103.4363038,
+      "tags": {
+        "name": "Dermatológico Veterinario Cherses",
+        "amenity": "veterinary",
+        "phone": "+52 33 3628 8582"
+      }
+    },
+    {
+      "type": "node",
+      "id": 7037211885,
+      "lat": 19.3932345,
+      "lon": -98.9875591,
+      "tags": { "name": "Zoolo+Cotas", "amenity": "veterinary", "phone": "+52 55 7650 4790" }
+    },
+    {
+      "type": "node",
+      "id": 7177921258,
+      "lat": 18.824569,
+      "lon": -98.9488578,
+      "tags": {
+        "name": "Clínica Veterinaria Gapp",
+        "amenity": "veterinary",
+        "phone": "+5273537905"
+      }
+    },
+    {
+      "type": "node",
+      "id": 7237883437,
+      "lat": 20.6511065,
+      "lon": -103.4411767,
+      "tags": { "name": "La Mascota Ideal", "amenity": "veterinary", "phone": "+52 33 3620 9012" }
+    },
+    {
+      "type": "node",
+      "id": 7304927870,
+      "lat": 20.6792556,
+      "lon": -103.4486539,
+      "tags": { "name": "Toby Town", "amenity": "veterinary", "phone": "+52 33 1657 2594" }
+    },
+    {
+      "type": "node",
+      "id": 7392894686,
+      "lat": 19.5028688,
+      "lon": -96.8598127,
+      "tags": {
+        "name": "Sana Sana Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 228 203 2686"
+      }
+    },
+    {
+      "type": "node",
+      "id": 7985798455,
+      "lat": 18.885944,
+      "lon": -99.1547757,
+      "tags": { "name": "Ke-Pets", "amenity": "veterinary", "phone": "+52 777 319 7960" }
+    },
+    {
+      "type": "node",
+      "id": 8315929274,
+      "lat": 29.1224464,
+      "lon": -111.0287124,
+      "tags": {
+        "name": "Clinica Veterinaria La Nueva Era",
+        "amenity": "veterinary",
+        "phone": "+52 662 171 0262"
+      }
+    },
+    {
+      "type": "node",
+      "id": 8608521229,
+      "lat": 19.3761422,
+      "lon": -99.1892775,
+      "tags": {
+        "name": "Consultorio veterinario",
+        "amenity": "veterinary",
+        "phone": "+52 55 3204 5611; +52 55 5563 8091"
+      }
+    },
+    {
+      "type": "node",
+      "id": 8934215963,
+      "lat": 19.3744669,
+      "lon": -99.1535462,
+      "tags": { "name": "Shambala", "amenity": "veterinary", "phone": "+521555532579" }
+    },
+    {
+      "type": "node",
+      "id": 8998792721,
+      "lat": 19.5177786,
+      "lon": -99.2305141,
+      "tags": { "name": "Dr. Escobar", "amenity": "veterinary", "phone": "+52 55 5393 5545" }
+    },
+    {
+      "type": "node",
+      "id": 9159504911,
+      "lat": 22.0018294,
+      "lon": -99.0256101,
+      "tags": { "name": "Veterinaria Animalia", "amenity": "veterinary", "phone": "+5214811270606" }
+    },
+    {
+      "type": "node",
+      "id": 9159504949,
+      "lat": 21.9837373,
+      "lon": -99.0074662,
+      "tags": { "name": "Mascoterapia", "amenity": "veterinary", "phone": "+5214813911896" }
+    },
+    {
+      "type": "node",
+      "id": 9159504953,
+      "lat": 21.9878028,
+      "lon": -99.0173904,
+      "tags": {
+        "name": "Kotas y Clínica Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+5214813820025"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9159505035,
+      "lat": 21.9920096,
+      "lon": -99.0139221,
+      "tags": {
+        "name": "Clínica Veterinaria Para Pequeñas Especies",
+        "amenity": "veterinary",
+        "phone": "+5214813811294"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9159505036,
+      "lat": 21.9934433,
+      "lon": -99.0059006,
+      "tags": {
+        "name": "Clínica Veterinaria Mi Mascota",
+        "amenity": "veterinary",
+        "phone": "+5214813817511"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9159505037,
+      "lat": 21.9860593,
+      "lon": -99.0077958,
+      "tags": {
+        "name": "Clínica Veterinaria La Huella Canina",
+        "amenity": "veterinary",
+        "phone": "+5214813316465"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9159505039,
+      "lat": 21.9931047,
+      "lon": -99.0125695,
+      "tags": {
+        "name": "Clínica Veterinaria Etvet",
+        "amenity": "veterinary",
+        "phone": "+5214813817614"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9241644245,
+      "lat": 22.1353975,
+      "lon": -101.0278593,
+      "tags": { "name": "VivaVet", "amenity": "veterinary", "phone": "+52 444 124 8905" }
+    },
+    {
+      "type": "node",
+      "id": 9556555518,
+      "lat": 19.3387688,
+      "lon": -99.0513705,
+      "tags": {
+        "name": "Veterinaria \"Pistas de Blue\"",
+        "amenity": "veterinary",
+        "phone": "+52 55 1810 0737"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9742157302,
+      "lat": 19.3529555,
+      "lon": -99.1515457,
+      "tags": {
+        "name": "Clínica Veterinaria Coyoacán",
+        "amenity": "veterinary",
+        "phone": "+52 55 5688 3177"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9772909117,
+      "lat": 25.6548112,
+      "lon": -100.1923531,
+      "tags": { "name": "Veterinaria Jared", "amenity": "veterinary", "phone": "+52 81 2742 7131" }
+    },
+    {
+      "type": "node",
+      "id": 9861664666,
+      "lat": 19.17803,
+      "lon": -99.4662897,
+      "tags": {
+        "name": "Veterinaria Mi Mascota",
+        "amenity": "veterinary",
+        "phone": "+52 713 133 0208"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9862677194,
+      "lat": 19.3834746,
+      "lon": -99.1518496,
+      "tags": { "name": "CEME Gatos", "amenity": "veterinary", "phone": "+52 55 8936 9455" }
+    },
+    {
+      "type": "node",
+      "id": 9865149642,
+      "lat": 19.1776964,
+      "lon": -99.4672596,
+      "tags": {
+        "name": "Veterinaria El Pastor",
+        "amenity": "veterinary",
+        "phone": "+52 713 133 0607"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9913431997,
+      "lat": 28.1828603,
+      "lon": -105.4726804,
+      "tags": {
+        "name": "Animal Health",
+        "amenity": "veterinary",
+        "contact:phone": "+52 639 132 6337"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9925610445,
+      "lat": 19.3590831,
+      "lon": -99.1594028,
+      "tags": {
+        "name": "CEME Gatos",
+        "amenity": "veterinary",
+        "phone": "+52 55 63639935;+52 55 63639940"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1020168347,
+      "center": { "lat": 18.9504567, "lon": -99.2445666 },
+      "tags": {
+        "name": "Hospital Veterinario Cuernavaca",
+        "amenity": "veterinary",
+        "phone": "01 777 317 6753"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1174145500,
+      "center": { "lat": 19.0630334, "lon": -98.3216952 },
+      "tags": { "name": "Sonrisa Animal", "amenity": "veterinary", "phone": "+522224772528" }
+    },
+    {
+      "type": "way",
+      "id": 1314731347,
+      "center": { "lat": 20.6105726, "lon": -100.3636707 },
+      "tags": {
+        "name": "Clinica Veterinaria Pegaso",
+        "amenity": "veterinary",
+        "phone": "+524422142573"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1373216624,
+      "center": { "lat": 32.6469062, "lon": -115.5231099 },
+      "tags": {
+        "name": "4 CAMINOS Granero y Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 686 591 2747"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1453209360,
+      "center": { "lat": 18.8421502, "lon": -96.9139028 },
+      "tags": { "name": "Veterinaria", "amenity": "veterinary", "phone": "+52 271 103 4140" }
+    },
+    {
+      "type": "way",
+      "id": 1503271051,
+      "center": { "lat": 19.5246625, "lon": -96.935196 },
+      "tags": {
+        "name": "Clínica Veterinaria Eukanuba",
+        "amenity": "veterinary",
+        "phone": "+52 228 186 8015"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1503280424,
+      "center": { "lat": 19.523567, "lon": -96.9371633 },
+      "tags": {
+        "name": "Hospital Animal Dr. Lechuza",
+        "amenity": "veterinary",
+        "phone": "+52 228 177 7748"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1504315119,
+      "center": { "lat": 19.5540015, "lon": -96.8555846 },
+      "tags": {
+        "name": "CSA Xalapa Salud Animal",
+        "amenity": "veterinary",
+        "phone": "+52 228 810 7400"
+      }
+    },
+    {
+      "type": "way",
+      "id": 322406632,
+      "center": { "lat": 17.0838885, "lon": -96.7219721 },
+      "tags": { "name": "Mariscal", "amenity": "veterinary", "contact:phone": "+52 951 13 2 65 02" }
+    },
+    {
+      "type": "way",
+      "id": 357284708,
+      "center": { "lat": 28.7004741, "lon": -106.1439152 },
+      "tags": {
+        "name": "Clinica Veterinaria Mi mejor Amigo",
+        "amenity": "veterinary",
+        "phone": "+52 614 136 6789"
+      }
+    },
+    {
+      "type": "way",
+      "id": 536790697,
+      "center": { "lat": 19.3210446, "lon": -99.2318307 },
+      "tags": {
+        "name": "Hospital de Especialidades Veterinarias - San Jerónimo",
+        "amenity": "veterinary",
+        "phone": "+52 55 5668 8393"
+      }
+    },
+    {
+      "type": "way",
+      "id": 571578975,
+      "center": { "lat": 19.3884724, "lon": -99.1531618 },
+      "tags": {
+        "name": "Centro Veterinario Raven",
+        "amenity": "veterinary",
+        "phone": "+525535433322"
+      }
+    },
+    {
+      "type": "way",
+      "id": 621626142,
+      "center": { "lat": 19.2887621, "lon": -103.7336816 },
+      "tags": {
+        "name": "Med & Pet Veterinaria",
+        "amenity": "veterinary",
+        "phone": "+52 312 161 0492"
+      }
+    },
+    {
+      "type": "way",
+      "id": 674343401,
+      "center": { "lat": 19.2714405, "lon": -103.7157209 },
+      "tags": { "name": "Pet House", "amenity": "veterinary", "phone": "+52 312 323 6095" }
+    },
+    {
+      "type": "way",
+      "id": 790810820,
+      "center": { "lat": 19.2794877, "lon": -99.0503056 },
+      "tags": {
+        "name": "Clinica Veterinaria Bienestar Y Adopcion Animal",
+        "amenity": "veterinary",
+        "phone": "+52 55 2160 5439"
+      }
+    }
+  ]
+}

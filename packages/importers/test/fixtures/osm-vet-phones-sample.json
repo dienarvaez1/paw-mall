@@ -1,0 +1,39 @@
+{
+  "elements": [
+    {
+      "type": "node",
+      "id": 21,
+      "lat": 3.0001,
+      "lon": -131,
+      "tags": {
+        "name": "Veterinaria Prueba",
+        "amenity": "veterinary",
+        "phone": "+52 55 1234 5678; +52 55 8765 4321"
+      }
+    },
+    {
+      "type": "way",
+      "id": 22,
+      "center": { "lat": 3.002, "lon": -131 },
+      "tags": {
+        "name": "Hospital Veterinario Prueba",
+        "amenity": "veterinary",
+        "contact:phone": "+521 (442) 123-4567"
+      }
+    },
+    {
+      "type": "node",
+      "id": 23,
+      "lat": 3.003,
+      "lon": -131,
+      "tags": { "name": "Vet sin numero", "amenity": "veterinary", "phone": "123" }
+    },
+    {
+      "type": "node",
+      "id": 24,
+      "lat": 3.004,
+      "lon": -131,
+      "tags": { "name": "Tienda", "shop": "pet", "phone": "+52 55 1111 2222" }
+    }
+  ]
+}

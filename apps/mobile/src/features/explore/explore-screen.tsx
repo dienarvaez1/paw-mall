@@ -963,7 +963,7 @@ function SourceNote({ places }: { places: Place[] }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const denue = places.find((place) => place.source === 'denue');
-  const osm = places.some((place) => place.source === 'osm');
+  const osm = places.some((place) => place.source === 'osm' || place.phoneSource === 'osm');
   if (!denue && !osm) return null;
   const overture = places.some(
     (p) => p.phoneSource === 'overture' || p.websiteSource === 'overture' || p.socialUrl,

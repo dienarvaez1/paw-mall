@@ -72,7 +72,7 @@ pnpm --filter mobile start             # Metro; scan the QR code with Expo Go
 ## Data sources
 
 Business data: INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE). Phones,
-websites and social media: Overture Maps Foundation. Landmarks: Wikidata. Dog parks, venues and
-hours: © OpenStreetMap contributors (ODbL). Pet policies: hotel chains' and businesses' own
+websites and social media: Overture Maps Foundation. Landmarks: Wikidata. Dog parks, venues,
+hours and some vets' phones: © OpenStreetMap contributors (ODbL). Pet policies: hotel chains' and businesses' own
 websites, the press and Paw Mall users. Hours on request: Google Maps. Each source is credited
 in the app wherever its data appears.
