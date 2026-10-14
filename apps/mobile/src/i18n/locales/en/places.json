@@ -142,7 +142,7 @@
   "areaCount_one": "{{total}} place within {{distance}} of {{area}}",
   "areaCount_other": "{{total}} places within {{distance}} of {{area}}",
   "nearMe": "My location",
-  "nearMeHint": "Goes back to your location and zooms to the smallest radius.",
+  "nearMeHint": "On: goes back to your location and zooms to the smallest radius. Tap again to turn it off.",
   "searchPlaceholderNearMe": "Business name, city, colonia or landmark",
   "radiusButton": "Search radius: {{distance}}",
   "radiusButtonHint": "Tap for the next radius. It's used by the list, the map and “My location”, and saved in Settings.",

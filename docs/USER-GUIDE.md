@@ -40,7 +40,8 @@ or 3 mi in miles). It's **on** (filled) while the search is around you.
 
 It turns **off** when you move or zoom the map by hand, tap a cluster, pick a place from the
 suggestions, or press 🔍 on a place's name (as soon as the question comes up; it stays off for
-"As a place" and Cancel). It turns **on** with the button, when you answer "As a business
+"As a place" and Cancel). The button is a switch: tap it while on to turn it off (the search and the map stay as they are).
+It turns **on** with the button, when you answer "As a business
 name", or when the search box is emptied (✕, or deleting every character; the map goes back
 around you, the radius stays). Nothing else changes it.
 
@@ -74,6 +75,10 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
   matches inside it, opens out to the smallest preset that reaches the nearest match (e.g.
   "Guadalupe" as a business name: nothing within 5 km, so 10 km). Once per answer; the radius
   button still changes it after.
+- **The tab that finds more takes the focus**: after a confirmed search, if the other tab
+  (Explorar or Pet-friendly) finds more places inside the circle, or, with none inside either, a
+  nearer one, the app switches to it (e.g. "Toluca" on Explorar finds only a café, so it opens
+  Pet-friendly).
 - **✕** clears the search and brings the full list back.
 - **ES / EN** (globe) switches the app's language.
 

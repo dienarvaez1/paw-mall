@@ -109,6 +109,14 @@
       "kmNorth": 7,
       "kmEast": 0,
       "address": "Calle de Prueba 11, Col. Industrial"
+    },
+    {
+      "key": "cafe-toluca",
+      "name": "Café Toluca Paw",
+      "category": "cafe",
+      "kmNorth": -1,
+      "kmEast": 1,
+      "address": "Calle de Prueba 12, Col. Obrera"
     }
   ],
   "areas": [
@@ -126,6 +134,14 @@
       "state": "Zacatecas",
       "lat": 22.7472,
       "lng": -102.5175,
+      "businessCount": 3000
+    },
+    {
+      "kind": "municipality",
+      "name": "Toluca",
+      "state": "México",
+      "lat": 19.2826,
+      "lng": -99.6557,
       "businessCount": 3000
     }
   ]

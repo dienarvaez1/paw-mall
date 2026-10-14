@@ -229,8 +229,13 @@ export function ExploreScreen({ section }: { section: CategoryGroup }) {
           <NearMeButton
             nearMe={nearMe}
             onPress={() => {
-              // Always starts over around the user, even when already on: the search box empties,
-              // the radius goes to the smallest preset and the map zooms to it (owner's rules).
+              // A switch the user can flip by hand (owner's rule, 2026-10-13): on -> off leaves the
+              // search and the map as they are; off -> on starts over around the user: the search
+              // box empties, the radius goes to the smallest preset and the map zooms to it.
+              if (nearMe) {
+                setNearMe(false);
+                return;
+              }
               setFocus(null);
               setText('');
               setRadiusKm(minRadiusKm(units));
@@ -401,6 +406,8 @@ function PlacesList({
     if (places.data) setShownArea(area);
   }, [places.data, area, setShownArea]);
   useConfirmedSearchFit({
+    section: group,
+    coords: focus ?? location.coords,
     name,
     ready: places.data !== undefined && !places.isPlaceholderData && !places.isFetching,
     area,
@@ -665,6 +672,8 @@ function PlacesMap({
     ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
     : { center, radiusKm };
   useConfirmedSearchFit({
+    section: group,
+    coords: center,
     name,
     ready: places.data !== undefined && !places.isPlaceholderData && !places.isFetching,
     area: searchedArea,
