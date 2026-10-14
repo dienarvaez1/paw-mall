@@ -15,6 +15,7 @@ Setting up, running and changing Paw Mall on a Mac. How the parts fit together i
 | Xcode                | for the iOS simulator                                                          |
 | Android Studio + SDK | for the Android emulator and development builds; **JDK 17** for Gradle (below) |
 | Maestro              | for end-to-end flows only (`brew install mobile-dev-inc/tap/maestro`)          |
+| k6                   | for the load test only (`brew install k6`)                                     |
 
 ## First run
 
@@ -97,6 +98,24 @@ pnpm format:check
 
 The API tests use their own database (`paw_mall_test`), created and migrated by the test setup;
 they never touch the dev data. End-to-end flows: [TESTING-E2E.md](TESTING-E2E.md).
+
+### Load test
+
+`apps/api/load/places.js` (k6) sends what people browsing do (nearby list and map, search,
+suggestions, detail, Urgencias) from six busy cities, ramping to 50 users at once for 1 m 45 s,
+plus one burst of 25 writes that must hit the rate limit after 20. It fails when 95% of reads
+take 500 ms or more, or more than 1% fail.
+
+```sh
+pnpm --filter api dev:load    # API on :8789 with the dev data and no Google key
+pnpm load                     # PEAK_USERS=10 pnpm load for a lighter run
+```
+
+Local only: never point it at a deployed API. It never calls "Ver horario" (a billed Google
+request), and `dev:load` runs without the Google key anyway. The writes fail validation, so
+nothing is stored. It measures the queries and the database, not Cloudflare or a production
+database. Results on 2026-10-14 (M-series Mac, Docker with 4 CPUs, 813k places): p95 229 ms at
+77 requests/s.
 
 ## Conventions (summary of CLAUDE.md)
 

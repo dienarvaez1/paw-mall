@@ -30,7 +30,8 @@
     "places:osm": "pnpm --filter @paw-mall/importers osm",
     "places:osm-hours": "pnpm --filter @paw-mall/importers osm-hours",
     "places:chains": "pnpm --filter @paw-mall/importers chains",
-    "e2e:seed": "pnpm --filter @paw-mall/importers e2e-seed"
+    "e2e:seed": "pnpm --filter @paw-mall/importers e2e-seed",
+    "load": "k6 run apps/api/load/places.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
