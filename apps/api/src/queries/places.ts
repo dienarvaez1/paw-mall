@@ -23,6 +23,7 @@ import {
   type ValueSource,
   type Verification,
   WEBSITE_VERIFIED_DAYS,
+  categoryGroup,
   detectCategory,
   SEARCH_ALIASES,
 } from '@paw-mall/shared';
@@ -287,7 +288,19 @@ async function interpretSearch(db: Database, query: SearchQuery) {
       text = found.business ?? '';
     }
   }
-  const { category, words } = detectCategory(text);
+  const detected = detectCategory(text);
+  // A keyword names a category only where it fits: not against a chip of another category, nor
+  // on the other tab ("vet" on Pet-friendly). There the chip wins and the keyword is dropped when
+  // something else is left to search by (a place, other words: "estética Plaza X" with
+  // Veterinarias lists the plaza's vets); when the keyword is the whole search it's a word to find
+  // in names, so "vet" with Restaurantes isn't every restaurant (owner's bug report, 2026-10-13).
+  const fits =
+    detected.category !== null &&
+    (!query.category || query.category === detected.category) &&
+    (!query.group || categoryGroup(detected.category) === query.group);
+  const category = fits ? detected.category : null;
+  const keywordOnly = detected.category !== null && !fits && !area && detected.words === '';
+  const words = keywordOnly ? text : detected.words;
   // A city or town (not a colonia or landmark) with more than CITY_BUSY_MATCHES places: 3 mi
   // around it (owner's rule). Counted over every visible place, not the tab's filters, so
   // Explorar's and Pet-friendly's maps get the same circle (owner's rule: the maps stay in sync).

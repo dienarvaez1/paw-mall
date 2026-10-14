@@ -84,7 +84,9 @@ Responses are localized by `Accept-Language` (`es` default, `en`).
 ### Queries (`src/queries`)
 
 - **`places.ts`** — list, map and detail queries. The text search (`interpretSearch`) reads the
-  search box in this order: a category keyword ("vet", "estética") picks a category; a place name
+  search box in this order: a category keyword ("vet", "estética") picks a category, where it fits
+  the selected chip and the tab (otherwise a chip wins, or, when the keyword is the whole search,
+  it's searched in names: "vet" with Restaurantes); a place name
   ("Coyoacán", "Zócalo", or "vet en Coyoacán") moves the circle there; the remaining words must
   each appear in the name, city or state (`searchWords`; "CDMX"/"DF" read as Ciudad de México).
   The app can force "business names only" (`namesOnly`) or "around this place".
