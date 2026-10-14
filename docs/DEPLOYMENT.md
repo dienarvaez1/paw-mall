@@ -1095,6 +1095,10 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
      (`search-fit.ts`). Also, a hand zoom saves the view's center along with the radius, so the
      other map shows exactly the same view; a pinch shifts the center up to 5%, which used to
      stay unsaved. New flow `maps-sync`.
+  9. **Hide-keyboard button on the keyboard's edge:** it floated 8 pt above the keyboard; now it's
+     a tab joined to the keyboard's top edge, in a keyboard gray (`keyboard-bar.tsx`). The system
+     keyboard is its own window over the app, so nothing can be drawn inside it. `map-buttons`
+     checks the tab closes the keyboard.
 - **Notes:**
   - The first E2E attempt "failed" because `common/hide-keyboard.yaml` pressed Back after picking a
     suggestion had already closed the keyboard, which sent the app home; `search-pan` doesn't use

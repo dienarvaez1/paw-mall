@@ -6,15 +6,17 @@ import { useAppTranslation } from '@/i18n/use-app-translation';
 
 import { ICONS } from './icons';
 
-/** The button's size and its gap above the keyboard. */
-const BUTTON_SIZE = 40;
-const GAP = 8;
+/** The tab's size. */
+const TAB_WIDTH = 52;
+const TAB_HEIGHT = 36;
 
 /**
- * A hide-keyboard button resting on top of the keyboard, at the right, for every text input in
- * the app, on Android and iOS (owner's rule). Rendered once, at the root, over every screen.
- * Placed from the keyboard's top edge on screen, so it's right whether or not the window resizes
- * for the keyboard.
+ * A hide-keyboard button for every text input in the app, on Android and iOS (owner's rule):
+ * a tab joined to the keyboard's top edge at the right, in a keyboard gray, so it reads as part
+ * of the keyboard (owner's rule, 2026-10-14). The keyboard is the system's own window, drawn over
+ * the app, so nothing can go inside it; the tab sits right on its edge. Rendered once, at the
+ * root, over every screen, and placed from the keyboard's top edge on screen, so it's right
+ * whether or not the window resizes for the keyboard.
  */
 export function KeyboardBar() {
   const { t } = useAppTranslation();
@@ -24,15 +26,16 @@ export function KeyboardBar() {
   return (
     <View
       pointerEvents="box-none"
-      style={{ position: 'absolute', right: 12, top: keyboardTop - BUTTON_SIZE - GAP }}
+      style={{ position: 'absolute', right: 8, top: keyboardTop - TAB_HEIGHT }}
     >
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('common.hideKeyboard')}
+        testID="keyboard-hide"
         onPress={() => Keyboard.dismiss()}
         hitSlop={8}
-        style={{ width: BUTTON_SIZE, height: BUTTON_SIZE }}
-        className="items-center justify-center rounded-full border border-neutral-300 bg-white shadow active:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:active:bg-neutral-800"
+        style={{ width: TAB_WIDTH, height: TAB_HEIGHT }}
+        className="items-center justify-center rounded-t-xl bg-[#ededf6] active:bg-[#dcdce8] dark:bg-neutral-800 dark:active:bg-neutral-700"
       >
         <Image
           source={ICONS['keyboard-hide']}
