@@ -27,18 +27,18 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status      | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ----------- | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done        | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done        | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done        | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done        | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done        | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done        | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done        | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done        | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done        | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done        | 2026-10-11 | 2026-10-12 |
+| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
 
 ## Pending owner reviews
 
@@ -800,15 +800,15 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
   - **Overture:** the download box covers all of Mexico (it also takes in some of the US and
     Guatemala, harmless: Overture only adds phones and websites to our own places).
   - **Import run on dev data (2026-10-11), in order:**
-    | Step                                           | Result                                                                                                          | Time                      |
-    | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
-    | `places:import`                                | 813,254 places (was 336,588); 573 cruelty-linked names left out                                                 | 128 s                     |
-    | `places:areas`                                 | 80,922 search areas (71,111 colonias, 3,646 towns, 2,476 municipalities, 3,689 landmarks) from 6.1 M DENUE rows | 60 s                      |
-    | `places:enrich-overture`                       | 44,018 pet-type Overture places; 8,284 matched; 3,292 phones, 1,553 websites saved                              | 407 s (download included) |
-    | `places:curated`                               | 36 places; 9 DENUE copies hidden                                                                                | 38 s                      |
-    | `places:osm`                                   | 275 places (137 dog parks, 125 parks, 15 venues; 11 say no); 10 DENUE copies hidden                             | 47 s                      |
-    | `places:osm-hours`                             | 1,747 places with OpenStreetMap hours (was 687)                                                                 | 6 s                       |
-    | `places:chains`                                | City Express on 63 branches (was 7)                                                                             | <1 s                      |
+    | Step                                           | Result                                                                                                                                          | Time                      |
+    | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+    | `places:import`                                | 813,254 places (was 336,588); 573 cruelty-linked names left out                                                                                 | 128 s                     |
+    | `places:areas`                                 | 80,922 search areas (71,111 colonias, 3,646 towns, 2,476 municipalities, 3,689 landmarks) from 6.1 M DENUE rows                                 | 60 s                      |
+    | `places:enrich-overture`                       | 44,018 pet-type Overture places; 8,284 matched; 3,292 phones, 1,553 websites saved                                                              | 407 s (download included) |
+    | `places:curated`                               | 36 places; 9 DENUE copies hidden                                                                                                                | 38 s                      |
+    | `places:osm`                                   | 275 places (137 dog parks, 125 parks, 15 venues; 11 say no); 10 DENUE copies hidden                                                             | 47 s                      |
+    | `places:osm-hours`                             | 1,747 places with OpenStreetMap hours (was 687)                                                                                                 | 6 s                       |
+    | `places:chains`                                | City Express on 63 branches (was 7)                                                                                                             | <1 s                      |
     | `places:check-websites`                        | 16,933 sites: 6,965 working, 256 blocking checks, 1,138 unreachable, 8,574 dead (hidden); hours for 171 places; 125 venues say pets are welcome | 4,389 s (73 min)          |
     | Database: 813,565 places, 697 MB (was 281 MB). |
   - **Query speed:** after the import, Pet-friendly with "sin confirmar" around Guadalajara (16 km)
@@ -816,6 +816,51 @@ places:osm`), 51 places saved: 32 dog parks (unnamed ones named "Parque canino, 
 places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tijuana") resolve
     to their municipality; the map query answers in 0.1 s.
 - **Follow-ups:** —
+
+### UI refresh, end-to-end tests and CI (not a phase)
+
+- **Scope:** the owner's UI requests of 2026-10-12 and 2026-10-13, Android development build,
+  Maestro end-to-end tests and GitHub Actions, on one branch (not a numbered phase).
+- **Branch / PR:** `fix/ui-bugs` / #16
+- **Status:** Merged 2026-10-13 on the owner's request ("add the DEPLOYMENT.md entry and merge");
+  the merge commit is recorded in the follow-up PR.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm test`: 297 tests (shared 35, mobile 82, API 85,
+        importers 95); GitHub Actions `CI` green on the PR
+  - [x] Maestro, 21 flows covering the 25 journeys in [TESTING-E2E.md](TESTING-E2E.md): 21/21 on
+        the Android release build (emulator, fixed test data)
+  - [x] iOS simulator and the owner's iPhone (Expo Go) for the map and search changes
+  - [ ] GitHub Actions `E2E` workflow run (needs the `GOOGLE_MAPS_ANDROID_KEY` secret and the
+        `run-e2e` label)
+- **Notes:**
+  - **App:** compact place page (icon links, copy and share the address, favorite heart), place
+    cards with contact icons, a Favoritos tab, cream backgrounds, centered logo; map controls
+    floating over the map, satellite toggle, lime radius circle, cluster bubbles sized to their
+    count, a tapped cluster centered on its places.
+  - **One page for Explore and Pet-friendly:** drawn once by the tabs layout over both tabs
+    (`explore-frame.tsx`), one map; only the places, chips and title change.
+  - **Search box:** order-invariant, tokenized autocomplete (place names from the API, nearby
+    businesses filtered on the phone; shared stop words and CDMX/DF aliases in
+    `packages/shared/src/search-tokens.ts`). A picked place searches there; the place-or-business
+    question only for a typed place name sent with the search key.
+  - **"Mi ubicación":** the button returns to the user at the smallest preset; off after a place
+    pick, "as a place", moving, zooming or a cluster tap; on after "as a business name".
+  - **Android:** development build with Paw Mall's own Maps key (`dev.pawmall.app`,
+    `apps/mobile/.env.local`); `pnpm --filter mobile emulator:location`.
+  - **Testing and CI:** Maestro flows in `apps/mobile/.maestro/`, test data `pnpm e2e:seed`;
+    `.github/workflows/ci.yml` (every PR) and `e2e.yml` (nightly, manual or `run-e2e` label);
+    `run-e2e` label created.
+  - **Fixed along the way:** iPhone map asked for the old area (no pins); Android map opened on
+    the whole world; suggestions untappable on Android (outside their parent); release bundle
+    needed `@babel/plugin-transform-react-jsx` hoisted; release builds drop `android.config`
+    (`extra.mapsKeyConfigured`).
+  - **Dependencies added (approved):** `expo-clipboard`, `expo-dev-client`.
+- **Follow-ups:**
+  - Add the `GOOGLE_MAPS_ANDROID_KEY` repository secret and run the `E2E` workflow once.
+  - The Android emulator's hardware graphics crashed twice during runs; local runs use
+    `-gpu swiftshader_indirect` (as CI does).
+  - The business-name search matches inside words ("net" in "Veterinaria"); suggestions match
+    word starts. Align if the owner wants.
 
 ## Production deployment
 
@@ -825,27 +870,28 @@ Play readiness").
 
 ## Change log
 
-| Date       | Change                     | PR  |
-| ---------- | -------------------------- | --- |
-| 2026-10-05 | Rollout log created        | #1  |
-| 2026-10-05 | Phase 1 started            | #2  |
-| 2026-10-05 | Phase 1 merged (`a0199db`) | #2  |
-| 2026-10-05 | Phase 2 started            | #3  |
-| 2026-10-05 | Phase 2 merged (`97d6019`) | #3  |
-| 2026-10-05 | Phase 3 started            | #4  |
-| 2026-10-05 | Phase 3 merged (`df26ef2`) | #4  |
-| 2026-10-05 | Phase 4 started            | #5  |
-| 2026-10-05 | Phase 4 merged (`c30d151`) | #5  |
-| 2026-10-05 | Phase 5 started            | #6  |
-| 2026-10-06 | Phase 5 merged (`80118ac`) | #6  |
-| 2026-10-10 | Diary files git-ignored    | #7  |
-| 2026-10-10 | Phase 6 started            | #8  |
-| 2026-10-10 | Phase 6 merged (`cb7b3b6`) | #8  |
-| 2026-10-10 | Phase 7 started            | #9  |
-| 2026-10-10 | Phase 7 merged (`146991b`) | #9  |
-| 2026-10-10 | Phase 8 started            | #11 |
-| 2026-10-10 | Phase 9 started            | #12 |
-| 2026-10-11 | Phase 8 merged (`3673c52`) | #11 |
-| 2026-10-11 | Phase 9 merged (`faaaf68`) | #12 |
-| 2026-10-11 | Phase 10 started           | #14 |
-| 2026-10-12 | Phase 10 merged (`d7384e2`) | #14 |
+| Date       | Change                                     | PR  |
+| ---------- | ------------------------------------------ | --- |
+| 2026-10-05 | Rollout log created                        | #1  |
+| 2026-10-05 | Phase 1 started                            | #2  |
+| 2026-10-05 | Phase 1 merged (`a0199db`)                 | #2  |
+| 2026-10-05 | Phase 2 started                            | #3  |
+| 2026-10-05 | Phase 2 merged (`97d6019`)                 | #3  |
+| 2026-10-05 | Phase 3 started                            | #4  |
+| 2026-10-05 | Phase 3 merged (`df26ef2`)                 | #4  |
+| 2026-10-05 | Phase 4 started                            | #5  |
+| 2026-10-05 | Phase 4 merged (`c30d151`)                 | #5  |
+| 2026-10-05 | Phase 5 started                            | #6  |
+| 2026-10-06 | Phase 5 merged (`80118ac`)                 | #6  |
+| 2026-10-10 | Diary files git-ignored                    | #7  |
+| 2026-10-10 | Phase 6 started                            | #8  |
+| 2026-10-10 | Phase 6 merged (`cb7b3b6`)                 | #8  |
+| 2026-10-10 | Phase 7 started                            | #9  |
+| 2026-10-10 | Phase 7 merged (`146991b`)                 | #9  |
+| 2026-10-10 | Phase 8 started                            | #11 |
+| 2026-10-10 | Phase 9 started                            | #12 |
+| 2026-10-11 | Phase 8 merged (`3673c52`)                 | #11 |
+| 2026-10-11 | Phase 9 merged (`faaaf68`)                 | #12 |
+| 2026-10-11 | Phase 10 started                           | #14 |
+| 2026-10-12 | Phase 10 merged (`d7384e2`)                | #14 |
+| 2026-10-13 | UI refresh, end-to-end tests and CI merged | #16 |
