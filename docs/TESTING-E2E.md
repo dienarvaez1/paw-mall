@@ -7,7 +7,7 @@ real app on the Android emulator, on **fixed test data**, so they can check exac
 ## Fixed test data
 
 `packages/importers/data/e2e-fixtures.json`: 10 fake places around the Zócalo (19.4326, -99.1332),
-where every flow puts the user, plus "Tlaxcala" as a place's name.
+where every flow puts the user, plus "Tlaxcala" and "Guadalupe" as places' names.
 
 | Place                             | Why it's there                                                    |
 | --------------------------------- | ----------------------------------------------------------------- |
@@ -21,6 +21,7 @@ where every flow puts the user, plus "Tlaxcala" as a place's name.
 | Café Perruno Paw                  | Café with a confirmed pet policy (dogs, any size, terrace)        |
 | Restaurante Sin Política Paw      | Restaurant with no answer yet; `pet-friendly-widen` answers "yes" |
 | Hotel Sin Política Paw            | Hotel nobody answers for (stays unconfirmed)                      |
+| Forrajería Guadalupe Paw          | Feed store 7 km away, named like a place ("Guadalupe", Zacatecas) |
 
 `pnpm e2e:seed` loads it into its own database, **`paw_mall_e2e`** (never the dev or the Vitest
 one): creates it if missing, applies the API's migrations, empties the place tables and inserts the
@@ -35,7 +36,7 @@ flow taps "Ver horario" (each Google answer uses part of the free monthly allowa
 3. The API on the test data: `pnpm --filter api dev:e2e` (port **8788**).
 4. A Metro server that points the app at it: `pnpm --filter mobile e2e:metro` (port **8084**,
    `EXPO_PUBLIC_API_URL=http://10.0.2.2:8788`; 10.0.2.2 is the Mac as the emulator sees it).
-5. `pnpm --filter mobile e2e` (21 flows, about 25 minutes) or
+5. `pnpm --filter mobile e2e` (23 flows, about 25 minutes) or
    `maestro test apps/mobile/.maestro/favorites.yaml` (one).
 
 `common/launch.yaml` starts every flow the same way: GPS at the Zócalo, the app's data cleared,
@@ -62,6 +63,8 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | Search       | Picked place → the places there, not the namesake near the user            | `place-question`          |
 | Search       | Search key on a place's name asks; as a business → only that name, nearby  | `place-question-business` |
 | Search       | Typed text searches business names without asking                          | `search-clear`            |
+| Search       | A confirmed search closes the radius in to its matches (15 km → 5 km)      | `search-zoom`             |
+| Search       | Nothing inside the radius → it opens out to the nearest match (5 → 10 km)  | `search-zoom-out`         |
 | Search       | ✕ clears the text and the full list comes back                             | `search-clear`            |
 | Explore      | Map and List count the same places                                         | `map-list`                |
 | Explore      | A category chip narrows the list; Todos brings everything back             | `chips`                   |
@@ -83,7 +86,7 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | Ajustes      | Kilómetros → Millas: distances and radius in miles                         | `settings-units`          |
 | States       | No connection → offline banner; back online → the app loads again          | `offline`                 |
 
-All 25 journeys covered by 21 flows. Not covered: the API itself down while the phone is online
+All 27 journeys covered by 23 flows. Not covered: the API itself down while the phone is online
 (only reachable by stopping the server; the offline flow covers the same error path), the
 cruelty report (same form as "closed"), and anything on iOS.
 

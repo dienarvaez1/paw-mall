@@ -57,6 +57,7 @@ import { useOnWake } from '@/lib/use-on-wake';
 
 import { CLUSTER_FONT_SIZE, clusterSize } from './cluster-size';
 import { useExploreView } from './explore-view';
+import { useConfirmedSearchFit } from './search-fit';
 import { AutocompleteList, useAutocomplete } from './autocomplete-search';
 import { useSuggestionItems } from './suggestion-items';
 
@@ -399,6 +400,13 @@ function PlacesList({
   useEffect(() => {
     if (places.data) setShownArea(area);
   }, [places.data, area, setShownArea]);
+  useConfirmedSearchFit({
+    name,
+    ready: places.data !== undefined && !places.isPlaceholderData && !places.isFetching,
+    area,
+    radiusKm: area ? area.radiusKm : radiusKm,
+    reach: places.data?.pages[0],
+  });
   const items = useMemo(
     () => uniqueById(places.data?.pages.flatMap((page) => page.items) ?? []),
     [places.data],
@@ -656,6 +664,13 @@ function PlacesMap({
   const circle = searchedArea
     ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
     : { center, radiusKm };
+  useConfirmedSearchFit({
+    name,
+    ready: places.data !== undefined && !places.isPlaceholderData && !places.isFetching,
+    area: searchedArea,
+    radiusKm: circle.radiusKm,
+    reach: places.data,
+  });
   // Fly to a newly searched area, and back to the user when the search no longer names one.
   const shownArea = useRef<string | null>(null);
   const loaded = places.data !== undefined;

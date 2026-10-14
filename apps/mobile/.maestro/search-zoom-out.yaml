@@ -1,0 +1,20 @@
+# With nothing within the radius, a confirmed search widens to the smallest radius that reaches
+# the nearest match: "Guadalupe" answered as a business name finds nothing within 5 km and the
+# feed store 7 km away, so the radius goes to 10 km and it shows (owner's rule, 2026-10-13).
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn:
+    id: search-input
+- inputText: Guadalupe
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: Como nombre de negocio|As a business name
+    timeout: 20000
+- tapOn: Como nombre de negocio|As a business name
+- extendedWaitUntil:
+    visible: Forrajería Guadalupe Paw
+    timeout: 20000
+- assertVisible: 10 km

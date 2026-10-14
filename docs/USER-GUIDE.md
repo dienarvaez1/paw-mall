@@ -69,6 +69,11 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
   - **As a place** — search around Guadalajara.
   - **As a business name** — businesses called "Guadalajara" near you.
   - **Cancel** — keep editing.
+- **The radius fits a confirmed search** (a place picked from the suggestions, or the question
+  answered): it closes in to the smallest preset that still holds every match, or, when nothing
+  matches inside it, opens out to the smallest preset that reaches the nearest match (e.g.
+  "Guadalupe" as a business name: nothing within 5 km, so 10 km). Once per answer; the radius
+  button still changes it after.
 - **✕** clears the search and brings the full list back.
 - **ES / EN** (globe) switches the app's language.
 
