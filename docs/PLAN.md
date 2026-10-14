@@ -67,7 +67,7 @@ detail.
 | Database    | PostgreSQL + PostGIS + pg_trgm + unaccent, via Drizzle ORM; Docker locally                                                                                                                                                      |
 | Shared code | `packages/shared`: Zod schemas, types, constants                                                                                                                                                                                |
 | Importers   | Node.js scripts in `packages/importers`; DuckDB for Overture                                                                                                                                                                    |
-| Tooling     | Node 24, pnpm workspaces, Turborepo, TypeScript, ESLint 9, Prettier, Vitest; Maestro for end-to-end flows (added 2026-10-13)                                                                                                    |
+| Tooling     | Node 24, pnpm workspaces, Turborepo, TypeScript, ESLint 9, Prettier, Vitest; Maestro for end-to-end flows (added 2026-10-13); k6 for load tests (installed apart, added 2026-10-14)                                             |
 
 ## Repository structure
 

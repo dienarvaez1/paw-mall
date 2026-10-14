@@ -41,6 +41,7 @@ checked) · **Blocked**.
 | 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
 | 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
 | 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
 | 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | In review | 2026-10-14 | —          |
 
 ## Pending owner reviews
@@ -949,15 +950,50 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - Run the `E2E` workflow on this PR (label `run-e2e`) to confirm the CI path with `api-down`.
   - Review item 7 (load test) needs k6, a new dependency.
 
+### Phase 13 — Load test
+
+- **Scope:** review item 7: a load test of the API (k6, approved by the owner 2026-10-14; no
+  cost: local only, no cloud service), and fixes for what it finds.
+- **Branch / PR:** `phase-13/load-test` / #24
+- **Status:** Done. Squash-merged into `main` as `e3c564f` on 2026-10-14; branch deleted.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 334 tests (shared 36, mobile 93, api 102, importers 103)
+  - [x] `pnpm load` (50 users, dev data, 813k places): passes, p95 229 ms
+  - [x] Fresh database migrates; `pnpm e2e:seed`; `pnpm places:import` keeps `pet_business` exact
+- **Notes:**
+  - `apps/api/load/places.js`, `pnpm --filter api dev:load` (port 8789, no Google key) and
+    `pnpm load`; see DEVELOPMENT.md, "Load test". Never calls "Ver horario"; writes fail
+    validation, so nothing is stored. The write burst confirms 429 after 20 per minute.
+  - **First run failed:** p95 2.18 s at 38 requests/s; one user alone was fine (p95 241 ms).
+    Postgres used all 4 Docker CPUs; the API barely any. Plans captured with `auto_explain`
+    (turned on in the dev database for the run, then reset):
+    - Pages sorted every place in the radius (105k for 25 km around Mexico City, on disk) to
+      keep 20. Now read nearest-first from the location index: 370 ms → 23 ms.
+    - JIT compiled each query (~60 ms) for queries that run in less. Off per connection.
+    - Explorar filtered 813k places for 51k pet businesses one by one. New
+      `places.pet_business`, kept by triggers on `place_categories` (migration 0013), with a
+      location index on pet businesses only.
+    - Urgencias walked pet businesses by distance to find hospitals; it now starts from the few
+      hundred candidates.
+  - **After:** p95 229 ms at 77 requests/s (list 191 ms, map 197 ms, search 347 ms, Urgencias
+    356 ms).
+  - Order change: places at the same distance (to 0.1 km) were ordered by id; now by exact
+    distance, then id.
+  - DENUE import: 143 s → 154 s with the triggers (they update only flags that change).
+- **Follow-ups:**
+  - E2E flows weren't rerun on this branch (the order change can only reorder places within
+    0.1 km); the nightly run or the `run-e2e` label covers it.
+
 ### Phase 14 — Data cleanup
 
 - **Scope:** act on the first `pnpm places:integrity` report (Phase 11): 5,782 probable
   duplicates, 165 Urgencias places without a phone, 5 name-only "24 horas" vets.
-- **Branch / PR:** `phase-14/data-cleanup` / #25 (from `main`; Phase 13, #24, is a separate PR)
+- **Branch / PR:** `phase-14/data-cleanup` / #25
 - **Status:** In review.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`
-  - [x] `pnpm test`: 335 tests (shared 36, mobile 93, api 101, importers 105)
+  - [x] `pnpm test`: 336 tests with Phase 13 (shared 36, mobile 93, api 102, importers 105)
   - [x] `pnpm places:import` on the dev data, then `pnpm places:integrity`
 - **Notes:**
   - **Duplicates:** almost all the 5,782 pairs are different businesses with one name at one
@@ -1023,4 +1059,6 @@ Play readiness").
 | 2026-10-14 | "Mi ubicación" and the radius follow the search (`a47654e`)  | #21 |
 | 2026-10-14 | A lone keyword no longer lists a chip's category (`009f4c5`) | #22 |
 | 2026-10-14 | Phase 12 bookkeeping                                         | #23 |
+| 2026-10-14 | Phase 13 started                                             | #24 |
+| 2026-10-14 | Phase 13 merged (`e3c564f`)                                  | #24 |
 | 2026-10-14 | Phase 14 started                                             | #25 |
