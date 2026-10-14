@@ -7,4 +7,5 @@ export * from './hours';
 export * from './pet-policy';
 export * from './places';
 export * from './search-keywords';
+export * from './search-tokens';
 export * from './trust';

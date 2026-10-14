@@ -74,13 +74,20 @@ export function distanceKm(
   return 2 * 6371 * Math.asin(Math.sqrt(h));
 }
 
-/** The center of a box [minLng, minLat, maxLng, maxLat] and the radius of a circle covering it. */
-export function circleForBounds([minLng, minLat, maxLng, maxLat]: readonly [
-  number,
-  number,
-  number,
-  number,
-]): { center: { lat: number; lng: number }; radiusKm: number } {
-  const center = { lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2 };
-  return { center, radiusKm: distanceKm(center, { lat: maxLat, lng: maxLng }) };
+/**
+ * A tapped cluster's circle: centered on its places' average position (where most of them are,
+ * not the middle of their box, which can fall in an empty area), wide enough to reach every corner
+ * of the box [minLng, minLat, maxLng, maxLat] around them, so none is left out.
+ */
+export function circleForCluster(
+  center: { lat: number; lng: number },
+  [minLng, minLat, maxLng, maxLat]: readonly [number, number, number, number],
+): { center: { lat: number; lng: number }; radiusKm: number } {
+  const corners = [
+    { lat: minLat, lng: minLng },
+    { lat: minLat, lng: maxLng },
+    { lat: maxLat, lng: minLng },
+    { lat: maxLat, lng: maxLng },
+  ];
+  return { center, radiusKm: Math.max(...corners.map((corner) => distanceKm(center, corner))) };
 }

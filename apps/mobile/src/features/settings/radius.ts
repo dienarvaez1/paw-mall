@@ -21,6 +21,11 @@ export function startRadiusKm(unit: DistanceUnit): number {
   return closestRadiusKm(toKm(START_RADIUS_MILES, 'mi'), unit);
 }
 
+/** The smallest radius choice in the unit, in km: 5 km, or 3 mi (the location button's). */
+export function minRadiusKm(unit: DistanceUnit): number {
+  return toKm(RADIUS_OPTIONS[unit][0], unit);
+}
+
 /** The radius choices for a unit, in km (what the API takes). */
 export function radiusOptionsKm(unit: DistanceUnit): number[] {
   return RADIUS_OPTIONS[unit].map((value) => toKm(value, unit));

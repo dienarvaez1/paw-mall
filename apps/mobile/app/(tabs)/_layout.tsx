@@ -1,10 +1,12 @@
 import { Image, type ImageSource } from 'expo-image';
-import { Tabs } from 'expo-router';
-import { useState } from 'react';
-import { Modal, Pressable, Text, View, useColorScheme } from 'react-native';
+import { Tabs, useSegments } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Keyboard, Modal, Pressable, Text, View, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ICONS } from '@/components/icons';
+import { ExploreFrameProvider, useExploreFrameHeight } from '@/features/explore/explore-frame';
+import { ExploreScreen } from '@/features/explore/explore-screen';
 import { ExploreViewProvider } from '@/features/explore/explore-view';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 
@@ -95,6 +97,8 @@ function TabHeader({ title, description }: { title: string; description?: string
 }
 
 const INFO_GLYPH = '\u24D8';
+/** The two tabs that are one page (SharedExplorePage). */
+const SHARED_PAGE_TABS = ['explore', 'pet-friendly'];
 const INFO_SIZE = 28;
 /** The selected tab's background: the logo's #FF9722 with 85% white (dark: orange-950). */
 const ACTIVE_TAB_BG = { light: '#ffefde', dark: '#431407' };
@@ -104,6 +108,49 @@ const LOGO_TURQUOISE = '#00c1c0';
 const LOGO_ORANGE = '#ff9722';
 /** red-400. */
 const LIGHT_RED = '#f87171';
+
+type TabInfo = { title: string; description?: string };
+
+/**
+ * Explorar and Pet-friendly are one page (owner's rule): drawn once here, over whichever of the
+ * two tabs is open, with that tab's title and places. One map, so its view, zoom, rotation,
+ * circle and switches can never differ between the two. Hidden on the other tabs (still there,
+ * so it comes back exactly as it was).
+ */
+function SharedExplorePage({ explore, petFriendly }: { explore: TabInfo; petFriendly: TabInfo }) {
+  const segments = useSegments() as string[];
+  const tab = segments[0] === '(tabs)' ? segments[1] : undefined;
+  // The last tab shown: a page opened on top (a place) keeps it as it was underneath.
+  const [shownTab, setShownTab] = useState(tab ?? 'explore');
+  if (tab && tab !== shownTab) setShownTab(tab);
+  const visible = shownTab === 'explore' || shownTab === 'pet-friendly';
+  const height = useExploreFrameHeight();
+  useEffect(() => {
+    if (!visible) Keyboard.dismiss();
+  }, [visible]);
+  const shown = visible && height > 0;
+  const section = shownTab === 'pet-friendly' ? 'pet_friendly' : 'pet_business';
+  const info = section === 'pet_friendly' ? petFriendly : explore;
+  return (
+    <View
+      // Hidden by being see-through and untouchable, not display: none: a map hidden that way
+      // loses its circle and pins on iOS when it comes back.
+      pointerEvents={shown ? 'box-none' : 'none'}
+      accessibilityElementsHidden={!shown}
+      importantForAccessibility={shown ? 'auto' : 'no-hide-descendants'}
+      style={{ position: 'absolute', top: 0, left: 0, right: 0, height, opacity: shown ? 1 : 0 }}
+    >
+      {/* Only once the room is known: a map first laid out at no height opens on the whole world
+          on Android (it can't fit the circle into nothing). */}
+      {height > 0 ? (
+        <>
+          <TabHeader title={info.title} description={info.description} />
+          <ExploreScreen section={section} />
+        </>
+      ) : null}
+    </View>
+  );
+}
 
 /** Explorar, Pet-friendly, Urgencias, Favoritos and Ajustes. */
 export default function TabsLayout() {
@@ -147,33 +194,47 @@ export default function TabsLayout() {
     { name: 'settings', title: t('settings.tabTitle'), icon: 'tab-settings' },
   ];
 
+  const tabInfo = (name: string): TabInfo => {
+    const tab = tabs.find((item) => item.name === name);
+    return { title: tab?.title ?? '', description: tab?.description };
+  };
   return (
     <ExploreViewProvider>
-      <Tabs
-        screenOptions={{
-          tabBarActiveTintColor: dark ? '#2dd4bf' : '#0f766e',
-          // The selected section sits on a light orange: the logo's #FF9722 with 85% white (dark:
-          // orange-950).
-          tabBarActiveBackgroundColor: dark ? ACTIVE_TAB_BG.dark : ACTIVE_TAB_BG.light,
-          // The bar itself: the unselected Lista/Mapa buttons' cream (off-bg, dark: off-bg-dark).
-          tabBarStyle: { backgroundColor: dark ? TAB_BAR_BG.dark : TAB_BAR_BG.light },
-        }}
-      >
-        {tabs.map((tab) => (
-          <Tabs.Screen
-            key={tab.name}
-            name={tab.name}
-            options={{
-              title: tab.title,
-              // Stable handles for the Maestro flows (.maestro/), in any language.
-              tabBarButtonTestID: `tab-${tab.name}`,
-              header: () => <TabHeader title={tab.title} description={tab.description} />,
-              ...(tab.activeTint ? { tabBarActiveTintColor: tab.activeTint } : {}),
-              tabBarIcon: ({ color }) => <TabIcon name={tab.icon} color={String(color)} />,
+      <ExploreFrameProvider>
+        <View style={{ flex: 1 }}>
+          <Tabs
+            screenOptions={{
+              tabBarActiveTintColor: dark ? '#2dd4bf' : '#0f766e',
+              // The selected section sits on a light orange: the logo's #FF9722 with 85% white (dark:
+              // orange-950).
+              tabBarActiveBackgroundColor: dark ? ACTIVE_TAB_BG.dark : ACTIVE_TAB_BG.light,
+              // The bar itself: the unselected Lista/Mapa buttons' cream (off-bg, dark: off-bg-dark).
+              tabBarStyle: { backgroundColor: dark ? TAB_BAR_BG.dark : TAB_BAR_BG.light },
             }}
-          />
-        ))}
-      </Tabs>
+          >
+            {tabs.map((tab) => (
+              <Tabs.Screen
+                key={tab.name}
+                name={tab.name}
+                options={{
+                  title: tab.title,
+                  // Stable handles for the Maestro flows (.maestro/), in any language.
+                  tabBarButtonTestID: `tab-${tab.name}`,
+                  // Explorar's and Pet-friendly's header is part of their shared page (below).
+                  ...(SHARED_PAGE_TABS.includes(tab.name)
+                    ? { headerShown: false }
+                    : {
+                        header: () => <TabHeader title={tab.title} description={tab.description} />,
+                      }),
+                  ...(tab.activeTint ? { tabBarActiveTintColor: tab.activeTint } : {}),
+                  tabBarIcon: ({ color }) => <TabIcon name={tab.icon} color={String(color)} />,
+                }}
+              />
+            ))}
+          </Tabs>
+          <SharedExplorePage explore={tabInfo('explore')} petFriendly={tabInfo('pet-friendly')} />
+        </View>
+      </ExploreFrameProvider>
     </ExploreViewProvider>
   );
 }

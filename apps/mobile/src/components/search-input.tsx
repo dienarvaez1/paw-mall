@@ -16,6 +16,8 @@ type Props = {
   disabled?: boolean;
   /** Over the map: white with a shadow, so it stands out from the streets. */
   floating?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
 };
 
 /** Rounded search field with a clear button and, at the far right, the ES / EN switch. */
@@ -27,6 +29,8 @@ export function SearchInput({
   onSubmit,
   disabled = false,
   floating = false,
+  onFocus,
+  onBlur,
 }: Props) {
   return (
     <View
@@ -41,6 +45,8 @@ export function SearchInput({
         value={value}
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
+        onFocus={onFocus}
+        onBlur={onBlur}
         placeholder={placeholder}
         accessibilityLabel={placeholder}
         placeholderTextColor="#737373"

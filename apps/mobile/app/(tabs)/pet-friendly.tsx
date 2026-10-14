@@ -1,6 +1,9 @@
-import { ExploreScreen } from '@/features/explore/explore-screen';
+import { ExploreTabFrame } from '@/features/explore/explore-frame';
 
-/** Pet-friendly: restaurants, cafés, lodging, museums and parks, with their pet policy. */
+/**
+ * Pet-friendly: restaurants, cafés, lodging, museums and parks, with their pet policy. The same
+ * page as Explorar, drawn once by the tabs layout (explore-frame.tsx); this tab only makes room.
+ */
 export default function PetFriendlyTab() {
-  return <ExploreScreen section="pet_friendly" />;
+  return <ExploreTabFrame />;
 }

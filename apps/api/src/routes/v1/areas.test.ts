@@ -1,6 +1,7 @@
 import {
   KM_PER_MILE,
   areaLookupResponseSchema,
+  areaSuggestResponseSchema,
   placeListResponseSchema,
   placeMapResponseSchema,
 } from '@paw-mall/shared';
@@ -9,7 +10,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { TEST_DATABASE_URL, testEnv } from '../../../test/env';
 import app from '../../index';
-import { nameKey, splitAreaSearch } from '../../queries/areas';
+import { nameKey, splitAreaSearch, suggestionPatterns } from '../../queries/areas';
 
 // Test areas and places in the open Pacific, removed afterwards. The user stands at USER; the
 // area "Plaza Prueba Paw" is 50 km east, far outside the user's radius.
@@ -27,11 +28,11 @@ async function addPlace(id: string, name: string, km: number, slug = 'veterinari
             SELECT ${row!.id}, id, 'activity' FROM categories WHERE slug = ${slug}`;
 }
 
-async function addArea(kind: string, name: string, km: number) {
+async function addArea(kind: string, name: string, km: number, businessCount = 0, key = name) {
   await sql`
-    INSERT INTO search_areas (kind, name, name_key, state, location)
-    VALUES (${kind}, ${name}, ${nameKey(name)}, 'Estado de Prueba',
-            ST_SetSRID(ST_MakePoint(${kmEast(km)}, ${USER.lat}), 4326)::geography)`;
+    INSERT INTO search_areas (kind, name, name_key, state, location, business_count)
+    VALUES (${kind}, ${name}, ${nameKey(key)}, 'Estado de Prueba',
+            ST_SetSRID(ST_MakePoint(${kmEast(km)}, ${USER.lat}), 4326)::geography, ${businessCount})`;
 }
 
 beforeAll(async () => {
@@ -50,6 +51,18 @@ beforeAll(async () => {
   // The same colonia name twice: the one near the user wins.
   await addArea('colonia', 'Colonia Gemela Paw', 1);
   await addArea('colonia', 'Colonia Gemela Paw', 300);
+  // Suggestions: names starting "Puertito Paw".
+  await addArea('municipality', 'Puertito Paw Vallarta', 400, 16000);
+  await addArea('town', 'Puertito Paw Escondido', 410, 5000);
+  await addArea('colonia', 'Puertito Paw Centro', 2, 90000);
+  await addArea('municipality', 'Puertito Pawllano', 420, 50000);
+  // The same name twice: the suggestion is the one a search goes to (the nearer).
+  await addArea('town', 'Puertito Paw Gemelo', 500, 10);
+  await addArea('town', 'Puertito Paw Gemelo', 5, 1);
+  // A landmark under two names, both shown as the same place.
+  await addArea('landmark', 'Plazita Paw', 6, 0, 'Plazita Paw');
+  await addArea('landmark', 'Plazita Paw', 6, 0, 'Plazita Paw Mayor');
+  await addArea('colonia', 'Vallarta Paw Viejo', 7, 1);
 });
 
 afterAll(async () => {
@@ -229,6 +242,93 @@ describe('GET /v1/places/area', () => {
     });
     expect((await lookup('veterinaria en plaza prueba paw')).area).toBeNull();
     expect((await lookup('tacos')).area).toBeNull();
+  });
+});
+
+describe('GET /v1/places/area-suggestions', () => {
+  async function suggest(q: string) {
+    const res = await app.request(
+      `/v1/places/area-suggestions?lat=${USER.lat}&lng=${USER.lng}&q=${encodeURIComponent(q)}`,
+      {},
+      testEnv,
+    );
+    expect(res.status).toBe(200);
+    return areaSuggestResponseSchema.parse(await res.json()).suggestions;
+  }
+
+  it('completes the next word: "puertito paw v" is Vallarta, "puertito paw e" Escondido', async () => {
+    expect((await suggest('Puertito Paw V')).map((s) => s.name)).toEqual(['Puertito Paw Vallarta']);
+    expect((await suggest('puertito paw e')).map((s) => s.name)).toEqual([
+      'Puertito Paw Escondido',
+    ]);
+  });
+
+  it('puts cities, towns and landmarks before colonias, then the busiest', async () => {
+    const names = (await suggest('Puertito Paw')).map((s) => s.name);
+    expect(names).toEqual([
+      'Puertito Pawllano',
+      'Puertito Paw Vallarta',
+      'Puertito Paw Escondido',
+      'Puertito Paw Gemelo',
+      'Puertito Paw Centro',
+    ]);
+  });
+
+  it('matches whole words after a space', async () => {
+    expect((await suggest('Puertito Paw ')).map((s) => s.name)).not.toContain('Puertito Pawllano');
+  });
+
+  it('suggests a shared name once, as the place a search for it goes to', async () => {
+    const twins = (await suggest('puertito paw gem')).filter(
+      (s) => s.name === 'Puertito Paw Gemelo',
+    );
+    expect(twins).toHaveLength(1);
+    expect(twins[0]!.location.lng).toBeCloseTo(kmEast(5), 3);
+  });
+
+  it('suggests a landmark stored under several names once', async () => {
+    const plazas = (await suggest('plazita paw')).filter((s) => s.name === 'Plazita Paw');
+    expect(plazas).toHaveLength(1);
+  });
+
+  it('matches the typed words in any order, each starting a word of the name', async () => {
+    for (const q of ['Vallarta Puertito', 'paw vall', 'v puertito paw']) {
+      expect((await suggest(q)).map((s) => s.name)).toContain('Puertito Paw Vallarta');
+    }
+    // A word in the middle of another word is no match.
+    expect((await suggest('allarta')).map((s) => s.name)).not.toContain('Puertito Paw Vallarta');
+  });
+
+  it('puts the exact name first', async () => {
+    expect((await suggest('Puertito Pawllano'))[0]?.name).toBe('Puertito Pawllano');
+  });
+
+  it('puts names that start with the text as typed first', async () => {
+    // A small colonia starting "Vallarta Paw" beats the busier city with the words out of order.
+    const names = (await suggest('vallarta paw')).map((s) => s.name);
+    expect(names.slice(0, 2)).toEqual(['Vallarta Paw Viejo', 'Puertito Paw Vallarta']);
+  });
+
+  it('suggests nothing under 3 letters', async () => {
+    expect(await suggest('pu')).toEqual([]);
+  });
+});
+
+describe('suggestionPatterns', () => {
+  it('turns each word into a word-start pattern, the last a prefix', () => {
+    expect(suggestionPatterns('Puerto V')).toEqual(['(^| )puerto', '(^| )v']);
+  });
+
+  it('makes the last word whole after a space', () => {
+    expect(suggestionPatterns('puerto ')).toEqual(['(^| )puerto( |$)']);
+  });
+
+  it('leaves out stop words', () => {
+    expect(suggestionPatterns('vet en coyo')).toEqual(['(^| )vet', '(^| )coyo']);
+  });
+
+  it('needs 3 letters', () => {
+    expect(suggestionPatterns('pu')).toBeNull();
   });
 });
 

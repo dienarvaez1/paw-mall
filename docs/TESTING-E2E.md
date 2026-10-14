@@ -58,10 +58,10 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | Area         | Journey                                                                    | Flow                      |
 | ------------ | -------------------------------------------------------------------------- | ------------------------- |
 | Language     | The globe switches ES ↔ EN (tab names)                                     | `language`                |
-| Search       | A place's name asks "place or business?"; nothing searches until answered  | `place-question`          |
-| Search       | Answered as a place → the places there, not the namesake near the user     | `place-question`          |
-| Search       | Answered as a business → only businesses with that name, around the user   | `place-question-business` |
-| Search       | A business name that's no place searches without asking                    | `search-clear`            |
+| Search       | Typing suggests places, never asks; a picked place searches there directly | `place-question`          |
+| Search       | Picked place → the places there, not the namesake near the user            | `place-question`          |
+| Search       | Search key on a place's name asks; as a business → only that name, nearby  | `place-question-business` |
+| Search       | Typed text searches business names without asking                          | `search-clear`            |
 | Search       | ✕ clears the text and the full list comes back                             | `search-clear`            |
 | Explore      | Map and List count the same places                                         | `map-list`                |
 | Explore      | A category chip narrows the list; Todos brings everything back             | `chips`                   |

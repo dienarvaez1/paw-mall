@@ -142,7 +142,7 @@
   "areaCount_one": "{{total}} place within {{distance}} of {{area}}",
   "areaCount_other": "{{total}} places within {{distance}} of {{area}}",
   "nearMe": "My location",
-  "nearMeHint": "On: searches business names near you, within the chosen radius. Off: searches around a colonia, city or landmark.",
+  "nearMeHint": "Goes back to your location and zooms to the smallest radius.",
   "searchPlaceholderNearMe": "Business name, city, colonia or landmark",
   "radiusButton": "Search radius: {{distance}}",
   "radiusButtonHint": "Tap for the next radius. It's used by the list, the map and “My location”, and saved in Settings.",
@@ -259,5 +259,16 @@
       "colonia": "neighborhood (colonia)",
       "landmark": "landmark"
     }
+  },
+  "suggestions": {
+    "label": "Place suggestions",
+    "kind": {
+      "municipality": "City",
+      "town": "Town",
+      "colonia": "Neighborhood (colonia)",
+      "landmark": "Landmark"
+    },
+    "hint": "Searches around this place",
+    "businessHint": "Opens this place's page"
   }
 }

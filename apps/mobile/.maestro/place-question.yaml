@@ -1,5 +1,5 @@
-# "Tlaxcala" is a place's name and a business's: the app asks, and nothing searches until the
-# answer. As a place: the vets in Tlaxcala, not the store named after it near the user.
+# "Tlaxcala" is a place's name and a business's. Picked from the suggestions it's the place: the
+# vets in Tlaxcala, not the store named after it near the user.
 appId: dev.pawmall.app
 ---
 - runFlow: common/launch.yaml
@@ -8,12 +8,16 @@ appId: dev.pawmall.app
 - tapOn:
     id: search-input
 - inputText: Tlaxcala
+# Typing never asks; picking a suggested place searches there with no question (owner's rules).
 - extendedWaitUntil:
-    visible: Como lugar|As a place
+    visible:
+      id: suggestion-0
     timeout: 20000
-- tapOn: Como lugar|As a place
-- hideKeyboard
+- assertNotVisible: Como lugar|As a place
+- tapOn:
+    id: suggestion-0
 - extendedWaitUntil:
     visible: Veterinaria Paw Tlaxcala
     timeout: 20000
 - assertNotVisible: Mascotas Tlaxcala
+- assertNotVisible: Como lugar|As a place

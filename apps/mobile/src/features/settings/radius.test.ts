@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  minRadiusKm,
   closestRadiusKm,
   isRadiusOption,
   nextRadiusKm,
@@ -78,5 +79,12 @@ describe('startRadiusKm', () => {
   it('starts a first launch at 3 miles, or the closest choice in km', () => {
     expect(startRadiusKm('mi')).toBeCloseTo(4.828, 3);
     expect(startRadiusKm('km')).toBe(5);
+  });
+});
+
+describe('minRadiusKm', () => {
+  it('is the smallest choice in the unit: 5 km, or 3 mi', () => {
+    expect(minRadiusKm('km')).toBe(5);
+    expect(minRadiusKm('mi')).toBeCloseTo(3 * 1.609344, 6);
   });
 });

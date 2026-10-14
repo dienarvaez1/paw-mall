@@ -142,7 +142,7 @@
   "areaCount_one": "{{total}} lugar a menos de {{distance}} de {{area}}",
   "areaCount_other": "{{total}} lugares a menos de {{distance}} de {{area}}",
   "nearMe": "Mi ubicación",
-  "nearMeHint": "Activado: busca nombres de negocios cerca de ti, dentro del radio elegido. Desactivado: busca alrededor de una colonia, ciudad o lugar.",
+  "nearMeHint": "Vuelve a tu ubicación y acerca el mapa al radio más chico.",
   "searchPlaceholderNearMe": "Nombre del negocio, ciudad, colonia o lugar",
   "radiusButton": "Radio de búsqueda: {{distance}}",
   "radiusButtonHint": "Toca para cambiar al siguiente radio. Se usa en la lista, el mapa y «Mi ubicación», y se guarda en Ajustes.",
@@ -259,5 +259,16 @@
       "colonia": "colonia",
       "landmark": "zona o lugar conocido"
     }
+  },
+  "suggestions": {
+    "label": "Lugares sugeridos",
+    "kind": {
+      "municipality": "Ciudad o alcaldía",
+      "town": "Población",
+      "colonia": "Colonia",
+      "landmark": "Zona o lugar conocido"
+    },
+    "hint": "Busca alrededor de este lugar",
+    "businessHint": "Abre la página de este lugar"
   }
 }

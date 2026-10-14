@@ -1,4 +1,5 @@
-# Moving the map by hand turns "Mi ubicación" off and searches there; turning it on comes back.
+# Moving the map by hand turns "Mi ubicación" off and searches there; the button comes back to the
+# user at the smallest radius (5 km).
 appId: dev.pawmall.app
 ---
 - runFlow: common/launch.yaml
@@ -14,7 +15,7 @@ appId: dev.pawmall.app
 - extendedWaitUntil:
     visible:
       id: near-me
-      checked: false
+      selected: false
     timeout: 15000
 - tapOn:
     id: near-me
@@ -23,4 +24,4 @@ appId: dev.pawmall.app
     timeout: 30000
 - assertVisible:
     id: near-me
-    checked: true
+    selected: true

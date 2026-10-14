@@ -9,6 +9,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { TEST_DATABASE_URL, testEnv } from '../../../test/env';
 import app from '../../index';
+import { searchWords } from '../../queries/places';
 
 // Test places sit in the open Pacific, far from any real place, and are removed afterwards.
 const ORIGIN = { lat: 0.5, lng: -150 };
@@ -224,5 +225,12 @@ describe('GET /v1/places/:id', () => {
       expect(res.status).toBe(404);
       expect(await res.json()).toEqual({ error: { code: 'PLACE_NOT_FOUND' } });
     }
+  });
+});
+
+describe('searchWords', () => {
+  it('reads CDMX and DF as the state Ciudad de México, in any order', () => {
+    expect(searchWords('CDMX veterinaria')).toEqual(['ciudad de mexico', 'veterinaria']);
+    expect(searchWords('veterinaria df')).toEqual(['veterinaria', 'ciudad de mexico']);
   });
 });

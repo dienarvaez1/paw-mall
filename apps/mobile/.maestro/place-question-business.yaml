@@ -1,4 +1,5 @@
-# The same text answered as a business name: only businesses called that, around the user.
+# "Tlaxcala" typed and sent with the search key, answered as a business name: only businesses
+# called that, around the user.
 appId: dev.pawmall.app
 ---
 - runFlow: common/launch.yaml
@@ -7,11 +8,12 @@ appId: dev.pawmall.app
 - tapOn:
     id: search-input
 - inputText: Tlaxcala
+# Not picked from the suggestions: the search key on a place's name asks how to read it.
+- pressKey: Enter
 - extendedWaitUntil:
     visible: Como nombre de negocio|As a business name
     timeout: 20000
 - tapOn: Como nombre de negocio|As a business name
-- hideKeyboard
 - extendedWaitUntil:
     visible: Mascotas Tlaxcala
     timeout: 20000

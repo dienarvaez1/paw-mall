@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { isAwayFrom, radiusForRegion, regionForBounds, regionForRadius } from './map-region';
+import {
+  circleForCluster,
+  distanceKm,
+  isAwayFrom,
+  radiusForRegion,
+  regionForBounds,
+  regionForRadius,
+} from './map-region';
 
 describe('regionForRadius', () => {
   it('fits the circle with a margin, wider in longitude away from the equator', () => {
@@ -67,5 +74,28 @@ describe('isAwayFrom', () => {
     expect(isAwayFrom({ ...around, longitude: me.lng - around.longitudeDelta * 0.2 }, me)).toBe(
       true,
     );
+  });
+});
+
+describe('circleForCluster', () => {
+  // Most places near the box's south-west corner (the average), a few far to the north-east.
+  const bounds = [-99.2, 19.3, -98.8, 19.7] as const;
+  const average = { lat: 19.35, lng: -99.15 };
+
+  it('centers on the average position, not the middle of the box', () => {
+    expect(circleForCluster(average, bounds).center).toEqual(average);
+  });
+
+  it('reaches every corner of the box', () => {
+    const { radiusKm } = circleForCluster(average, bounds);
+    const farCorner = distanceKm(average, { lat: 19.7, lng: -98.8 });
+    expect(radiusKm).toBeCloseTo(farCorner, 6);
+    for (const corner of [
+      { lat: 19.3, lng: -99.2 },
+      { lat: 19.3, lng: -98.8 },
+      { lat: 19.7, lng: -99.2 },
+    ]) {
+      expect(radiusKm).toBeGreaterThanOrEqual(distanceKm(average, corner));
+    }
   });
 });

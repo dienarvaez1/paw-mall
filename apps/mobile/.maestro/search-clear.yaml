@@ -1,4 +1,4 @@
-# A business name that's no place searches without asking; ✕ brings the full list back.
+# Typed text searches business names without asking; ✕ brings the full list back.
 appId: dev.pawmall.app
 ---
 - runFlow: common/launch.yaml
