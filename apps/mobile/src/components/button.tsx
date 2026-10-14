@@ -11,12 +11,15 @@ type Props = {
   onPress: () => void;
   accessibilityLabel?: string;
   variant?: 'primary' | 'secondary';
+  /** For the Maestro flows (.maestro/). */
+  testID?: string;
 };
 
-export function Button({ label, onPress, accessibilityLabel, variant = 'primary' }: Props) {
+export function Button({ label, onPress, accessibilityLabel, variant = 'primary', testID }: Props) {
   const primary = variant === 'primary';
   return (
     <Pressable
+      testID={testID}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}

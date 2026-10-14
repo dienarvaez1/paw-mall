@@ -4,6 +4,7 @@ import { Linking, Pressable, Text, View } from 'react-native';
 import { Button } from '@/components/button';
 import { ErrorState } from '@/components/states';
 import { formatShortDate } from '@/i18n/format';
+import { SECTION, SECTION_TITLE } from '@/components/section';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 
@@ -31,11 +32,8 @@ export function PolicyCard({ placeId, policy }: { placeId: number; policy: PetPo
   ].filter((line) => line !== null);
 
   return (
-    <View className="gap-2 px-4 pt-6">
-      <Text
-        accessibilityRole="header"
-        className="text-lg font-semibold text-neutral-900 dark:text-white"
-      >
+    <View className={SECTION}>
+      <Text accessibilityRole="header" className={SECTION_TITLE}>
         {t('places.pets.title')}
       </Text>
       {policy.underReview ? (

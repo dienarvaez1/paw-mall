@@ -57,3 +57,32 @@ In production (only when the owner decides to deploy) the key would be a Worker 
 SELECT * FROM google_usage ORDER BY month DESC;              -- requests per month and SKU
 SELECT google_match_status, count(*) FROM places GROUP BY 1; -- matched / no_match / never looked up
 ```
+
+## Android map key (development builds)
+
+Expo Go's own Google Maps key is refused on recent Android emulators ("Authorization failure"), so
+Android runs as a **development build** with Paw Mall's own key, in the same Google Cloud project.
+iOS keeps Apple Maps and Expo Go.
+
+1. **APIs & Services → Library:** enable **Maps SDK for Android**.
+2. **APIs & Services → Credentials → Create credentials → API key.** Edit it:
+   - **Name:** "Paw Mall Android maps (dev)".
+   - **Application restrictions:** Android apps → add package **`dev.pawmall.app`** with the debug
+     signing SHA-1 **`5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25`** (the React
+     Native template's debug keystore, `android/app/debug.keystore` after a prebuild).
+   - **API restrictions:** Maps SDK for Android only.
+3. Put it in `apps/mobile/.env.local` (git-ignored) as `GOOGLE_MAPS_ANDROID_KEY=…` (see
+   `apps/mobile/.env.example`). Never commit or print it.
+4. Build and run on the emulator or a USB phone: `pnpm --filter mobile android:dev`. It needs
+   **JDK 17**: Android Studio's bundled JDK (25) fails in the native CMake step ("A restricted
+   method in java.lang.System has been called"). Gradle's own copy works:
+   `JAVA_HOME=~/.gradle/jdks/eclipse_adoptium-17-aarch64-os_x.2/jdk-17.0.20.1+1/Contents/Home`, with
+   `ANDROID_HOME=~/Library/Android/sdk`. After a key change, rebuild
+   (`npx expo prebuild --platform android --clean`, then `android:dev`).
+
+The emulator doesn't read the Mac's location: `pnpm --filter mobile emulator:location` sets it
+(precise with `brew install --cask corelocationcli`, else approximate from the IP), or pass a
+latitude and longitude. Then tap the app's location button.
+
+`pnpm --filter mobile start` keeps opening Expo Go (`--go`), for iPhones and quick checks.
+`dev.pawmall.app` is a development package name only, not the store ID (still an open decision).

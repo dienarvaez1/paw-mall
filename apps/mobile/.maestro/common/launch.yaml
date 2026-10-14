@@ -1,0 +1,44 @@
+# Fresh start on the fixed test data (docs/TESTING-E2E.md), with the user at the Zócalo. Locally:
+# the development build, opened on the e2e Metro (port 8084), which points it at the e2e API
+# (port 8788). With BUNDLED=true (CI): a release build with the code and the e2e API's address
+# built in, so there is no development server or menu to go through.
+appId: dev.pawmall.app
+---
+# LAT / LNG: another spot for a flow that needs one (default: the Zócalo).
+- setLocation:
+    latitude: ${LAT || 19.4326}
+    longitude: ${LNG || -99.1332}
+- launchApp:
+    clearState: true
+    permissions:
+      location: allow
+- runFlow:
+    when:
+      true: ${BUNDLED !== 'true'}
+    commands:
+      # 10.0.2.2 is the Mac as the emulator sees it.
+      - extendedWaitUntil:
+          visible: DEVELOPMENT SERVERS|Development servers
+          timeout: 30000
+      # Loading the bundle can stall after a clean install; open it again if it does.
+      - retry:
+          maxRetries: 2
+          commands:
+            - openLink: exp+paw-mall://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8084
+            # A fresh install shows the dev menu's welcome over the app (it hides the search box),
+            # then the menu itself: both are closed below.
+            - extendedWaitUntil:
+                visible: Continue|Lista|List
+                timeout: 90000
+      - tapOn:
+          text: Continue
+          optional: true
+      - runFlow:
+          when:
+            visible: Go home
+          commands:
+            - back
+- extendedWaitUntil:
+    visible:
+      id: search-input
+    timeout: 30000

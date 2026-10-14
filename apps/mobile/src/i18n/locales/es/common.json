@@ -5,6 +5,7 @@
     "es": "Español",
     "en": "Inglés"
   },
+  "switchLanguage": "Cambiar idioma a {{language}}",
   "getDirections": "Cómo llegar",
   "directionsWith": "Cómo llegar con…",
   "cancel": "Cancelar",

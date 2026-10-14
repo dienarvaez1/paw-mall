@@ -1,0 +1,18 @@
+# The layers button toggles the satellite map; the compass turns the map north.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: map-layers
+- assertVisible:
+    id: map-layers
+    selected: true
+- tapOn:
+    id: map-layers
+- assertVisible:
+    id: map-layers
+    selected: false
+- tapOn:
+    id: map-compass
+- assertVisible:
+    id: search-input

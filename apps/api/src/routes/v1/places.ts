@@ -10,6 +10,7 @@ import {
   type receivedResponseSchema,
   urgentQuerySchema,
   areaLookupQuerySchema,
+  areaSuggestQuerySchema,
 } from '@paw-mall/shared';
 import { Hono } from 'hono';
 import type { z } from 'zod';
@@ -17,7 +18,7 @@ import type { z } from 'zod';
 import type { AppEnv } from '../../env';
 import { GoogleError } from '../../lib/google-places';
 import { errorResponse, parseInput } from '../../lib/http';
-import { resolveArea } from '../../queries/areas';
+import { resolveArea, suggestAreas } from '../../queries/areas';
 import { lookupGoogleDetails, userKey } from '../../queries/google';
 import { getPlace, listPlaces, placesForMap, urgentPlaces } from '../../queries/places';
 import { answerPet, answerPolicy, createClaim, reportPlace } from '../../queries/trust';
@@ -30,7 +31,7 @@ export const placesRoute = new Hono<AppEnv>()
     if (!query.ok) return query.response;
     return c.json(await listPlaces(c.var.db, query.data, c.var.locale));
   })
-  // Before /:id, so "map", "area" and "urgent" aren't read as place ids.
+  // Before /:id, so "map", "area", "area-suggestions" and "urgent" aren't read as place ids.
   .get('/map', async (c) => {
     const query = parseInput(c, placeMapQuerySchema, c.req.query());
     if (!query.ok) return query.response;
@@ -42,6 +43,13 @@ export const placesRoute = new Hono<AppEnv>()
     if (!query.ok) return query.response;
     const { q, lat, lng } = query.data;
     return c.json({ area: await resolveArea(c.var.db, q, { lat, lng }) });
+  })
+  // Place names for the search box's suggestions while typing ("Puerto V" -> Puerto Vallarta).
+  .get('/area-suggestions', async (c) => {
+    const query = parseInput(c, areaSuggestQuerySchema, c.req.query());
+    if (!query.ok) return query.response;
+    const { q, lat, lng } = query.data;
+    return c.json({ suggestions: await suggestAreas(c.var.db, q, { lat, lng }) });
   })
   .get('/urgent', async (c) => {
     const query = parseInput(c, urgentQuerySchema, c.req.query());

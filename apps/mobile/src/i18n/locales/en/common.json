@@ -5,6 +5,7 @@
     "es": "Spanish",
     "en": "English"
   },
+  "switchLanguage": "Switch language to {{language}}",
   "getDirections": "Directions",
   "directionsWith": "Get directions with…",
   "cancel": "Cancel",

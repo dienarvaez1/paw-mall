@@ -16,6 +16,14 @@ const config: ExpoConfig = {
   },
   android: {
     predictiveBackGestureEnabled: false,
+    // Development builds only (`pnpm --filter mobile android:dev`), not a store ID: Google Maps
+    // keys are restricted to a package name. Expo Go ignores it.
+    package: 'dev.pawmall.app',
+    config: {
+      // Paw Mall's own Maps SDK for Android key, from apps/mobile/.env.local (never committed);
+      // setup in docs/GOOGLE-PLACES.md.
+      googleMaps: { apiKey: process.env.GOOGLE_MAPS_ANDROID_KEY },
+    },
   },
   web: {
     bundler: 'metro',
@@ -39,6 +47,11 @@ const config: ExpoConfig = {
   ],
   experiments: {
     typedRoutes: true,
+  },
+  extra: {
+    // Whether the Maps key above is set (never the key itself): release builds drop
+    // `android.config` from the config the app can read, so src/lib/map-type.ts checks this.
+    mapsKeyConfigured: Boolean(process.env.GOOGLE_MAPS_ANDROID_KEY),
   },
 };
 

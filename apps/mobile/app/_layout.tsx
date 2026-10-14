@@ -8,6 +8,7 @@ import { useColorScheme } from 'react-native';
 
 import { KeyboardBar } from '@/components/keyboard-bar';
 import { OfflineBanner } from '@/components/states';
+import { FavoritesProvider } from '@/features/favorites/favorites-context';
 import { LocationProvider } from '@/features/location/location-context';
 import { connectQueryOnlineState } from '@/features/network/network';
 import { SettingsProvider } from '@/features/settings/settings-context';
@@ -37,6 +38,15 @@ function RootStack() {
   );
 }
 
+/**
+ * Light mode: pages and the place and claim headers on the tab bar's cream (off-bg, #FFFBED)
+ * instead of white (owner's choice); dark mode keeps the default.
+ */
+const LIGHT_THEME = {
+  ...DefaultTheme,
+  colors: { ...DefaultTheme.colors, background: '#fffbed', card: '#fffbed' },
+};
+
 export default function RootLayout() {
   const [i18nReady, setI18nReady] = useState(false);
   const scheme = useColorScheme();
@@ -50,15 +60,17 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={scheme === 'dark' ? DarkTheme : LIGHT_THEME}>
       <QueryClientProvider client={queryClient}>
         <SettingsProvider>
-          <LocationProvider>
-            <OfflineBanner />
-            <RootStack />
-            <StatusBar style="auto" />
-            <KeyboardBar />
-          </LocationProvider>
+          <FavoritesProvider>
+            <LocationProvider>
+              <OfflineBanner />
+              <RootStack />
+              <StatusBar style="auto" />
+              <KeyboardBar />
+            </LocationProvider>
+          </FavoritesProvider>
         </SettingsProvider>
       </QueryClientProvider>
     </ThemeProvider>

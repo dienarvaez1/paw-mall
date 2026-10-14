@@ -1,0 +1,8 @@
+{
+  "tabTitle": "Favoritos",
+  "intro": "Los lugares que guardes para volver a encontrarlos rápido.",
+  "empty": "Aún no tienes favoritos.",
+  "emptyHint": "Toca el corazón en la página de un lugar para guardarlo aquí.",
+  "add": "Guardar {{name}} en favoritos",
+  "remove": "Quitar {{name}} de favoritos"
+}

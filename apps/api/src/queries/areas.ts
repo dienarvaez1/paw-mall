@@ -1,4 +1,9 @@
-import { type SearchArea, detectCategory } from '@paw-mall/shared';
+import {
+  AREA_SUGGESTIONS_MAX,
+  type SearchArea,
+  detectCategory,
+  searchTokens,
+} from '@paw-mall/shared';
 import { sql } from 'drizzle-orm';
 
 import type { Database } from '../db/client';
@@ -64,6 +69,85 @@ export async function resolveArea(
         location: { lat: row.lat, lng: row.lng },
       }
     : null;
+}
+
+/** Most typed words a suggestion search looks at. */
+const MAX_SUGGEST_TOKENS = 6;
+
+/**
+ * The search box text as word patterns for suggestions, order-invariant: each typed word must
+ * start a word of the name, in any order ("vallarta puerto", "puerto vall" and "v puerto" all
+ * match "puerto vallarta"). The last word is still being typed, so it's a prefix, unless the text
+ * ends with a space: then it's a whole word ("puerto " never suggests "Puertollano"). Null when
+ * the text is too short to suggest anything. Patterns are POSIX regexes for name_key, which
+ * holds only letters, digits and spaces (so nothing typed is a regex character).
+ */
+export function suggestionPatterns(text: string): string[] | null {
+  // The shared search words: stop words ("en", "near"…) don't have to match (search-tokens.ts).
+  const tokens = searchTokens(text).slice(0, MAX_SUGGEST_TOKENS);
+  if (tokens.join(' ').length < 3) return null;
+  const finished = /\s$/.test(text);
+  return tokens.map((token, index) => {
+    const whole = index < tokens.length - 1 ? false : finished;
+    return `(^| )${token}${whole ? '( |$)' : ''}`;
+  });
+}
+
+/**
+ * Place names for the search box's suggestions, matching the typed words in any order
+ * (suggestionPatterns). One per name, the one resolveArea would pick (so a tapped suggestion
+ * searches exactly that place). The exact name first, then names that start with the text as
+ * typed, then cities, towns and landmarks before colonias, then the busiest.
+ */
+export async function suggestAreas(
+  db: Database,
+  text: string,
+  near: Point,
+): Promise<Omit<SearchArea, 'radiusKm'>[]> {
+  const patterns = suggestionPatterns(text);
+  if (!patterns) return [];
+  const key = nameKey(text);
+  const asTyped = `${key}%`;
+  const rows = await db.execute<{
+    name: string;
+    kind: SearchArea['kind'];
+    municipality: string | null;
+    state: string;
+    lat: number;
+    lng: number;
+  }>(sql`
+    SELECT name, kind, municipality, state, lat, lng
+    FROM (
+      -- A landmark is stored under several names ("zocalo", "zocalo cdmx", "plaza de la
+      -- constitucion"), all shown as "Zócalo": suggest it once.
+      SELECT DISTINCT ON (name, state, coalesce(municipality, ''))
+             name, kind, municipality, state, business_count, lat, lng, exact, in_order
+      FROM (
+        SELECT DISTINCT ON (name_key) name, kind, municipality, state, business_count,
+               ST_Y(location::geometry) AS lat, ST_X(location::geometry) AS lng,
+               name_key = ${key} AS exact, name_key LIKE ${asTyped} AS in_order
+        FROM search_areas
+        WHERE ${sql.join(
+          patterns.map((pattern) => sql`name_key ~ ${pattern}`),
+          sql` AND `,
+        )}
+        ORDER BY name_key,
+                 CASE kind WHEN 'landmark' THEN 0 WHEN 'municipality' THEN 1 WHEN 'town' THEN 2 ELSE 3 END,
+                 ST_Distance(location, ST_SetSRID(ST_MakePoint(${near.lng}, ${near.lat}), 4326)::geography),
+                 business_count DESC
+      ) by_key
+      ORDER BY name, state, coalesce(municipality, ''), exact DESC, in_order DESC, business_count DESC
+    ) best
+    ORDER BY exact DESC, in_order DESC, CASE WHEN kind = 'colonia' THEN 1 ELSE 0 END,
+             business_count DESC, name
+    LIMIT ${AREA_SUGGESTIONS_MAX}`);
+  return rows.map((row) => ({
+    name: row.name,
+    kind: row.kind,
+    municipality: row.municipality,
+    state: row.state,
+    location: { lat: Number(row.lat), lng: Number(row.lng) },
+  }));
 }
 
 /** Most words a place name inside a search can have ("san juan del rio"). */

@@ -1,0 +1,23 @@
+# "Tlaxcala" is a place's name and a business's. Picked from the suggestions it's the place: the
+# vets in Tlaxcala, not the store named after it near the user.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn:
+    id: search-input
+- inputText: Tlaxcala
+# Typing never asks; picking a suggested place searches there with no question (owner's rules).
+- extendedWaitUntil:
+    visible:
+      id: suggestion-0
+    timeout: 20000
+- assertNotVisible: Como lugar|As a place
+- tapOn:
+    id: suggestion-0
+- extendedWaitUntil:
+    visible: Veterinaria Paw Tlaxcala
+    timeout: 20000
+- assertNotVisible: Mascotas Tlaxcala
+- assertNotVisible: Como lugar|As a place

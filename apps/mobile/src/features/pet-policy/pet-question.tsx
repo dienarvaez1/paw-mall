@@ -4,6 +4,7 @@ import { Pressable, Text, View } from 'react-native';
 
 import { BUTTON_HIT_SLOP, Button } from '@/components/button';
 import { ErrorState } from '@/components/states';
+import { SECTION, SECTION_TITLE } from '@/components/section';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 
 import { usePetAnswer } from './pet-answers';
@@ -68,11 +69,8 @@ export function PetQuestion({ placeId, published }: { placeId: number; published
 export function PetQuestionCard({ placeId }: { placeId: number }) {
   const { t } = useAppTranslation();
   return (
-    <View className="gap-2 px-4 pt-6">
-      <Text
-        accessibilityRole="header"
-        className="text-lg font-semibold text-neutral-900 dark:text-white"
-      >
+    <View className={SECTION}>
+      <Text accessibilityRole="header" className={SECTION_TITLE}>
         {t('places.pets.title')}
       </Text>
       <Text className="text-base text-neutral-700 dark:text-neutral-300">

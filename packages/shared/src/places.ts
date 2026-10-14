@@ -177,6 +177,27 @@ export const areaLookupResponseSchema = z.object({
 });
 export type AreaLookupResponse = z.infer<typeof areaLookupResponseSchema>;
 
+/** Place names starting with what's typed in the search box ("Puerto V" -> "Puerto Vallarta"). */
+export const areaSuggestQuerySchema = z.object({
+  // Not trimmed: a trailing space means the word is finished ("puerto " is not "Puertollano").
+  q: z.string().min(1).max(100),
+  lat: latitude,
+  lng: longitude,
+});
+export type AreaSuggestQuery = z.infer<typeof areaSuggestQuerySchema>;
+
+/** Most suggestions shown under the search box. */
+export const AREA_SUGGESTIONS_MAX = 5;
+
+export const areaSuggestResponseSchema = z.object({
+  /**
+   * Up to AREA_SUGGESTIONS_MAX places, one per name (the one a search for that name goes to):
+   * cities, towns and landmarks before colonias, then the busiest first.
+   */
+  suggestions: z.array(searchAreaSchema.omit({ radiusKm: true })),
+});
+export type AreaSuggestResponse = z.infer<typeof areaSuggestResponseSchema>;
+
 export const placeListResponseSchema = z.object({
   /**
    * The area `q` named, when it did: places are then within area.radiusKm of it, nearest to it

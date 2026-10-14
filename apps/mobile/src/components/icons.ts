@@ -3,12 +3,28 @@ import type { CategorySlug } from '@paw-mall/shared';
 import type { ImageSource } from 'expo-image';
 
 export const ICONS = {
+  alert: require('../../assets/icons/alert.svg') as ImageSource,
+  clock: require('../../assets/icons/clock.svg') as ImageSource,
   compass: require('../../assets/icons/compass.svg') as ImageSource,
+  directions: require('../../assets/icons/directions.svg') as ImageSource,
+  flag: require('../../assets/icons/flag.svg') as ImageSource,
+  heart: require('../../assets/icons/heart.svg') as ImageSource,
+  'heart-filled': require('../../assets/icons/heart-filled.svg') as ImageSource,
+  info: require('../../assets/icons/info.svg') as ImageSource,
+  'keyboard-hide': require('../../assets/icons/keyboard-hide.svg') as ImageSource,
+  layers: require('../../assets/icons/layers.svg') as ImageSource,
   locate: require('../../assets/icons/locate.svg') as ImageSource,
+  map: require('../../assets/icons/map.svg') as ImageSource,
+  phone: require('../../assets/icons/phone.svg') as ImageSource,
+  share: require('../../assets/icons/share.svg') as ImageSource,
+  social: require('../../assets/icons/social.svg') as ImageSource,
+  store: require('../../assets/icons/store.svg') as ImageSource,
+  'tab-favorites': require('../../assets/icons/tab-favorites.svg') as ImageSource,
   'tab-explore': require('../../assets/icons/tab-search.svg') as ImageSource,
   'tab-pets': require('../../assets/icons/tab-pets.svg') as ImageSource,
   'tab-settings': require('../../assets/icons/tab-settings.svg') as ImageSource,
   'tab-urgent': require('../../assets/icons/tab-urgent.svg') as ImageSource,
+  website: require('../../assets/icons/website.svg') as ImageSource,
 };
 
 /** Map pins: one line icon per category (white on the category's color). */

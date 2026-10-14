@@ -1,0 +1,20 @@
+# Typed text searches business names without asking; ✕ brings the full list back.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn:
+    id: search-input
+- inputText: Estética
+- hideKeyboard
+- extendedWaitUntil:
+    notVisible: Tienda de Mascotas Paw
+    timeout: 20000
+- assertVisible: Estética Canina Paw
+- assertNotVisible: Como lugar|As a place
+- tapOn:
+    id: search-clear
+- extendedWaitUntil:
+    visible: Veterinaria Paw Centro
+    timeout: 20000

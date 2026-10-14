@@ -21,6 +21,7 @@ import {
   type UrgentResponse,
   type ValueSource,
   detectCategory,
+  SEARCH_ALIASES,
 } from '@paw-mall/shared';
 import { type SQL, sql } from 'drizzle-orm';
 
@@ -389,12 +390,17 @@ const IGNORED_WORDS = new Set(['en', 'la', 'el', 'de', 'del', 'los', 'las', 'y',
 
 /**
  * Up to 6 words that must each match the name, city or state ("Huellitas de Coyoacán" →
- * ["Huellitas", "Coyoacán"]). The ignored words are only searched when there's nothing else.
+ * ["Huellitas", "Coyoacán"], "vet CDMX" → ["vet", "ciudad de mexico"]). The ignored words are
+ * only searched when there's nothing else.
  */
 export function searchWords(q: string): string[] {
   const words = q.split(/[\s,.;]+/).filter(Boolean);
   const required = words.filter((word) => !IGNORED_WORDS.has(plain(word)));
-  return (required.length > 0 ? required : words).slice(0, 6);
+  // "CDMX" and "DF" are how people write the state "Ciudad de México" (SEARCH_ALIASES).
+  return (required.length > 0 ? required : words).slice(0, 6).map((word) => {
+    const alias = SEARCH_ALIASES[plain(word)];
+    return alias ? alias.join(' ') : word;
+  });
 }
 
 /** Treats % and _ typed by a user as plain characters in LIKE. */

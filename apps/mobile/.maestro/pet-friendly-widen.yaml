@@ -1,0 +1,36 @@
+# A search no confirmed place matches widens by itself to unconfirmed venues, with a notice; on
+# such a venue's page the user can answer whether it takes dogs.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+# Tap again if the first tap came while the dev menu was still closing.
+- retry:
+    maxRetries: 2
+    commands:
+      - tapOn:
+          id: tab-pet-friendly
+      - extendedWaitUntil:
+          visible:
+            id: chip-cafe
+          timeout: 10000
+- tapOn:
+    id: mode-list
+- tapOn:
+    id: search-input
+- inputText: Restaurante
+- hideKeyboard
+- extendedWaitUntil:
+    visible: Restaurante Sin Política Paw
+    timeout: 30000
+- assertVisible: Ningún lugar confirmado coincide.*|No confirmed place matches.*
+- tapOn: Restaurante Sin Política Paw
+- scrollUntilVisible:
+    element: ¿Acepta perros\?|Does it take dogs\?
+    timeout: 20000
+- tapOn: Sí|Yes
+- tapOn:
+    text: No sé|I don't know
+    optional: true
+- extendedWaitUntil:
+    visible: Gracias.*|Thanks.*|Thank you.*
+    timeout: 15000

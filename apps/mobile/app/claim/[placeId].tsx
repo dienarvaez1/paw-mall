@@ -22,7 +22,6 @@ import {
 import { apiPost } from '@/api/client';
 import { usePlace } from '@/api/hooks';
 import { BUTTON_HIT_SLOP, Button } from '@/components/button';
-import { KEYBOARD_BAR_ID } from '@/components/keyboard-bar';
 import { usePlaceName } from '@/components/place-row';
 import { ErrorState } from '@/components/states';
 import {
@@ -98,7 +97,7 @@ export default function ClaimScreen() {
 
   if (submit.isSuccess) {
     return (
-      <View className="flex-1 bg-white p-6 dark:bg-neutral-950">
+      <View className="flex-1 bg-off-bg p-6 dark:bg-neutral-950">
         <Text className="text-base leading-6 text-neutral-800 dark:text-neutral-200">
           {t('places.claim.thanks')}
         </Text>
@@ -111,7 +110,7 @@ export default function ClaimScreen() {
 
   return (
     <KeyboardAvoidingView
-      className="flex-1 bg-white dark:bg-neutral-950"
+      className="flex-1 bg-off-bg dark:bg-neutral-950"
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerClassName="gap-6 p-4 pb-16" keyboardShouldPersistTaps="handled">
@@ -125,17 +124,16 @@ export default function ClaimScreen() {
         <Section title={t('places.claim.storeSection')}>
           <Field label={t('places.claim.phone')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={phone}
               onChangeText={setPhone}
               keyboardType="phone-pad"
+              testID="claim-phone"
               accessibilityLabel={t('places.claim.phone')}
             />
           </Field>
           <Field label={t('places.claim.website')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={website}
               onChangeText={setWebsite}
@@ -192,21 +190,21 @@ export default function ClaimScreen() {
         <Section title={t('places.claim.contactSection')} hint={t('places.claim.contactHint')}>
           <Field label={t('places.claim.contactName')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={contactName}
               onChangeText={setContactName}
+              testID="claim-contact-name"
               accessibilityLabel={t('places.claim.contactName')}
             />
           </Field>
           <Field label={t('places.claim.contact')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={contact}
               onChangeText={setContact}
               autoCapitalize="none"
               autoCorrect={false}
+              testID="claim-contact"
               accessibilityLabel={t('places.claim.contact')}
             />
           </Field>
@@ -216,6 +214,7 @@ export default function ClaimScreen() {
           <Switch
             value={consent}
             onValueChange={setConsent}
+            testID="claim-consent"
             accessibilityLabel={t('places.claim.consent')}
             trackColor={{ true: '#46d2d1' }}
           />
@@ -233,6 +232,7 @@ export default function ClaimScreen() {
 
         <View className="flex-row">
           <Button
+            testID="claim-submit"
             label={t('places.claim.submit')}
             onPress={() => {
               if (!submit.isPending) send();
@@ -300,7 +300,6 @@ function DayRow({
       {!value.closed ? (
         <View className="flex-row gap-3">
           <TextInput
-            inputAccessoryViewID={KEYBOARD_BAR_ID}
             className={`${INPUT} flex-1`}
             value={value.open}
             onChangeText={(open) => onChange({ ...value, open })}
@@ -309,7 +308,6 @@ function DayRow({
             keyboardType="numbers-and-punctuation"
           />
           <TextInput
-            inputAccessoryViewID={KEYBOARD_BAR_ID}
             className={`${INPUT} flex-1`}
             value={value.close}
             onChangeText={(close) => onChange({ ...value, close })}
@@ -363,7 +361,6 @@ function PetPolicyFields({
           </View>
           <Field label={t('places.claim.petMaxWeight')}>
             <TextInput
-              inputAccessoryViewID={KEYBOARD_BAR_ID}
               className={INPUT}
               value={value.maxWeightKg}
               onChangeText={(maxWeightKg) => set({ maxWeightKg })}
@@ -398,7 +395,6 @@ function PetPolicyFields({
       </View>
       <Field label={t('places.claim.petRules')}>
         <TextInput
-          inputAccessoryViewID={KEYBOARD_BAR_ID}
           className={`${INPUT} py-2`}
           value={value.rules}
           onChangeText={(rules) => set({ rules })}

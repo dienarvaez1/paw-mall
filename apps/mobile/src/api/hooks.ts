@@ -1,5 +1,8 @@
 import {
   type CategoryGroup,
+  type Locale,
+  areaSuggestResponseSchema,
+  searchTokens,
   placeListResponseSchema,
   placeMapResponseSchema,
   placeSchema,
@@ -8,10 +11,12 @@ import {
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { readsAsPlace, useExploreView } from '@/features/explore/explore-view';
+import { useUserLocation } from '@/features/location/location-context';
 import { startRadiusKm, toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
 import type { ChipCategory } from '@/lib/categories';
+import { useDebounced } from '@/lib/use-debounced';
 
 import { apiGet } from './client';
 
@@ -29,10 +34,10 @@ export function useAreaRadiusKm(): number {
 
 /**
  * Places within the search radius (Ajustes, or the radius button on the list and the map) of the
- * user, nearest first, loaded page by page. With `nearMe` ("Mi ubicación" on), `name` searches
- * business names only. Without it, a `name` that names an area (a colonia, a city or a landmark
- * like the Zócalo) moves the search there within AREA_RADIUS; other text searches names, cities
- * and states. Every key includes the locale, so switching language refetches category names.
+ * user, nearest first, loaded page by page. `name` searches business names, unless the user
+ * picked it from the place suggestions and said to search around that place (readsAsPlace): then
+ * the search moves there within AREA_RADIUS. `nearMe` ("Mi ubicación") no longer changes how the
+ * text is read. Every key includes the locale, so switching language refetches category names.
  */
 export function usePlaces(
   coords: Coords,
@@ -56,9 +61,8 @@ export function usePlaces(
   const { placeChoice, areaRadius } = useExploreView();
   const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
   const areaRadiusKm = pickedKm ?? presetAreaRadiusKm;
-  // Business names only: "Mi ubicación" on, or the user said the place-like text is a name.
-  const asPlace = readsAsPlace(placeChoice, name);
-  const namesOnly = name !== '' && (asPlace === false || (nearMe && asPlace !== true));
+  // Business names only, unless the user picked a place and said to search around it.
+  const namesOnly = name !== '' && !readsAsPlace(placeChoice, name);
   return useInfiniteQuery({
     queryKey: [
       'places',
@@ -126,9 +130,8 @@ export function usePlacesMap(
   const { placeChoice, areaRadius } = useExploreView();
   const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
   const areaRadiusKm = pickedKm ?? presetAreaRadiusKm;
-  // Business names only: "Mi ubicación" on, or the user said the place-like text is a name.
-  const asPlace = readsAsPlace(placeChoice, name);
-  const namesOnly = name !== '' && (asPlace === false || (nearMe && asPlace !== true));
+  // Business names only, unless the user picked a place and said to search around it.
+  const namesOnly = name !== '' && !readsAsPlace(placeChoice, name);
   return useQuery({
     queryKey: [
       'places-map',
@@ -171,12 +174,17 @@ export function usePlacesMap(
   });
 }
 
-export function usePlace(id: number) {
-  const locale = useLocale();
-  return useQuery({
+/** One place's page; Favoritos reads its saved places with the same query. */
+export function placeQuery(id: number, locale: Locale) {
+  return {
     queryKey: ['place', locale, id],
     queryFn: () => apiGet(`/v1/places/${id}`, {}, locale, placeSchema),
-  });
+  };
+}
+
+export function usePlace(id: number) {
+  const locale = useLocale();
+  return useQuery(placeQuery(id, locale));
 }
 
 /** "Open now" changes by the minute, so Urgencias refreshes while it's on screen. */
@@ -203,5 +211,76 @@ export function useUrgentPlaces(coords: Coords, q = '') {
       ),
     staleTime: 0,
     refetchInterval: URGENT_REFRESH_MS,
+  });
+}
+
+/** Wait after a keystroke before asking for suggestions, so fast typing asks once. */
+const SUGGEST_DEBOUNCE_MS = 250;
+/** Fewest letters before suggesting places (as the API). */
+const MIN_SUGGEST_LETTERS = 3;
+
+/**
+ * Place names starting with the search box's text ("Puerto V" -> Puerto Vallarta), for the
+ * suggestions under it; the nearest of a shared name, as the search would pick.
+ */
+export function useAreaSuggestions(text: string, enabled: boolean) {
+  const locale = useLocale();
+  const { coords } = useUserLocation();
+  // Not trimmed at the end: "Puerto " (a finished word) suggests only names with more words.
+  const typed = useDebounced(text.trimStart(), SUGGEST_DEBOUNCE_MS);
+  const on = enabled && typed.trim().length >= MIN_SUGGEST_LETTERS;
+  return useQuery({
+    // Not keyed by position: the same text keeps its suggestions while the user moves.
+    queryKey: ['area-suggestions', locale, typed],
+    queryFn: () =>
+      apiGet(
+        '/v1/places/area-suggestions',
+        { q: typed, ...coords },
+        locale,
+        areaSuggestResponseSchema,
+      ),
+    enabled: on,
+    staleTime: Infinity,
+    placeholderData: (previous) => previous,
+    select: (data) => (on ? data.suggestions : []),
+  });
+}
+
+/** Most nearby businesses the suggestions look through. */
+const BUSINESS_SUGGESTION_POOL = 20;
+
+/**
+ * Businesses near the user whose names, cities or states hold every typed word (the API's search,
+ * stop words left out), as candidates for the search box's suggestions; the app then keeps only
+ * those where each word starts a word (search-filter.ts).
+ */
+export function useBusinessSuggestions(text: string, group: CategoryGroup, enabled: boolean) {
+  const locale = useLocale();
+  const { coords } = useUserLocation();
+  const { radiusKm } = useSettings();
+  const filters = usePlaceFilters();
+  const typed = useDebounced(searchTokens(text).join(' '), SUGGEST_DEBOUNCE_MS);
+  const on = enabled && typed.length >= MIN_SUGGEST_LETTERS;
+  return useQuery({
+    queryKey: ['business-suggestions', locale, group, typed, coords, radiusKm, filters],
+    queryFn: () =>
+      apiGet(
+        '/v1/places',
+        {
+          ...coords,
+          radiusKm,
+          group,
+          q: typed,
+          namesOnly: true,
+          ...filters,
+          pageSize: BUSINESS_SUGGESTION_POOL,
+          page: 1,
+        },
+        locale,
+        placeListResponseSchema,
+      ),
+    enabled: on,
+    placeholderData: (previous) => previous,
+    select: (data) => (on ? data.items : []),
   });
 }

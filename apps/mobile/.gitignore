@@ -4,3 +4,5 @@
 
 expo-env.d.ts
 # @end expo-cli
+# Maestro end-to-end results (pnpm e2e)
+e2e-results/

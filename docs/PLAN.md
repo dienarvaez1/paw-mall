@@ -58,16 +58,16 @@ Not copied: products, prices, inventory, the Truper work, the image pipeline for
 The same stack as Ferre Mall, already proven together. See Ferre Mall's `docs/TECH-STACK.md` for
 detail.
 
-| Layer       | Choice                                                                             |
-| ----------- | ---------------------------------------------------------------------------------- |
-| Mobile app  | Expo (SDK 57) + React Native + TypeScript, Expo Router, NativeWind                 |
-| Data        | TanStack Query; react-native-maps; expo-location; AsyncStorage for device settings |
-| i18n        | i18next + react-i18next + expo-localization; `es` default, `en` alongside          |
-| API         | Hono on Cloudflare Workers, run locally with `wrangler dev` (no deploys for now)   |
-| Database    | PostgreSQL + PostGIS + pg_trgm + unaccent, via Drizzle ORM; Docker locally         |
-| Shared code | `packages/shared`: Zod schemas, types, constants                                   |
-| Importers   | Node.js scripts in `packages/importers`; DuckDB for Overture                       |
-| Tooling     | Node 24, pnpm workspaces, Turborepo, TypeScript, ESLint 9, Prettier, Vitest        |
+| Layer       | Choice                                                                                                                                                                                                                          |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Mobile app  | Expo (SDK 57) + React Native + TypeScript, Expo Router, NativeWind                                                                                                                                                              |
+| Data        | TanStack Query; react-native-maps; expo-location; AsyncStorage for device settings; expo-clipboard (copy an address, added 2026-10-12); expo-dev-client (Android development builds with Paw Mall's Maps key, added 2026-10-12) |
+| i18n        | i18next + react-i18next + expo-localization; `es` default, `en` alongside                                                                                                                                                       |
+| API         | Hono on Cloudflare Workers, run locally with `wrangler dev` (no deploys for now)                                                                                                                                                |
+| Database    | PostgreSQL + PostGIS + pg_trgm + unaccent, via Drizzle ORM; Docker locally                                                                                                                                                      |
+| Shared code | `packages/shared`: Zod schemas, types, constants                                                                                                                                                                                |
+| Importers   | Node.js scripts in `packages/importers`; DuckDB for Overture                                                                                                                                                                    |
+| Tooling     | Node 24, pnpm workspaces, Turborepo, TypeScript, ESLint 9, Prettier, Vitest; Maestro for end-to-end flows (added 2026-10-13)                                                                                                    |
 
 ## Repository structure
 

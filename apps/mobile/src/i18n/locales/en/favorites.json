@@ -1,0 +1,8 @@
+{
+  "tabTitle": "Favorites",
+  "intro": "The places you save, so you can find them again quickly.",
+  "empty": "You have no favorites yet.",
+  "emptyHint": "Tap the heart on a place's page to save it here.",
+  "add": "Save {{name}} to favorites",
+  "remove": "Remove {{name}} from favorites"
+}

@@ -1,0 +1,57 @@
+# The owner's claim form says what's missing, then sends.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- scrollUntilVisible:
+    element: Tienda de Mascotas Paw
+    timeout: 20000
+- tapOn: Tienda de Mascotas Paw
+- scrollUntilVisible:
+    element: ¿Eres el dueño de este negocio\?|Do you own this business\?
+    timeout: 20000
+- tapOn: ¿Eres el dueño de este negocio\?|Do you own this business\?
+- scrollUntilVisible:
+    element:
+      id: claim-submit
+    timeout: 20000
+- tapOn:
+    id: claim-submit
+- assertVisible: Revisa los datos.*|Check the details.*
+- scrollUntilVisible:
+    element:
+      id: claim-phone
+    direction: UP
+    timeout: 20000
+- tapOn:
+    id: claim-phone
+- inputText: "5512345678"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: claim-contact-name
+    timeout: 20000
+- tapOn:
+    id: claim-contact-name
+- inputText: Prueba E2E
+- hideKeyboard
+- tapOn:
+    id: claim-contact
+- inputText: prueba@example.com
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: claim-consent
+    timeout: 20000
+- tapOn:
+    id: claim-consent
+- scrollUntilVisible:
+    element:
+      id: claim-submit
+    timeout: 20000
+- tapOn:
+    id: claim-submit
+- extendedWaitUntil:
+    visible: Recibimos tu solicitud.*|We received your request.*
+    timeout: 20000

@@ -1,0 +1,13 @@
+# No places in the radius (the user in Monterrey, the test places in CDMX): the empty message.
+appId: dev.pawmall.app
+---
+- runFlow:
+    file: common/launch.yaml
+    env:
+      LAT: 25.6866
+      LNG: -100.3161
+- tapOn:
+    id: mode-list
+- extendedWaitUntil:
+    visible: No hay lugares a menos de.*|No places within.*
+    timeout: 30000

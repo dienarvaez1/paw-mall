@@ -4,7 +4,9 @@
   "distanceKm": "{{distance}} away",
   "showMap": "Map",
   "showList": "List",
-  "address": "Address",
+  "copyAddress": "Copy name and address",
+  "addressCopied": "Name and address copied",
+  "share": "Share {{name}}",
   "call": "Call",
   "callPlace": "Call {{name}}",
   "website": "Website",
@@ -28,6 +30,10 @@
   "mapCount_other": "{{total}} places within {{distance}}",
   "mapShowAll": "Tap to see the whole radius",
   "compass": "Compass. Tap to turn the map north.",
+  "mapUnavailable": "The map can't be shown.",
+  "mapUnavailableHint": "This Android test build has no Google Maps key. Use List meanwhile.",
+  "mapSatellite": "Show satellite map",
+  "mapStandard": "Show standard map",
   "categoriesLabel": "Categories",
   "open24hHint": "Its name says “24 horas”. Hours not confirmed.",
   "chips": {
@@ -136,7 +142,7 @@
   "areaCount_one": "{{total}} place within {{distance}} of {{area}}",
   "areaCount_other": "{{total}} places within {{distance}} of {{area}}",
   "nearMe": "My location",
-  "nearMeHint": "On: searches business names near you, within the chosen radius. Off: searches around a colonia, city or landmark.",
+  "nearMeHint": "Goes back to your location and zooms to the smallest radius.",
   "searchPlaceholderNearMe": "Business name, city, colonia or landmark",
   "radiusButton": "Search radius: {{distance}}",
   "radiusButtonHint": "Tap for the next radius. It's used by the list, the map and “My location”, and saved in Settings.",
@@ -253,5 +259,16 @@
       "colonia": "neighborhood (colonia)",
       "landmark": "landmark"
     }
+  },
+  "suggestions": {
+    "label": "Place suggestions",
+    "kind": {
+      "municipality": "City",
+      "town": "Town",
+      "colonia": "Neighborhood (colonia)",
+      "landmark": "Landmark"
+    },
+    "hint": "Searches around this place",
+    "businessHint": "Opens this place's page"
   }
 }

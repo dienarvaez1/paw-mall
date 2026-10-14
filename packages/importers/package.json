@@ -18,7 +18,8 @@
     "policies": "node src/review/policies-cli.ts",
     "osm": "node src/osm/cli.ts",
     "osm-hours": "node src/osm/hours-cli.ts",
-    "chains": "node src/chains/cli.ts"
+    "chains": "node src/chains/cli.ts",
+    "e2e-seed": "node src/e2e/cli.ts"
   },
   "dependencies": {
     "@duckdb/node-api": "1.5.6-r.1",

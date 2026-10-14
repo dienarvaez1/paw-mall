@@ -75,5 +75,8 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
   curated `data/landmarks.json` wins over Wikidata on the same name.
 - Owner review: `pnpm places:claims` (owner claims) and `pnpm places:reports` (closed and
   animal-cruelty reports); see each command's header for options.
+- End-to-end: Maestro flows in `apps/mobile/.maestro/` on the Android development build and fixed
+  test data (`pnpm e2e:seed` → `paw_mall_e2e`), `pnpm --filter mobile e2e`; setup and the journey
+  list in `docs/TESTING-E2E.md`.
 - Google "Ver horario": Paw Mall's own Google Cloud project; setup and limits in
   `docs/GOOGLE-PLACES.md`. The key lives only in `apps/api/.dev.vars`; never print or commit it.

@@ -1,0 +1,20 @@
+# "Tlaxcala" typed and sent with the search key, answered as a business name: only businesses
+# called that, around the user.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn:
+    id: search-input
+- inputText: Tlaxcala
+# Not picked from the suggestions: the search key on a place's name asks how to read it.
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: Como nombre de negocio|As a business name
+    timeout: 20000
+- tapOn: Como nombre de negocio|As a business name
+- extendedWaitUntil:
+    visible: Mascotas Tlaxcala
+    timeout: 20000
+- assertNotVisible: Veterinaria Paw Tlaxcala

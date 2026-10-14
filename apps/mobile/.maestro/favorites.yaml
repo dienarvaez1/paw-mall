@@ -1,0 +1,23 @@
+# Save a place from its page and find it in Favoritos; take it out again.
+appId: dev.pawmall.app
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn: Veterinaria Paw Centro
+- extendedWaitUntil:
+    visible:
+      id: place-name
+      text: Veterinaria Paw Centro
+    timeout: 15000
+- tapOn:
+    id: favorite-button
+- back
+- tapOn:
+    id: tab-favorites
+- assertVisible: Veterinaria Paw Centro
+- tapOn: Veterinaria Paw Centro
+- tapOn:
+    id: favorite-button
+- back
+- assertVisible: Aún no tienes favoritos.|You have no favorites yet.

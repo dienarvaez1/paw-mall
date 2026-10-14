@@ -16,10 +16,7 @@ export default function SettingsScreen() {
   const settings = useSettings();
 
   return (
-    <ScrollView
-      className="flex-1 bg-neutral-50 dark:bg-neutral-950"
-      contentContainerClassName="pb-10"
-    >
+    <ScrollView className="flex-1 bg-off-bg dark:bg-neutral-950" contentContainerClassName="pb-10">
       <Section title={t('settings.language')}>
         {SUPPORTED_LOCALES.map((code) => (
           <Option
@@ -74,6 +71,7 @@ export default function SettingsScreen() {
 
       <Section title={t('settings.placesTitle')}>
         <SwitchRow
+          testID="switch-only-with-phone"
           label={t('settings.onlyWithPhone')}
           hint={t('settings.onlyWithPhoneHint')}
           value={settings.onlyWithPhone}
@@ -141,6 +139,8 @@ function SwitchRow(props: {
   hint: string;
   value: boolean;
   onChange: (value: boolean) => void;
+  /** For the Maestro flows (.maestro/). */
+  testID?: string;
 }) {
   return (
     <View className="min-h-12 flex-row items-center justify-between gap-3 px-4 py-2">
@@ -149,6 +149,7 @@ function SwitchRow(props: {
         <Text className="text-sm text-neutral-500 dark:text-neutral-400">{props.hint}</Text>
       </View>
       <Switch
+        testID={props.testID}
         value={props.value}
         onValueChange={props.onChange}
         accessibilityLabel={props.label}
