@@ -104,16 +104,30 @@ const ExploreViewContext = createContext<ExploreView>({
 export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<ExploreMode>('map');
   const [nearMe, setNearMe] = useState(true);
-  const [text, setText] = useState('');
+  const [text, setTextValue] = useState('');
   const [focus, setFocus] = useState<Point | null>(null);
   const [shownArea, setShownArea] = useState<SearchArea | null>(null);
   const [areaRadius, setAreaRadius] = useState<AreaRadius | null>(null);
   const [satellite, setSatellite] = useState(false);
   const [locateRequest, setLocateRequest] = useState(0);
   const requestLocate = useCallback(() => setLocateRequest((n) => n + 1), []);
+  // Emptying the search box (✕ or deleting every character) turns "Mi ubicación" back on, around
+  // the user (owner's rule, 2026-10-13); the radius stays as it is.
+  const setText = useCallback(
+    (next: string) => {
+      setTextValue(next);
+      if (text.trim() !== '' && next.trim() === '') {
+        setNearMe(true);
+        setFocus(null);
+        requestLocate();
+      }
+    },
+    [text, requestLocate],
+  );
   useOnWake(() => {
     // After a search, or with "Mi ubicación" off, the app comes back as it was (owner's rules:
-    // only the location button, a place pick or answer, and moving the map change "Mi ubicación").
+    // only the location button, a place pick, the place question and its answer, emptying the
+    // search box, and moving the map change "Mi ubicación").
     if (text.trim() || !nearMe) return;
     setMode('map');
     setFocus(null);
@@ -122,13 +136,20 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
     choice: placeChoice,
     choosePlace,
     askAboutPlace,
+    confirmBusinessName,
   } = usePlaceChoice(text, setText, setNearMe, setFocus);
   const queryClient = useQueryClient();
   const locale = useLocale();
   const { coords } = useUserLocation();
+  // The search key: a place's name asks how to read it; any other text ("Tlaxcala Casona") is
+  // confirmed as a business-name search, so the tab and radius fit its matches (search-fit.ts).
   const submitSearch = useCallback(() => {
     const q = text.trim();
-    if (q.length < MIN_PLACE_LOOKUP || placeChoice?.text === q) return;
+    if (!q || placeChoice?.text === q) return;
+    if (q.length < MIN_PLACE_LOOKUP) {
+      confirmBusinessName(q);
+      return;
+    }
     void queryClient
       .fetchQuery({
         queryKey: ['area-lookup', locale, q],
@@ -138,9 +159,10 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       })
       .then(({ area }) => {
         if (area) askAboutPlace(area);
+        else confirmBusinessName(q);
       })
       .catch(() => {});
-  }, [text, placeChoice, queryClient, locale, coords, askAboutPlace]);
+  }, [text, placeChoice, queryClient, locale, coords, askAboutPlace, confirmBusinessName]);
   const searchText = text.trim();
   const value = useMemo(
     () => ({
@@ -169,6 +191,7 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       mode,
       nearMe,
       text,
+      setText,
       searchText,
       choosePlace,
       submitSearch,
@@ -187,9 +210,12 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
 /**
  * How a place's name is searched. Picked from the suggestions (choosePlace): around that place,
  * no question. Typed and sent with the search key (askAboutPlace): the place-or-business question.
- * As a place: the search goes around it and "Mi ubicación" turns off (turning it back on clears
- * the text). As a business name: only business names match, around the user ("Mi ubicación" on). Either puts the name in the box and
- * hides the keyboard; Cancel changes nothing. Typing something else forgets the answer.
+ * "Mi ubicación" turns off as soon as a place is picked or the question comes up (owner's rule,
+ * 2026-10-13), and stays off unless the answer is "as a business name". As a place: the search
+ * goes around it (turning "Mi ubicación" back on clears the text). As a business name: only
+ * business names match, around the user ("Mi ubicación" on again). Either puts the name in the
+ * box and hides the keyboard; Cancel leaves the text as typed. Typing something else forgets the
+ * answer.
  */
 function usePlaceChoice(
   text: string,
@@ -200,6 +226,7 @@ function usePlaceChoice(
   choice: PlaceChoice | null;
   choosePlace: (place: Pick<SearchArea, 'name' | 'kind'>) => void;
   askAboutPlace: (place: Pick<SearchArea, 'name' | 'kind'>) => void;
+  confirmBusinessName: (text: string) => void;
 } {
   const { t } = useAppTranslation();
   const [choice, setChoice] = useState<PlaceChoice | null>(null);
@@ -223,6 +250,7 @@ function usePlaceChoice(
   );
   const askAboutPlace = useCallback(
     (place: Pick<SearchArea, 'name' | 'kind'>) => {
+      setNearMe(false);
       Alert.alert(
         t('places.placeAsk.title', { name: place.name }),
         t('places.placeAsk.message', {
@@ -237,9 +265,15 @@ function usePlaceChoice(
         { cancelable: false },
       );
     },
-    [t, answer],
+    [t, answer, setNearMe],
   );
-  return { choice, choosePlace, askAboutPlace };
+  // Text that isn't a place's name, sent with the search key: a business-name search, confirmed
+  // as is ("Mi ubicación" and the circle stay as they are).
+  const confirmBusinessName = useCallback((name: string) => {
+    setChoice({ text: name, asPlace: false });
+    Keyboard.dismiss();
+  }, []);
+  return { choice, choosePlace, askAboutPlace, confirmBusinessName };
 }
 
 export function useExploreView(): ExploreView {

@@ -1,5 +1,5 @@
 # Moving the map by hand turns "Mi ubicación" off and searches there; the button comes back to the
-# user at the smallest radius (5 km).
+# user at the smallest radius (5 km). The button is also a switch: tapped while on, it turns off.
 appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
@@ -22,6 +22,16 @@ appId: ${APP_ID || 'dev.pawmall.app'}
 - extendedWaitUntil:
     visible: 6 lugares a menos de 5 km.*|6 places within 5 km.*
     timeout: 30000
+- assertVisible:
+    id: near-me
+    selected: true
+- tapOn:
+    id: near-me
+- assertVisible:
+    id: near-me
+    selected: false
+- tapOn:
+    id: near-me
 - assertVisible:
     id: near-me
     selected: true

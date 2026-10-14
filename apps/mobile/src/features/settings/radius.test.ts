@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  fittingRadiusKm,
+  searchFitRadiusKm,
   minRadiusKm,
   closestRadiusKm,
   isRadiusOption,
@@ -86,5 +88,39 @@ describe('minRadiusKm', () => {
   it('is the smallest choice in the unit: 5 km, or 3 mi', () => {
     expect(minRadiusKm('km')).toBe(5);
     expect(minRadiusKm('mi')).toBeCloseTo(3 * 1.609344, 6);
+  });
+});
+
+describe('fittingRadiusKm', () => {
+  it('zooms in to the smallest choice that holds the farthest place', () => {
+    expect(fittingRadiusKm(7.2, 25, 'km')).toBe(10);
+    expect(fittingRadiusKm(0.4, 25, 'km')).toBe(5);
+    expect(fittingRadiusKm(10, 50, 'km')).toBe(10);
+    expect(fittingRadiusKm(4, 15 * 1.609344, 'mi')).toBeCloseTo(3 * 1.609344);
+  });
+
+  it('never zooms out, nor "zooms" to the same radius', () => {
+    expect(fittingRadiusKm(30, 25, 'km')).toBeNull();
+    expect(fittingRadiusKm(4, 5, 'km')).toBeNull();
+    expect(fittingRadiusKm(200, 160, 'km')).toBeNull();
+  });
+});
+
+describe('searchFitRadiusKm', () => {
+  it('zooms in to hold every match inside the radius', () => {
+    expect(searchFitRadiusKm({ farthestKm: 7, nearestBeyondKm: null }, 25, 'km')).toBe(10);
+  });
+
+  it('with none inside, widens to the smallest choice that reaches the nearest', () => {
+    // "Guadalupe" as a business name: nothing within 5 km, the nearest at 8 km -> 10 km.
+    expect(searchFitRadiusKm({ farthestKm: null, nearestBeyondKm: 8 }, 5, 'km')).toBe(10);
+    expect(
+      searchFitRadiusKm({ farthestKm: null, nearestBeyondKm: 6 }, 3 * 1.609344, 'mi'),
+    ).toBeCloseTo(5 * 1.609344);
+  });
+
+  it('stays when nothing matches, or nothing within the largest choice', () => {
+    expect(searchFitRadiusKm({ farthestKm: null, nearestBeyondKm: null }, 5, 'km')).toBeNull();
+    expect(searchFitRadiusKm({ farthestKm: null, nearestBeyondKm: 160.5 }, 5, 'km')).toBeNull();
   });
 });

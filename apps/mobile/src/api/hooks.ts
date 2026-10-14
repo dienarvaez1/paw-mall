@@ -16,6 +16,7 @@ import { startRadiusKm, toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
 import { useLocale } from '@/i18n/use-locale';
 import type { ChipCategory } from '@/lib/categories';
+import type { SectionReach } from '@/lib/section-pick';
 import { useDebounced } from '@/lib/use-debounced';
 
 import { apiGet } from './client';
@@ -100,6 +101,64 @@ export function usePlaces(
       ),
     getNextPageParam: (last) =>
       last.page * last.pageSize < last.total ? last.page + 1 : undefined,
+  });
+}
+
+/**
+ * After a confirmed search: what each tab would show with its "Todos" chip, to put the focus on the
+ * one that finds more (section-pick.ts). Pet-friendly counts as its list does: confirmed venues
+ * (with Ajustes' "Solo lugares confirmados"), else the unconfirmed ones it widens to.
+ */
+export function useSectionReach(coords: Coords, name: string, enabled: boolean) {
+  const locale = useLocale();
+  const settings = useSettings();
+  const businessFilters = usePlaceFilters(false, false);
+  const confirmedFilters = usePlaceFilters(true, false);
+  const anyVenueFilters = usePlaceFilters(true, true);
+  const presetAreaRadiusKm = useAreaRadiusKm();
+  const { placeChoice, areaRadius } = useExploreView();
+  const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
+  const namesOnly = name !== '' && !readsAsPlace(placeChoice, name);
+  const search = {
+    ...coords,
+    radiusKm: settings.radiusKm,
+    q: name || undefined,
+    areaRadiusKm: name ? (pickedKm ?? presetAreaRadiusKm) : undefined,
+    namesOnly: namesOnly || undefined,
+    fixedAreaRadius: (name && pickedKm !== null) || undefined,
+    cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,
+    pageSize: 1,
+  };
+  const onlyConfirmed = settings.onlyConfirmedPetPlaces;
+  return useQuery({
+    queryKey: [
+      'section-reach',
+      locale,
+      search,
+      businessFilters,
+      confirmedFilters,
+      anyVenueFilters,
+      onlyConfirmed,
+    ],
+    enabled,
+    queryFn: async (): Promise<Record<CategoryGroup, SectionReach>> => {
+      const reach = async (group: CategoryGroup, filters: object): Promise<SectionReach> => {
+        const page = await apiGet(
+          '/v1/places',
+          { ...search, group, ...filters },
+          locale,
+          placeListResponseSchema,
+        );
+        return { total: page.total, nearestBeyondKm: page.nearestBeyondKm };
+      };
+      const [business, venues] = await Promise.all([
+        reach('pet_business', businessFilters),
+        reach('pet_friendly', onlyConfirmed ? confirmedFilters : anyVenueFilters),
+      ]);
+      const widened =
+        onlyConfirmed && venues.total === 0 ? await reach('pet_friendly', anyVenueFilters) : venues;
+      return { pet_business: business, pet_friendly: widened };
+    },
   });
 }
 

@@ -53,6 +53,37 @@ export function coveringRadiusKm(neededKm: number): number {
 }
 
 /**
+ * A confirmed search's zoom: the smallest choice in the unit that still holds every place found
+ * (the farthest at `farthestKm` from the center). Null when that isn't smaller than the current
+ * radius: the map only zooms in.
+ */
+export function fittingRadiusKm(
+  farthestKm: number,
+  currentKm: number,
+  unit: DistanceUnit,
+): number | null {
+  const fit = radiusOptionsKm(unit).find((option) => option >= farthestKm - 1e-6);
+  return fit !== undefined && fit < currentKm - 1e-6 ? fit : null;
+}
+
+/**
+ * A confirmed search's radius (owner's rules, 2026-10-13): with matches inside the radius, the
+ * smallest choice that still holds them all (zoom in); with none inside, the smallest choice that
+ * reaches the nearest one (zoom out to it). Null when the radius stays as it is.
+ */
+export function searchFitRadiusKm(
+  reach: { farthestKm: number | null; nearestBeyondKm: number | null },
+  currentKm: number,
+  unit: DistanceUnit,
+): number | null {
+  if (reach.farthestKm !== null) return fittingRadiusKm(reach.farthestKm, currentKm, unit);
+  if (reach.nearestBeyondKm === null) return null;
+  const nearest = reach.nearestBeyondKm;
+  const fit = radiusOptionsKm(unit).find((option) => option >= nearest - 1e-6);
+  return fit !== undefined && fit > currentKm + 1e-6 ? fit : null;
+}
+
+/**
  * The map's radius button: the next choice above the radius in the unit (also from a radius set by
  * zooming the map), back to the smallest after the largest.
  */

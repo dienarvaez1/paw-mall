@@ -1,5 +1,5 @@
 # "Tlaxcala" typed and sent with the search key, answered as a business name: only businesses
-# called that, around the user.
+# called that, around the user. "Mi ubicación" is off while the question shows, on after.
 appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
@@ -13,7 +13,22 @@ appId: ${APP_ID || 'dev.pawmall.app'}
 - extendedWaitUntil:
     visible: Como nombre de negocio|As a business name
     timeout: 20000
+# The question turns "Mi ubicación" off, and Cancel leaves it off.
+- tapOn: Cancelar|Cancel
+- assertVisible:
+    id: near-me
+    selected: false
+# Asked again and answered "as a business name": back on.
+- tapOn:
+    id: search-input
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: Como nombre de negocio|As a business name
+    timeout: 20000
 - tapOn: Como nombre de negocio|As a business name
+- assertVisible:
+    id: near-me
+    selected: true
 - extendedWaitUntil:
     visible: Mascotas Tlaxcala.*
     timeout: 20000
