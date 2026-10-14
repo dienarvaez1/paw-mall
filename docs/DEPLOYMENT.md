@@ -1051,11 +1051,12 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Status:** In review.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
-  - [x] `pnpm test`: 341 tests (shared 36, mobile 93, api 104, importers 108)
+  - [x] `pnpm test`: 342 tests (shared 36, mobile 93, api 105, importers 108)
   - [x] Android emulator (release build of this branch): new `search-pan` flow, plus
         `search-zoom`, `search-zoom-out`, `place-question`, `place-question-business`,
         `search-clear`, `near-me`, `search-section`, `search-typed-fit`, `map-buttons`,
-        `emergencies`, `map-list`, `pet-friendly`, and new `urgent-sync`: all pass
+        `emergencies`, `map-list`, `pet-friendly`, `empty`, `chips`, `pet-friendly-widen`,
+        `radius`, and new `urgent-sync`: all pass
 - **Fixes:**
   1. **A hand pan lets go of a searched place.** After picking a place from the suggestions or
      answering "As a place", the map ignored pans. Now a pan away from the place empties the
@@ -1077,6 +1078,11 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
      of Tlaxcala." The name is the same one as the summary uses: the searched area, or the list's
      or map's city. With an empty circle (no place to take a city from), the API returns the
      nearest municipality (`nearestMunicipality`; looked up only then). `search-pan` checks it.
+  5. **Empty map and list say where:** with nothing in the circle (often after moving the map),
+     the map reads "0 places within 5 km of Chiautempan" and the list's empty messages "No places
+     within 5 km of Chiautempan." The name is the searched area, or the nearest municipality: the
+     list response's `nearestMunicipality`, and the map's `nearestCity`, which falls back to it.
+     `search-pan` checks the map, the list and Urgencias.
 - **Notes:**
   - The first E2E attempt "failed" because `common/hide-keyboard.yaml` pressed Back after picking a
     suggestion had already closed the keyboard, which sent the app home; `search-pan` doesn't use

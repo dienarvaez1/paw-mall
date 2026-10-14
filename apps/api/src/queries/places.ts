@@ -265,7 +265,11 @@ export async function listPlaces(
     locale,
     search.namedAfter,
   );
-  return { ...result, area: search.area, searchCategory: search.category };
+  const nearestMunicipality =
+    query.page === 1 && result.total === 0 && !search.area
+      ? await nearestMunicipalityName(db, search.point)
+      : null;
+  return { ...result, area: search.area, searchCategory: search.category, nearestMunicipality };
 }
 
 type SearchQuery = PlaceFilters & {
@@ -394,7 +398,7 @@ async function searchPlaces(
   query: PlaceListQuery,
   locale: Locale,
   namedAfter: string | null = null,
-): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory'>> {
+): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory' | 'nearestMunicipality'>> {
   const point = { lat: query.lat, lng: query.lng };
   // Every word must match, letter for letter; no looser fallback (owner's rules).
   const base = [visibleSql, ...filterConditions(query), ...(query.q ? [allWordsSql(query.q)] : [])];
@@ -535,8 +539,9 @@ export async function placesForMap(
     ]),
     circleStats(db, base, circle, point),
   ]);
-  // The page is nearest first, so its first place names the circle's city.
-  const nearestCity = items[0]?.city ?? null;
+  // The page is nearest first, so its first place names the circle's city; with none in view, the
+  // nearest municipality does.
+  const nearestCity = items[0]?.city ?? (await nearestMunicipalityName(db, point));
   if (items.length <= query.limit) {
     return {
       kind: 'places',
@@ -638,16 +643,15 @@ export async function urgentPlaces(
     LIMIT ${URGENT_LIMIT}`);
   // None in the circle and no searched area: the nearest municipality names where the app looked
   // ("No hospitals within 5 km of Chiautempan"), as no place's city can.
-  const [near] =
-    rows.length === 0 && !found
-      ? await db.execute<{ name: string }>(sql`
-          SELECT name FROM search_areas WHERE kind = 'municipality'
-          ORDER BY location <-> ${pointSql(point)} LIMIT 1`)
-      : [];
-  return {
-    area,
-    items: rows.map(toPlace),
-    total: rows[0]?.total ?? 0,
-    nearestMunicipality: near?.name ?? null,
-  };
+  const nearestMunicipality =
+    rows.length === 0 && !found ? await nearestMunicipalityName(db, point) : null;
+  return { area, items: rows.map(toPlace), total: rows[0]?.total ?? 0, nearestMunicipality };
+}
+
+/** The municipality whose center is nearest `point`, to name a circle with no place in it. */
+async function nearestMunicipalityName(db: Database, point: Point): Promise<string | null> {
+  const [near] = await db.execute<{ name: string }>(sql`
+    SELECT name FROM search_areas WHERE kind = 'municipality'
+    ORDER BY location <-> ${pointSql(point)} LIMIT 1`);
+  return near?.name ?? null;
 }

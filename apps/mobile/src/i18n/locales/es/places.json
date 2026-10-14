@@ -12,6 +12,7 @@
   "website": "Sitio web",
   "social": "Redes sociales",
   "noPlaces": "No hay lugares a menos de {{distance}}.",
+  "noPlacesIn": "No hay lugares a menos de {{distance}} de {{area}}.",
   "noPlacesHint": "Prueba con otra categoría o amplía tu radio en Ajustes.",
   "unnamed": "Negocio sin nombre",
   "sourceDenue": "Fuente: INEGI, DENUE",
@@ -23,6 +24,7 @@
   "searchPlaceholder": "Nombre del negocio, ciudad, colonia o lugar",
   "clearSearch": "Borrar búsqueda",
   "noMatchesNearby": "No encontramos lugares que coincidan con «{{query}}» a menos de {{distance}}.",
+  "noMatchesNearbyIn": "No encontramos lugares que coincidan con «{{query}}» a menos de {{distance}} de {{area}}.",
   "noMatchesHint": "Revisa cómo lo escribiste o prueba con menos palabras. La búsqueda llega hasta tu radio; puedes ampliarlo en Ajustes.",
   "clusterLabel_one": "{{count}} lugar. Toca para acercar.",
   "clusterLabel_other": "{{count}} lugares. Toca para acercar.",
@@ -55,6 +57,7 @@
     "park": "Parques"
   },
   "noOpenPlaces": "No hay lugares abiertos ahora con horario confirmado a menos de {{distance}}.",
+  "noOpenPlacesIn": "No hay lugares abiertos ahora con horario confirmado a menos de {{distance}} de {{area}}.",
   "noOpenPlacesHint": "Todavía pocos negocios tienen su horario confirmado. Desactiva «Solo lugares abiertos ahora» en Ajustes para ver todos, o revisa el horario de cada uno con «Ver horario».",
   "hours": {
     "title": "Horario",
@@ -152,6 +155,7 @@
     "forProfile": "Para tu mascota: {{profile}}. Cámbiala en Ajustes."
   },
   "noPetFriendlyPlaces": "No hay lugares pet-friendly a menos de {{distance}} para tu mascota",
+  "noPetFriendlyPlacesIn": "No hay lugares pet-friendly a menos de {{distance}} de {{area}} para tu mascota",
   "noPetFriendlyPlacesHint": "Por ahora tenemos restaurantes, cafés, hoteles, museos y parques de la Ciudad de México. Prueba un radio mayor o cambia tu mascota en Ajustes.",
   "sourceCurated": "Política de mascotas: reunida por Paw Mall de la fuente indicada. Ubicación y teléfono: Overture Maps Foundation.",
   "pets": {

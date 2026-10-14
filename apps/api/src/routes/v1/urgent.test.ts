@@ -2,6 +2,7 @@ import {
   type PlaceHours,
   isOpenAt,
   placeListResponseSchema,
+  placeMapResponseSchema,
   urgentResponseSchema,
 } from '@paw-mall/shared';
 import postgres from 'postgres';
@@ -162,6 +163,25 @@ describe('GET /v1/places/urgent total', () => {
     const { items, nearestMunicipality } = urgentResponseSchema.parse(await res.json());
     expect(items).toEqual([]);
     expect(nearestMunicipality).toBe('Municipio Vacio Paw');
+  });
+
+  it('names it in the list and on the map too', async () => {
+    const lng = ORIGIN.lng - 49 / 111.32;
+    const list = await app.request(
+      `/v1/places?lat=${ORIGIN.lat}&lng=${lng}&radiusKm=5`,
+      {},
+      testEnv,
+    );
+    const listed = placeListResponseSchema.parse(await list.json());
+    expect(listed.total).toBe(0);
+    expect(listed.nearestMunicipality).toBe('Municipio Vacio Paw');
+    const bbox = [lng - 0.05, ORIGIN.lat - 0.05, lng + 0.05, ORIGIN.lat + 0.05].join(',');
+    const map = await app.request(
+      `/v1/places/map?lat=${ORIGIN.lat}&lng=${lng}&radiusKm=5&bbox=${bbox}`,
+      {},
+      testEnv,
+    );
+    expect(placeMapResponseSchema.parse(await map.json()).nearestCity).toBe('Municipio Vacio Paw');
   });
 });
 

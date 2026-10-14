@@ -227,6 +227,11 @@ export const placeListResponseSchema = z.object({
   pageSize: z.number().int(),
   /** On the first page only (null on the others). */
   ...searchReach,
+  /**
+   * With nothing found around the user or a moved circle: the municipality nearest the center,
+   * to say where ("No places within 5 km of Chiautempan"). Null otherwise.
+   */
+  nearestMunicipality: z.string().nullable().default(null),
 });
 export type PlaceListResponse = z.infer<typeof placeListResponseSchema>;
 
@@ -268,7 +273,10 @@ const mapCounts = {
   /** Every place within radiusKm, in view or not. */
   radiusTotal: z.number().int(),
   ...searchReach,
-  /** The city of the place in view nearest the circle's center, to name where the circle is. */
+  /**
+   * The city of the place in view nearest the circle's center, to name where the circle is; with
+   * none in view, the municipality nearest the center.
+   */
   nearestCity: z.string().nullable().default(null),
 };
 

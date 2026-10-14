@@ -429,7 +429,8 @@ function PlacesList({
   const distance = formatDistance(area ? area.radiusKm : radiusKm, locale, units);
   // The list is nearest first: its first place's city names the circle (Urgencias names it too,
   // from the tab on screen only).
-  const nearestCity = places.data?.pages[0]?.items[0]?.city ?? null;
+  const nearestCity =
+    places.data?.pages[0]?.items[0]?.city ?? places.data?.pages[0]?.nearestMunicipality ?? null;
   const summaryArea = area
     ? area.municipality
       ? `${area.name}, ${area.municipality}`
@@ -491,24 +492,42 @@ function PlacesList({
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         ListEmptyComponent={
+          // Named where the circle is (the searched area, or the municipality nearest a moved or
+          // user's circle; owner's rule, 2026-10-14).
           name ? (
             <EmptyState
-              title={t('places.noMatchesNearby', { query: name, distance })}
+              title={
+                summaryArea
+                  ? t('places.noMatchesNearbyIn', { query: name, distance, area: summaryArea })
+                  : t('places.noMatchesNearby', { query: name, distance })
+              }
               hint={t('places.noMatchesHint')}
             />
           ) : petMode ? (
             <EmptyState
-              title={t('places.noPetFriendlyPlaces', { distance })}
+              title={
+                summaryArea
+                  ? t('places.noPetFriendlyPlacesIn', { distance, area: summaryArea })
+                  : t('places.noPetFriendlyPlaces', { distance })
+              }
               hint={t('places.noPetFriendlyPlacesHint')}
             />
           ) : onlyOpenNow ? (
             <EmptyState
-              title={t('places.noOpenPlaces', { distance })}
+              title={
+                summaryArea
+                  ? t('places.noOpenPlacesIn', { distance, area: summaryArea })
+                  : t('places.noOpenPlaces', { distance })
+              }
               hint={t('places.noOpenPlacesHint')}
             />
           ) : (
             <EmptyState
-              title={t('places.noPlaces', { distance })}
+              title={
+                summaryArea
+                  ? t('places.noPlacesIn', { distance, area: summaryArea })
+                  : t('places.noPlaces', { distance })
+              }
               hint={t('places.noPlacesHint')}
             />
           )
