@@ -3,13 +3,17 @@ import Constants from 'expo-constants';
 import type { z } from 'zod';
 
 import { buildApiUrl, resolveApiBaseUrl } from './base-url';
+import { fetchWithTimeout } from './fetch-timeout';
 
 export const API_BASE_URL = resolveApiBaseUrl(
   process.env.EXPO_PUBLIC_API_URL,
   Constants.expoConfig?.hostUri,
 );
 
-/** API failures carry a code only; NETWORK_ERROR means the API couldn't be reached. */
+/**
+ * API failures carry a code only; NETWORK_ERROR means the API couldn't be reached or didn't answer
+ * in time.
+ */
 export class ApiError extends Error {
   constructor(
     readonly code: ErrorCode | 'NETWORK_ERROR',
@@ -28,7 +32,7 @@ async function request<S extends z.ZodType>(
 ): Promise<z.infer<S>> {
   let response: Response;
   try {
-    response = await fetch(url, init);
+    response = await fetchWithTimeout(url, init);
   } catch {
     throw new ApiError('NETWORK_ERROR', 0);
   }

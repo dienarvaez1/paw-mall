@@ -1,5 +1,5 @@
 # Map and List count the same places around the user.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - extendedWaitUntil:

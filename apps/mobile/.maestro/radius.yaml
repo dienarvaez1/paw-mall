@@ -1,19 +1,19 @@
 # The radius button steps 5 → 10 → … → 160 km; at 160 km the vet in Tlaxcala (about 110 km) shows.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:
     id: mode-list
 - extendedWaitUntil:
-    visible: Veterinaria Paw Centro
+    visible: Veterinaria Paw Centro.*
     timeout: 30000
-- assertNotVisible: Veterinaria Paw Tlaxcala
+- assertNotVisible: Veterinaria Paw Tlaxcala.*
 - repeat:
     times: 6
     commands:
       - tapOn:
           id: radius-button
-- assertVisible: 160 km
+- assertVisible: .*160 km.*
 - scrollUntilVisible:
-    element: Veterinaria Paw Tlaxcala
+    element: Veterinaria Paw Tlaxcala.*
     timeout: 20000

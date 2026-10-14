@@ -1,0 +1,17 @@
+# Back to the previous screen: the system back on Android; on iOS (no back button in Maestro) the
+# edge swipe of the native stack.
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow:
+    when:
+      true: ${IOS !== 'true'}
+    commands:
+      - back
+- runFlow:
+    when:
+      true: ${IOS === 'true'}
+    commands:
+      - swipe:
+          start: 1%, 50%
+          end: 80%, 50%
+          duration: 400
