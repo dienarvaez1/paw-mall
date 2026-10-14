@@ -27,20 +27,20 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | In review | 2026-10-13 | —          |
+| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done   | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done   | 2026-10-13 | 2026-10-13 |
 
 ## Pending owner reviews
 
@@ -916,7 +916,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Scope:** review items 5–6: E2E gaps (animal-cruelty report, API down while online, iOS) and
   failure tests (database outage, interrupted import, slow API).
 - **Branch / PR:** `phase-12/failure-coverage` / #20
-- **Status:** In review.
+- **Status:** Done. Squash-merged into `main` as `677ff30` on 2026-10-13; branch deleted.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
   - [x] `pnpm test`: 320 tests (shared 35, mobile 84, api 98, importers 103)
@@ -985,3 +985,6 @@ Play readiness").
 | 2026-10-13 | Phase 11 started                                             | #18 |
 | 2026-10-13 | Phase 11 merged (`bf1d4e7`)                                  | #18 |
 | 2026-10-13 | Phase 12 started                                             | #20 |
+| 2026-10-13 | Phase 12 merged (`677ff30`)                                  | #20 |
+| 2026-10-14 | "Mi ubicación" and the radius follow the search (`a47654e`)  | #21 |
+| 2026-10-14 | A lone keyword no longer lists a chip's category (`009f4c5`) | #22 |
