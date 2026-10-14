@@ -40,8 +40,9 @@ or 3 mi in miles). It's **on** (filled) while the search is around you.
 
 It turns **off** when you move or zoom the map by hand, tap a cluster, pick a place from the
 suggestions, or press 🔍 on a place's name (as soon as the question comes up; it stays off for
-"As a place" and Cancel). It turns **on** with the button, or when you answer "As a business
-name". Nothing else changes it.
+"As a place" and Cancel). It turns **on** with the button, when you answer "As a business
+name", or when the search box is emptied (✕, or deleting every character; the map goes back
+around you, the radius stays). Nothing else changes it.
 
 ### Radius
 

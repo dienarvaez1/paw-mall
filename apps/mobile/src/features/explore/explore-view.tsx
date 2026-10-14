@@ -104,17 +104,30 @@ const ExploreViewContext = createContext<ExploreView>({
 export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<ExploreMode>('map');
   const [nearMe, setNearMe] = useState(true);
-  const [text, setText] = useState('');
+  const [text, setTextValue] = useState('');
   const [focus, setFocus] = useState<Point | null>(null);
   const [shownArea, setShownArea] = useState<SearchArea | null>(null);
   const [areaRadius, setAreaRadius] = useState<AreaRadius | null>(null);
   const [satellite, setSatellite] = useState(false);
   const [locateRequest, setLocateRequest] = useState(0);
   const requestLocate = useCallback(() => setLocateRequest((n) => n + 1), []);
+  // Emptying the search box (✕ or deleting every character) turns "Mi ubicación" back on, around
+  // the user (owner's rule, 2026-10-13); the radius stays as it is.
+  const setText = useCallback(
+    (next: string) => {
+      setTextValue(next);
+      if (text.trim() !== '' && next.trim() === '') {
+        setNearMe(true);
+        setFocus(null);
+        requestLocate();
+      }
+    },
+    [text, requestLocate],
+  );
   useOnWake(() => {
     // After a search, or with "Mi ubicación" off, the app comes back as it was (owner's rules:
-    // only the location button, a place pick, the place question and its answer, and moving the
-    // map change "Mi ubicación").
+    // only the location button, a place pick, the place question and its answer, emptying the
+    // search box, and moving the map change "Mi ubicación").
     if (text.trim() || !nearMe) return;
     setMode('map');
     setFocus(null);
@@ -170,6 +183,7 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       mode,
       nearMe,
       text,
+      setText,
       searchText,
       choosePlace,
       submitSearch,

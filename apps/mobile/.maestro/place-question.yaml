@@ -1,5 +1,6 @@
 # "Tlaxcala" is a place's name and a business's. Picked from the suggestions it's the place: the
-# vets in Tlaxcala, not the store named after it near the user.
+# vets in Tlaxcala, not the store named after it near the user. Emptying the box (erased or ✕)
+# turns "Mi ubicación" back on.
 appId: dev.pawmall.app
 ---
 - runFlow: common/launch.yaml
@@ -21,3 +22,33 @@ appId: dev.pawmall.app
     timeout: 20000
 - assertNotVisible: Mascotas Tlaxcala
 - assertNotVisible: Como lugar|As a place
+# The picked place turns "Mi ubicación" off; deleting every character turns it back on, and the
+# list is around the user again (owner's rules).
+- assertVisible:
+    id: near-me
+    selected: false
+- tapOn:
+    id: search-input
+- eraseText: 20
+- extendedWaitUntil:
+    visible: Mascotas Tlaxcala
+    timeout: 20000
+- assertVisible:
+    id: near-me
+    selected: true
+# Same with ✕ after picking the place again.
+- inputText: Tlaxcala
+- extendedWaitUntil:
+    visible:
+      id: suggestion-0
+    timeout: 20000
+- tapOn:
+    id: suggestion-0
+- assertVisible:
+    id: near-me
+    selected: false
+- tapOn:
+    id: search-clear
+- assertVisible:
+    id: near-me
+    selected: true
