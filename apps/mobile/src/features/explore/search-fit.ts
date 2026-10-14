@@ -10,7 +10,7 @@ import { otherSection, otherSectionFindsMore } from '@/lib/section-pick';
 import { type PlaceChoice, useExploreView } from './explore-view';
 
 /**
- * Per answer: whether the tab was chosen, and the tabs whose radius was fitted. Shared by the list
+ * Per answer: whether the tab was chosen, and whether the radius was fitted. Shared by the list
  * and the map, so switching between them (or between the tabs) doesn't do either again.
  */
 const tabChosen = new WeakSet<PlaceChoice>();
@@ -24,7 +24,8 @@ const TAB_ROUTES = { pet_business: '/explore', pet_friendly: '/pet-friendly' } a
  * 1. The focus goes to the tab (Explorar or Pet-friendly) that finds more (section-pick.ts).
  * 2. On that tab, the radius fits the matches (searchFitRadiusKm): in to hold every match inside
  *    it, or out to the nearest when none is inside. Around a place it's that place's radius;
- *    around the user, Ajustes' (as the radius button).
+ *    around the user, Ajustes' (as the radius button). Once per search, not per tab: both tabs
+ *    show one map, and a second fit on the other tab would move it (owner's rule, 2026-10-14).
  */
 export function useConfirmedSearchFit({
   section,
@@ -76,7 +77,8 @@ export function useConfirmedSearchFit({
     if (done.has(section) || !ready) return;
     // Only this answer's results: around the place when read as a place, else around the user.
     if (placeChoice.asPlace !== (area !== null)) return;
-    done.add(section);
+    done.add('pet_business');
+    done.add('pet_friendly');
     const fit = searchFitRadiusKm({ farthestKm, nearestBeyondKm }, radiusKm, units);
     if (fit === null) return;
     if (area) setAreaRadius({ text: name, km: fit });

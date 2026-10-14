@@ -1056,7 +1056,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
         `search-zoom`, `search-zoom-out`, `place-question`, `place-question-business`,
         `search-clear`, `near-me`, `search-section`, `search-typed-fit`, `map-buttons`,
         `emergencies`, `map-list`, `pet-friendly`, `empty`, `chips`, `pet-friendly-widen`,
-        `radius`, and new `urgent-sync`: all pass
+        `radius`, `search-pan`, and new `urgent-sync` and `maps-sync`: all pass
 - **Fixes:**
   1. **A hand pan lets go of a searched place.** After picking a place from the suggestions or
      answering "As a place", the map ignored pans. Now a pan away from the place empties the
@@ -1089,6 +1089,12 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
      and both maps follow it. The app sends it as `limit`, and the API now accepts up to 300.
      `map-buttons` checks the steps.
   7. **Bigger compass icon:** 28 pt instead of 20, in the same 36 pt circle.
+  8. **The two maps drifted again.** Reproduced on the emulator: pick Tlaxcala on Explorar (5 km),
+     open Pet-friendly, and it refit to 160 km. The search fit ran once per tab, so each tab fit
+     its own matches and the second fit moved the shared map. It now runs once per search
+     (`search-fit.ts`). Also, a hand zoom saves the view's center along with the radius, so the
+     other map shows exactly the same view; a pinch shifts the center up to 5%, which used to
+     stay unsaved. New flow `maps-sync`.
 - **Notes:**
   - The first E2E attempt "failed" because `common/hide-keyboard.yaml` pressed Back after picking a
     suggestion had already closed the keyboard, which sent the app home; `search-pan` doesn't use

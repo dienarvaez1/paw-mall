@@ -81,8 +81,8 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 - **The radius fits a confirmed search** (a place picked from the suggestions, the question
   answered, or other text sent with the search key): it closes in to the smallest preset that still holds every match, or, when nothing
   matches inside it, opens out to the smallest preset that reaches the nearest match (e.g.
-  "Guadalupe" as a business name: nothing within 5 km, so 10 km). Once per answer; the radius
-  button still changes it after.
+  "Guadalupe" as a business name: nothing within 5 km, so 10 km). Once per answer, on the tab
+  that shows it; switching tabs keeps the same circle. The radius button still changes it after.
 - **The tab that finds more takes the focus**: after a confirmed search, if the other tab
   (Explorar or Pet-friendly) finds more places inside the circle, or, with none inside either, a
   nearer one, the app switches to it (e.g. "Toluca" on Explorar finds only a café, so it opens

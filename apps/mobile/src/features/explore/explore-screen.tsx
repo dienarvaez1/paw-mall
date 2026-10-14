@@ -828,10 +828,12 @@ function PlacesMap({
               setRadiusKm(handRadiusKm);
             }
             if (!searchedArea && (zoomed || panned)) {
-              saveCircle(
-                zoomed ? handRadiusKm : radiusKm,
-                panned ? { lat: next.latitude, lng: next.longitude } : null,
-              );
+              // A zoom keeps the view's center too (a pinch shifts it a little), so the other
+              // tab's map shows exactly this view (owner's rule: the maps stay in sync).
+              saveCircle(zoomed ? handRadiusKm : radiusKm, {
+                lat: next.latitude,
+                lng: next.longitude,
+              });
             }
             // Any zoom or pan by hand turns "Mi ubicación" off (owner's rule).
             if (nearMe && (zoomed || isAwayFrom(next, location.coords))) onLeaveMyLocation();
