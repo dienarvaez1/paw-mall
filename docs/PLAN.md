@@ -200,6 +200,13 @@ before starting the next. No deploys in any phase until the owner decides.
       "Mérida") moves the map there with its pet businesses and pet-friendly places, and the
       rollout log records the data volumes and import times.
 
+11. **Hardening (added 2026-10-13, from an external project review).** Write rate limits and a cap
+    on pending claims, CORS limited to known browser origins, a data-integrity report
+    (`pnpm places:integrity`), and a verification status on every place (shown on its page and on
+    Urgencias cards).
+    - Done when: the 21st write in a minute gets 429, another browser origin gets no CORS header,
+      the integrity report runs on the full data, and a reported place shows "En revisión".
+
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when
 the owner decides.

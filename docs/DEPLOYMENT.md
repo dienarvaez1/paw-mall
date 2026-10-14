@@ -27,18 +27,19 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
+| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | —   | In review | 2026-10-13 | —          |
 
 ## Pending owner reviews
 
@@ -862,6 +863,45 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - The business-name search matches inside words ("net" in "Veterinaria"); suggestions match
     word starts. Align if the owner wants.
 
+### Phase 11 — Hardening
+
+- **Scope:** recommendations 1–4 of an external review (`Paw_Mall_Project_Review.pdf`, 2026-10-13):
+  rate limits on writes, CORS, a data-integrity report, a verification status per place.
+- **Branch / PR:** `phase-11/hardening` / —
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 313 tests (shared 35, mobile 82, api 95, importers 101)
+  - [x] `wrangler dev` (simulated limiter): 20 bad-input POSTs answer 400, the 21st to 23rd 429
+  - [x] CORS: `Origin: http://localhost:8081` gets `Access-Control-Allow-Origin`; another origin
+        gets none; requests without Origin (the phone app) work as before
+  - [x] Verification on dev data: place 18501 `website_verified` (checked 2026-10-11), DENUE-only
+        places `listed` (edition 2026-05-20); list of 200 places near the Zócalo ~75 ms (main ~70)
+  - [x] `pnpm places:integrity` on the full data: 22 s
+  - [ ] On a phone: a reported place shows "En revisión"; Urgencias cards say to call first
+- **Notes:**
+  - Rate limit: Cloudflare's Workers rate-limit binding (`WRITE_LIMITER`, 20 POSTs per minute per
+    user), simulated by `wrangler dev`, no cost when deployed. The key is the IP hashed with the
+    day, as for Google; only the limiter counts it, in memory, and the API stores nothing (reporter
+    privacy holds). Off for end-to-end runs (`dev:e2e` sets `WRITE_RATE_LIMIT=off`).
+  - Claims: at most 3 pending per place (429 `RATE_LIMITED`) until reviewed, since they hold
+    contacts.
+  - CORS: `CORS_ORIGINS` in `wrangler.toml` (Expo web on 8081 and 19006).
+  - Verification statuses, first match wins: `needs_review` (any report or a disputed policy),
+    `owner_verified`, `community_confirmed`, `website_verified` (check within 365 days), `listed`.
+    Places that leave DENUE are already deleted on import, so a missing edition isn't a status.
+  - First integrity report (dev data, 813k places): 0 outside Mexico, **5,782 probable duplicates**
+    (same name within 50 m, mostly DENUE twins a few metres apart), 0 invalid hours, **165
+    Urgencias places without a phone**, **5 "24 horas" vets known only from the name**, 0 stale
+    sources, websites or policies, 0 places without a category, empty review queue.
+  - `@paw-mall/shared/hours` subpath export: Node runs the importer CLIs' TypeScript directly and
+    can't load the package index.
+- **Follow-ups:**
+  - Decide what to do with the 5,782 probable duplicates (merge rule, or hide the newer twin).
+  - `pnpm format:check` already fails on `main` for `.maestro/claim.yaml`, `.maestro/config.yaml`
+    and `data/osm-hours.json`; left as is.
+  - Review items 5–7 (E2E gaps, failure tests, load test) are the next candidate phase.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -896,3 +936,4 @@ Play readiness").
 | 2026-10-12 | Phase 10 merged (`d7384e2`)                                  | #14 |
 | 2026-10-13 | UI refresh, end-to-end tests and CI merged (`ed5c432`)       | #16 |
 | 2026-10-13 | Project documentation started (`docs/project-documentation`) | —   |
+| 2026-10-13 | Phase 11 started                                             | —   |

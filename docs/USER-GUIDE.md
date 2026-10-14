@@ -83,6 +83,9 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 - **Map** with the place, its **name**, **category** and a **heart** to save it to Favorites.
 - **Address** — tap it to copy the name and address; the share button sends them to any app.
+- **How far it's confirmed**, under the address: verified by the owner, confirmed by Paw Mall users,
+  confirmed by its own website, or only from a public directory (with the date it was last
+  checked); places users reported show "under review".
 - **Directions** (Apple Maps, Google Maps or Waze), **Call**, **Website**, **Social media**.
 - **Hours**: confirmed hours with "open now", or "Hours not confirmed" with **See hours**, which
   asks Google once (a small free allowance; the answer is shown for this visit only).
@@ -97,7 +100,8 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 The nearest vet hospitals and 24-hour vets within your radius (or around a place you searched),
 the first one highlighted. "Open now" refreshes every minute. Small icons show which have a
-phone, website or social page; open a card for directions and call.
+phone, website or social page; open a card for directions and call. Cards whose details the owner
+hasn't verified say to call before going, and reported ones say they're under review.
 
 ## Favorites
 
