@@ -905,6 +905,10 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - `pnpm format:check` already fails on `main` for `.maestro/claim.yaml`, `.maestro/config.yaml`
     and `data/osm-hours.json`; left as is.
   - Review items 5–7 (E2E gaps, failure tests, load test) are the next candidate phase.
+- **CI fix:** the first CI run failed in `pet-policies.test.ts`: the importer and API tests share
+  `paw_mall_test` in parallel, and `osm/hours.test.ts` puts places with partial hours within the
+  pet-policy test's 1 km around (2, −131) (also behind a `main` failure earlier on 2026-10-13).
+  The pet-policy test now uses its own spot at −137.
 
 ## Production deployment
 
