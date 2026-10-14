@@ -1,5 +1,8 @@
 # No connection: the offline banner shows; back online, the list loads again.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
+# Airplane mode can only be switched on Android.
+tags:
+  - android-only
 # Always back online, even when a step fails (or every later flow fails to load).
 onFlowComplete:
   - setAirplaneMode: disabled
@@ -8,7 +11,7 @@ onFlowComplete:
 - tapOn:
     id: mode-list
 - extendedWaitUntil:
-    visible: Veterinaria Paw Centro
+    visible: Veterinaria Paw Centro.*
     timeout: 30000
 - setAirplaneMode: enabled
 - extendedWaitUntil:
@@ -21,6 +24,6 @@ onFlowComplete:
 - tapOn:
     id: chip-vet_hospital
 - extendedWaitUntil:
-    notVisible: Veterinaria Paw Centro
+    notVisible: Veterinaria Paw Centro.*
     timeout: 60000
-- assertVisible: Hospital Veterinario Paw 24 Horas
+- assertVisible: Hospital Veterinario Paw 24 Horas.*

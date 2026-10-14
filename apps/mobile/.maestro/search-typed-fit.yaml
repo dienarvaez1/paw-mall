@@ -1,7 +1,7 @@
 # Typed text that isn't a place's name, sent with the search key, fits the radius too: "Paw
 # Tlaxcala" finds nothing within 5 km and the vet in Tlaxcala about 110 km away, so the radius
 # opens out to 160 km and lists it (owner's rule, 2026-10-13).
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:
@@ -11,7 +11,7 @@ appId: dev.pawmall.app
 - inputText: Paw Tlaxcala
 - pressKey: Enter
 - extendedWaitUntil:
-    visible: Veterinaria Paw Tlaxcala
+    visible: Veterinaria Paw Tlaxcala.*
     timeout: 20000
-- assertVisible: 160 km
+- assertVisible: '(.*\D)?160 km.*'
 - assertNotVisible: Como nombre de negocio|As a business name

@@ -207,6 +207,13 @@ before starting the next. No deploys in any phase until the owner decides.
     - Done when: the 21st write in a minute gets 429, another browser origin gets no CORS header,
       the integrity report runs on the full data, and a reported place shows "En revisión".
 
+12. **Failure coverage (added 2026-10-13, review items 5–6).** End-to-end flows for the
+    animal-cruelty report and for the API down while the phone is online; the flows on iOS (Expo
+    Go on the simulator); tests for the API with its database down and for an interrupted import;
+    a request timeout in the app.
+    - Done when: the Maestro flows pass on the Android emulator and the iOS simulator, `api-down`
+      passes with the API stopped, and the failure tests pass in CI.
+
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when
 the owner decides.

@@ -52,6 +52,7 @@ pnpm --filter mobile start             # Metro; scan the QR code with Expo Go
 | `pnpm db:migrate`                        | Apply the API's migrations                                       |
 | `pnpm places:*`                          | Data loaders (list in [DEVELOPMENT.md](docs/DEVELOPMENT.md))     |
 | `pnpm --filter mobile e2e`               | Maestro end-to-end flows ([TESTING-E2E.md](docs/TESTING-E2E.md)) |
+| `pnpm --filter mobile e2e:ios`           | The same flows on the iOS simulator in Expo Go                   |
 | `pnpm --filter mobile android:dev`       | Build and run the Android development build                      |
 | `pnpm --filter mobile emulator:location` | Set the Android emulator's GPS to this Mac's location            |
 

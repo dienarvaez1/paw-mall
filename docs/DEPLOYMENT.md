@@ -27,19 +27,20 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done   | 2026-10-13 | 2026-10-13 |
+| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | In review | 2026-10-13 | —          |
 
 ## Pending owner reviews
 
@@ -910,6 +911,43 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   pet-policy test's 1 km around (2, −131) (also behind a `main` failure earlier on 2026-10-13).
   The pet-policy test now uses its own spot at −137.
 
+### Phase 12 — Failure coverage
+
+- **Scope:** review items 5–6: E2E gaps (animal-cruelty report, API down while online, iOS) and
+  failure tests (database outage, interrupted import, slow API).
+- **Branch / PR:** `phase-12/failure-coverage` / #20
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 320 tests (shared 35, mobile 84, api 98, importers 103)
+  - [x] Android emulator (release build of this branch, `BUNDLED=true`): 22 flows; first full run
+        21/22 (`settings-units` tapped "Millas" before Ajustes drew; a wait added, then it passed
+        3 times alone); `pet-friendly-widen` fixed (below); `api-down` passed with the e2e API
+        stopped
+  - [x] iOS simulator (iPhone 17 Pro Max, iOS 26.5, Expo Go): 21/21 flows (`offline` is
+        Android-only) in 10 m 45 s; `api-down` passed
+- **Notes:**
+  - New flows: `report-cruelty`, `api-down/api-down` (kept out of the main run; CI runs it after
+    stopping the API, results in `report-api-down.xml`, picked up by the "Maestro flows" check).
+  - iOS runs in Expo Go (`e2e:metro-ios` on 8085, `e2e:ios`): CocoaPods isn't installed, so no iOS
+    development build; local only (macOS runners cost 10× the minutes). Flows made cross-platform:
+    `APP_ID`/`IOS` variables, `common/back.yaml`, `common/hide-keyboard.yaml`, name matches as
+    `Name.*` (iOS reads a row as one accessibility label), `offline` tagged `android-only`.
+  - **Phase 11 regression found:** the new verification line pushed "No sé" below the screen in
+    `pet-friendly-widen`, whose optional tap then skipped it; the flow now scrolls to it. (The
+    nightly E2E would have failed.)
+  - App: requests give up after 15 s (`src/api/fetch-timeout.ts`) and show "couldn't reach the
+    server" with a retry, instead of an endless spinner.
+  - API with the database down: `/health` answers 200 with `database: unavailable`; every route
+    answers 500 `INTERNAL_ERROR` with no details (`database-down.test.ts`).
+  - DENUE import: the save step moved to `denue/save.ts`; a failure part way leaves the previous
+    places and no `import_runs` row (`save.test.ts`). The other importers write per run or per
+    place and are safe to re-run.
+  - Release APK built with JDK 17 (`~/.gradle/jdks/...17...`); the default JDK 26 fails.
+- **Follow-ups:**
+  - Run the `E2E` workflow on this PR (label `run-e2e`) to confirm the CI path with `api-down`.
+  - Review item 7 (load test) needs k6, a new dependency.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -946,3 +984,4 @@ Play readiness").
 | 2026-10-13 | Project documentation started (`docs/project-documentation`) | —   |
 | 2026-10-13 | Phase 11 started                                             | #18 |
 | 2026-10-13 | Phase 11 merged (`bf1d4e7`)                                  | #18 |
+| 2026-10-13 | Phase 12 started                                             | #20 |
