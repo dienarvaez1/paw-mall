@@ -4,6 +4,10 @@ Standing rules for Claude Code in this repo. The full build plan is in `docs/PLA
 phase at a time. The rollout of each phase (branch, pull request, status, checks) is tracked in
 `docs/DEPLOYMENT.md`.
 
+Project docs: `README.md` (overview, quick start), `docs/ARCHITECTURE.md` (how the pieces fit),
+`docs/DEVELOPMENT.md` (setup, commands, troubleshooting), `docs/USER-GUIDE.md` (the app, screen
+by screen). Keep them current when a change affects what they describe.
+
 ## Conventions
 
 - All code, identifiers, comments, commit messages, docs and test names in English.
