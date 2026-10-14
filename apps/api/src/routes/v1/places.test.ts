@@ -160,6 +160,23 @@ describe('GET /v1/places search and filters', () => {
     ]);
   });
 
+  it('reads a keyword as a category only where it fits the chip and the tab', async () => {
+    const parse = async (params: string) =>
+      placeListResponseSchema.parse((await getPlaces(params)).body);
+    // Explorar, no chip: "vet" is the vets category.
+    const vets = await parse('q=vet&group=pet_business');
+    expect(vets.searchCategory).toBe('veterinarian');
+    expect(vets.items.map((p) => p.name)).toEqual(['Veterinaria Cercana', 'Veterinaria Lejana']);
+    // With the Tiendas chip, "vet" is a word in the name: no store is called that (it used to
+    // list every store).
+    expect(await parse('q=vet&group=pet_business&category=pet_store')).toMatchObject({
+      total: 0,
+      searchCategory: null,
+    });
+    // On Pet-friendly, vets aren't a category there: "vet" is searched in names.
+    expect(await parse('q=vet&group=pet_friendly')).toMatchObject({ searchCategory: null });
+  });
+
   it('keeps only places with a phone or a live website', async () => {
     const phone = placeListResponseSchema.parse((await getPlaces('withPhone=true')).body);
     expect(phone.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);

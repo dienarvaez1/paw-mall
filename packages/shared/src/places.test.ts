@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { categoryGroup } from './categories';
 import { DEFAULT_RADIUS_KM, placeListQuerySchema, placeMapQuerySchema } from './places';
 
 const base = { lat: '19.4', lng: '-99.1' };
@@ -56,5 +57,14 @@ describe('placeMapQuerySchema', () => {
       maxLat: 19.5,
     });
     expect(placeMapQuerySchema.safeParse({ ...base, bbox: '1,2,3' }).success).toBe(false);
+  });
+});
+
+describe('categoryGroup', () => {
+  it('puts each category in its tab', () => {
+    expect(categoryGroup('veterinarian')).toBe('pet_business');
+    expect(categoryGroup('feed_store')).toBe('pet_business');
+    expect(categoryGroup('restaurant')).toBe('pet_friendly');
+    expect(categoryGroup('tourist_site')).toBe('pet_friendly');
   });
 });
