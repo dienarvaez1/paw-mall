@@ -7,7 +7,7 @@ real app on the Android emulator, on **fixed test data**, so they can check exac
 ## Fixed test data
 
 `packages/importers/data/e2e-fixtures.json`: 10 fake places around the Zócalo (19.4326, -99.1332),
-where every flow puts the user, plus "Tlaxcala" as a place's name.
+where every flow puts the user, plus "Tlaxcala", "Guadalupe" and "Toluca" as places' names.
 
 | Place                             | Why it's there                                                    |
 | --------------------------------- | ----------------------------------------------------------------- |
@@ -21,6 +21,8 @@ where every flow puts the user, plus "Tlaxcala" as a place's name.
 | Café Perruno Paw                  | Café with a confirmed pet policy (dogs, any size, terrace)        |
 | Restaurante Sin Política Paw      | Restaurant with no answer yet; `pet-friendly-widen` answers "yes" |
 | Hotel Sin Política Paw            | Hotel nobody answers for (stays unconfirmed)                      |
+| Forrajería Guadalupe Paw          | Feed store 7 km away, named like a place ("Guadalupe", Zacatecas) |
+| Café Toluca Paw                   | Café (no policy) named like a place: only Pet-friendly finds it   |
 
 `pnpm e2e:seed` loads it into its own database, **`paw_mall_e2e`** (never the dev or the Vitest
 one): creates it if missing, applies the API's migrations, empties the place tables and inserts the
@@ -35,7 +37,7 @@ flow taps "Ver horario" (each Google answer uses part of the free monthly allowa
 3. The API on the test data: `pnpm --filter api dev:e2e` (port **8788**).
 4. A Metro server that points the app at it: `pnpm --filter mobile e2e:metro` (port **8084**,
    `EXPO_PUBLIC_API_URL=http://10.0.2.2:8788`; 10.0.2.2 is the Mac as the emulator sees it).
-5. `pnpm --filter mobile e2e` (21 flows, about 25 minutes) or
+5. `pnpm --filter mobile e2e` (26 flows, about 12 minutes on the release build) or
    `maestro test apps/mobile/.maestro/favorites.yaml` (one).
 
 `common/launch.yaml` starts every flow the same way: GPS at the Zócalo, the app's data cleared,
@@ -51,6 +53,36 @@ A plain `maestro test` writes the same to `~/.maestro/tests/<date_time>/`.
 
 The everyday dev server (port 8083, real data) and the e2e one (8084) can run side by side.
 
+### API down
+
+`.maestro/api-down/` holds the flow for "online, but the API is down"; it's kept out of the main
+run (which needs the API). Stop the e2e API (`dev:e2e`, port 8788), then
+`pnpm --filter mobile e2e:api-down` (results in `e2e-results/report-api-down.xml`). CI runs it after
+the other flows (`scripts/e2e-ci.sh` stops the API first).
+
+### iOS (Expo Go on the simulator)
+
+The same flows run on the iOS simulator in **Expo Go** (no iOS development build: it would need
+CocoaPods and a native build). Local only: CI's macOS runners cost ten times the Linux minutes.
+
+1. Expo Go installed on a booted simulator; `pnpm db:up`, `pnpm e2e:seed`, `pnpm --filter api dev:e2e`.
+2. A Metro for Expo Go pointing at the e2e API: `pnpm --filter mobile e2e:metro-ios` (port **8085**,
+   `EXPO_PUBLIC_API_URL=http://127.0.0.1:8788`; the simulator reaches the Mac at 127.0.0.1).
+3. `pnpm --filter mobile e2e:ios` (`IOS=true`, `APP_ID=host.exp.Exponent`, flows tagged
+   `android-only` skipped). With the Android emulator also running, add
+   `--device <simulator id>` (`xcrun simctl list devices booted`).
+
+How the flows stay cross-platform:
+
+- `common/launch.yaml` opens `exp://127.0.0.1:8085` in Expo Go and closes its developer-menu
+  introduction and sheet; location permission is `inuse` on iOS, `allow` on Android.
+- `common/back.yaml`: the system back on Android, the edge swipe on iOS. `common/hide-keyboard.yaml`:
+  `hideKeyboard` on Android, the Return key on iOS.
+- iOS reads a button or list row as **one** accessibility label ("Veterinaria Paw Centro, a 0.3 km,
+  …"; the call link as "Llamar a …"), so flows match place names as `Name.*` and button texts as
+  `.*text.*` or `(Llamar|Call)( .*)?`.
+- `offline` is tagged `android-only` (airplane mode can't be switched on the simulator).
+
 ## Journey list (coverage)
 
 The measure of UI coverage: each journey a user can take, and the flow that checks it.
@@ -62,6 +94,10 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | Search       | Picked place → the places there, not the namesake near the user            | `place-question`          |
 | Search       | Search key on a place's name asks; as a business → only that name, nearby  | `place-question-business` |
 | Search       | Typed text searches business names without asking                          | `search-clear`            |
+| Search       | A confirmed search closes the radius in to its matches (15 km → 5 km)      | `search-zoom`             |
+| Search       | Nothing inside the radius → it opens out to the nearest match (5 → 10 km)  | `search-zoom-out`         |
+| Search       | Only the other tab finds the name → it takes the focus                     | `search-section`          |
+| Search       | Other text + search key fits too ("Paw Tlaxcala": 5 → 160 km)              | `search-typed-fit`        |
 | Search       | ✕ clears the text and the full list comes back                             | `search-clear`            |
 | Explore      | Map and List count the same places                                         | `map-list`                |
 | Explore      | A category chip narrows the list; Todos brings everything back             | `chips`                   |
@@ -76,18 +112,18 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | Place page   | Contact links only for what the place has (phone, website, social)         | `place-page`              |
 | Place page   | Tap the address → "Nombre y dirección copiados"                            | `place-page`              |
 | Place page   | Report "closed" → confirm → thanks                                         | `report-closed`           |
+| Place page   | Report animal cruelty → confirm (anonymous note) → thanks                  | `report-cruelty`          |
 | Place page   | Claim form: says what's missing, then sends                                | `claim`                   |
 | Favoritos    | Heart saves; tapping again removes it (empty state)                        | `favorites`               |
 | Favoritos    | Several saved places, newest first                                         | `favorites-order`         |
 | Ajustes      | "Solo lugares con teléfono" hides the hospital without a phone (Urgencias) | `settings-phone`          |
 | Ajustes      | Kilómetros → Millas: distances and radius in miles                         | `settings-units`          |
 | States       | No connection → offline banner; back online → the app loads again          | `offline`                 |
+| States       | Online but the API down → "No pudimos conectar con el servidor" and retry  | `api-down/api-down`       |
 
-All 25 journeys covered by 21 flows. Not covered: the API itself down while the phone is online
-(only reachable by stopping the server; the offline flow covers the same error path), the
-cruelty report (same form as "closed"), and anything on iOS.
-
-iOS: not covered yet (the development build is Android only; iOS runs in Expo Go).
+All 31 journeys covered by 27 flows (26 in the main run, plus `api-down`), on Android; on iOS
+(Expo Go) all but `offline`. Not covered: the development build on iOS (Expo Go stands in for it),
+and a database outage behind a running API (covered by the API's tests, `database-down.test.ts`).
 
 ## GitHub Actions
 

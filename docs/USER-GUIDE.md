@@ -39,8 +39,11 @@ The location button (crosshair) brings the map back to you, zoomed to the smalle
 or 3 mi in miles). It's **on** (filled) while the search is around you.
 
 It turns **off** when you move or zoom the map by hand, tap a cluster, pick a place from the
-suggestions, or answer "As a place". It turns **on** with the button, or when you answer "As a
-business name". Nothing else changes it.
+suggestions, or press 🔍 on a place's name (as soon as the question comes up; it stays off for
+"As a place" and Cancel). The button is a switch: tap it while on to turn it off (the search and the map stay as they are).
+It turns **on** with the button, when you answer "As a business
+name", or when the search box is emptied (✕, or deleting every character; the map goes back
+around you, the radius stays). Nothing else changes it.
 
 ### Radius
 
@@ -67,6 +70,17 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
   - **As a place** — search around Guadalajara.
   - **As a business name** — businesses called "Guadalajara" near you.
   - **Cancel** — keep editing.
+- **Other text with the search key** (e.g. "Tlaxcala Casona", not a place's name): searched as
+  business names, with no question; it counts as confirmed for the two points below.
+- **The radius fits a confirmed search** (a place picked from the suggestions, the question
+  answered, or other text sent with the search key): it closes in to the smallest preset that still holds every match, or, when nothing
+  matches inside it, opens out to the smallest preset that reaches the nearest match (e.g.
+  "Guadalupe" as a business name: nothing within 5 km, so 10 km). Once per answer; the radius
+  button still changes it after.
+- **The tab that finds more takes the focus**: after a confirmed search, if the other tab
+  (Explorar or Pet-friendly) finds more places inside the circle, or, with none inside either, a
+  nearer one, the app switches to it (e.g. "Toluca" on Explorar finds only a café, so it opens
+  Pet-friendly).
 - **✕** clears the search and brings the full list back.
 - **ES / EN** (globe) switches the app's language.
 

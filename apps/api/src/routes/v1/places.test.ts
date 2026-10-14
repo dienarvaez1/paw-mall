@@ -222,6 +222,22 @@ describe('GET /v1/places/map', () => {
   it('filters the map by category', async () => {
     expect(await map('radiusKm=5&category=pet_store')).toMatchObject({ total: 1, radiusTotal: 1 });
   });
+
+  it('says where the matches are, so a confirmed search can fit its radius to them', async () => {
+    // Inside the radius: the farthest (Lejana, 3 km); clusters carry it too.
+    expect(await map('radiusKm=5')).toMatchObject({ nearestBeyondKm: null });
+    expect((await map('radiusKm=5')).farthestKm).toBeCloseTo(3, 1);
+    expect((await map('radiusKm=5&limit=2')).farthestKm).toBeCloseTo(3, 1);
+    expect((await map('radiusKm=5&category=pet_store')).farthestKm).toBeCloseTo(1.5, 1);
+    // None inside 5 km: the nearest beyond it (Veterinaria Fuera, 20 km); none at all: both null.
+    const beyond = await map('radiusKm=5&q=fuera');
+    expect(beyond).toMatchObject({ radiusTotal: 0, farthestKm: null });
+    expect(beyond.nearestBeyondKm).toBeCloseTo(20, 0);
+    expect(await map('radiusKm=5&q=nadaquecoincida')).toMatchObject({
+      farthestKm: null,
+      nearestBeyondKm: null,
+    });
+  });
 });
 
 describe('GET /v1/places/:id', () => {
@@ -249,5 +265,25 @@ describe('searchWords', () => {
   it('reads CDMX and DF as the state Ciudad de México, in any order', () => {
     expect(searchWords('CDMX veterinaria')).toEqual(['ciudad de mexico', 'veterinaria']);
     expect(searchWords('veterinaria df')).toEqual(['veterinaria', 'ciudad de mexico']);
+  });
+});
+
+describe('GET /v1/places search reach', () => {
+  const list = async (params: string) =>
+    placeListResponseSchema.parse(
+      await (
+        await app.request(`/v1/places?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&${params}`, {}, testEnv)
+      ).json(),
+    );
+
+  it('gives the farthest match inside the radius, or the nearest beyond it, on page 1', async () => {
+    expect((await list('radiusKm=5&q=veterinaria')).farthestKm).toBeCloseTo(3, 1);
+    const beyond = await list('radiusKm=5&q=fuera');
+    expect(beyond).toMatchObject({ total: 0, farthestKm: null });
+    expect(beyond.nearestBeyondKm).toBeCloseTo(20, 0);
+    expect(await list('radiusKm=5&q=veterinaria&page=2&pageSize=1')).toMatchObject({
+      farthestKm: null,
+      nearestBeyondKm: null,
+    });
   });
 });

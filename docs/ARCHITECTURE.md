@@ -156,7 +156,9 @@ before drawing: a map laid out at zero height opens on the whole world on Androi
 - **`features/favorites`**, **`features/location`** (device location with a Mexico City
   fallback), **`features/network`** (offline notice).
 - Server data goes through TanStack Query hooks in **`src/api/hooks.ts`**; every key includes the
-  locale, so switching language refetches.
+  locale, so switching language refetches. `src/api/client.ts` gives up on a request after 15 s
+  (`fetch-timeout.ts`), so a server that never answers shows "couldn't reach the server" with a
+  retry instead of an endless spinner.
 
 ### Search box and autocomplete
 
@@ -190,8 +192,11 @@ use `Intl` with the active locale.
 ## Testing
 
 - **Unit and API tests:** Vitest in every package. The API tests run against their own database,
-  `paw_mall_test`, created and migrated by the test setup.
-- **End to end:** Maestro flows in `apps/mobile/.maestro` (21 flows, 25 journeys) on fixed test
-  data — see [TESTING-E2E.md](TESTING-E2E.md).
+  `paw_mall_test`, created and migrated by the test setup. Failure paths: the API with its
+  database down (`database-down.test.ts`: `/health` reports it, every route answers a bare
+  `INTERNAL_ERROR`), and a DENUE import that fails part way (`denue/save.test.ts`: one
+  transaction, so nothing is left behind).
+- **End to end:** Maestro flows in `apps/mobile/.maestro` (23 flows, 27 journeys) on fixed test
+  data, on the Android build and on iOS in Expo Go — see [TESTING-E2E.md](TESTING-E2E.md).
 - **CI:** `.github/workflows/ci.yml` (lint, typecheck, tests on every PR) and `e2e.yml` (Maestro on
   an Android emulator: nightly, manual or the `run-e2e` label).

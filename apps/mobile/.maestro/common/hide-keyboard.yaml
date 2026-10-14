@@ -1,0 +1,14 @@
+# Closes the keyboard: hideKeyboard on Android; on iOS (where it often can't) the Return key, which
+# also leaves a single-line field.
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow:
+    when:
+      true: ${IOS !== 'true'}
+    commands:
+      - hideKeyboard
+- runFlow:
+    when:
+      true: ${IOS === 'true'}
+    commands:
+      - pressKey: Enter

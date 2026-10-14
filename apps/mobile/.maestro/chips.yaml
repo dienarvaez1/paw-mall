@@ -1,23 +1,23 @@
 # A category chip narrows the list to that category; Todos brings everything back.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:
     id: mode-list
 # The closest place; the list is longer than the screen.
 - extendedWaitUntil:
-    visible: Veterinaria Paw Centro
+    visible: Veterinaria Paw Centro.*
     timeout: 30000
 - tapOn:
     id: chip-vet_hospital
 - extendedWaitUntil:
-    notVisible: Veterinaria Paw Centro
+    notVisible: Veterinaria Paw Centro.*
     timeout: 15000
-- assertVisible: Hospital Veterinario Paw 24 Horas
-- assertVisible: Hospital Veterinario Sin Teléfono
-- assertNotVisible: Mascotas Tlaxcala
+- assertVisible: Hospital Veterinario Paw 24 Horas.*
+- assertVisible: Hospital Veterinario Sin Teléfono.*
+- assertNotVisible: Mascotas Tlaxcala.*
 - tapOn:
     id: chip-all
 - extendedWaitUntil:
-    visible: Veterinaria Paw Centro
+    visible: Veterinaria Paw Centro.*
     timeout: 15000

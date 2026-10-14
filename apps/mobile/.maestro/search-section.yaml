@@ -1,0 +1,23 @@
+# A confirmed search moves to the tab that finds more: on Explorar, "Toluca" answered as a business
+# name finds no pet business but a café (unconfirmed) 1.4 km away, so Pet-friendly takes the
+# focus and lists it (owner's rule, 2026-10-13).
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn:
+    id: search-input
+- inputText: Toluca
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: Como nombre de negocio|As a business name
+    timeout: 20000
+- tapOn: Como nombre de negocio|As a business name
+- extendedWaitUntil:
+    visible:
+      id: chip-cafe
+    timeout: 20000
+- extendedWaitUntil:
+    visible: Café Toluca Paw.*
+    timeout: 20000

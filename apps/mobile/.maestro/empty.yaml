@@ -1,5 +1,5 @@
 # No places in the radius (the user in Monterrey, the test places in CDMX): the empty message.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow:
     file: common/launch.yaml

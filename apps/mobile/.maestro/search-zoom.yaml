@@ -1,0 +1,24 @@
+# A confirmed search zooms the map in to the smallest radius that still holds what it found: at
+# 15 km, "Tlaxcala" answered as a business name finds the store 0.7 km away, so the radius goes
+# to 5 km (owner's rule, 2026-10-13).
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow: common/launch.yaml
+- repeat:
+    times: 2
+    commands:
+      - tapOn:
+          id: radius-button
+- assertVisible: '(.*\D)?15 km.*'
+- tapOn:
+    id: search-input
+- inputText: Tlaxcala
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: Como nombre de negocio|As a business name
+    timeout: 20000
+- tapOn: Como nombre de negocio|As a business name
+- extendedWaitUntil:
+    visible: '(.*\D)?5 km.*'
+    timeout: 20000
+- assertNotVisible: '(.*\D)?15 km.*'

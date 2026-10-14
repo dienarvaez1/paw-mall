@@ -201,6 +201,18 @@ export const areaSuggestResponseSchema = z.object({
 });
 export type AreaSuggestResponse = z.infer<typeof areaSuggestResponseSchema>;
 
+/**
+ * Where a search's matches are, so the app can fit the radius to them after a confirmed search
+ * (owner's rule, 2026-10-13): the farthest inside the radius, or, with none inside, the nearest
+ * within MAX_RADIUS_KM. Distances in km from the circle's center; null when they don't apply.
+ */
+const searchReach = {
+  /** The farthest match inside the radius; null when none is. */
+  farthestKm: z.number().nullable().default(null),
+  /** With no match inside the radius: the nearest one within MAX_RADIUS_KM; else null. */
+  nearestBeyondKm: z.number().nullable().default(null),
+};
+
 export const placeListResponseSchema = z.object({
   /**
    * The area `q` named, when it did: places are then within area.radiusKm of it, nearest to it
@@ -213,6 +225,8 @@ export const placeListResponseSchema = z.object({
   total: z.number().int().nonnegative(),
   page: z.number().int(),
   pageSize: z.number().int(),
+  /** On the first page only (null on the others). */
+  ...searchReach,
 });
 export type PlaceListResponse = z.infer<typeof placeListResponseSchema>;
 
@@ -253,6 +267,7 @@ const mapCounts = {
   total: z.number().int(),
   /** Every place within radiusKm, in view or not. */
   radiusTotal: z.number().int(),
+  ...searchReach,
   /** The city of the place in view nearest the circle's center, to name where the circle is. */
   nearestCity: z.string().nullable().default(null),
 };

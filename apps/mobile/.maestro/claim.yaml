@@ -1,13 +1,13 @@
 # The owner's claim form says what's missing, then sends.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:
     id: mode-list
 - scrollUntilVisible:
-    element: Tienda de Mascotas Paw
+    element: Tienda de Mascotas Paw.*
     timeout: 20000
-- tapOn: Tienda de Mascotas Paw
+- tapOn: Tienda de Mascotas Paw.*
 - scrollUntilVisible:
     element: ¿Eres el dueño de este negocio\?|Do you own this business\?
     timeout: 20000
@@ -27,7 +27,7 @@ appId: dev.pawmall.app
 - tapOn:
     id: claim-phone
 - inputText: "5512345678"
-- hideKeyboard
+- runFlow: common/hide-keyboard.yaml
 - scrollUntilVisible:
     element:
       id: claim-contact-name
@@ -35,11 +35,11 @@ appId: dev.pawmall.app
 - tapOn:
     id: claim-contact-name
 - inputText: Prueba E2E
-- hideKeyboard
+- runFlow: common/hide-keyboard.yaml
 - tapOn:
     id: claim-contact
 - inputText: prueba@example.com
-- hideKeyboard
+- runFlow: common/hide-keyboard.yaml
 - scrollUntilVisible:
     element:
       id: claim-consent
