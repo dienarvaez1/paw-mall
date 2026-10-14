@@ -75,11 +75,17 @@ beforeAll(async () => {
     VALUES ('town', 'Pueblo Urgente Paw', ${nameKey('Pueblo Urgente Paw')}, 'Estado',
             ST_SetSRID(ST_MakePoint(${ORIGIN.lng + 100 / 111.32}, ${ORIGIN.lat}), 4326)::geography)`;
   await addPlace('hospital-in-town', 100.4, ['veterinarian', 'vet_hospital']);
+  // A municipality 50 km west, with no urgent place near it.
+  await sql`DELETE FROM search_areas WHERE name = 'Municipio Vacio Paw'`;
+  await sql`
+    INSERT INTO search_areas (kind, name, name_key, state, location)
+    VALUES ('municipality', 'Municipio Vacio Paw', ${nameKey('Municipio Vacio Paw')}, 'Estado',
+            ST_SetSRID(ST_MakePoint(${ORIGIN.lng - 50 / 111.32}, ${ORIGIN.lat}), 4326)::geography)`;
 });
 
 afterAll(async () => {
   await sql`DELETE FROM places WHERE external_id LIKE 'test-urgent-%'`;
-  await sql`DELETE FROM search_areas WHERE name = 'Pueblo Urgente Paw'`;
+  await sql`DELETE FROM search_areas WHERE name IN ('Pueblo Urgente Paw', 'Municipio Vacio Paw')`;
   await sql.end();
 });
 
@@ -145,6 +151,17 @@ describe('GET /v1/places/urgent total', () => {
       testEnv,
     );
     expect(urgentResponseSchema.parse(await tight.json()).total).toBe(2);
+  });
+
+  it('names the nearest municipality when the circle has none', async () => {
+    const res = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng - 49 / 111.32}&radiusKm=5`,
+      {},
+      testEnv,
+    );
+    const { items, nearestMunicipality } = urgentResponseSchema.parse(await res.json());
+    expect(items).toEqual([]);
+    expect(nearestMunicipality).toBe('Municipio Vacio Paw');
   });
 });
 

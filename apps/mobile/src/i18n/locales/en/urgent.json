@@ -2,6 +2,7 @@
   "tabTitle": "Emergencies",
   "intro": "Veterinary hospitals and 24-hour vets, closest first. Search a place in Explorar (like Xochimilco) to see the ones there.",
   "none": "We couldn't find veterinary hospitals nearby.",
+  "noneIn": "We couldn't find veterinary hospitals within {{distance}} of {{area}}.",
   "noneHint": "Look for vets in Explore or call your usual vet.",
   "disclaimer": "Most hours aren't confirmed yet. Call before you go if you can."
 }

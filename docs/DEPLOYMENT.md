@@ -1051,11 +1051,11 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Status:** In review.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
-  - [x] `pnpm test`: 340 tests (shared 36, mobile 93, api 103, importers 108)
+  - [x] `pnpm test`: 341 tests (shared 36, mobile 93, api 104, importers 108)
   - [x] Android emulator (release build of this branch): new `search-pan` flow, plus
         `search-zoom`, `search-zoom-out`, `place-question`, `place-question-business`,
         `search-clear`, `near-me`, `search-section`, `search-typed-fit`, `map-buttons`,
-        `emergencies`, `map-list`: all pass
+        `emergencies`, `map-list`, `pet-friendly`, and new `urgent-sync`: all pass
 - **Fixes:**
   1. **A hand pan lets go of a searched place.** After picking a place from the suggestions or
      answering "As a place", the map ignored pans. Now a pan away from the place empties the
@@ -1067,9 +1067,16 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
      - Its counter counts every urgent place in the circle; it used to count the cards, which
        stop at 20. The API now returns `total`.
      - Around a searched place it uses the place's radius from the map, not Ajustes'.
-     - It names the circle by the same city as the list or map (`circleCity`).
+     - It names the circle exactly as the list or map on screen does (`circleName`). Both tabs
+       keep a map mounted, and the hidden one's nearest place is of the other kind (a restaurant
+       vs a vet), so only the tab on screen shares its name (`useScreenFocused`). This was the
+       drift the owner still saw after the first fix. Flow `urgent-sync` compares the two names.
   3. **Pins up to 200:** the map shows places one by one up to 200 in view (was 100), then
      clusters (`MAP_MAX_PLACES`).
+  4. **Urgencias with none found says where:** "We couldn't find veterinary hospitals within 5 km
+     of Tlaxcala." The name is the same one as the summary uses: the searched area, or the list's
+     or map's city. With an empty circle (no place to take a city from), the API returns the
+     nearest municipality (`nearestMunicipality`; looked up only then). `search-pan` checks it.
 - **Notes:**
   - The first E2E attempt "failed" because `common/hide-keyboard.yaml` pressed Back after picking a
     suggestion had already closed the keyboard, which sent the app home; `search-pan` doesn't use

@@ -307,5 +307,7 @@ export const urgentResponseSchema = z.object({
   items: z.array(placeSchema),
   /** Every urgent place in the radius, beyond the URGENT_LIMIT shown (the summary counts them). */
   total: z.number().int().nonnegative(),
+  /** With no places and no area: the municipality nearest the circle's center, to name it. */
+  nearestMunicipality: z.string().nullable(),
 });
 export type UrgentResponse = z.infer<typeof urgentResponseSchema>;

@@ -204,7 +204,7 @@ use `Intl` with the active locale.
   database down (`database-down.test.ts`: `/health` reports it, every route answers a bare
   `INTERNAL_ERROR`), and a DENUE import that fails part way (`denue/save.test.ts`: one
   transaction, so nothing is left behind).
-- **End to end:** Maestro flows in `apps/mobile/.maestro` (28 flows, 32 journeys) on fixed test
+- **End to end:** Maestro flows in `apps/mobile/.maestro` (29 flows, 33 journeys) on fixed test
   data, on the Android build and on iOS in Expo Go — see [TESTING-E2E.md](TESTING-E2E.md).
 - **CI:** `.github/workflows/ci.yml` (lint, typecheck, tests on every PR) and `e2e.yml` (Maestro on
   an Android emulator: nightly, manual or the `run-e2e` label).

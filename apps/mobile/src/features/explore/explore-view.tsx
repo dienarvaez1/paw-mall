@@ -59,11 +59,11 @@ type ExploreView = {
    */
   leaveArea: (center: Point) => void;
   /**
-   * The city the list or map names its circle by (its nearest place's), so Urgencias names the
-   * same one; null around a searched place.
+   * The name the list or map on screen gives its circle (the searched area, or the nearest
+   * place's city), so Urgencias names the same place (owner's rule, 2026-10-14).
    */
-  circleCity: string | null;
-  setCircleCity: (city: string | null) => void;
+  circleName: string | null;
+  setCircleName: (name: string | null) => void;
 };
 
 export type AreaRadius = { text: string; km: number };
@@ -105,8 +105,8 @@ const ExploreViewContext = createContext<ExploreView>({
   areaRadius: null,
   setAreaRadius: () => {},
   leaveArea: () => {},
-  circleCity: null,
-  setCircleCity: () => {},
+  circleName: null,
+  setCircleName: () => {},
 });
 
 /**
@@ -123,7 +123,7 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
   const [focus, setFocus] = useState<Point | null>(null);
   const [shownArea, setShownArea] = useState<SearchArea | null>(null);
   const [areaRadius, setAreaRadius] = useState<AreaRadius | null>(null);
-  const [circleCity, setCircleCity] = useState<string | null>(null);
+  const [circleName, setCircleName] = useState<string | null>(null);
   const [satellite, setSatellite] = useState(false);
   const [locateRequest, setLocateRequest] = useState(0);
   const requestLocate = useCallback(() => setLocateRequest((n) => n + 1), []);
@@ -208,8 +208,8 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       areaRadius,
       setAreaRadius,
       leaveArea,
-      circleCity,
-      setCircleCity,
+      circleName,
+      setCircleName,
     }),
     [
       mode,
@@ -227,7 +227,7 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       shownArea,
       areaRadius,
       leaveArea,
-      circleCity,
+      circleName,
     ],
   );
   return <ExploreViewContext.Provider value={value}>{children}</ExploreViewContext.Provider>;

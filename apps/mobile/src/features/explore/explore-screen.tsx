@@ -51,6 +51,7 @@ import {
 import { uniqueById } from '@/lib/unique';
 import { circleForCluster, isAwayFrom, radiusForRegion, regionForRadius } from '@/lib/map-region';
 import { MAP_TYPE, MAPS_AVAILABLE } from '@/lib/map-type';
+import { useScreenFocused } from '@/lib/use-screen-focused';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 import { useOnWake } from '@/lib/use-on-wake';
@@ -426,14 +427,20 @@ function PlacesList({
   }, [noConfirmedMatch, onWiden]);
   // Area searches use 5 km (3 mi); everything around the user uses the shared radius.
   const distance = formatDistance(area ? area.radiusKm : radiusKm, locale, units);
-  // The list is nearest first: its first place's city names the circle (Urgencias names it too).
+  // The list is nearest first: its first place's city names the circle (Urgencias names it too,
+  // from the tab on screen only).
   const nearestCity = places.data?.pages[0]?.items[0]?.city ?? null;
-  const { setCircleCity } = useExploreView();
-  const listCity = area ? null : nearestCity;
+  const summaryArea = area
+    ? area.municipality
+      ? `${area.name}, ${area.municipality}`
+      : area.name
+    : nearestCity;
+  const { setCircleName } = useExploreView();
+  const focused = useScreenFocused();
   const listLoaded = places.data !== undefined;
   useEffect(() => {
-    if (listLoaded) setCircleCity(listCity);
-  }, [listLoaded, listCity, setCircleCity]);
+    if (focused && listLoaded) setCircleName(summaryArea);
+  }, [focused, listLoaded, summaryArea, setCircleName]);
 
   if (places.isPending) return <SkeletonList />;
   if (places.isError)
@@ -442,11 +449,6 @@ function PlacesList({
   // The summary stays put above the list while it scrolls: "69 lugares a menos de 5 km de
   // Tlaxcala", or around the user (or a moved circle) named by the nearest place's city: "1,237
   // lugares a menos de 5 km de Coyoacán" (the list is nearest first).
-  const summaryArea = area
-    ? area.municipality
-      ? `${area.name}, ${area.municipality}`
-      : area.name
-    : nearestCity;
   const summary = summaryArea
     ? t('places.areaCount', {
         count: total,
@@ -671,14 +673,17 @@ function PlacesMap({
   // A searched area ("Zócalo") moves the circle there with its own radius; otherwise the circle is
   // the user's radius around the user.
   const searchedArea = places.data?.area ?? null;
-  const { setShownArea, setAreaRadius, leaveArea, setCircleCity } = useExploreView();
+  const { setShownArea, setAreaRadius, leaveArea, setCircleName } = useExploreView();
   useEffect(() => {
     if (places.data) setShownArea(searchedArea);
   }, [places.data, searchedArea, setShownArea]);
-  const mapCity = searchedArea ? null : (places.data?.nearestCity ?? null);
+  // The name under the map (MapCountLegend), shared only by the tab on screen: both tabs keep a
+  // map, and the hidden one's nearest place is of the other kind.
+  const focused = useScreenFocused();
+  const mapName = searchedArea?.name ?? places.data?.nearestCity ?? null;
   useEffect(() => {
-    if (places.data) setCircleCity(mapCity);
-  }, [places.data, mapCity, setCircleCity]);
+    if (focused && places.data) setCircleName(mapName);
+  }, [focused, places.data, mapName, setCircleName]);
   const circle = searchedArea
     ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
     : { center, radiusKm };
@@ -1109,7 +1114,10 @@ function MapCountLegend({
         onPress={onPress}
         className="items-center rounded-2xl bg-white/95 px-4 py-2 active:bg-neutral-100 dark:bg-neutral-900/95 dark:active:bg-neutral-800"
       >
-        <Text className="text-center text-sm font-semibold text-neutral-800 dark:text-neutral-100">
+        <Text
+          testID="map-count"
+          className="text-center text-sm font-semibold text-neutral-800 dark:text-neutral-100"
+        >
           {label}
         </Text>
         {partial ? (

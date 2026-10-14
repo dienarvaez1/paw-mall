@@ -636,5 +636,18 @@ export async function urgentPlaces(
         WHERE c.slug = 'vet_hospital')
     ORDER BY ${nearestFirstSql(point)}
     LIMIT ${URGENT_LIMIT}`);
-  return { area, items: rows.map(toPlace), total: rows[0]?.total ?? 0 };
+  // None in the circle and no searched area: the nearest municipality names where the app looked
+  // ("No hospitals within 5 km of Chiautempan"), as no place's city can.
+  const [near] =
+    rows.length === 0 && !found
+      ? await db.execute<{ name: string }>(sql`
+          SELECT name FROM search_areas WHERE kind = 'municipality'
+          ORDER BY location <-> ${pointSql(point)} LIMIT 1`)
+      : [];
+  return {
+    area,
+    items: rows.map(toPlace),
+    total: rows[0]?.total ?? 0,
+    nearestMunicipality: near?.name ?? null,
+  };
 }

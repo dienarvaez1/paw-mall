@@ -1,0 +1,32 @@
+# Urgencias names its circle as the map on screen does, also after the map moves and after
+# visiting the other tab, whose map's nearest place is of another kind (owner's rule, 2026-10-14).
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow: common/launch.yaml
+- extendedWaitUntil:
+    visible:
+      id: map-count
+    timeout: 30000
+- swipe:
+    start: 70%, 60%
+    end: 45%, 60%
+- waitForAnimationToEnd
+- tapOn:
+    id: tab-pet-friendly
+- waitForAnimationToEnd
+- tapOn:
+    id: tab-explore
+- extendedWaitUntil:
+    visible:
+      id: map-count
+    timeout: 20000
+- copyTextFrom:
+    id: map-count
+- evalScript: ${output.place = maestro.copiedText.split(/ (de|of) /).pop()}
+- tapOn:
+    id: tab-urgent
+- extendedWaitUntil:
+    visible:
+      id: urgent-count
+      text: .* (de|of) ${output.place}
+    timeout: 20000

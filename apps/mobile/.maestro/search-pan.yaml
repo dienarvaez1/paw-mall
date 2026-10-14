@@ -29,3 +29,10 @@ appId: ${APP_ID || 'dev.pawmall.app'}
 - assertVisible:
     id: near-me
     selected: false
+# Urgencias follows the moved circle; with no hospital in it, it says where it looked (owner's
+# rule, 2026-10-14): the nearest municipality, as no place's city can name it.
+- tapOn:
+    id: tab-urgent
+- extendedWaitUntil:
+    visible: No encontramos hospitales veterinarios a menos de 5 km de Tlaxcala\.|We couldn't find veterinary hospitals within 5 km of Tlaxcala\.
+    timeout: 20000
