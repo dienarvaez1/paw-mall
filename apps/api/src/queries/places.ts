@@ -13,6 +13,7 @@ import {
   type PlaceFilters,
   type PlaceListQuery,
   type PlaceListResponse,
+  MAX_RADIUS_KM,
   type PlaceMapQuery,
   type PlaceHours,
   type PlaceMapResponse,
@@ -368,15 +369,13 @@ async function searchPlaces(
   namedAfter: string | null = null,
 ): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory'>> {
   const point = { lat: query.lat, lng: query.lng };
-  const conditions = [
-    visibleSql,
-    searchCircleSql(point, query.radiusKm, namedAfter),
-    ...filterConditions(query),
-  ];
-  if (!query.q) return pageOfPlaces(db, query, locale, conditions);
-
   // Every word must match, letter for letter; no looser fallback (owner's rules).
-  return pageOfPlaces(db, query, locale, [...conditions, allWordsSql(query.q)]);
+  const base = [visibleSql, ...filterConditions(query), ...(query.q ? [allWordsSql(query.q)] : [])];
+  const circle = searchCircleSql(point, query.radiusKm, namedAfter);
+  const page = await pageOfPlaces(db, query, locale, [...base, circle]);
+  if (query.page !== 1) return { ...page, farthestKm: null, nearestBeyondKm: null };
+  const { farthestKm, nearestBeyondKm } = await circleStats(db, base, circle, point);
+  return { ...page, farthestKm, nearestBeyondKm };
 }
 
 async function pageOfPlaces(
@@ -384,7 +383,7 @@ async function pageOfPlaces(
   query: Pick<PlaceListQuery, 'lat' | 'lng' | 'page' | 'pageSize'>,
   locale: Locale,
   conditions: SQL[],
-): Promise<Omit<PlaceListResponse, 'area' | 'searchCategory'>> {
+): Promise<Pick<PlaceListResponse, 'items' | 'total' | 'page' | 'pageSize'>> {
   const where = sql.join(conditions, sql` AND `);
   const rows = await db.execute<PlaceRow & { total: number }>(sql`
     SELECT ${placeColumnsSql(locale, query)}, count(*) OVER()::int AS total
@@ -404,6 +403,37 @@ async function countPlaces(db: Database, conditions: SQL[]): Promise<number> {
     SELECT count(*)::int AS total FROM places p LEFT JOIN vet_details v ON v.place_id = p.id
     WHERE ${sql.join(conditions, sql` AND `)}`);
   return row?.total ?? 0;
+}
+
+type SearchReach = Pick<PlaceListResponse, 'farthestKm' | 'nearestBeyondKm'>;
+
+/**
+ * The places meeting `base` inside `circle`: how many, and how far the farthest is from `point`;
+ * with none inside, how far the nearest is within MAX_RADIUS_KM (PlaceListResponse's search
+ * reach, km).
+ */
+async function circleStats(
+  db: Database,
+  base: SQL[],
+  circle: SQL,
+  point: Point,
+): Promise<{ total: number } & SearchReach> {
+  const [row] = await db.execute<{ total: number; farthest_km: number | null }>(sql`
+    SELECT count(*)::int AS total,
+           max(ST_Distance(p.location, ${pointSql(point)})) / 1000 AS farthest_km
+    FROM places p LEFT JOIN vet_details v ON v.place_id = p.id
+    WHERE ${sql.join([...base, circle], sql` AND `)}`);
+  const total = row?.total ?? 0;
+  if (total > 0) {
+    return { total, farthestKm: Number(row?.farthest_km), nearestBeyondKm: null };
+  }
+  const [nearest] = await db.execute<{ km: number }>(sql`
+    SELECT ST_Distance(p.location, ${pointSql(point)}) / 1000 AS km
+    FROM places p LEFT JOIN vet_details v ON v.place_id = p.id
+    WHERE ${sql.join([...base, withinRadiusSql(point, MAX_RADIUS_KM)], sql` AND `)}
+    ORDER BY p.location <-> ${pointSql(point)}
+    LIMIT 1`);
+  return { total, farthestKm: null, nearestBeyondKm: nearest ? Number(nearest.km) : null };
 }
 
 function plain(text: string): string {
@@ -463,16 +493,13 @@ export async function placesForMap(
   const { point, radiusKm, area, category, words, namedAfter } = await interpretSearch(db, query);
   const filters = { ...query, category: query.category ?? category ?? undefined };
   const inBox = sql`p.location && ST_MakeEnvelope(${minLng}, ${minLat}, ${maxLng}, ${maxLat}, 4326)::geography`;
-  const inRadius = [
-    visibleSql,
-    searchCircleSql(point, radiusKm, namedAfter),
-    ...filterConditions(filters),
-    ...(words ? [allWordsSql(words)] : []),
-  ];
+  const base = [visibleSql, ...filterConditions(filters), ...(words ? [allWordsSql(words)] : [])];
+  const circle = searchCircleSql(point, radiusKm, namedAfter);
+  const inRadius = [...base, circle];
 
-  const [places, radiusTotal] = await Promise.all([
+  const [places, { total: radiusTotal, ...reach }] = await Promise.all([
     pageOfPlaces(db, { ...point, page: 1, pageSize: query.limit }, locale, [...inRadius, inBox]),
-    countPlaces(db, inRadius),
+    circleStats(db, base, circle, point),
   ]);
   // The page is nearest first, so its first place names the circle's city.
   const nearestCity = places.items[0]?.city ?? null;
@@ -484,6 +511,7 @@ export async function placesForMap(
       items: places.items,
       total: places.total,
       radiusTotal,
+      ...reach,
       nearestCity,
     };
   }
@@ -519,6 +547,7 @@ export async function placesForMap(
     clusters,
     total: places.total,
     radiusTotal,
+    ...reach,
     nearestCity,
   };
 }
