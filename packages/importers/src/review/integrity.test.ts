@@ -40,6 +40,14 @@ beforeAll(async () => {
   await addPlace('original', { name: 'Clínica Huellitas', lat: 19.5, lng: -99.2 });
   await addPlace('twin', { name: 'CLINICA HUELLITAS', lat: 19.50009, lng: -99.2 });
   await addPlace('elsewhere', { name: 'Clínica Huellitas', lat: 19.6, lng: -99.2 });
+  // Two market stalls: one name, one spot, different phones.
+  await addPlace('stall', { name: 'Cocina Económica', lat: 19.7, lng: -99.2 });
+  await addPlace('stall-next', {
+    name: 'Cocina Economica',
+    lat: 19.7,
+    lng: -99.2,
+    phone: '55 0000',
+  });
   await addPlace('outside', { lat: 40.4, lng: -3.7 });
   const week = (open: string) =>
     Object.fromEntries(
@@ -69,6 +77,7 @@ describe('integrityReport', () => {
     expect(report.map((c) => c.id)).toEqual([
       'outside_mexico',
       'duplicates',
+      'same_name_nearby',
       'invalid_hours',
       'urgent_without_phone',
       'urgent_unconfirmed_24h',
@@ -85,8 +94,12 @@ describe('integrityReport', () => {
     expect(flagged('outside_mexico')).toEqual([ids.outside]);
   });
 
-  it('flags the same name within 50 m once, ignoring accents and case', () => {
+  it('flags the same name and phone within 50 m once, ignoring accents and case', () => {
     expect(flagged('duplicates')).toEqual([ids.original]);
+  });
+
+  it('lists the same name nearby with other phones apart', () => {
+    expect(flagged('same_name_nearby')).toEqual([ids.stall]);
   });
 
   it('flags hours the shared schema rejects', () => {

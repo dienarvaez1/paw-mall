@@ -1,7 +1,7 @@
 // A data-integrity report over the visible places (read-only): coordinates outside Mexico,
-// probable duplicates, invalid hours, Urgencias places without a phone or with an unconfirmed
-// "24 horas", stale sources, websites and pet policies, places without a category, and the
-// owner's review queue.
+// duplicates and same-name neighbors, invalid hours, Urgencias places without a phone or with an
+// unconfirmed "24 horas", stale sources, websites and pet policies, places without a category,
+// and the owner's review queue.
 //
 //   pnpm places:integrity                 counts with 5 samples per check
 //   pnpm places:integrity --samples 20    more samples
