@@ -55,9 +55,7 @@ export const options = {
     'http_req_failed{scenario:reads}': ['rate<0.01'],
     'checks{scenario:writes}': ['rate==1'],
     // Per endpoint, only so the summary lists each one's times (always true).
-    ...Object.fromEntries(
-      ENDPOINTS.map((name) => [`http_req_duration{name:${name}}`, ['max>=0']]),
-    ),
+    ...Object.fromEntries(ENDPOINTS.map((name) => [`http_req_duration{name:${name}}`, ['max>=0']])),
   },
   summaryTrendStats: ['med', 'p(95)', 'max'],
 };
