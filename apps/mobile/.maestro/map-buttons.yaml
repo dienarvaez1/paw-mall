@@ -1,5 +1,5 @@
 # The layers button toggles the satellite map; the compass turns the map north.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

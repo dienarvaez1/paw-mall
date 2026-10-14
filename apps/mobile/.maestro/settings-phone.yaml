@@ -1,5 +1,5 @@
 # Ajustes "Solo lugares con teléfono" hides the hospital without a phone everywhere.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:
@@ -13,6 +13,6 @@ appId: dev.pawmall.app
 - tapOn:
     id: tab-urgent
 - extendedWaitUntil:
-    visible: Hospital Veterinario Paw 24 Horas
+    visible: Hospital Veterinario Paw 24 Horas.*
     timeout: 30000
-- assertNotVisible: Hospital Veterinario Sin Teléfono
+- assertNotVisible: Hospital Veterinario Sin Teléfono.*

@@ -1,0 +1,16 @@
+# The phone is online but the API is down: the app says it couldn't reach the server (not the
+# offline banner) and offers to try again. Run with the e2e API stopped, after the other flows:
+# `pnpm --filter mobile e2e:api-down` (docs/TESTING-E2E.md). Kept out of `.maestro/*.yaml` so the
+# main run, which needs the API, doesn't pick it up.
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow: ../common/launch.yaml
+- extendedWaitUntil:
+    visible: No pudimos conectar con el servidor.|We couldn't reach the server.
+    timeout: 30000
+- assertNotVisible: Sin conexión.*|No connection.*|You're offline.*
+- assertVisible: Reintentar|Try again
+- tapOn: Reintentar|Try again
+- extendedWaitUntil:
+    visible: No pudimos conectar con el servidor.|We couldn't reach the server.
+    timeout: 30000

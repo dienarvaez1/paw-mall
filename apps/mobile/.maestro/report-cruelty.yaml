@@ -1,0 +1,18 @@
+# "Reportar maltrato animal" asks to confirm, says the report is anonymous, then thanks the user
+# (only the reason and a random id are sent). One phone's report doesn't hide the place.
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn: Estética Canina Paw.*
+- scrollUntilVisible:
+    element: Reportar maltrato animal|Report animal cruelty
+    timeout: 20000
+- tapOn: Reportar maltrato animal|Report animal cruelty
+- assertVisible: .*maltrato animal \(por ejemplo.*|.*linked to animal cruelty.*
+- assertVisible: Tu reporte es anónimo.*|Your report is anonymous.*
+- tapOn: Sí, reportar|Yes, report
+- extendedWaitUntil:
+    visible: Gracias por tu reporte. Lo revisaremos.|Thanks for your report.*
+    timeout: 15000

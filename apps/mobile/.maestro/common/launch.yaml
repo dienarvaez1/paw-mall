@@ -1,8 +1,9 @@
 # Fresh start on the fixed test data (docs/TESTING-E2E.md), with the user at the Zócalo. Locally:
 # the development build, opened on the e2e Metro (port 8084), which points it at the e2e API
 # (port 8788). With BUNDLED=true (CI): a release build with the code and the e2e API's address
-# built in, so there is no development server or menu to go through.
-appId: dev.pawmall.app
+# built in, so there is no development server or menu to go through. With IOS=true and
+# APP_ID=host.exp.Exponent: Expo Go on the iOS simulator, opened on the iOS e2e Metro (port 8085).
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 # LAT / LNG: another spot for a flow that needs one (default: the Zócalo).
 - setLocation:
@@ -11,10 +12,38 @@ appId: dev.pawmall.app
 - launchApp:
     clearState: true
     permissions:
-      location: allow
+      # iOS takes always / inuse / never; Android allow / deny.
+      location: "${IOS === 'true' ? 'inuse' : 'allow'}"
 - runFlow:
     when:
-      true: ${BUNDLED !== 'true'}
+      true: ${IOS === 'true'}
+    commands:
+      # The simulator reaches the Mac at 127.0.0.1.
+      - openLink: exp://127.0.0.1:8085
+      - tapOn:
+          text: Open
+          optional: true
+      # Expo Go's developer-menu introduction shows over the app on a fresh start, once the bundle
+      # has loaded.
+      - extendedWaitUntil:
+          visible: Continue
+          timeout: 90000
+          optional: true
+      - tapOn:
+          text: Continue
+          optional: true
+      # Then the menu itself stays open as a sheet: swipe it down.
+      - runFlow:
+          when:
+            visible: Go home
+          commands:
+            - swipe:
+                start: 50%, 50%
+                end: 50%, 98%
+                duration: 300
+- runFlow:
+    when:
+      true: ${BUNDLED !== 'true' && IOS !== 'true'}
     commands:
       # 10.0.2.2 is the Mac as the emulator sees it.
       - extendedWaitUntil:

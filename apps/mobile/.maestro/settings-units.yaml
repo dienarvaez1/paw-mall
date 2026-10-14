@@ -1,16 +1,20 @@
 # Ajustes km → miles: distances and the radius read in miles.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:
     id: tab-settings
+# The tap can come before Ajustes has drawn (seen once on Android).
+- extendedWaitUntil:
+    visible: Millas|Miles
+    timeout: 15000
 - tapOn: Millas|Miles
 - tapOn:
     id: tab-explore
 - tapOn:
     id: mode-list
 - extendedWaitUntil:
-    visible: Veterinaria Paw Centro
+    visible: Veterinaria Paw Centro.*
     timeout: 30000
 - assertVisible: .*\d mi.*
-- assertVisible: 3 mi
+- assertVisible: .*3 mi.*

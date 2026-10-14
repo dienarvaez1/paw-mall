@@ -1,5 +1,5 @@
 # The globe in the search box switches the whole app between Spanish and English.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - assertVisible: Explorar
@@ -8,7 +8,7 @@ appId: dev.pawmall.app
 - extendedWaitUntil:
     visible: Explore
     timeout: 5000
-- assertVisible: Favorites
+- assertVisible: .*Favorites.*
 - tapOn:
     id: language-toggle
 - extendedWaitUntil:

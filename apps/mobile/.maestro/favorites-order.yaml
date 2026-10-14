@@ -1,21 +1,21 @@
 # Favoritos lists saved places newest first.
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:
     id: mode-list
-- tapOn: Veterinaria Paw Centro
+- tapOn: Veterinaria Paw Centro.*
 - tapOn:
     id: favorite-button
-- back
-- tapOn: Estética Canina Paw
+- runFlow: common/back.yaml
+- tapOn: Estética Canina Paw.*
 - tapOn:
     id: favorite-button
-- back
+- runFlow: common/back.yaml
 - tapOn:
     id: tab-favorites
 - extendedWaitUntil:
-    visible: Veterinaria Paw Centro
+    visible: Veterinaria Paw Centro.*
     timeout: 15000
 - copyTextFrom:
     id: place-row

@@ -1,6 +1,6 @@
 # Moving the map by hand turns "Mi ubicación" off and searches there; the button comes back to the
 # user at the smallest radius (5 km).
-appId: dev.pawmall.app
+appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
 - extendedWaitUntil:
