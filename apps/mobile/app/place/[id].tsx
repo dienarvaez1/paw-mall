@@ -15,6 +15,7 @@ import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { SECTION, SECTION_TITLE } from '@/components/section';
 import { ErrorState, SkeletonList } from '@/components/states';
+import { VerificationLine } from '@/components/verification';
 import { FavoriteButton } from '@/features/favorites/favorite-button';
 import {
   GoogleHours,
@@ -25,7 +26,7 @@ import {
 import { PetQuestionCard } from '@/features/pet-policy/pet-question';
 import { PolicyCard } from '@/features/pet-policy/policy-card';
 import { useReportPlace } from '@/features/reports/place-reports';
-import { formatClockTime, formatDate, formatMonthYear, formatWeekday } from '@/i18n/format';
+import { formatClockTime, formatLongDate, formatMonthYear, formatWeekday } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
 import { isPetFriendlyCategory } from '@/lib/categories';
@@ -133,7 +134,9 @@ function PlaceDetail({ place: p }: { place: Place }) {
           <Text className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
             {t('places.ownerVerified', { date: formatLongDate(p.ownerVerifiedOn, locale) })}
           </Text>
-        ) : null}
+        ) : (
+          <VerificationLine verification={p.verification} />
+        )}
       </View>
 
       <View className="mx-4 mt-4 border-t border-neutral-200 pt-4 dark:border-neutral-800">
@@ -299,12 +302,6 @@ function HoursSection({ place: p, googleHours }: { place: Place; googleHours: Go
       )}
     </View>
   );
-}
-
-/** An ISO date ("2026-10-05") in the long local format ("5 de octubre de 2026"). */
-function formatLongDate(isoDate: string, language: Parameters<typeof formatDate>[1]): string {
-  const [year, month, day] = isoDate.split('-').map(Number);
-  return formatDate(new Date(year ?? 1970, (month ?? 1) - 1, day ?? 1), language);
 }
 
 /**

@@ -11,6 +11,12 @@ export type Bindings = {
   GOOGLE_MONTHLY_LIMIT?: string;
   /** "Ver horario" lookups per user per day (default 5). */
   GOOGLE_DAILY_LOOKUPS?: string;
+  /** Cloudflare's rate limiter for writes (wrangler.toml [[ratelimits]]); absent in tests. */
+  WRITE_LIMITER?: RateLimit;
+  /** "off" turns the write rate limit off (end-to-end runs post many answers in a row). */
+  WRITE_RATE_LIMIT?: string;
+  /** Browser origins allowed by CORS, comma-separated (Expo web in development). */
+  CORS_ORIGINS?: string;
 };
 
 export type Variables = {

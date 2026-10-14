@@ -7,7 +7,8 @@ import app from '../../index';
 
 const sql = postgres(TEST_DATABASE_URL, { max: 1, onnotice: () => {} });
 // Far from any real place (in the Pacific), so only these test places are near.
-const AT = { lat: 2, lng: -131 };
+// Its own spot: importer tests put places (some with partial hours) around -131 in parallel.
+const AT = { lat: 2, lng: -137 };
 
 type Policy = {
   dogs: boolean | null;
@@ -134,7 +135,7 @@ describe('pet-friendly filter', () => {
     const [row] = await sql<{ id: number }[]>`
       INSERT INTO places (source, external_id, name, address, city, state, location)
       VALUES ('osm', 'test-pets-osm', 'Parque canino', 'Col. Prueba', 'Ciudad', 'Estado',
-              ST_SetSRID(ST_MakePoint(-131, 3), 4326)::geography)
+              ST_SetSRID(ST_MakePoint(-137, 3), 4326)::geography)
       RETURNING id`;
     await sql`
       INSERT INTO pet_policies (place_id, dogs, max_dog_size, source, source_name, source_url,
@@ -142,7 +143,7 @@ describe('pet-friendly filter', () => {
       VALUES (${row!.id}, true, 'large', 'osm', 'OpenStreetMap',
               'https://www.openstreetmap.org/node/1', '2026-10-11')`;
     const response = await app.request(
-      '/v1/places?lat=3&lng=-131&radiusKm=1&petFriendly=true',
+      '/v1/places?lat=3&lng=-137&radiusKm=1&petFriendly=true',
       {},
       testEnv,
     );

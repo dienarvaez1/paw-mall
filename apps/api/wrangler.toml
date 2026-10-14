@@ -15,3 +15,13 @@ DATABASE_URL = "postgres://paw:paw@localhost:5434/paw_mall"
 # locally (see docs/GOOGLE-PLACES.md); without it the feature says hours are unavailable.
 GOOGLE_MONTHLY_LIMIT = "950"
 GOOGLE_DAILY_LOOKUPS = "5"
+# Browser origins allowed to call the API (Expo web); the phone app sends no Origin and needs none.
+CORS_ORIGINS = "http://localhost:8081,http://localhost:19006"
+
+# Writes (reports, claims, answers, Google lookups) per user and minute, keyed by a hash of the IP
+# that only the limiter counts in memory (see src/middleware/rate-limit.ts). Simulated locally by
+# `wrangler dev`; a deployed Worker would use Cloudflare's, at no cost.
+[[ratelimits]]
+name = "WRITE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 20, period = 60 }

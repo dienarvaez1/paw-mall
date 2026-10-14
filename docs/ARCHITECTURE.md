@@ -47,12 +47,21 @@ Drizzle schema in `apps/api/src/db/schema.ts`, SQL migrations in `apps/api/src/d
 **Reporter privacy:** reports and answers store only the reason and a random id the app generates;
 never the phone's location, IP, name or contact.
 
+**Verification:** every place in the API carries `verification` (`packages/shared/src/verification.ts`),
+worked out in SQL from the data above, first match wins: `needs_review` (a report, or a disputed
+pet policy), `owner_verified`, `community_confirmed` (users' pet policy), `website_verified` (its
+website answered a check within a year), `listed` (only a directory says so), with the date of
+the evidence.
+
 **Visibility:** queries only return places where `hidden_at IS NULL`. Reports and confirmed
 closures hide a place; the owner-review commands (`pnpm places:reports`, `places:claims`) decide.
 
 ## API (`apps/api`)
 
-Hono app (`src/index.ts`) with CORS, `/health` and `/v1`. Routes parse their input with the shared
+Hono app (`src/index.ts`) with CORS for the browser origins in `CORS_ORIGINS` only (Expo web; the
+phone app sends no Origin), a write rate limit (`middleware/rate-limit.ts`: Cloudflare's rate
+limiter, 20 writes per minute per user keyed by a hashed IP that's never stored; at most 3 pending
+claims per place), `/health` and `/v1`. Routes parse their input with the shared
 Zod schemas (`lib/http.ts` → `parseInput`) and return typed JSON; errors use a shared error shape.
 Responses are localized by `Accept-Language` (`es` default, `en`).
 
@@ -103,6 +112,7 @@ Each loader is a command (`pnpm places:*`), safe to re-run, writing to the same 
 | 7     | `places:chains`                                      | Chain-wide pet policies (`data/pet-friendly-chains.json`)                                               |
 | —     | `places:landmarks`                                   | Refreshes the Wikidata landmarks snapshot                                                               |
 | —     | `places:claims`, `places:reports`, `places:policies` | Owner review of claims, reports and policy answers                                                      |
+| —     | `places:integrity`                                   | Read-only data-integrity report: duplicates, bad coordinates or hours, Urgencias gaps, stale data       |
 | —     | `e2e:seed`                                           | The fixed test data for end-to-end tests (`paw_mall_e2e`)                                               |
 
 The importers exclude cruelty-linked businesses (puppy mills, slaughterhouses, butchers) by

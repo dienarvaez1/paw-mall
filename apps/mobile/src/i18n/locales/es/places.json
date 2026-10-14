@@ -270,5 +270,13 @@
     },
     "hint": "Busca alrededor de este lugar",
     "businessHint": "Abre la página de este lugar"
+  },
+  "verification": {
+    "needs_review": "En revisión: usuarios reportaron este lugar o su política de mascotas",
+    "community_confirmed": "Confirmado por usuarios de Paw Mall",
+    "website_verified": "Confirmado en su propio sitio web",
+    "listed": "De un directorio público; sin confirmar",
+    "checkedOn": "{{label}} · revisado el {{date}}",
+    "callFirst": "Llama antes de ir: el dueño no ha confirmado estos datos."
   }
 }

@@ -13,6 +13,12 @@ export function formatDate(date: Date, language: Locale): string {
   return new Intl.DateTimeFormat(intlLocale(language), { dateStyle: 'long' }).format(date);
 }
 
+/** An ISO date ("2026-10-05") in the long local format ("5 de octubre de 2026"). */
+export function formatLongDate(isoDate: string, language: Locale): string {
+  const [year, month, day] = isoDate.split('-').map(Number);
+  return formatDate(new Date(year ?? 1970, (month ?? 1) - 1, day ?? 1), language);
+}
+
 const DISTANCE_SYMBOLS = { km: 'km', mi: 'mi' } as const;
 
 /**

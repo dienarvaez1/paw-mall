@@ -127,4 +127,18 @@ describe('POST /v1/places/:id/claims', () => {
       (await post(`/v1/places/${placeId}/claims`, { ...contact, phone: '5512345678' })).status,
     ).toBe(400);
   });
+
+  it('refuses more than 3 pending claims on one place until they are reviewed', async () => {
+    const id = await addPlace();
+    const claim = { phone: '55 1234 5678', contactName: 'Ana', contact: 'ana@example.com' };
+    for (let i = 0; i < 3; i += 1) {
+      expect((await post(`/v1/places/${id}/claims`, { ...claim, consent: true })).status).toBe(201);
+    }
+    const refused = await post(`/v1/places/${id}/claims`, { ...claim, consent: true });
+    expect(refused.status).toBe(429);
+    expect(await refused.json()).toEqual({ error: { code: 'RATE_LIMITED' } });
+
+    await sql`UPDATE place_claims SET status = 'rejected' WHERE place_id = ${id}`;
+    expect((await post(`/v1/places/${id}/claims`, { ...claim, consent: true })).status).toBe(201);
+  });
 });

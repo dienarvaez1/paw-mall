@@ -12,6 +12,7 @@
     "test": "vitest run",
     "claims": "node src/review/claims-cli.ts",
     "reports": "node src/review/reports-cli.ts",
+    "integrity": "node src/review/integrity-cli.ts",
     "areas": "node src/areas/cli.ts",
     "landmarks": "node src/areas/wikidata-cli.ts",
     "curated": "node src/curated/cli.ts",

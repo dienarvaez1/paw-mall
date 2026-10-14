@@ -6,6 +6,7 @@ import { Pressable, Text, useColorScheme, View } from 'react-native';
 import { CategoryBadge } from '@/components/category-badge';
 import { ICONS } from '@/components/icons';
 import { OpenStatus } from '@/components/open-status';
+import { UrgentVerificationNote } from '@/components/verification';
 import { usePolicySummary } from '@/features/pet-policy/policy-text';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatDistance } from '@/i18n/format';
@@ -63,12 +64,15 @@ export function PlaceRow({
   away = true,
   showPolicy = false,
   highlight = false,
+  urgent = false,
 }: {
   place: Place;
   selected: ChipCategory;
   away?: boolean;
   showPolicy?: boolean;
   highlight?: boolean;
+  /** Urgencias: say to call first unless the owner verified the details. */
+  urgent?: boolean;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
@@ -120,6 +124,7 @@ export function PlaceRow({
             {t('places.pets.ask.rowUnknown')}
           </Text>
         ) : null}
+        {urgent ? <UrgentVerificationNote verification={place.verification} /> : null}
         <View className="flex-row items-center gap-2">
           <View className="flex-1">
             <OpenStatus place={place} small />

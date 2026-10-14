@@ -64,7 +64,8 @@ export const placesRoute = new Hono<AppEnv>()
     const place = await getPlace(c.var.db, params.data.id, c.var.locale);
     return place ? c.json(place) : errorResponse(c, 404, 'PLACE_NOT_FOUND');
   })
-  // Reports carry only a reason and the app's random id; nothing about the phone is read or kept.
+  // Reports carry only a reason and the app's random id; nothing about the phone is kept (the rate
+  // limiter counts a hash of the IP in memory only).
   .post('/:id/reports', async (c) => {
     const params = parseInput(c, idParamSchema, c.req.param());
     if (!params.ok) return params.response;
@@ -84,7 +85,9 @@ export const placesRoute = new Hono<AppEnv>()
     if (!(await getPlace(c.var.db, params.data.id, c.var.locale))) {
       return errorResponse(c, 404, 'PLACE_NOT_FOUND');
     }
-    await createClaim(c.var.db, params.data.id, claim.data);
+    if (!(await createClaim(c.var.db, params.data.id, claim.data))) {
+      return errorResponse(c, 429, 'RATE_LIMITED');
+    }
     return c.json<Received>({ received: true }, 201);
   })
   // Confirm or dispute a pet policy: only the answer and the app's random id are read or kept.
