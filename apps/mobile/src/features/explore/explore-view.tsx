@@ -136,13 +136,20 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
     choice: placeChoice,
     choosePlace,
     askAboutPlace,
+    confirmBusinessName,
   } = usePlaceChoice(text, setText, setNearMe, setFocus);
   const queryClient = useQueryClient();
   const locale = useLocale();
   const { coords } = useUserLocation();
+  // The search key: a place's name asks how to read it; any other text ("Tlaxcala Casona") is
+  // confirmed as a business-name search, so the tab and radius fit its matches (search-fit.ts).
   const submitSearch = useCallback(() => {
     const q = text.trim();
-    if (q.length < MIN_PLACE_LOOKUP || placeChoice?.text === q) return;
+    if (!q || placeChoice?.text === q) return;
+    if (q.length < MIN_PLACE_LOOKUP) {
+      confirmBusinessName(q);
+      return;
+    }
     void queryClient
       .fetchQuery({
         queryKey: ['area-lookup', locale, q],
@@ -152,9 +159,10 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
       })
       .then(({ area }) => {
         if (area) askAboutPlace(area);
+        else confirmBusinessName(q);
       })
       .catch(() => {});
-  }, [text, placeChoice, queryClient, locale, coords, askAboutPlace]);
+  }, [text, placeChoice, queryClient, locale, coords, askAboutPlace, confirmBusinessName]);
   const searchText = text.trim();
   const value = useMemo(
     () => ({
@@ -218,6 +226,7 @@ function usePlaceChoice(
   choice: PlaceChoice | null;
   choosePlace: (place: Pick<SearchArea, 'name' | 'kind'>) => void;
   askAboutPlace: (place: Pick<SearchArea, 'name' | 'kind'>) => void;
+  confirmBusinessName: (text: string) => void;
 } {
   const { t } = useAppTranslation();
   const [choice, setChoice] = useState<PlaceChoice | null>(null);
@@ -258,7 +267,13 @@ function usePlaceChoice(
     },
     [t, answer, setNearMe],
   );
-  return { choice, choosePlace, askAboutPlace };
+  // Text that isn't a place's name, sent with the search key: a business-name search, confirmed
+  // as is ("Mi ubicación" and the circle stay as they are).
+  const confirmBusinessName = useCallback((name: string) => {
+    setChoice({ text: name, asPlace: false });
+    Keyboard.dismiss();
+  }, []);
+  return { choice, choosePlace, askAboutPlace, confirmBusinessName };
 }
 
 export function useExploreView(): ExploreView {

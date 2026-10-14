@@ -37,7 +37,7 @@ flow taps "Ver horario" (each Google answer uses part of the free monthly allowa
 3. The API on the test data: `pnpm --filter api dev:e2e` (port **8788**).
 4. A Metro server that points the app at it: `pnpm --filter mobile e2e:metro` (port **8084**,
    `EXPO_PUBLIC_API_URL=http://10.0.2.2:8788`; 10.0.2.2 is the Mac as the emulator sees it).
-5. `pnpm --filter mobile e2e` (24 flows, about 25 minutes) or
+5. `pnpm --filter mobile e2e` (25 flows, about 25 minutes) or
    `maestro test apps/mobile/.maestro/favorites.yaml` (one).
 
 `common/launch.yaml` starts every flow the same way: GPS at the Zócalo, the app's data cleared,
@@ -67,6 +67,7 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | Search       | A confirmed search closes the radius in to its matches (15 km → 5 km)      | `search-zoom`             |
 | Search       | Nothing inside the radius → it opens out to the nearest match (5 → 10 km)  | `search-zoom-out`         |
 | Search       | Only the other tab finds the name → it takes the focus                     | `search-section`          |
+| Search       | Other text + search key fits too ("Paw Tlaxcala": 5 → 160 km)              | `search-typed-fit`        |
 | Search       | ✕ clears the text and the full list comes back                             | `search-clear`            |
 | Explore      | Map and List count the same places                                         | `map-list`                |
 | Explore      | A category chip narrows the list; Todos brings everything back             | `chips`                   |
@@ -88,7 +89,7 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | Ajustes      | Kilómetros → Millas: distances and radius in miles                         | `settings-units`          |
 | States       | No connection → offline banner; back online → the app loads again          | `offline`                 |
 
-All 28 journeys covered by 24 flows. Not covered: the API itself down while the phone is online
+All 29 journeys covered by 25 flows. Not covered: the API itself down while the phone is online
 (only reachable by stopping the server; the offline flow covers the same error path), the
 cruelty report (same form as "closed"), and anything on iOS.
 
