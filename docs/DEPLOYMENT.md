@@ -39,7 +39,7 @@ checked) · **Blocked**.
 | 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
 | 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
 | 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | —   | In review | 2026-10-13 | —          |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | In review | 2026-10-13 | —          |
 
 ## Pending owner reviews
 
@@ -867,7 +867,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 
 - **Scope:** recommendations 1–4 of an external review (`Paw_Mall_Project_Review.pdf`, 2026-10-13):
   rate limits on writes, CORS, a data-integrity report, a verification status per place.
-- **Branch / PR:** `phase-11/hardening` / —
+- **Branch / PR:** `phase-11/hardening` / #18
 - **Status:** In review.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
@@ -936,4 +936,4 @@ Play readiness").
 | 2026-10-12 | Phase 10 merged (`d7384e2`)                                  | #14 |
 | 2026-10-13 | UI refresh, end-to-end tests and CI merged (`ed5c432`)       | #16 |
 | 2026-10-13 | Project documentation started (`docs/project-documentation`) | —   |
-| 2026-10-13 | Phase 11 started                                             | —   |
+| 2026-10-13 | Phase 11 started                                             | #18 |
