@@ -36,6 +36,7 @@ pnpm places:areas             # colonias, cities and landmarks for the search bo
 pnpm places:curated           # hand-collected pet-friendly places
 pnpm places:osm               # OpenStreetMap dog parks and venues (--refresh for a new snapshot)
 pnpm places:osm-hours         # OpenStreetMap opening hours
+pnpm places:osm-phones        # OpenStreetMap phones for vets without one
 pnpm places:chains            # chain-wide pet policies
 ```
 

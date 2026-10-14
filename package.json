@@ -29,6 +29,7 @@
     "places:landmarks": "pnpm --filter @paw-mall/importers landmarks",
     "places:osm": "pnpm --filter @paw-mall/importers osm",
     "places:osm-hours": "pnpm --filter @paw-mall/importers osm-hours",
+    "places:osm-phones": "pnpm --filter @paw-mall/importers osm-phones",
     "places:chains": "pnpm --filter @paw-mall/importers chains",
     "e2e:seed": "pnpm --filter @paw-mall/importers e2e-seed",
     "load": "k6 run apps/api/load/places.js"

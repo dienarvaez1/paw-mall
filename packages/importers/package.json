@@ -19,6 +19,7 @@
     "policies": "node src/review/policies-cli.ts",
     "osm": "node src/osm/cli.ts",
     "osm-hours": "node src/osm/hours-cli.ts",
+    "osm-phones": "node src/osm/phones-cli.ts",
     "chains": "node src/chains/cli.ts",
     "e2e-seed": "node src/e2e/cli.ts"
   },

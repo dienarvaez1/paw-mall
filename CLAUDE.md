@@ -71,7 +71,8 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 - Pet-friendly and hours: after `pnpm places:import`, run `pnpm places:curated` (hand-collected
   places), `pnpm places:osm` (OpenStreetMap dog parks and venues, snapshot
   `data/osm-dogs.json`), `pnpm places:osm-hours` (OpenStreetMap opening hours, snapshot
-  `data/osm-hours.json`) and `pnpm places:chains` (chain-wide policies,
+  `data/osm-hours.json`), `pnpm places:osm-phones` (OpenStreetMap phones for vets without one,
+  snapshot `data/osm-vet-phones.json`) and `pnpm places:chains` (chain-wide policies,
   `data/pet-friendly-chains.json`). `--refresh` fetches a new OpenStreetMap snapshot. The website
   check also reads hours and "pet friendly" wording from each homepage.
 - Landmarks: `pnpm places:landmarks` refreshes the committed Wikidata snapshot

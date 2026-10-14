@@ -244,6 +244,7 @@
     }
   },
   "sourceOsm": "Datos: © colaboradores de OpenStreetMap (ODbL).",
+  "sourceOsmPhone": "Teléfono: © colaboradores de OpenStreetMap (ODbL).",
   "searchUnconfirmed": "Buscar también en lugares sin confirmar",
   "widenedAuto": "Ningún lugar confirmado coincide con «{{query}}». Estos aún no tienen política de mascotas: abre uno y dinos si las acepta.",
   "introExplore": "Todo lo que tu peludo necesita, cerca de ti: veterinarias, estéticas, tiendas y más. Busca, filtra y llega directo, sin dar vueltas.",

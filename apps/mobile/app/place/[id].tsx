@@ -214,6 +214,11 @@ function PlaceDetail({ place: p }: { place: Place }) {
               {t('places.sourceOverture')}
             </Text>
           ) : null}
+          {p.phoneSource === 'osm' ? (
+            <Text className="text-xs text-neutral-500 dark:text-neutral-400">
+              {t('places.sourceOsmPhone')}
+            </Text>
+          ) : null}
         </View>
       ) : null}
       {p.source === 'curated' ? (

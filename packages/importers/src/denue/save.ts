@@ -60,10 +60,10 @@ export async function saveDenuePlaces(
             // Owner-verified values win; then DENUE's; an Overture value stays when DENUE has none.
             phone: sql`CASE WHEN places.owner_verified_at IS NOT NULL THEN places.phone
               WHEN excluded.phone IS NOT NULL THEN excluded.phone
-              WHEN places.phone_source = 'overture' THEN places.phone END`,
+              WHEN places.phone_source IN ('overture', 'osm') THEN places.phone END`,
             phoneSource: sql`CASE WHEN places.owner_verified_at IS NOT NULL THEN places.phone_source
               WHEN excluded.phone IS NOT NULL THEN 'denue'
-              WHEN places.phone_source = 'overture' THEN 'overture' END`,
+              WHEN places.phone_source IN ('overture', 'osm') THEN places.phone_source END`,
             website: sql`CASE WHEN places.owner_verified_at IS NOT NULL THEN places.website
               WHEN excluded.website IS NOT NULL THEN excluded.website
               WHEN places.website_source = 'overture' THEN places.website END`,
