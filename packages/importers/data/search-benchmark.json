@@ -438,6 +438,121 @@
       "relevant": {}
     },
     {
+      "id": "service-place-vet-mascota",
+      "q": "veterinaria mascota",
+      "near": "cdmx-zocalo",
+      "mode": "place",
+      "tags": ["geo", "multi-token", "service-in-place"],
+      "expectArea": {
+        "name": "Mascota",
+        "state": "Jalisco"
+      },
+      "judge": {
+        "lat": 20.5257,
+        "lng": -104.7884,
+        "radiusKm": 5
+      },
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"]
+      },
+      "note": "A kind of business in a place, either order: what the app sends after \"En Mascota\" (Phase 19)."
+    },
+    {
+      "id": "service-place-mascota-vet",
+      "q": "mascota veterinaria",
+      "near": "cdmx-zocalo",
+      "mode": "place",
+      "tags": ["geo", "multi-token", "service-in-place"],
+      "expectArea": {
+        "name": "Mascota",
+        "state": "Jalisco"
+      },
+      "judge": {
+        "lat": 20.5257,
+        "lng": -104.7884,
+        "radiusKm": 5
+      },
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"]
+      },
+      "note": "A kind of business in a place, either order: what the app sends after \"En Mascota\" (Phase 19)."
+    },
+    {
+      "id": "service-place-vet-en-mascota",
+      "q": "veterinaria en Mascota",
+      "near": "cdmx-zocalo",
+      "mode": "place",
+      "tags": ["geo", "multi-token", "service-in-place"],
+      "expectArea": {
+        "name": "Mascota",
+        "state": "Jalisco"
+      },
+      "judge": {
+        "lat": 20.5257,
+        "lng": -104.7884,
+        "radiusKm": 5
+      },
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"]
+      },
+      "note": "A kind of business in a place, either order: what the app sends after \"En Mascota\" (Phase 19)."
+    },
+    {
+      "id": "service-place-vet-tlaxcala",
+      "q": "vet tlaxcala",
+      "near": "puebla",
+      "mode": "place",
+      "tags": ["geo", "multi-token", "service-in-place"],
+      "expectArea": {
+        "name": "Tlaxcala",
+        "state": "Tlaxcala"
+      },
+      "judge": {
+        "lat": 19.3152,
+        "lng": -98.2364,
+        "radiusKm": 5
+      },
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"]
+      },
+      "note": "Not ambiguous near Puebla: the app goes straight to Tlaxcala (Phase 19)."
+    },
+    {
+      "id": "exact-vet-mi-mascota",
+      "q": "veterinaria mi mascota",
+      "near": "cdmx-zocalo",
+      "mode": "exact",
+      "radiusKm": 10,
+      "tags": ["known-item", "service-in-place"],
+      "relevant": {
+        "nameWords": ["veterinaria", "mi", "mascota"]
+      },
+      "note": "\"By that name\" after the question: names with every word, around the user (Phase 19)."
+    },
+    {
+      "id": "place-words-tacos-vallarta",
+      "q": "puerto vallarta taco",
+      "near": "cdmx-zocalo",
+      "mode": "place",
+      "group": "pet_friendly",
+      "widened": true,
+      "tags": ["geo", "multi-token", "place-words"],
+      "expectArea": {
+        "name": "Puerto Vallarta",
+        "state": "Jalisco"
+      },
+      "judge": {
+        "lat": 20.6521,
+        "lng": -105.2246,
+        "radiusKm": 5
+      },
+      "relevant": {
+        "categories": ["restaurant", "cafe"],
+        "nameWords": ["taco"]
+      },
+      "note": "Owner's report (2026-10-14): a place with any other words goes there. No confirmed policy there, so Pet-friendly widens."
+    },
+    {
       "id": "pf-cafe-condesa",
       "q": "café",
       "near": "cdmx-condesa",
@@ -482,6 +597,29 @@
         "categories": ["park"],
         "takesPets": true
       }
+    },
+    {
+      "id": "neg-pf-vet-tlaxcala",
+      "q": "Tlaxcala vet",
+      "near": "puebla",
+      "mode": "place",
+      "group": "pet_friendly",
+      "tags": ["negative", "geo", "service-in-place"],
+      "expectArea": {
+        "name": "Tlaxcala",
+        "state": "Tlaxcala"
+      },
+      "relevant": null,
+      "note": "Owner's rule (2026-10-14): a vet search finds nothing on Pet-friendly; Explorar shows Tlaxcala's vets."
+    },
+    {
+      "id": "neg-pf-vet",
+      "q": "vet",
+      "near": "cdmx-condesa",
+      "group": "pet_friendly",
+      "tags": ["negative"],
+      "relevant": null,
+      "note": "Owner's rule (2026-10-14): no venue is a vet."
     },
     {
       "id": "neg-puppy-mill",

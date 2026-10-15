@@ -47,6 +47,7 @@ checked) · **Blocked**.
 | 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done      | 2026-10-14 | 2026-10-14 |
 | 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done      | 2026-10-14 | 2026-10-14 |
 | 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | In review | 2026-10-14 | —          |
+| 19    | Place with words      | `phase-19/service-in-place`  | #34 | In review | 2026-10-14 | —          |
 
 ## Pending owner reviews
 
@@ -1189,6 +1190,55 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - A town named like a pet word (Mascota, Jalisco) typed after a keyword ("veterinaria
     mascota") loses the town; picking it from the suggestions still works.
 
+### Phase 19 — A place with other words
+
+- **Scope:** the owner's examples (2026-10-14): "veterinaria mascota" and "mascota veterinaria"
+  should find the vets in Mascota, Jalisco, and "puerto vallarta taco" found nothing.
+- **Branch / PR:** `phase-19/service-in-place` / #34, stacked on Phase 18 (#33), which isn't
+  merged yet.
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 373 tests (shared 41, mobile 97, api 111, importers 124)
+  - [x] `pnpm search:bench`: 49 queries (47 after the place-with-words change), 0 of 41 regressed against Phase 18's baseline; the six new
+        ones score 90–100% (both orders and "veterinaria en Mascota" find Mascota's 4 vets; "vet
+        tlaxcala" from Puebla; "veterinaria mi mascota" by name; "puerto vallarta taco" 9 of 10);
+        precision@10 99%, recall@10 97%; new baseline committed (`ac3cc90`)
+  - [x] Android emulator (new release build): full run 29 of 30 passed; `search-typed-fit` failed
+        on its example (below) and passes with the new one (twice); new flow `service-in-place`
+        passes (three times)
+- **What changed:**
+  1. **API:** `GET /v1/places/area` also reads a place with other words in any order ("X Y", "Y
+     X", "X en Y"), returning the place, the other words (`business`), the kind of business they
+     name (`category`) and `ambiguous`: a business within 25 miles of the user has every word in
+     its name, or the place's name is a pet word ("Mascota"). The list and map already read such
+     texts when they aren't sent as names only.
+  2. **App:** with the search key, a place with other words goes straight there; when ambiguous it
+     asks "¿Qué buscas?": **En Mascota** or **Con ese nombre**. "By that name" sends `exactWords`:
+     every word in names, no keyword read as a category.
+  3. **Old rule changed:** typed text with a place in it ("Tlaxcala Casona", owner's example of
+     2026-10-13) was a business-name search around the user; now it goes to the place, unless a
+     business near the user has those words (then it asks).
+  4. **Benchmark:** `exact` mode, a `widened` option (Pet-friendly's fallback to unconfirmed
+     venues) and six queries.
+  5. **Flows:** new `service-in-place` (both orders, and "Paw Tlaxcala"); `search-typed-fit` now
+     types "forrajeria" (no place in it; 5 → 10 km).
+  6. **A pet-business keyword finds nothing on Pet-friendly** (owner's rule, 2026-10-14): "vet",
+     "Tlaxcala vet" and similar list no venue (they used to list every pet-friendly venue in
+     Tlaxcala, the keyword dropped); Explorar lists Tlaxcala's vets, and the app's tab pick moves
+     there. Venue words on Explorar ("hotel") still read as words in names ("Hotel Canino"). Two
+     negative benchmark queries; 9 search flows pass on the emulator against it.
+- **Notes:**
+  - "veterinaria mascota" always asks: "Mascota" is also a pet word, and 70 vets within 25 km of
+    the Zócalo have both words in their names.
+  - Puerto Vallarta has no confirmed pet-friendly taco place, so Pet-friendly shows unconfirmed
+    ones with its usual notice, and the app switches to Pet-friendly (it finds more).
+  - `search-typed-fit`'s first new example, "forrajeria paw", also matched "Café Perruno Paw", so
+    the app rightly switched to Pet-friendly; "forrajeria" alone matches nothing nearby on either
+    tab.
+  - The Android keyboard can swap in its suggestion when Enter is pressed mid-word; the flows type
+    a trailing space. The emulator crashed twice during builds; cold boots fixed it.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -1242,3 +1292,4 @@ Play readiness").
 | 2026-10-14 | Phase 17 started                                             | #31 |
 | 2026-10-14 | Phase 17 merged (`998af42`)                                  | #31 |
 | 2026-10-14 | Phase 18 started                                             | #33 |
+| 2026-10-14 | Phase 19 started                                             | #34 |

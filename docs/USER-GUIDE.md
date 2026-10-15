@@ -81,7 +81,13 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
   - **As a place** — search around Guadalajara (moving the map lets go of it, as above).
   - **As a business name** — businesses called "Guadalajara" near you.
   - **Cancel** — keep editing.
-- **Other text with the search key** (e.g. "Tlaxcala Casona", not a place's name): searched as
+- **A place with other words and the search key** ("veterinaria Tlaxcala", "Tlaxcala
+  veterinaria", "veterinaria en Mascota", "puerto vallarta taco"): the search goes to the place
+  and looks for those words or that kind of business there. When it could also be a business's
+  name (a business near you has all those words in its name, or the place's name is a word like
+  "Mascota"), the app asks first: **In Mascota** or **By that name** (every word, in names, near
+  you).
+- **Other text with the search key** (no place in it, e.g. "forrajeria"): searched as
   business names, with no question; it counts as confirmed for the two points below.
 - **The radius fits a confirmed search** (a place picked from the suggestions, the question
   answered, or other text sent with the search key): it closes in to the smallest preset that still holds every match, or, when nothing
@@ -97,6 +103,8 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 ### Pet-friendly specifics
 
+- Searching for a kind of pet business ("vet", "Tlaxcala vet", "estética") finds nothing on
+  Pet-friendly, since no venue is one; Explorar lists them, and the app switches there.
 - By default only places **confirmed** to take pets show, filtered by **your pet** (Settings →
   My pet: dog or cat, and your dog's size).
 - When nothing confirmed matches a search, it **widens** to venues nobody has answered for yet,

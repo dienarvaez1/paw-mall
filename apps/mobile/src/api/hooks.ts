@@ -10,7 +10,7 @@ import {
 } from '@paw-mall/shared';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import { readsAsPlace, useExploreView } from '@/features/explore/explore-view';
+import { searchReading, useExploreView } from '@/features/explore/explore-view';
 import { useUserLocation } from '@/features/location/location-context';
 import { startRadiusKm, toKm } from '@/features/settings/radius';
 import { usePlaceFilters, useSettings } from '@/features/settings/settings-context';
@@ -63,7 +63,7 @@ export function usePlaces(
   const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
   const areaRadiusKm = pickedKm ?? presetAreaRadiusKm;
   // Business names only, unless the user picked a place and said to search around it.
-  const namesOnly = name !== '' && !readsAsPlace(placeChoice, name);
+  const reading = searchReading(placeChoice, name);
   return useInfiniteQuery({
     queryKey: [
       'places',
@@ -74,7 +74,7 @@ export function usePlaces(
       category,
       group,
       name,
-      namesOnly,
+      reading,
       areaRadiusKm,
     ],
     initialPageParam: 1,
@@ -88,7 +88,7 @@ export function usePlaces(
           group,
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,
-          namesOnly: namesOnly || undefined,
+          ...reading,
           fixedAreaRadius: (name && pickedKm !== null) || undefined,
           // A busy city's circle in the user's units, so the radius button shows it as a preset.
           cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,
@@ -118,13 +118,13 @@ export function useSectionReach(coords: Coords, name: string, enabled: boolean) 
   const presetAreaRadiusKm = useAreaRadiusKm();
   const { placeChoice, areaRadius } = useExploreView();
   const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
-  const namesOnly = name !== '' && !readsAsPlace(placeChoice, name);
+  const reading = searchReading(placeChoice, name);
   const search = {
     ...coords,
     radiusKm: settings.radiusKm,
     q: name || undefined,
     areaRadiusKm: name ? (pickedKm ?? presetAreaRadiusKm) : undefined,
-    namesOnly: namesOnly || undefined,
+    ...reading,
     fixedAreaRadius: (name && pickedKm !== null) || undefined,
     cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,
     pageSize: 1,
@@ -190,7 +190,7 @@ export function usePlacesMap(
   const pickedKm = areaRadius && areaRadius.text === name ? areaRadius.km : null;
   const areaRadiusKm = pickedKm ?? presetAreaRadiusKm;
   // Business names only, unless the user picked a place and said to search around it.
-  const namesOnly = name !== '' && !readsAsPlace(placeChoice, name);
+  const reading = searchReading(placeChoice, name);
   return useQuery({
     queryKey: [
       'places-map',
@@ -203,7 +203,7 @@ export function usePlacesMap(
       category,
       group,
       name,
-      namesOnly,
+      reading,
       settings.mapPinLimit,
     ],
     enabled: area !== null,
@@ -221,7 +221,7 @@ export function usePlacesMap(
           // The search box, as in the list (see usePlaces).
           q: name || undefined,
           areaRadiusKm: name ? areaRadiusKm : undefined,
-          namesOnly: namesOnly || undefined,
+          ...reading,
           fixedAreaRadius: (name && pickedKm !== null) || undefined,
           // A busy city's circle in the user's units, so the radius button shows it as a preset.
           cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,

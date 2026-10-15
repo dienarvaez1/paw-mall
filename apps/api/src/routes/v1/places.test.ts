@@ -173,8 +173,11 @@ describe('GET /v1/places search and filters', () => {
       total: 0,
       searchCategory: null,
     });
-    // On Pet-friendly, vets aren't a category there: "vet" is searched in names.
-    expect(await parse('q=vet&group=pet_friendly')).toMatchObject({ searchCategory: null });
+    // On Pet-friendly, no venue is a vet: "vet" finds nothing (owner's rule, 2026-10-14).
+    expect(await parse('q=vet&group=pet_friendly')).toMatchObject({
+      total: 0,
+      searchCategory: 'veterinarian',
+    });
   });
 
   it('matches a short word only at the start of a word, a longer one anywhere', async () => {

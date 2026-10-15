@@ -37,7 +37,7 @@ flow taps "Ver horario" (each Google answer uses part of the free monthly allowa
 3. The API on the test data: `pnpm --filter api dev:e2e` (port **8788**).
 4. A Metro server that points the app at it: `pnpm --filter mobile e2e:metro` (port **8084**,
    `EXPO_PUBLIC_API_URL=http://10.0.2.2:8788`; 10.0.2.2 is the Mac as the emulator sees it).
-5. `pnpm --filter mobile e2e` (29 flows, about 12 minutes on the release build) or
+5. `pnpm --filter mobile e2e` (30 flows, about 12 minutes on the release build) or
    `maestro test apps/mobile/.maestro/favorites.yaml` (one).
 
 `common/launch.yaml` starts every flow the same way: GPS at the Zócalo, the app's data cleared,
@@ -98,7 +98,9 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | Search       | A confirmed search closes the radius in to its matches (15 km → 5 km)      | `search-zoom`             |
 | Search       | Nothing inside the radius → it opens out to the nearest match (5 → 10 km)  | `search-zoom-out`         |
 | Search       | Only the other tab finds the name → it takes the focus                     | `search-section`          |
-| Search       | Other text + search key fits too ("Paw Tlaxcala": 5 → 160 km)              | `search-typed-fit`        |
+| Search       | Other text + search key fits too ("forrajeria": 5 → 10 km)                 | `search-typed-fit`        |
+| Search       | A kind of business + a place, either order, goes there with no question    | `service-in-place`        |
+| Search       | A place + any words ("Paw Tlaxcala") goes there, not a 160 km name search  | `service-in-place`        |
 | Search       | Moving the map lets go of a picked place: box empties, "Mi ubicación" off  | `search-pan`              |
 | Urgencias    | Names its circle as the map does, after a pan and a visit to the other tab | `urgent-sync`             |
 | Search       | After a search, switching tabs keeps the same circle (no second fit)       | `maps-sync`               |
@@ -125,7 +127,7 @@ The measure of UI coverage: each journey a user can take, and the flow that chec
 | States       | No connection → offline banner; back online → the app loads again          | `offline`                 |
 | States       | Online but the API down → "No pudimos conectar con el servidor" and retry  | `api-down/api-down`       |
 
-All 34 journeys covered by 30 flows (29 in the main run, plus `api-down`), on Android; on iOS
+All 36 journeys covered by 31 flows (30 in the main run, plus `api-down`), on Android; on iOS
 (Expo Go) all but `offline`. Not covered: the development build on iOS (Expo Go stands in for it),
 and a database outage behind a running API (covered by the API's tests, `database-down.test.ts`).
 
