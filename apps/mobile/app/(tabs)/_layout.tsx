@@ -5,12 +5,15 @@ import { Keyboard, Modal, Pressable, Text, View, useColorScheme } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ICONS } from '@/components/icons';
+import { visibleTabs } from '@/features/disclaimer/disclaimer';
+import { useDisclaimer } from '@/features/disclaimer/disclaimer-context';
 import { ExploreFrameProvider, useExploreFrameHeight } from '@/features/explore/explore-frame';
 import { ExploreScreen } from '@/features/explore/explore-screen';
 import { ExploreViewProvider } from '@/features/explore/explore-view';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 
-type TabIconName = 'tab-explore' | 'tab-pets' | 'tab-urgent' | 'tab-favorites' | 'tab-settings';
+type TabIconName =
+  'tab-explore' | 'tab-pets' | 'tab-urgent' | 'tab-favorites' | 'tab-settings' | 'tab-notice';
 
 function TabIcon({ name, color }: { name: TabIconName; color: string }) {
   return <Image source={ICONS[name]} style={{ width: 26, height: 26 }} tintColor={color} />;
@@ -152,10 +155,15 @@ function SharedExplorePage({ explore, petFriendly }: { explore: TabInfo; petFrie
   );
 }
 
-/** Explorar, Pet-friendly, Urgencias, Favoritos and Ajustes. */
+/**
+ * Explorar, Pet-friendly, Urgencias, Favoritos and Ajustes once the disclaimer is accepted; until
+ * then only Urgencias and Aviso, the notice to read and accept (visibleTabs).
+ */
 export default function TabsLayout() {
   const { t } = useAppTranslation();
   const dark = useColorScheme() === 'dark';
+  const { status } = useDisclaimer();
+  const shown = visibleTabs(status);
   const tabs: {
     name: string;
     title: string;
@@ -192,6 +200,7 @@ export default function TabsLayout() {
       description: t('favorites.intro'),
     },
     { name: 'settings', title: t('settings.tabTitle'), icon: 'tab-settings' },
+    { name: 'notice', title: t('disclaimer.tabTitle'), icon: 'tab-notice' },
   ];
 
   const tabInfo = (name: string): TabInfo => {
@@ -228,11 +237,15 @@ export default function TabsLayout() {
                       }),
                   ...(tab.activeTint ? { tabBarActiveTintColor: tab.activeTint } : {}),
                   tabBarIcon: ({ color }) => <TabIcon name={tab.icon} color={String(color)} />,
+                  // Hidden tabs keep their route but leave the tab bar.
+                  ...(shown.includes(tab.name) ? {} : { href: null }),
                 }}
               />
             ))}
           </Tabs>
-          <SharedExplorePage explore={tabInfo('explore')} petFriendly={tabInfo('pet-friendly')} />
+          {status === 'accepted' ? (
+            <SharedExplorePage explore={tabInfo('explore')} petFriendly={tabInfo('pet-friendly')} />
+          ) : null}
         </View>
       </ExploreFrameProvider>
     </ExploreViewProvider>

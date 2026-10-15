@@ -1,0 +1,57 @@
+# The disclaimer on a fresh start (Phase 21). Cancelar leaves only Urgencias and the notice tab,
+# and Urgencias still works; accepting from the notice tab opens all five tabs, and Ajustes opens
+# the notice again to read.
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow:
+    file: common/launch.yaml
+    env:
+      DISCLAIMER: keep
+- assertVisible:
+    id: disclaimer-cancel
+- tapOn:
+    id: disclaimer-cancel
+- extendedWaitUntil:
+    visible: Hospital Veterinario Paw 24 Horas.*
+    timeout: 30000
+- assertVisible:
+    id: tab-urgent
+- assertVisible:
+    id: tab-notice
+- assertNotVisible:
+    id: tab-explore
+- assertNotVisible:
+    id: tab-settings
+- tapOn:
+    id: tab-notice
+- tapOn:
+    id: notice-accept
+- extendedWaitUntil:
+    visible:
+      id: search-input
+    timeout: 30000
+- assertVisible:
+    id: tab-pet-friendly
+- assertVisible:
+    id: tab-favorites
+- assertNotVisible:
+    id: tab-notice
+# Ajustes opens the notice to read again, with only Cerrar.
+- tapOn:
+    id: tab-settings
+- scrollUntilVisible:
+    element:
+      id: settings-disclaimer
+    timeout: 20000
+- tapOn:
+    id: settings-disclaimer
+- extendedWaitUntil:
+    visible:
+      id: disclaimer-close
+    timeout: 15000
+- assertNotVisible:
+    id: disclaimer-accept
+- tapOn:
+    id: disclaimer-close
+- assertVisible:
+    id: settings-disclaimer

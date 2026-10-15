@@ -49,6 +49,7 @@ checked) · **Blocked**.
 | 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | Done      | 2026-10-14 | 2026-10-14 |
 | 19    | Place with words      | `phase-19/service-in-place`  | #36 | Done      | 2026-10-14 | 2026-10-14 |
 | 20    | Full-text search      | `phase-20/full-text-search`  | #35 | Done      | 2026-10-14 | 2026-10-14 |
+| 21    | First-launch notice   | `phase-21/disclaimer`        | #38 | In review | 2026-10-14 | —          |
 | 22    | Adoption and rescue   | `phase-22/animal-welfare`    | #39 | In review | 2026-10-15 | —          |
 
 ## Pending owner reviews
@@ -1279,6 +1280,41 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - Spanish stems don't join every form: "feliz" and "felices" stay apart.
   - Fresh databases need `pnpm search:synonyms` after the migration (CLAUDE.md, DEVELOPMENT.md).
 
+### Phase 21 — First-launch notice
+
+- **Scope:** the owner's request (2026-10-14): a well-written disclaimer on the first launch after
+  installing, with Accept and Cancel. Cancel leaves only Emergencies and a page with the notice to
+  review again; accepting shows all five tabs.
+- **Branch / PR:** `phase-21/disclaimer` / #38
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 381 tests (shared 41, mobile 100, api 112, importers 128)
+  - [x] Android emulator (release build): all 31 flows pass with the notice accepted at launch,
+        including the new `disclaimer`; after moving the notice tab's button into a fixed footer,
+        `disclaimer`, `language` and `emergencies` pass again on a new build
+  - [x] iOS simulator (Expo Go): `disclaimer` passes (its first run found the notice tab's button
+        behind the tab bar; fixed as above)
+- **What it adds:**
+  - **The notice** (`app/disclaimer.tsx`, text in i18n `disclaimer`, es and en): guidance-only
+    information and its sources, not a substitute for a vet (call before going), pet policies
+    change, no endorsement, location and privacy, third-party services, responsibility under
+    Mexican law, animal welfare. Acepto / Cancelar; no swipe or back gesture past it.
+  - **The answer** is kept on the phone with the notice's version (`features/disclaimer`,
+    `DISCLAIMER_VERSION` = 2026-10-14): a new version asks again.
+  - **Cancelled:** the tab bar shows only Urgencias (fully working, place pages included) and
+    **Aviso**, the notice with a fixed "I've read the notice and accept it" button. Explorar's
+    shared map page isn't mounted, so nothing else loads.
+  - **Accepted:** the five tabs; the notice stays readable from Ajustes → About (Cerrar only).
+  - **Flows:** `common/launch.yaml` accepts the notice on every fresh start (`DISCLAIMER=keep`
+    leaves it); new `disclaimer` flow (cancel, Urgencias works, accept from Aviso, reread from
+    Ajustes).
+- **Notes:**
+  - The notice's wording is a careful draft, not legal advice: have it reviewed by a lawyer before
+    a public release, especially the responsibility and privacy sections (they must match the
+    production privacy notice).
+  - The README's screenshots predate the notice.
+
 ### Phase 22 — Adoption, rescue and animal protection
 
 - **Scope:** the owner's choice (2026-10-14): one category for shelters, sanctuaries, adoption
@@ -1391,4 +1427,6 @@ Play readiness").
 | 2026-10-14 | Phase 18 merged (`688d6c3`)                                  | #33 |
 | 2026-10-14 | Phase 19 merged (`c54913d`; #34 replaced by #36)             | #36 |
 | 2026-10-14 | Phase 20 merged (`f580b20`)                                  | #35 |
+| 2026-10-14 | Phases 18-20 bookkeeping (`76c5c5a`)                         | #37 |
+| 2026-10-14 | Phase 21 started                                             | #38 |
 | 2026-10-15 | Phase 22 started                                             | #39 |

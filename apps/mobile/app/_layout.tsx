@@ -10,6 +10,7 @@ import { KeyboardBar } from '@/components/keyboard-bar';
 import { OfflineBanner } from '@/components/states';
 import { FavoritesProvider } from '@/features/favorites/favorites-context';
 import { LocationProvider } from '@/features/location/location-context';
+import { DisclaimerProvider } from '@/features/disclaimer/disclaimer-context';
 import { connectQueryOnlineState } from '@/features/network/network';
 import { SettingsProvider } from '@/features/settings/settings-context';
 import { initI18n } from '@/i18n';
@@ -25,6 +26,8 @@ function RootStack() {
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      {/* The disclaimer: answered with its buttons, never swiped away. */}
+      <Stack.Screen name="disclaimer" options={{ headerShown: false, gestureEnabled: false }} />
       {/* Just the arrow: the screen behind is the tab group, whose route name isn't a title. */}
       <Stack.Screen
         name="place/[id]"
@@ -63,14 +66,16 @@ export default function RootLayout() {
     <ThemeProvider value={scheme === 'dark' ? DarkTheme : LIGHT_THEME}>
       <QueryClientProvider client={queryClient}>
         <SettingsProvider>
-          <FavoritesProvider>
-            <LocationProvider>
-              <OfflineBanner />
-              <RootStack />
-              <StatusBar style="auto" />
-              <KeyboardBar />
-            </LocationProvider>
-          </FavoritesProvider>
+          <DisclaimerProvider>
+            <FavoritesProvider>
+              <LocationProvider>
+                <OfflineBanner />
+                <RootStack />
+                <StatusBar style="auto" />
+                <KeyboardBar />
+              </LocationProvider>
+            </FavoritesProvider>
+          </DisclaimerProvider>
         </SettingsProvider>
       </QueryClientProvider>
     </ThemeProvider>

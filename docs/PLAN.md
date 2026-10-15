@@ -260,7 +260,13 @@ with a check you can run on your phone. Finish and commit one phase before start
     - Done when: plurals and synonyms find more of the relevant places, the benchmark shows no
       regression, and the load test stays under its threshold.
 
-21. **Adoption, rescue and animal protection (added 2026-10-14, owner's choice).** A new pet
+21. **First-launch notice (added 2026-10-14, owner's request).** A disclaimer on the first launch
+    with Acepto / Cancelar. Cancelling leaves only Urgencias and a notice tab to read and accept
+    later; accepting shows the five tabs. Kept on the phone with the notice's version.
+    - Done when: a fresh install shows the notice, both answers behave as above on the emulator,
+      and every flow accepts it at launch.
+
+22. **Adoption, rescue and animal protection (added 2026-10-14, owner's choice).** A new pet
     business category for shelters, sanctuaries, adoption centers, rescuers and non-profits that
     help animals: from DENUE names now (reviewed), OpenStreetMap and Overture next, and SAT's
     authorized-donee list later as a "registered non-profit" mark.

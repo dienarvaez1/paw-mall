@@ -153,6 +153,8 @@ i18next.
 | `(tabs)/settings`     | Ajustes — language, units, pet profile, place filters          |
 | `place/[id]`          | A place's page: map, contact links, hours, pet policy, reports |
 | `claim/[placeId]`     | Owner claim form                                               |
+| `disclaimer`          | The notice: on first launch (Acepto / Cancelar), or to reread  |
+| `(tabs)/notice`       | Aviso — the notice, after Cancelar; hidden once accepted       |
 
 ### One page for Explorar and Pet-friendly
 
@@ -175,6 +177,9 @@ before drawing: a map laid out at zero height opens on the whole world on Androi
   tabs, so switching tabs keeps the same circle.
 - **`features/settings/settings-context.tsx`** — device settings in AsyncStorage: language,
   units, radius, pet profile, place filters, the map's pin limit (`mapPinLimit`).
+- **`features/disclaimer`** — the first-launch notice (Phase 21): the answer and its version in
+  AsyncStorage (`disclaimer.answer`); `index.tsx` sends a fresh install to `disclaimer`, and the
+  tabs layout shows only Urgencias and Aviso until it's accepted (`visibleTabs`).
 - **`features/favorites`**, **`features/location`** (device location with a Mexico City
   fallback), **`features/network`** (offline notice).
 - Server data goes through TanStack Query hooks in **`src/api/hooks.ts`**; every key includes the
@@ -221,7 +226,7 @@ use `Intl` with the active locale.
 - **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 53 labeled
   searches to the local API and judges the top 10 in SQL against the labels, then compares with
   the committed baseline ([DEVELOPMENT.md](DEVELOPMENT.md), "Search benchmark").
-- **End to end:** Maestro flows in `apps/mobile/.maestro` (31 flows, 36 journeys) on fixed test
+- **End to end:** Maestro flows in `apps/mobile/.maestro` (32 flows, 39 journeys) on fixed test
   data, on the Android build and on iOS in Expo Go — see [TESTING-E2E.md](TESTING-E2E.md).
 - **CI:** `.github/workflows/ci.yml` (lint, typecheck, tests on every PR) and `e2e.yml` (Maestro on
   an Android emulator: nightly, manual or the `run-e2e` label).
