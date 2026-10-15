@@ -4,6 +4,19 @@ How the app works for pet owners. The app is in Spanish by default and in Englis
 switch in the search box or in Ajustes; this guide uses the English names, with the Spanish ones
 in parentheses the first time.
 
+## First launch: the notice
+
+The first time the app opens it shows an **important notice** (Aviso importante): where the
+information comes from, that it's for guidance and can be out of date, that it doesn't replace a
+vet, how your location and reports are handled, and who is responsible for what.
+
+- **I accept** (Acepto) opens the whole app.
+- **Cancel** (Cancelar) leaves only **Emergencies** and a **Notice** tab (Aviso), where you can
+  read it again and accept it whenever you want; then the five tabs appear.
+
+The answer is kept on your phone. If the notice changes, the app asks again. Once accepted, it's
+in **Settings → About**.
+
 ## Tabs
 
 | Tab                         | For                                                                                                                 |

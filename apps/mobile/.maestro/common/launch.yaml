@@ -67,7 +67,19 @@ appId: ${APP_ID || 'dev.pawmall.app'}
             visible: Go home
           commands:
             - back
+# A fresh start shows the disclaimer (Phase 21): accepted here, unless the flow tests it
+# (DISCLAIMER=keep, disclaimer.yaml).
 - extendedWaitUntil:
     visible:
-      id: search-input
-    timeout: 30000
+      id: disclaimer-accept
+    timeout: 60000
+- runFlow:
+    when:
+      true: ${DISCLAIMER !== 'keep'}
+    commands:
+      - tapOn:
+          id: disclaimer-accept
+      - extendedWaitUntil:
+          visible:
+            id: search-input
+          timeout: 30000
