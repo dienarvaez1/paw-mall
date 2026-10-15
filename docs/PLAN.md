@@ -145,7 +145,7 @@ Counts are from the DENUE edition of May 2026, measured on October 5, 2026.
 
 ## Phased roadmap
 
-Seven phases were planned at the start; phases 8 to 18 were added as the work went on. Each ends
+Seven phases were planned at the start; phases 8 to 19 were added as the work went on. Each ends
 with a check you can run on your phone. Finish and commit one phase before starting the next. No deploys in any phase until the owner decides.
 
 1. **Foundation (1–2 days).** Monorepo, TypeScript, lint, Prettier, Vitest, `CLAUDE.md`, Expo app
@@ -246,6 +246,13 @@ with a check you can run on your phone. Finish and commit one phase before start
     venue words), and short words matched at a word's start.
     - Done when: the benchmark shows higher recall with no regression, and the search flows pass
       on the emulator.
+
+19. **A place with other words (added 2026-10-14, owner's request).** Typed with the search key, a
+    place plus other words in any order ("veterinaria mascota", "mascota veterinaria", "puerto
+    vallarta taco") goes to the place, or asks "in the place or by that name?" when a business
+    near the user has all the words in its name or the place's name is a pet word.
+    - Done when: both orders find the vets in Mascota, Jalisco, "puerto vallarta taco" finds taco
+      places there, and the benchmark and the end-to-end flows pass.
 
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when
