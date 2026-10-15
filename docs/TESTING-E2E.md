@@ -6,7 +6,7 @@ real app on the Android emulator, on **fixed test data**, so they can check exac
 
 ## Fixed test data
 
-`packages/importers/data/e2e-fixtures.json`: 10 fake places around the Zócalo (19.4326, -99.1332),
+`packages/importers/data/e2e-fixtures.json`: 12 fake places around the Zócalo (19.4326, -99.1332),
 where every flow puts the user, plus "Tlaxcala", "Guadalupe" and "Toluca" as places' names.
 
 | Place                             | Why it's there                                                    |
@@ -43,7 +43,8 @@ flow taps "Ver horario" (each Google answer uses part of the free monthly allowa
 `common/launch.yaml` starts every flow the same way: GPS at the Zócalo, the app's data cleared,
 location allowed, the e2e server opened, the development build's welcome menu closed. Flows find
 controls by `testID` (`search-input`, `mode-map`, `mode-list`, `place-row`, `place-name`,
-`favorite-button`, `language-toggle`, `tab-<name>`) and fixture names, so keep those when changing
+`favorite-button`, `language-toggle`, `tab-<name>`, `map-count`, `urgent-count`, `map-pins`,
+`keyboard-hide`) and fixture names, so keep those when changing
 the screens.
 
 Results: `pnpm --filter mobile e2e` writes to `apps/mobile/e2e-results/` (git-ignored, replaced
@@ -51,7 +52,7 @@ each run): `report.xml` (JUnit, one entry per flow) and a folder per flow with i
 (`commands.json`), logs (`maestro.log`, Android `device-logcat.txt`) and screenshots of failures.
 A plain `maestro test` writes the same to `~/.maestro/tests/<date_time>/`.
 
-The everyday dev server (port 8083, real data) and the e2e one (8084) can run side by side.
+The everyday Metro (port 8081, real data) and the e2e one (8084) can run side by side.
 
 ### API down
 

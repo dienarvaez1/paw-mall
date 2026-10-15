@@ -39,7 +39,7 @@ Drizzle schema in `apps/api/src/db/schema.ts`, SQL migrations in `apps/api/src/d
 | `pet_policies`                        | A venue's pet policy (species, size, where, fee) with its source and confirmation date                                                                                                                                         |
 | `policy_answers`, `pet_answers`       | Users' "is this policy right?" and "does it take dogs?" answers, one per phone (random app id)                                                                                                                                 |
 | `place_reports`                       | "Closed" and "animal cruelty" reports, one per phone; a report hides the place until reviewed                                                                                                                                  |
-| `place_claims`                        | Owners' claims, checked against their SAT certificate before approval                                                                                                                                                          |
+| `place_claims`                        | Owners' claims, reviewed by hand (`pnpm places:claims`); the SAT certificate check is deferred by the owner                                                                                                                    |
 | `search_areas`                        | Colonias, towns, municipalities and landmarks with a normalized `name_key` (trigram index), for searching "around a place" and the search box's suggestions                                                                    |
 | `google_usage`, `google_lookups`      | The Google Places free-tier counters and per-phone daily limits                                                                                                                                                                |
 | `import_runs`                         | One row per importer run: counts and timing                                                                                                                                                                                    |
@@ -157,10 +157,15 @@ before drawing: a map laid out at zero height opens on the whole world on Androi
 ### State
 
 - **`features/explore/explore-view.tsx`** — the shared search state: Map/List mode, "Mi
-  ubicación", the search text, the circle's center (a tapped cluster or a pan), satellite view,
-  the location-button requests, and the user's place-or-business answer.
+  ubicación", the search text, the circle's center (a tapped cluster or a pan) and a searched
+  place's radius, satellite view, the location-button requests, the user's place-or-business
+  answer, and the circle's name (`circleName`, written by whichever of the list or map is on
+  screen) so Urgencias names the same circle. A hand pan off a searched place lets go of it
+  (`leaveArea`): the box empties and the search follows the map.
+- **`features/explore/search-fit.ts`** — fits the radius once per confirmed search, for both
+  tabs, so switching tabs keeps the same circle.
 - **`features/settings/settings-context.tsx`** — device settings in AsyncStorage: language,
-  units, radius, pet profile, place filters.
+  units, radius, pet profile, place filters, the map's pin limit (`mapPinLimit`).
 - **`features/favorites`**, **`features/location`** (device location with a Mexico City
   fallback), **`features/network`** (offline notice).
 - Server data goes through TanStack Query hooks in **`src/api/hooks.ts`**; every key includes the

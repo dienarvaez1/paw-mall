@@ -119,7 +119,8 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 ## Emergencies
 
 The nearest vet hospitals and 24-hour vets within your radius (or around a place you searched),
-the first one highlighted. "Open now" refreshes every minute. Small icons show which have a
+the first one highlighted. The count at the top names the same circle as the map ("29 places
+within 5 km of Cuauhtémoc"); with none inside, it says where. "Open now" refreshes every minute. Small icons show which have a
 phone, website or social page; open a card for directions and call. Cards whose details the owner
 hasn't verified say to call before going, and reported ones say they're under review.
 

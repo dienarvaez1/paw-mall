@@ -120,7 +120,7 @@ values always win, as in Ferre Mall.
 | INEGI DENUE, SCIAN **434112**  | Wholesale vet medicine and animal feed: some forrajeras sell retail                      | Imported as feed stores (forrajerías), farm animals included; cruelty-linked names excluded   |
 | Overture Maps                  | Missing phones, websites, social pages; pet categories                                   | Category names to confirm in Overture's taxonomy                                              |
 | Google Places (on demand)      | Hours and "open now" for one view                                                        | Free-tier cap (950 a month); nothing stored but place ids                                     |
-| Owners                         | Verified details, hours, 24-hour flag, pet policies                                      | Claims checked with the SAT certificate                                                       |
+| Owners                         | Verified details, hours, 24-hour flag, pet policies                                      | Claims reviewed by hand; the SAT certificate check is deferred by the owner (2026-10-05)      |
 | Shoppers                       | Closed reports; confirming pet policies                                                  | Anonymous device ids                                                                          |
 | Curated lists                  | Pet-friendly restaurants and lodging in CDMX to start                                    | Collected by the team from the businesses' own public statements                              |
 | Official cultural/tourism data | Museums and tourist sites (e.g. Secretaría de Cultura's Sistema de Información Cultural) | **Licensing to verify** before use                                                            |
@@ -129,11 +129,12 @@ Counts are from the DENUE edition of May 2026, measured on October 5, 2026.
 
 ## Screens and UX
 
-- **Tabs:** Explorar (map/list of places), Urgencias (nearest emergency vet open now), Favoritos,
-  Ajustes.
+- **Tabs:** Explorar (map/list of pet businesses), Pet-friendly (the same map and list for venues
+  that take pets), Urgencias (nearest emergency vet open now), Favoritos, Ajustes.
 - **Explorar:** the Ferre Mall map and list (radius circle, clusters, count legend, location and
   compass buttons), with **category chips** (Tiendas, Veterinarias, Estéticas, Pensiones,
-  Restaurantes, Hospedaje…) and a **"Pet-friendly" toggle**.
+  Restaurantes, Hospedaje…); the **Pet-friendly** tab shares its map (built as a tab instead of
+  the toggle first planned).
 - **Place page:** category, open now, hours, call, website, social, "Cómo llegar" (Apple Maps,
   Google Maps or Waze), pet policy card with its source and last confirmation, "¿Cerró?", "¿Eres el
   dueño?".
@@ -144,8 +145,8 @@ Counts are from the DENUE edition of May 2026, measured on October 5, 2026.
 
 ## Phased roadmap
 
-Seven phases, each ending with a check you can run on your phone. Finish and commit one phase
-before starting the next. No deploys in any phase until the owner decides.
+Seven phases were planned at the start; phases 8 to 16 were added as the work went on. Each ends
+with a check you can run on your phone. Finish and commit one phase before starting the next. No deploys in any phase until the owner decides.
 
 1. **Foundation (1–2 days).** Monorepo, TypeScript, lint, Prettier, Vitest, `CLAUDE.md`, Expo app
    boots, Hono API answers `/health` locally, Postgres + PostGIS in Docker, i18next with `es` and
@@ -214,6 +215,25 @@ before starting the next. No deploys in any phase until the owner decides.
     - Done when: the Maestro flows pass on the Android emulator and the iOS simulator, `api-down`
       passes with the API stopped, and the failure tests pass in CI.
 
+13. **Load test (added 2026-10-14, review item 7).** A k6 load test of the API's read endpoints on
+    the full data (`pnpm load`, local only), and the query fixes it calls for.
+    - Done when: 50 users at once keep 95% of reads under 500 ms (229 ms after the fixes) and the
+      write burst gets 429 after 20.
+
+14. **Data cleanup (added 2026-10-14).** Act on the first integrity report: merge DENUE's
+    same-business twins (one name and phone within 50 m) and split the report's duplicate checks.
+    - Done when: the import merges the twins and the integrity report lists what's left.
+
+15. **OpenStreetMap vet phones (added 2026-10-14).** Phones from OpenStreetMap for vets and vet
+    hospitals that have none (`pnpm places:osm-phones`), credited on their pages.
+    - Done when: matched vets show the phone with OpenStreetMap as its source.
+
+16. **Bug fixes 2 (added 2026-10-14).** Owner-reported map, search and Urgencias bugs: a hand pan
+    lets go of a searched place, Urgencias names the same circle as the map, empty results name
+    the place, a pin-count button (50–300), both tabs' maps stay in sync.
+    - Done when: each bug is fixed and checked on the emulator, with Maestro flows for the new
+      behavior.
+
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when
 the owner decides.
@@ -249,15 +269,15 @@ Copy these rules into `CLAUDE.md` at the repo root.
 
 ## Open decisions
 
-| Decision                        | Default assumed                              | Why it matters                                                                       |
-| ------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Repo visibility                 | Private                                      | Public exposes plans and data work                                                   |
-| App name and bundle ID          | "Paw Mall" as a working name                 | Hard to change after store release                                                   |
-| Region                          | All of Mexico (from Phase 10)                | Data volume and the map center                                                       |
-| Shared code with Ferre Mall     | Copy now, extract a package later            | Avoids coupling two young projects                                                   |
-| Who uses it                     | Pet owners, no login                         | Owner claims and policy confirmations work without accounts; reviews would need them |
-| Pet-friendly coverage at launch | Curated CDMX restaurants and lodging         | Quality over breadth; the data is user-sourced                                       |
-| Vet license check               | Off until the registry's terms are confirmed | Legal and technical feasibility                                                      |
+| Decision                        | Default assumed                                                                | Why it matters                                                                       |
+| ------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| Repo visibility                 | Private                                                                        | Public exposes plans and data work                                                   |
+| App name and bundle ID          | "Paw Mall" as a working name                                                   | Hard to change after store release                                                   |
+| Region                          | All of Mexico (from Phase 10)                                                  | Data volume and the map center                                                       |
+| Shared code with Ferre Mall     | Copy now, extract a package later                                              | Avoids coupling two young projects                                                   |
+| Who uses it                     | Pet owners, no login                                                           | Owner claims and policy confirmations work without accounts; reviews would need them |
+| Pet-friendly coverage at launch | Curated CDMX, plus DENUE venues and OSM dog places in every state (2026-10-11) | Breadth from open data; most policies come from users' answers                       |
+| Vet license check               | Off until the registry's terms are confirmed                                   | Legal and technical feasibility                                                      |
 
 ## Risks, open questions and costs
 
