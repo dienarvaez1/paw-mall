@@ -27,25 +27,25 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
-| 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
-| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done      | 2026-10-14 | 2026-10-14 |
-| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done      | 2026-10-14 | 2026-10-14 |
-| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done      | 2026-10-14 | 2026-10-14 |
-| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | In review | 2026-10-14 | —          |
+| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done   | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done   | 2026-10-13 | 2026-10-13 |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done   | 2026-10-14 | 2026-10-14 |
+| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done   | 2026-10-14 | 2026-10-14 |
+| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done   | 2026-10-14 | 2026-10-14 |
+| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done   | 2026-10-14 | 2026-10-14 |
+| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done   | 2026-10-14 | 2026-10-14 |
 
 ## Pending owner reviews
 
@@ -1111,7 +1111,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   benchmark of labeled searches, with precision and recall at 10, zero results, latency and
   regressions against a baseline.
 - **Branch / PR:** `phase-17/search-benchmark` / #31
-- **Status:** In review.
+- **Status:** Done. Squash-merged into `main` as `998af42` on 2026-10-14; branch deleted.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`
   - [x] `pnpm test`: 360 tests (shared 36, mobile 96, api 105, importers 123; 15 new)
@@ -1200,3 +1200,4 @@ Play readiness").
 | 2026-10-14 | Phase 16 merged (`501415d`)                                  | #28 |
 | 2026-10-14 | README screenshots, docs brought up to date (`112bf1e`)      | #30 |
 | 2026-10-14 | Phase 17 started                                             | #31 |
+| 2026-10-14 | Phase 17 merged (`998af42`)                                  | #31 |
