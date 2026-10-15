@@ -5,6 +5,8 @@ export const EXPLORE_CHIPS = [
   null,
   'veterinarian',
   'vet_hospital',
+  'animal_welfare',
+  'public_vet_service',
   'pet_store',
   'boutique',
   'groomer',
@@ -12,7 +14,6 @@ export const EXPLORE_CHIPS = [
   'feed_store',
   'dog_trainer',
   'pet_funeral',
-  'public_vet_service',
 ] as const satisfies readonly (CategorySlug | null)[];
 
 /** The Pet-friendly tab's chips, in order; null is "Todos" (places that take pets). */
@@ -35,6 +36,8 @@ export type ChipCategory = (typeof CHIP_CATEGORIES)[number];
 // shows pet businesses, Pet-friendly shows venues.
 export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   vet_hospital: '#dc2626', // red-600: hospitals only
+  // Before vets: a shelter that also treats animals shows as a shelter (Phase 22).
+  animal_welfare: '#059669', // emerald-600
   veterinarian: '#16a34a', // green-600
   public_vet_service: '#4d7c0f', // lime-800 (olive)
   groomer: '#9333ea', // purple-600
@@ -51,7 +54,8 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   park: '#15803d', // green-700
   tourist_site: '#52525b', // zinc-600
 };
-const DEFAULT_COLOR = '#525252';
+export const DEFAULT_CATEGORY_COLOR = '#525252';
+const DEFAULT_COLOR = DEFAULT_CATEGORY_COLOR;
 
 /** The category a place's pin shows: the selected chip's, or its most specific one. */
 export function pinCategory(
@@ -61,6 +65,21 @@ export function pinCategory(
   if (selected) return selected;
   const slugs = new Set(place.categories.map((c) => c.slug));
   return (Object.keys(CATEGORY_COLORS) as CategorySlug[]).find((slug) => slugs.has(slug)) ?? null;
+}
+
+/**
+ * A place's categories with the selected one first (the chip's, or with "Todos" the one its pin
+ * shows), then the others in their order (owner's rule, 2026-10-15).
+ */
+export function orderedCategories(
+  place: Pick<Place, 'categories'>,
+  selected: ChipCategory,
+): Place['categories'] {
+  const first = pinCategory(place, selected);
+  return [
+    ...place.categories.filter((c) => c.slug === first),
+    ...place.categories.filter((c) => c.slug !== first),
+  ];
 }
 
 /** The pin color for a place: its selected category's, or its most specific one's. */

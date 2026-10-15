@@ -121,7 +121,7 @@ database. Results on 2026-10-14 (M-series Mac, Docker with 4 CPUs, 813k places):
 
 ### Search benchmark
 
-`packages/importers/data/search-benchmark.json` holds 51 labeled Spanish and English searches
+`packages/importers/data/search-benchmark.json` holds 53 labeled Spanish and English searches
 from nine cities: services, synonyms, accents, a typo, English words, business names, place names
 and negative cases (puppy mills, cockfighting, unrelated words). Each is sent to the API as the
 app sends it (typed text as names only; Pet-friendly with its default filter), and its top 10 are

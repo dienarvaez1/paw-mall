@@ -54,7 +54,8 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 - Pet-friendly coverage: curated CDMX places, plus every supported state's DENUE restaurants,
   cafés and hotels and OpenStreetMap dog places (extended 2026-10-11).
 - Vet license check: off until the registry's terms are confirmed.
-- Live animal sales: listed. Municipal animal control centers: listed as public services.
+- Live animal sales: listed. Municipal animal control centers: listed as public services, never
+  in adoption and rescue (Phase 22; the owner's decision on them is pending).
 - Feed stores (DENUE 434112): imported as forrajerías.
 
 ## Local setup
@@ -84,7 +85,7 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
   read-only data-integrity report (about 20 s on the full data).
 - Load test: `pnpm --filter api dev:load`, then `pnpm load` (k6, local only; see
   `docs/DEVELOPMENT.md`, "Load test").
-- Search benchmark: with the dev API running, `pnpm search:bench` scores 51 labeled searches
+- Search benchmark: with the dev API running, `pnpm search:bench` scores 53 labeled searches
   against `packages/importers/data/search-baseline.json`; run it before and after any search
   change and commit a new baseline (`--save`) with it (`docs/DEVELOPMENT.md`, "Search benchmark").
 - End-to-end: Maestro flows in `apps/mobile/.maestro/` on the Android development build and fixed

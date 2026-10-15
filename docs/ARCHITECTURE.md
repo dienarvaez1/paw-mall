@@ -33,7 +33,7 @@ Drizzle schema in `apps/api/src/db/schema.ts`, SQL migrations in `apps/api/src/d
 | Table                                 | Holds                                                                                                                                                                                                                          |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `places`                              | Every business and venue: source and id in it, name, chain, address, city, state, location (PostGIS geography), phone/website/social and where they came from, hours, hidden and owner-verified state, Overture and Google ids |
-| `categories`, `category_translations` | The 16 categories (10 pet businesses, 6 pet-friendly venue kinds) and their names per language                                                                                                                                 |
+| `categories`, `category_translations` | The 17 categories (11 pet businesses, including adoption, rescue and protection since Phase 22; 6 pet-friendly venue kinds) and their names per language                                                                       |
 | `place_categories`                    | Which categories a place has, and why (DENUE activity, name keywords, curated)                                                                                                                                                 |
 | `vet_details`                         | Vet-specific facts: emergencies, 24 hours                                                                                                                                                                                      |
 | `pet_policies`                        | A venue's pet policy (species, size, where, fee) with its source and confirmation date                                                                                                                                         |
@@ -223,7 +223,7 @@ use `Intl` with the active locale.
   database down (`database-down.test.ts`: `/health` reports it, every route answers a bare
   `INTERNAL_ERROR`), and a DENUE import that fails part way (`denue/save.test.ts`: one
   transaction, so nothing is left behind).
-- **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 51 labeled
+- **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 53 labeled
   searches to the local API and judges the top 10 in SQL against the labels, then compares with
   the committed baseline ([DEVELOPMENT.md](DEVELOPMENT.md), "Search benchmark").
 - **End to end:** Maestro flows in `apps/mobile/.maestro` (32 flows, 39 journeys) on fixed test

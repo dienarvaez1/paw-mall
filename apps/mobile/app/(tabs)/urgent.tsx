@@ -70,7 +70,6 @@ export default function UrgentScreen() {
               selected={null}
               away={fromUser}
               highlight={fromUser && index === 0}
-              urgent
             />
           )}
           ItemSeparatorComponent={() => <View className="h-3" />}

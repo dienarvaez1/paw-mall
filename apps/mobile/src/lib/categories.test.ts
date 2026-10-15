@@ -6,6 +6,7 @@ import {
   isPetFriendlyCategory,
   pinCategory,
   pinColor,
+  orderedCategories,
 } from './categories';
 
 const place = (...slugs: string[]) =>
@@ -52,5 +53,31 @@ describe('pinCategory', () => {
     expect(pinCategory(place('veterinarian', 'groomer'), 'groomer')).toBe('groomer');
     expect(pinCategory(place('veterinarian', 'vet_hospital'), null)).toBe('vet_hospital');
     expect(pinCategory(place(), null)).toBeNull();
+  });
+});
+
+describe('orderedCategories', () => {
+  const place = {
+    categories: [
+      { slug: 'veterinarian' as const, name: 'Veterinaria' },
+      { slug: 'groomer' as const, name: 'Estética' },
+      { slug: 'animal_welfare' as const, name: 'Adopción' },
+    ],
+  };
+
+  it("puts the selected chip's category first, the others in their order", () => {
+    expect(orderedCategories(place, 'groomer').map((c) => c.slug)).toEqual([
+      'groomer',
+      'veterinarian',
+      'animal_welfare',
+    ]);
+  });
+
+  it('with Todos, puts the category the pin shows first', () => {
+    expect(orderedCategories(place, null).map((c) => c.slug)).toEqual([
+      'animal_welfare',
+      'veterinarian',
+      'groomer',
+    ]);
   });
 });

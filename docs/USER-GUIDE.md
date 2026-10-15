@@ -19,13 +19,13 @@ in **Settings → About**.
 
 ## Tabs
 
-| Tab                         | For                                                                                                                 |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| **Explore** (Explorar)      | Pet businesses: vets, vet hospitals, pet stores, boutiques, groomers, boarding, feed stores, pet funerals, trainers |
-| **Pet-friendly**            | Places you can go with your pet: restaurants, cafés, lodging, museums, parks                                        |
-| **Emergencies** (Urgencias) | The nearest vet hospitals and 24-hour vets, open ones first                                                         |
-| **Favorites** (Favoritos)   | Places you saved, newest first                                                                                      |
-| **Settings** (Ajustes)      | Language, units, your pet, which places to show                                                                     |
+| Tab                         | For                                                                                                                                                                                                            |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Explore** (Explorar)      | Pet businesses: vets, vet hospitals, pet stores, boutiques, groomers, boarding, feed stores, pet funerals, trainers, and adoption, rescue and animal protection (shelters, sanctuaries, rescuers, non-profits) |
+| **Pet-friendly**            | Places you can go with your pet: restaurants, cafés, lodging, museums, parks                                                                                                                                   |
+| **Emergencies** (Urgencias) | The nearest vet hospitals and 24-hour vets, open ones first                                                                                                                                                    |
+| **Favorites** (Favoritos)   | Places you saved, newest first                                                                                                                                                                                 |
+| **Settings** (Ajustes)      | Language, units, your pet, which places to show                                                                                                                                                                |
 
 The ⓘ at the top right of a tab explains it.
 
@@ -47,6 +47,9 @@ search — the other shows too.
 - With nothing in the circle, the count and the empty message still say where: "No places within
   5 km of Chiautempan" (the nearest municipality, or the place you searched).
 - **Pins** have their category's color and icon; tap a pin, then its bubble, to open the place.
+- **List cards** show a place's categories one per line, each with its icon: the selected chip's
+  first (with All, the one its pin shows), then the others ("Veterinaria", then "Hospital
+  veterinario"). A place's page shows them the same way.
 - **Satellite** (layers button) and the **compass** (turns the map north up) are at the bottom
   right.
 
@@ -69,7 +72,8 @@ in miles). Zooming the map by hand also sets the radius to what you zoomed to.
 
 ### Category chips
 
-**All** (Todos) or one category at a time: Vets, Hospitals, Stores, Boutiques… on Explore;
+**All** (Todos) or one category at a time: Vets, Hospitals, Adoption & rescue (Adopción y rescate), Public services (Servicios públicos),
+Stores, Boutiques… on Explore;
 Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 ### Search box
@@ -129,11 +133,15 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 ## A place's page
 
-- **Map** with the place, its **name**, **category** and a **heart** to save it to Favorites.
+- **Map** with the place, its **name** with a **heart** beside it to save it to Favorites, and its
+  **categories**.
 - **Address** — tap it to copy the name and address; the share button sends them to any app.
 - **How far it's confirmed**, under the address: verified by the owner, confirmed by Paw Mall users,
-  confirmed by its own website, or only from a public directory (with the date it was last
-  checked); places users reported show "under review".
+  or confirmed by its own website (with the date it was last checked); places users reported show
+  "under review". A place only known from a public directory shows no line.
+- **Call first (ⓘ)**: a place with a phone whose owner hasn't verified its details has a pink ⓘ
+  across from the phone; tap it to read "Call before going: details aren't confirmed by the
+  owner" (or that users reported it).
 - **Directions** (Apple Maps, Google Maps or Waze), **Call**, **Website**, **Social media**.
 - **Hours**: confirmed hours with "open now", or "Hours not confirmed" with **See hours**, which
   asks Google once (a small free allowance; the answer is shown for this visit only).
@@ -150,7 +158,8 @@ The nearest vet hospitals and 24-hour vets within your radius (or around a place
 the first one highlighted. The count at the top names the same circle as the map ("29 places
 within 5 km of Cuauhtémoc"); with none inside, it says where. "Open now" refreshes every minute. Small icons show which have a
 phone, website or social page; open a card for directions and call. Cards whose details the owner
-hasn't verified say to call before going, and reported ones say they're under review.
+hasn't verified have a pink ⓘ on their page, across from the phone (when they list one), that says
+to call before going, or that they're under review.
 
 ## Favorites
 

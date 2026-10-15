@@ -4,8 +4,8 @@ Paw Mall (working name) is a mobile app for pet owners in Mexico. It answers two
 questions:
 
 - **Where's the pet business I need?** Vets and vet hospitals, pet stores, boutiques, groomers,
-  boarding, feed stores and more, on a map and a list, with a fast path to the nearest emergency
-  vet.
+  boarding, feed stores, shelters and animal rescue groups, and more, on a map and a list, with a
+  fast path to the nearest emergency vet.
 - **Where can I go with my pet?** Restaurants, cafés, lodging, museums and parks with their pet
   policy (dogs or cats, size limits, terrace or indoors).
 
@@ -26,7 +26,7 @@ back it today.
 
 | Pillar                                   | Strategy                                                                 | What is verified                                                                                                                                                           | Evidence                                                                                                                                                                                                |
 | ---------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Search quality and relevance**         | [§4, §5](docs/QA-STRATEGY.md#5-search-quality-evaluation)                | Accent- and order-insensitive matching, place-versus-business intent, radius fitting, nearest-first ranking, consistent results across the map, list and Urgencias         | Search benchmark (`pnpm search:bench`): 51 labeled queries, precision and recall at 10 against a baseline; unit tests (`search-tokens`, `search-filter`, `search-keywords`); 13 Maestro search journeys |
+| **Search quality and relevance**         | [§4, §5](docs/QA-STRATEGY.md#5-search-quality-evaluation)                | Accent- and order-insensitive matching, place-versus-business intent, radius fitting, nearest-first ranking, consistent results across the map, list and Urgencias         | Search benchmark (`pnpm search:bench`): 53 labeled queries, precision and recall at 10 against a baseline; unit tests (`search-tokens`, `search-filter`, `search-keywords`); 13 Maestro search journeys |
 | **Business-data integrity and trust**    | [§4, §6](docs/QA-STRATEGY.md#6-data-quality-and-trust)                   | Duplicate merging, coordinates inside Mexico, valid hours, Urgencias places without a phone, stale sources, cruelty-linked businesses kept out, every data source credited | `pnpm places:integrity` (read-only report on the full data); importer tests with sample files; a verification status on every place (`packages/shared/src/verification.ts`)                             |
 | **API, database and mobile reliability** | [§4](docs/QA-STRATEGY.md#4-test-strategy)                                | Behavior with the database down, an interrupted import, a slow or unreachable API, no connection; performance under concurrent load                                        | `database-down.test.ts`, `denue/save.test.ts`; `offline` and `api-down` flows; k6 load test (`pnpm load`): 50 concurrent users, p95 229 ms against a 500 ms threshold                                   |
 | **Security and privacy**                 | [§4, §7](docs/QA-STRATEGY.md#7-continuous-integration-and-release-gates) | Write rate limits, a cap on pending claims, CORS restricted to known origins, no personal data from reporters, secrets kept out of the repository                          | `rate-limit.test.ts` (limits and CORS), `trust.test.ts`; reporter-privacy rule in [CLAUDE.md](CLAUDE.md); keys only in git-ignored local files                                                          |
@@ -35,10 +35,10 @@ back it today.
 **Current baseline (2026-10-14),** reproducible with `pnpm test`, `pnpm --filter mobile e2e`,
 `pnpm load` and `pnpm search:bench`:
 
-- 381 unit and API tests (shared 41, mobile 100, API 112, importers 128).
+- 400 unit and API tests (shared 41, mobile 102, API 112, importers 145).
 - 32 end-to-end flows covering 39 user journeys on Android, and all but one on iOS.
 - Load test: p95 of 195 ms at 79 requests per second (Phase 20; 229 ms at 77 in Phase 13).
-- Search benchmark (51 queries): precision@10 99%, recall@10 97%, zero results 0%, known items,
+- Search benchmark (53 queries): precision@10 99%, recall@10 97%, zero results 0%, known items,
   negative cases and place intent 100%, p95 43 ms (Phase 18; Phase 17's first baseline was 93%,
   72% and 5%).
 

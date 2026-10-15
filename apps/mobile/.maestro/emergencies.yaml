@@ -14,3 +14,22 @@ appId: ${APP_ID || 'dev.pawmall.app'}
       id: place-name
       text: Hospital Veterinario Paw 24 Horas.*
     timeout: 15000
+# Urgencias' cards don't say to call first any more; the place's page has a pink ⓘ across from its
+# phone with the notice, and none without a phone (owner's rules, 2026-10-15).
+- tapOn:
+    id: urgent-note
+- assertVisible:
+    id: urgent-note-text
+- assertVisible: '.*Llama antes de ir: el dueño.*|.*Call before going: details.*'
+- tapOn:
+    id: urgent-note-text
+- runFlow: common/back.yaml
+- assertNotVisible: '.*Llama antes de ir: el dueño.*|.*Call before going: details.*'
+- tapOn: Hospital Veterinario Sin Teléfono.*
+- extendedWaitUntil:
+    visible:
+      id: place-name
+      text: Hospital Veterinario Sin Teléfono.*
+    timeout: 15000
+- assertNotVisible:
+    id: urgent-note

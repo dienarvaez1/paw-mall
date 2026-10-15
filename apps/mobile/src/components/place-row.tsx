@@ -6,13 +6,19 @@ import { Pressable, Text, useColorScheme, View } from 'react-native';
 import { CategoryBadge } from '@/components/category-badge';
 import { ICONS } from '@/components/icons';
 import { OpenStatus } from '@/components/open-status';
-import { UrgentVerificationNote } from '@/components/verification';
 import { usePolicySummary } from '@/features/pet-policy/policy-text';
 import { useSettings } from '@/features/settings/settings-context';
 import { formatDistance } from '@/i18n/format';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
-import { type ChipCategory, pinCategory, pinColor } from '@/lib/categories';
+import {
+  CATEGORY_COLORS,
+  type ChipCategory,
+  DEFAULT_CATEGORY_COLOR,
+  orderedCategories,
+  pinCategory,
+  pinColor,
+} from '@/lib/categories';
 import { placeLine } from '@/lib/place-line';
 
 /** The place's name, or a translated label for businesses registered without one. */
@@ -21,7 +27,10 @@ export function usePlaceName(place: Pick<Place, 'name'>): string {
   return place.name ?? t('places.unnamed');
 }
 
-/** The place's categories as a line ("Veterinaria · Estética para mascotas"). */
+/**
+ * The place's categories, each with its badge: the selected one first, and each other one on a
+ * line of its own under it (owner's rules, 2026-10-15).
+ */
 export function CategoryLine({
   place,
   selected,
@@ -32,19 +41,34 @@ export function CategoryLine({
   /** List rows: one point smaller (13 pt). */
   small?: boolean;
 }) {
+  const [first, ...others] = orderedCategories(place, selected);
+  const text = `${small ? 'text-[13px]' : 'text-sm'} text-neutral-600 dark:text-neutral-300`;
+  const badge = small ? 18 : 20;
   return (
-    <View className="flex-row items-center gap-2">
-      <CategoryBadge
-        slug={pinCategory(place, selected)}
-        color={pinColor(place, selected)}
-        size={small ? 18 : 20}
-      />
-      <Text
-        className={`flex-1 ${small ? 'text-[13px]' : 'text-sm'} text-neutral-600 dark:text-neutral-300`}
-        numberOfLines={1}
-      >
-        {place.categories.map((c) => c.name).join(' · ')}
-      </Text>
+    <View>
+      <View className="flex-row items-center gap-2">
+        <CategoryBadge
+          slug={pinCategory(place, selected)}
+          color={pinColor(place, selected)}
+          size={badge}
+        />
+        <Text className={`flex-1 ${text}`} numberOfLines={1}>
+          {first?.name ?? ''}
+        </Text>
+      </View>
+      {others.map((category) => (
+        // Each other category on a line of its own, with its own badge (owner's rule, 2026-10-15).
+        <View key={category.slug} className="mt-0.5 flex-row items-center gap-2">
+          <CategoryBadge
+            slug={category.slug}
+            color={CATEGORY_COLORS[category.slug] ?? DEFAULT_CATEGORY_COLOR}
+            size={badge}
+          />
+          <Text className={`flex-1 ${text}`} numberOfLines={1}>
+            {category.name}
+          </Text>
+        </View>
+      ))}
     </View>
   );
 }
@@ -64,15 +88,12 @@ export function PlaceRow({
   away = true,
   showPolicy = false,
   highlight = false,
-  urgent = false,
 }: {
   place: Place;
   selected: ChipCategory;
   away?: boolean;
   showPolicy?: boolean;
   highlight?: boolean;
-  /** Urgencias: say to call first unless the owner verified the details. */
-  urgent?: boolean;
 }) {
   const { t } = useAppTranslation();
   const locale = useLocale();
@@ -124,7 +145,6 @@ export function PlaceRow({
             {t('places.pets.ask.rowUnknown')}
           </Text>
         ) : null}
-        {urgent ? <UrgentVerificationNote verification={place.verification} /> : null}
         <View className="flex-row items-center gap-2">
           <View className="flex-1">
             <OpenStatus place={place} small />

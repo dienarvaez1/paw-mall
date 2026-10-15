@@ -10,6 +10,9 @@ export const PET_BUSINESS_CATEGORIES = [
   'feed_store',
   'pet_funeral',
   'dog_trainer',
+  // Adoption, rescue and animal protection (Phase 22): shelters, sanctuaries, adoption centers,
+  // rescuers and non-profits that help animals.
+  'animal_welfare',
 ] as const;
 
 /** Pet-friendly venues: filled from Phase 6 on. */

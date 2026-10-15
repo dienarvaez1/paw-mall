@@ -20,7 +20,7 @@ const ACTIVITY_CATEGORIES: Record<string, CategorySlug> = {
  * boarding and pet funeral names; 812310 (servicios funerarios) for pet funeral names, since most
  * funeral homes there are for people.
  */
-const NAME_ONLY_ACTIVITIES = new Set(['812990', '812310']);
+const NAME_ONLY_ACTIVITIES = new Set(['812990', '812310', '813230']);
 
 const VET_ACTIVITIES = new Set(['541941', '541942']);
 
@@ -46,6 +46,29 @@ const GROOMING = /\b(ESTETICAS?|PELUQUERIAS?|PERRUQUERIAS?|SPA|BANOS?|BARBER(IA|
 const GROOMING_ALONE = /\bGROOM(ING|ER|ERS)?\b/;
 const BOARDING =
   /\b(PENSION(ES)?|HOTEL(ES)?|GUARDERIAS?|HOSPEDAJE|ESTANCIAS?|RESORT|DAYCARE|KINDER|INN|CAMP|HOUSING|HOSTAL)\b/;
+/**
+ * Adoption, rescue and animal protection (Phase 22, owner's choice 2026-10-14): a shelter, rescue,
+ * adoption or sanctuary word, or a non-profit's legal form, plus an animal word, in the classes
+ * where they register: civil associations (813230), other personal services (812990), vets and
+ * pet stores run by them. "Bienestar animal" alone is a common vet's name, so it doesn't count.
+ */
+const WELFARE =
+  /\b(ALBERGUES?|REFUGIOS?|RESCATES?|RESCATISTAS?|ADOPCION(ES)?|ADOPTA\w*|ABANDONAD[OA]S?|PROTECTORAS?|PROTECCION (ANIMAL|DE (LOS )?ANIMALES|DE LA FAUNA)|DEFENSA ANIMAL|DEFENSORES? DE (LOS )?ANIMALES|SANTUARIOS?|ANIMALISTAS?|HOGAR(ES)? TEMPORAL(ES)?|CASA HOGAR)\b/;
+const NON_PROFIT =
+  /(\bA ?\. ?C\b|\bAC$|ASOCIACION CIVIL|\bI ?\. ?A ?\. ?P\b|\bIAP\b|INSTITUCION DE ASISTENCIA PRIVADA|FUNDACION|ORGANIZACION CIVIL|\bONG\b)/;
+const WELFARE_ANIMAL =
+  /\b(FAUNA|ANIMALISTAS?|CALLEJER[OA]S?|MICHIS?|CABALLOS?|EQUIN[OA]S?|BURR(O|A|IT[OA])S?)\b/;
+const WELFARE_ACTIVITIES = new Set(['813230', '812990', '541941', '541942', '465911']);
+/**
+ * Municipal animal control stays a public service, never adoption: some put animals down (owner's
+ * rule: no kill shelters; decision pending, Phase 22). Therapy with animals and guide-dog schools
+ * help people.
+ */
+const ANIMAL_CONTROL = /\b(CONTROL|ZOONOSIS|ZONOSIS|ANTIRRABIC[OA]S?|PERRERAS?)\b/;
+/** "Veterinaria el Refugio" is a vet's name, like "El Rastro" is a place's: no shelter word alone. */
+const NAMED_REFUGE = /\bEL (REFUGIO|SANTUARIO)\b/g;
+const NOT_WELFARE = /\b(EQUINOTERAPIA|TERAPIAS?|PERROS? GUIA)\b/;
+
 /** Shelters and rescues: a "hotel para perros abandonados" isn't a boarding business. */
 const SHELTER = /\b(ABANDONAD[OA]S?|REFUGIOS?|ALBERGUES?|ADOPCION(ES)?|RESCATES?)\b/;
 /**
@@ -149,9 +172,13 @@ export function plain(value: string): string {
   return value.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/\s+/g, ' ').trim();
 }
 
-/** Categories for a business from its DENUE class and name; empty when it isn't a pet business. */
-export function categorize(activityCode: string, name: string): PlaceCategory[] {
+/**
+ * Categories for a business from its DENUE class, name and legal name; empty when it isn't a pet
+ * business.
+ */
+export function categorize(activityCode: string, name: string, legalName = ''): PlaceCategory[] {
   const text = plain(name);
+  const legal = plain(legalName);
   const out: PlaceCategory[] = [];
   const add = (slug: CategorySlug, source: PlaceCategory['source']) => {
     if (!out.some((c) => c.slug === slug)) out.push({ slug, source });
@@ -167,6 +194,7 @@ export function categorize(activityCode: string, name: string): PlaceCategory[] 
     return out;
   }
   if (trainer) add('dog_trainer', 'name');
+  if (isAnimalWelfare(activityCode, `${text} | ${legal}`)) add('animal_welfare', 'name');
 
   if (GROOMING_ALONE.test(text) || (GROOMING.test(text) && animal)) add('groomer', 'name');
   if (BOARDING.test(text) && animal && !SHELTER.test(text)) add('boarding', 'name');
@@ -177,6 +205,16 @@ export function categorize(activityCode: string, name: string): PlaceCategory[] 
     if (activityCode !== '541942') add('veterinarian', 'name');
   }
   return out;
+}
+
+/** Adoption, rescue or protection by its names (WELFARE); never animal control or therapy. */
+export function isAnimalWelfare(activityCode: string, names: string): boolean {
+  const text = plain(names);
+  if (!WELFARE_ACTIVITIES.has(activityCode) || ANIMAL_CONTROL.test(text) || NOT_WELFARE.test(text))
+    return false;
+  const animal = ANIMAL.test(text) || WELFARE_ANIMAL.test(text);
+  const words = text.replace(NAMED_REFUGE, '');
+  return animal && (WELFARE.test(words) || NON_PROFIT.test(words));
 }
 
 const SMALL_WORDS = new Set([
@@ -303,7 +341,7 @@ export function mapDenueRow(row: Record<string, string>): MappedRow | null {
   const venue = venueCategory(activityCode);
   const categories: PlaceCategory[] = venue
     ? [{ slug: venue, source: 'activity' }]
-    : categorize(activityCode, name);
+    : categorize(activityCode, name, clean(row.raz_social));
   if (categories.length === 0) return null;
 
   const names = plain(`${clean(row.nom_estab)} | ${clean(row.raz_social)}`);
