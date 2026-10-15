@@ -56,7 +56,7 @@ in miles). Zooming the map by hand also sets the radius to what you zoomed to.
 
 ### Category chips
 
-**All** (Todos) or one category at a time: Vets, Hospitals, Stores, Boutiques, … Adoption & rescue (Adopción y rescate) on Explore;
+**All** (Todos) or one category at a time: Vets, Hospitals, Adoption & rescue (Adopción y rescate), Stores, Boutiques… on Explore;
 Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 ### Search box

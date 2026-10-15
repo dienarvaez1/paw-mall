@@ -1295,7 +1295,8 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - [x] Android emulator (release build): all 30 flows pass
 - **What it adds:**
   - **Category** `animal_welfare` (migration 0015): "Adopción, rescate y protección animal"; chip
-    "Adopción y rescate" on Explorar (emerald, house-and-heart icon), before vets in pin order.
+    "Adopción y rescate" on Explorar right after Hospitales (owner's request), emerald, with a
+    house-and-heart icon; before vets in pin order.
   - **DENUE rules** (`isAnimalWelfare` in `denue/map.ts`): a shelter, rescue, adoption, sanctuary
     or protection word, or a non-profit's legal form (A.C., I.A.P., fundación), plus an animal
     word, in civil associations (813230, now read by name), other personal services (812990),
