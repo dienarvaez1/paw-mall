@@ -1306,6 +1306,11 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - **Found:** 111 in 27 states: 39 civil associations, 32 shelters under personal services, 29
     vets (shelters with a clinic, foundations' clinics), 10 municipal protection units, 1 store
     run by a rescue foundation. 2 animal sanctuaries (Pachuca; Ahuacatlán).
+  - **Cards with several categories** (owner's requests, 2026-10-15): the selected chip's category
+    first (with Todos, the pin's), then each other one on its own line with its own icon
+    (`orderedCategories`, `CategoryLine`); the place page and map bubbles use the same order.
+    Checked on the emulator with the dev data (Condesa: "Vet Me Hospital Veterinario" reads
+    Hospital veterinario first under Hospitales, Veterinaria first under Veterinarias).
   - **Search words:** "adopción", "adoptar", "rescatistas", "refugio canino", "albergue de perros",
     "santuario de animales", "protectora de animales", "animal shelter"… ("refugio" alone stays
     a name: "Tacos el Refugio").

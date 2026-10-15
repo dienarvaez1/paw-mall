@@ -34,6 +34,9 @@ search — the other shows too.
 - With nothing in the circle, the count and the empty message still say where: "No places within
   5 km of Chiautempan" (the nearest municipality, or the place you searched).
 - **Pins** have their category's color and icon; tap a pin, then its bubble, to open the place.
+- **List cards** show a place's categories one per line, each with its icon: the selected chip's
+  first (with All, the one its pin shows), then the others ("Veterinaria", then "Hospital
+  veterinario"). A place's page shows them the same way.
 - **Satellite** (layers button) and the **compass** (turns the map north up) are at the bottom
   right.
 

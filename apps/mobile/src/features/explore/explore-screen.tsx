@@ -47,6 +47,7 @@ import {
   type ChipCategory,
   isPetFilterCategory,
   isPetFriendlyCategory,
+  orderedCategories,
 } from '@/lib/categories';
 import { uniqueById } from '@/lib/unique';
 import { circleForCluster, isAwayFrom, radiusForRegion, regionForRadius } from '@/lib/map-region';
@@ -1003,7 +1004,12 @@ function PlaceMarker({
   const { units } = useSettings();
   const name = usePlaceName(place);
   const policy = usePolicySummary(place.petPolicy);
-  const kinds = showPolicy && policy ? policy : place.categories.map((c) => c.name).join(' · ');
+  const kinds =
+    showPolicy && policy
+      ? policy
+      : orderedCategories(place, category)
+          .map((c) => c.name)
+          .join(' · ');
   return (
     <CategoryPin
       place={place}

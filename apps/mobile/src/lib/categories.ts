@@ -54,7 +54,8 @@ export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   park: '#15803d', // green-700
   tourist_site: '#52525b', // zinc-600
 };
-const DEFAULT_COLOR = '#525252';
+export const DEFAULT_CATEGORY_COLOR = '#525252';
+const DEFAULT_COLOR = DEFAULT_CATEGORY_COLOR;
 
 /** The category a place's pin shows: the selected chip's, or its most specific one. */
 export function pinCategory(
@@ -64,6 +65,21 @@ export function pinCategory(
   if (selected) return selected;
   const slugs = new Set(place.categories.map((c) => c.slug));
   return (Object.keys(CATEGORY_COLORS) as CategorySlug[]).find((slug) => slugs.has(slug)) ?? null;
+}
+
+/**
+ * A place's categories with the selected one first (the chip's, or with "Todos" the one its pin
+ * shows), then the others in their order (owner's rule, 2026-10-15).
+ */
+export function orderedCategories(
+  place: Pick<Place, 'categories'>,
+  selected: ChipCategory,
+): Place['categories'] {
+  const first = pinCategory(place, selected);
+  return [
+    ...place.categories.filter((c) => c.slug === first),
+    ...place.categories.filter((c) => c.slug !== first),
+  ];
 }
 
 /** The pin color for a place: its selected category's, or its most specific one's. */
