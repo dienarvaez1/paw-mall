@@ -599,6 +599,29 @@
       }
     },
     {
+      "id": "neg-pf-vet-tlaxcala",
+      "q": "Tlaxcala vet",
+      "near": "puebla",
+      "mode": "place",
+      "group": "pet_friendly",
+      "tags": ["negative", "geo", "service-in-place"],
+      "expectArea": {
+        "name": "Tlaxcala",
+        "state": "Tlaxcala"
+      },
+      "relevant": null,
+      "note": "Owner's rule (2026-10-14): a vet search finds nothing on Pet-friendly; Explorar shows Tlaxcala's vets."
+    },
+    {
+      "id": "neg-pf-vet",
+      "q": "vet",
+      "near": "cdmx-condesa",
+      "group": "pet_friendly",
+      "tags": ["negative"],
+      "relevant": null,
+      "note": "Owner's rule (2026-10-14): no venue is a vet."
+    },
+    {
       "id": "neg-puppy-mill",
       "q": "criadero de perros",
       "near": "cdmx-zocalo",

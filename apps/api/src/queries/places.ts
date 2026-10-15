@@ -320,8 +320,17 @@ async function interpretSearch(db: Database, query: SearchQuery) {
     detected.category !== null &&
     (!query.category || query.category === detected.category) &&
     (!query.group || categoryGroup(detected.category) === query.group);
-  const category = fits ? detected.category : null;
-  const keywordOnly = detected.category !== null && !fits && !area && detected.words === '';
+  // A pet-business keyword on Pet-friendly ("Tlaxcala vet") finds nothing there: no venue is a
+  // vet (owner's rule, 2026-10-14). Its category is kept, so the tab's group and it rule out every
+  // place, and the app's tab pick moves to Explorar. Venue words on Explorar ("hotel") still read
+  // as words in names, since pet businesses use them ("Hotel Canino").
+  const elsewhere =
+    detected.category !== null &&
+    query.group === 'pet_friendly' &&
+    categoryGroup(detected.category) === 'pet_business';
+  const category = fits || elsewhere ? detected.category : null;
+  const keywordOnly =
+    detected.category !== null && !fits && !elsewhere && !area && detected.words === '';
   const words = keywordOnly ? text : detected.words;
   // A city or town (not a colonia or landmark) with more than CITY_BUSY_MATCHES places: 3 mi
   // around it (owner's rule). Counted over every visible place, not the tab's filters, so
