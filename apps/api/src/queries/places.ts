@@ -374,21 +374,25 @@ function searchCircleSql(point: Point, radiusKm: number, namedAfter: string | nu
 const WORD_START_MAX_LENGTH = 3;
 
 /**
- * Every word of `q` in the name, city or state of places aliased `p`, letter for letter, ignoring
- * only case and accents (owner's rule): "tlaxcala" never matches "Ixtacala". A short word must
- * start a word of the name ("me" finds "Vet Me", not "Gómez"; search benchmark, Phase 17); a
- * longer one can be inside one ("kota" finds "Maskota").
+ * Every word of `q` in the name, city or state of places aliased `p`, ignoring case and accents.
+ * A word matches letter for letter (owner's rule: "tlaxcala" never matches "Ixtacala"): a short one
+ * must start a word of the name ("me" finds "Vet Me", not "Gómez"; search benchmark, Phase 17), a
+ * longer one can be inside one ("kota" finds "Maskota"). Or it matches by full-text search (Phase
+ * 20): its Spanish stem or a synonym's, so "veterinarias" finds "Veterinaria Paw" and "tacos" finds
+ * "Taquería" (search_word_query(), migration 0014; synonyms from `pnpm search:synonyms`).
  */
 function allWordsSql(q: string): SQL {
   const searchText = sql`place_search_text(p.name, p.city, p.state)`;
   const words = sql.join(
     searchWords(q).map((word) => {
       const text = sql`lower(f_unaccent(${word}))`;
+      // A sub-select, so Postgres builds the query once, not once per place.
+      const stems = sql`(p.search_words @@ (SELECT search_word_query(${word})))`;
       if (plain(word).length <= WORD_START_MAX_LENGTH && !word.includes(' ')) {
         const name = sql`lower(f_unaccent(coalesce(p.name, '')))`;
-        return sql`(${name} ~ ('\\m' || lower(f_unaccent(${escapeRegex(word)}))))`;
+        return sql`(${name} ~ ('\\m' || lower(f_unaccent(${escapeRegex(word)}))) OR ${stems})`;
       }
-      return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!')`;
+      return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!' OR ${stems})`;
     }),
     sql` AND `,
   );

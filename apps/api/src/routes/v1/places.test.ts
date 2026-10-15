@@ -191,6 +191,22 @@ describe('GET /v1/places search and filters', () => {
     expect(await names('ercana')).toEqual(['Veterinaria Cercana']);
   });
 
+  it('finds plurals and synonyms by full-text search (Phase 20)', async () => {
+    const names = async (q: string) =>
+      placeListResponseSchema
+        .parse((await getPlaces(`q=${q}&namesOnly=true&exactWords=true`)).body)
+        .items.map((p) => p.name);
+    // "Cercanas" isn't inside "Cercana", but both are the stem "cercan".
+    expect(await names('cercanas')).toEqual(['Veterinaria Cercana']);
+    await sql`INSERT INTO search_synonyms (word, alternatives) VALUES ('proxima', '{cercana}')
+             ON CONFLICT (word) DO UPDATE SET alternatives = excluded.alternatives`;
+    try {
+      expect(await names('proxima')).toEqual(['Veterinaria Cercana']);
+    } finally {
+      await sql`DELETE FROM search_synonyms WHERE word = 'proxima'`;
+    }
+  });
+
   it('keeps only places with a phone or a live website', async () => {
     const phone = placeListResponseSchema.parse((await getPlaces('withPhone=true')).body);
     expect(phone.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);

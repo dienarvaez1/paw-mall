@@ -1,0 +1,12 @@
+{
+  "_comment": "Words that mean the same in a business's name (Phase 20). Each group's words find each other in name searches: a search for \"tacos\" also finds \"Taquería\". Lower case or not, with or without accents; a phrase needs all its words. Kinds of business (\"veterinaria\", \"estética\") are read as categories first (packages/shared/src/search-keywords.ts), so these matter for the other words of a search. Load with `pnpm search:synonyms`; check with `pnpm search:bench`.",
+  "groups": [
+    ["taco", "tacos", "taquería", "taquerías"],
+    ["croqueta", "croquetas", "alimento", "alimentos"],
+    ["acuario", "acuarios", "peces", "aquarium"],
+    ["café", "cafetería", "coffee"],
+    ["restaurante", "restaurant", "fonda", "cocina"],
+    ["hotel", "hostal", "posada", "hospedaje"],
+    ["parque", "jardín", "park"]
+  ]
+}

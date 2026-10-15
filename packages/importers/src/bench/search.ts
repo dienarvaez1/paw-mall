@@ -36,6 +36,8 @@ const benchmarkQuery = z.object({
       categories: z.array(z.string()).optional(),
       /** Every word must start a word of the name (accents and case aside). */
       nameWords: z.array(z.string()).optional(),
+      /** At least one of these must start a word of the name ("taco" or "taquería"). */
+      anyNameWords: z.array(z.string()).optional(),
       city: z.string().optional(),
       /** A pet policy that takes pets and isn't under review. */
       takesPets: z.boolean().optional(),
@@ -250,6 +252,12 @@ export function intentSql(sql: Sql, query: BenchmarkQuery): Fragment {
       (word) => sql`${name} ~ ('\\m' || lower(f_unaccent(${escapeRegex(word)})))`,
     ),
   ];
+  if (relevant.anyNameWords) {
+    const any = relevant.anyNameWords.map(
+      (word) => sql`${name} ~ ('\\m' || lower(f_unaccent(${escapeRegex(word)})))`,
+    );
+    conditions.push(sql`(${any.reduce((all, one) => sql`${all} OR ${one}`)})`);
+  }
   if (relevant.city) {
     conditions.push(sql`lower(f_unaccent(p.city)) = lower(f_unaccent(${relevant.city}))`);
   }
