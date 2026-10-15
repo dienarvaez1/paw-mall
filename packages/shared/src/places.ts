@@ -144,8 +144,8 @@ export const placeListQuerySchema = z.object({
   lng: longitude,
   radiusKm,
   /**
-   * Business name, city or state; every word must match one of them (accents, case and small
-   * typos ignored). CDMX, DF and Edomex work too.
+   * Business name, city or state; every word must match one of them (accents and case ignored;
+   * typos are not, see the search benchmark). CDMX, DF and Edomex work too.
    */
   q: z.string().trim().min(1).max(100).optional(),
   /** Radius around an area named by `q`; the Settings radius (radiusKm) stays as it is. */

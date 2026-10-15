@@ -145,7 +145,7 @@ Counts are from the DENUE edition of May 2026, measured on October 5, 2026.
 
 ## Phased roadmap
 
-Seven phases were planned at the start; phases 8 to 16 were added as the work went on. Each ends
+Seven phases were planned at the start; phases 8 to 17 were added as the work went on. Each ends
 with a check you can run on your phone. Finish and commit one phase before starting the next. No deploys in any phase until the owner decides.
 
 1. **Foundation (1–2 days).** Monorepo, TypeScript, lint, Prettier, Vitest, `CLAUDE.md`, Expo app
@@ -233,6 +233,13 @@ with a check you can run on your phone. Finish and commit one phase before start
     the place, a pin-count button (50–300), both tabs' maps stay in sync.
     - Done when: each bug is fixed and checked on the emulator, with Maestro flows for the new
       behavior.
+
+17. **Search quality benchmark (added 2026-10-14, QA strategy section 5).** A version-controlled
+    set of labeled searches (services, synonyms, accents, typos, English, names, places, negative
+    cases), judged in SQL against the labels, with precision and recall at 10, zero results,
+    known items, latency and regressions against a committed baseline (`pnpm search:bench`).
+    - Done when: the benchmark runs on the full data, the baseline is committed, and a changed
+      result shows up as a regression.
 
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when

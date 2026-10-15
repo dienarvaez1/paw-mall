@@ -1,0 +1,517 @@
+{
+  "_comment": "Search quality benchmark (docs/QA-STRATEGY.md, section 5). Each query is sent to the API as the app sends it, and its top 10 results are judged against the labels below, never against the search code. Labels: `relevant` is the user's intent (categories, words in the name, city, takes pets); `judge` is the circle where every relevant place should be found (default: `near` and `radiusKm`); `knownItems` are businesses that must be in the top 10; `relevant: null` is a negative case where any result is wrong. Run with `pnpm search:bench`; see docs/DEVELOPMENT.md, 'Search benchmark'.",
+  "review": {
+    "status": "draft",
+    "note": "Labels drafted on 2026-10-14 from each query's intent; the owner reviews them before the baseline sets release thresholds."
+  },
+  "locations": {
+    "cdmx-zocalo": {
+      "lat": 19.4326,
+      "lng": -99.1332
+    },
+    "cdmx-condesa": {
+      "lat": 19.4119,
+      "lng": -99.171
+    },
+    "guadalajara": {
+      "lat": 20.6767,
+      "lng": -103.3475
+    },
+    "monterrey": {
+      "lat": 25.6866,
+      "lng": -100.3161
+    },
+    "puebla": {
+      "lat": 19.0414,
+      "lng": -98.2063
+    },
+    "merida": {
+      "lat": 20.9674,
+      "lng": -89.5926
+    },
+    "tijuana": {
+      "lat": 32.5149,
+      "lng": -117.0382
+    },
+    "queretaro": {
+      "lat": 20.5888,
+      "lng": -100.3899
+    },
+    "oaxaca": {
+      "lat": 17.0732,
+      "lng": -96.7266
+    }
+  },
+  "queries": [
+    {
+      "id": "vet-cdmx",
+      "q": "veterinaria",
+      "near": "cdmx-zocalo",
+      "tags": ["service"],
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"]
+      }
+    },
+    {
+      "id": "vet-short-gdl",
+      "q": "vet",
+      "near": "guadalajara",
+      "tags": ["service", "synonym"],
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"]
+      }
+    },
+    {
+      "id": "vet-typo-mty",
+      "q": "veterinria",
+      "near": "monterrey",
+      "tags": ["service", "spelling"],
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"]
+      }
+    },
+    {
+      "id": "vet-clinic-puebla",
+      "q": "clínica veterinaria",
+      "near": "puebla",
+      "tags": ["service", "multi-token", "accents"],
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"]
+      }
+    },
+    {
+      "id": "vet-english-tijuana",
+      "q": "veterinarian",
+      "near": "tijuana",
+      "tags": ["service", "english"],
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"]
+      }
+    },
+    {
+      "id": "hospital-cdmx",
+      "q": "hospital veterinario",
+      "near": "cdmx-condesa",
+      "tags": ["service", "multi-token"],
+      "relevant": {
+        "categories": ["vet_hospital"]
+      },
+      "knownItems": [
+        {
+          "source": "denue",
+          "externalId": "6808483",
+          "name": "Vet Me Hospital Veterinario"
+        },
+        {
+          "source": "denue",
+          "externalId": "10551972",
+          "name": "Aztekan Hospital Veterinario"
+        }
+      ]
+    },
+    {
+      "id": "emergency-cdmx",
+      "q": "urgencias veterinarias",
+      "near": "cdmx-condesa",
+      "tags": ["service", "multi-token", "synonym"],
+      "relevant": {
+        "categories": ["vet_hospital"]
+      },
+      "knownItems": [
+        {
+          "source": "denue",
+          "externalId": "866353",
+          "name": "Hospital de Emergencias Veterinarias"
+        }
+      ]
+    },
+    {
+      "id": "vet-24h-cdmx",
+      "q": "veterinaria 24 horas",
+      "near": "cdmx-zocalo",
+      "radiusKm": 10,
+      "tags": ["service", "multi-token"],
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"],
+        "nameWords": ["24"]
+      }
+    },
+    {
+      "id": "groomer-accents-cdmx",
+      "q": "estética canina",
+      "near": "cdmx-condesa",
+      "tags": ["service", "multi-token", "accents"],
+      "relevant": {
+        "categories": ["groomer"]
+      }
+    },
+    {
+      "id": "groomer-no-accents-mty",
+      "q": "estetica canina",
+      "near": "monterrey",
+      "tags": ["service", "multi-token", "accents"],
+      "relevant": {
+        "categories": ["groomer"]
+      }
+    },
+    {
+      "id": "groomer-synonym-puebla",
+      "q": "peluquería canina",
+      "near": "puebla",
+      "radiusKm": 10,
+      "tags": ["service", "synonym", "multi-token"],
+      "relevant": {
+        "categories": ["groomer"]
+      }
+    },
+    {
+      "id": "groomer-english-cdmx",
+      "q": "dog grooming",
+      "near": "cdmx-condesa",
+      "tags": ["service", "english", "multi-token"],
+      "relevant": {
+        "categories": ["groomer"]
+      }
+    },
+    {
+      "id": "pet-store-gdl",
+      "q": "tienda de mascotas",
+      "near": "guadalajara",
+      "tags": ["service", "multi-token"],
+      "relevant": {
+        "categories": ["pet_store", "boutique"]
+      }
+    },
+    {
+      "id": "pet-store-english-tijuana",
+      "q": "pet shop",
+      "near": "tijuana",
+      "tags": ["service", "english"],
+      "relevant": {
+        "categories": ["pet_store", "boutique"]
+      }
+    },
+    {
+      "id": "pet-food-cdmx",
+      "q": "croquetas",
+      "near": "cdmx-zocalo",
+      "tags": ["service", "synonym"],
+      "relevant": {
+        "categories": ["pet_store", "boutique", "feed_store"]
+      }
+    },
+    {
+      "id": "pet-food-phrase-merida",
+      "q": "alimento para perro",
+      "near": "merida",
+      "radiusKm": 10,
+      "tags": ["service", "synonym", "multi-token"],
+      "relevant": {
+        "categories": ["pet_store", "boutique", "feed_store"]
+      }
+    },
+    {
+      "id": "aquarium-gdl",
+      "q": "acuario",
+      "near": "guadalajara",
+      "tags": ["service"],
+      "relevant": {
+        "categories": ["pet_store", "boutique"],
+        "nameWords": ["acuario"]
+      },
+      "knownItems": [
+        {
+          "source": "denue",
+          "externalId": "7609707",
+          "name": "Acuario Anubis Guadalajara"
+        }
+      ]
+    },
+    {
+      "id": "boarding-qro",
+      "q": "pensión para perros",
+      "near": "queretaro",
+      "radiusKm": 10,
+      "tags": ["service", "multi-token", "accents"],
+      "relevant": {
+        "categories": ["boarding"]
+      }
+    },
+    {
+      "id": "boarding-synonym-cdmx",
+      "q": "hotel para perros",
+      "near": "cdmx-condesa",
+      "radiusKm": 10,
+      "tags": ["service", "synonym", "multi-token"],
+      "relevant": {
+        "categories": ["boarding"]
+      }
+    },
+    {
+      "id": "feed-store-oaxaca",
+      "q": "forrajería",
+      "near": "oaxaca",
+      "radiusKm": 10,
+      "tags": ["service", "accents"],
+      "relevant": {
+        "categories": ["feed_store"]
+      }
+    },
+    {
+      "id": "funeral-cdmx",
+      "q": "crematorio de mascotas",
+      "near": "cdmx-zocalo",
+      "radiusKm": 15,
+      "tags": ["service", "multi-token"],
+      "relevant": {
+        "categories": ["pet_funeral"]
+      }
+    },
+    {
+      "id": "trainer-mty",
+      "q": "adiestrador de perros",
+      "near": "monterrey",
+      "radiusKm": 15,
+      "tags": ["service", "multi-token"],
+      "relevant": {
+        "categories": ["dog_trainer"]
+      }
+    },
+    {
+      "id": "vet-in-colonia-cdmx",
+      "q": "veterinaria en Coyoacán",
+      "near": "cdmx-zocalo",
+      "radiusKm": 15,
+      "tags": ["service", "geo", "multi-token"],
+      "relevant": {
+        "categories": ["veterinarian", "vet_hospital"],
+        "city": "Coyoacán"
+      }
+    },
+    {
+      "id": "groomer-city-word-gdl",
+      "q": "estetica zapopan",
+      "near": "guadalajara",
+      "radiusKm": 10,
+      "tags": ["service", "geo", "multi-token"],
+      "relevant": {
+        "categories": ["groomer"],
+        "city": "Zapopan"
+      }
+    },
+    {
+      "id": "name-farmanimals",
+      "q": "farmanimals",
+      "near": "cdmx-condesa",
+      "tags": ["known-item"],
+      "relevant": {
+        "nameWords": ["farmanimals"]
+      },
+      "knownItems": [
+        {
+          "source": "denue",
+          "externalId": "10808927",
+          "name": "Farmanimals Condesa"
+        }
+      ]
+    },
+    {
+      "id": "name-vet-me",
+      "q": "vet me",
+      "near": "cdmx-condesa",
+      "tags": ["known-item", "multi-token"],
+      "relevant": {
+        "nameWords": ["vet", "me"]
+      },
+      "knownItems": [
+        {
+          "source": "denue",
+          "externalId": "6808483",
+          "name": "Vet Me Hospital Veterinario"
+        }
+      ]
+    },
+    {
+      "id": "name-chain-petco-mty",
+      "q": "petco",
+      "near": "monterrey",
+      "radiusKm": 15,
+      "tags": ["known-item", "chain"],
+      "relevant": {
+        "nameWords": ["petco"]
+      }
+    },
+    {
+      "id": "name-chain-kota-gdl",
+      "q": "+kota",
+      "near": "guadalajara",
+      "radiusKm": 15,
+      "tags": ["known-item", "chain", "spelling"],
+      "relevant": {
+        "nameWords": ["maskota"]
+      },
+      "note": "+Kota (\"más kota\") is listed as Maskota in DENUE"
+    },
+    {
+      "id": "place-coyoacan",
+      "q": "Coyoacán",
+      "near": "cdmx-zocalo",
+      "mode": "place",
+      "tags": ["geo"],
+      "expectArea": {
+        "name": "Coyoacán",
+        "state": "Ciudad de México"
+      },
+      "judge": {
+        "lat": 19.3614,
+        "lng": -99.1707,
+        "radiusKm": 5
+      },
+      "relevant": {}
+    },
+    {
+      "id": "place-zapopan",
+      "q": "Zapopan",
+      "near": "guadalajara",
+      "mode": "place",
+      "tags": ["geo"],
+      "expectArea": {
+        "name": "Zapopan",
+        "state": "Jalisco"
+      },
+      "judge": {
+        "lat": 20.7227,
+        "lng": -103.3931,
+        "radiusKm": 5
+      },
+      "relevant": {}
+    },
+    {
+      "id": "place-polanco",
+      "q": "Polanco",
+      "near": "cdmx-zocalo",
+      "mode": "place",
+      "tags": ["geo"],
+      "expectArea": {
+        "name": "Polanco",
+        "state": "Ciudad de México"
+      },
+      "judge": {
+        "lat": 19.4335,
+        "lng": -99.191,
+        "radiusKm": 5
+      },
+      "relevant": {}
+    },
+    {
+      "id": "place-queretaro-no-accents",
+      "q": "queretaro",
+      "near": "cdmx-zocalo",
+      "mode": "place",
+      "tags": ["geo", "accents"],
+      "expectArea": {
+        "name": "Querétaro",
+        "state": "Querétaro"
+      },
+      "judge": {
+        "lat": 20.6075,
+        "lng": -100.4029,
+        "radiusKm": 5
+      },
+      "relevant": {}
+    },
+    {
+      "id": "place-san-pedro",
+      "q": "San Pedro Garza García",
+      "near": "monterrey",
+      "mode": "place",
+      "tags": ["geo", "multi-token"],
+      "expectArea": {
+        "name": "San Pedro Garza García",
+        "state": "Nuevo León"
+      },
+      "judge": {
+        "lat": 25.6549,
+        "lng": -100.3615,
+        "radiusKm": 5
+      },
+      "relevant": {}
+    },
+    {
+      "id": "pf-cafe-condesa",
+      "q": "café",
+      "near": "cdmx-condesa",
+      "group": "pet_friendly",
+      "tags": ["pet-friendly", "accents"],
+      "relevant": {
+        "categories": ["cafe"],
+        "takesPets": true
+      }
+    },
+    {
+      "id": "pf-restaurant-condesa",
+      "q": "restaurante",
+      "near": "cdmx-condesa",
+      "group": "pet_friendly",
+      "tags": ["pet-friendly"],
+      "relevant": {
+        "categories": ["restaurant"],
+        "takesPets": true
+      }
+    },
+    {
+      "id": "pf-hotel-gdl",
+      "q": "hotel",
+      "near": "guadalajara",
+      "group": "pet_friendly",
+      "radiusKm": 10,
+      "tags": ["pet-friendly"],
+      "relevant": {
+        "categories": ["lodging"],
+        "takesPets": true
+      }
+    },
+    {
+      "id": "pf-dog-park-cdmx",
+      "q": "parque para perros",
+      "near": "cdmx-condesa",
+      "group": "pet_friendly",
+      "radiusKm": 10,
+      "tags": ["pet-friendly", "multi-token", "synonym"],
+      "relevant": {
+        "categories": ["park"],
+        "takesPets": true
+      }
+    },
+    {
+      "id": "neg-puppy-mill",
+      "q": "criadero de perros",
+      "near": "cdmx-zocalo",
+      "radiusKm": 25,
+      "tags": ["negative", "cruelty"],
+      "relevant": null
+    },
+    {
+      "id": "neg-cockfighting",
+      "q": "gallos de pelea",
+      "near": "guadalajara",
+      "radiusKm": 25,
+      "tags": ["negative", "cruelty"],
+      "relevant": null
+    },
+    {
+      "id": "neg-other-business",
+      "q": "pizza",
+      "near": "cdmx-condesa",
+      "tags": ["negative"],
+      "relevant": null
+    },
+    {
+      "id": "neg-gibberish",
+      "q": "xqzvw",
+      "near": "monterrey",
+      "tags": ["negative"],
+      "relevant": null
+    }
+  ]
+}
