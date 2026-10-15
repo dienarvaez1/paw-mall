@@ -11,6 +11,7 @@ export const EXPLORE_CHIPS = [
   'boarding',
   'feed_store',
   'dog_trainer',
+  'animal_welfare',
   'pet_funeral',
   'public_vet_service',
 ] as const satisfies readonly (CategorySlug | null)[];
@@ -35,6 +36,8 @@ export type ChipCategory = (typeof CHIP_CATEGORIES)[number];
 // shows pet businesses, Pet-friendly shows venues.
 export const CATEGORY_COLORS: Partial<Record<CategorySlug, string>> = {
   vet_hospital: '#dc2626', // red-600: hospitals only
+  // Before vets: a shelter that also treats animals shows as a shelter (Phase 22).
+  animal_welfare: '#059669', // emerald-600
   veterinarian: '#16a34a', // green-600
   public_vet_service: '#4d7c0f', // lime-800 (olive)
   groomer: '#9333ea', // purple-600

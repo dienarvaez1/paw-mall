@@ -57,6 +57,10 @@ describe('detectCategory', () => {
     expect(detectCategory('Café').category).toBe('cafe');
     expect(detectCategory('restaurante').category).toBe('restaurant');
     expect(detectCategory('parque para perros')).toEqual({ category: 'park', words: '' });
+    expect(detectCategory('adopción de perros')).toEqual({ category: 'animal_welfare', words: '' });
+    expect(detectCategory('refugio canino')).toEqual({ category: 'animal_welfare', words: '' });
+    // "Refugio" alone is also a common business name ("Tacos el Refugio").
+    expect(detectCategory('el refugio').category).toBeNull();
   });
 });
 

@@ -11,6 +11,7 @@ import {
   dedupeChainBranches,
   dedupeSameBusiness,
   formatPhone,
+  isAnimalWelfare,
   isCrueltyLinked,
   venueCategory,
   mapDenueRow,
@@ -174,13 +175,50 @@ describe('categorize', () => {
   it('does not take shelters for boarding', () => {
     expect(
       categorize('541942', 'HOTEL PARA PERROS Y GATOS ABANDONADOS').map((c) => c.slug),
-    ).toEqual(['public_vet_service']);
+    ).toEqual(['public_vet_service', 'animal_welfare']);
   });
 
   it('reads accents and mixed case', () => {
     expect(categorize('812990', 'Peluquería para Mascotas').map((c) => c.slug)).toEqual([
       'groomer',
     ]);
+  });
+});
+
+describe('isAnimalWelfare (adoption, rescue and protection)', () => {
+  it.each([
+    ['813230', 'REFUGIO DE AMOR ALBERGUE CANINO'],
+    ['813230', 'SANTUARIO DE ANIMALES AHUACATLAN PATITAS AL RESCATE'],
+    ['812990', 'APAC | ASOSACION PROTECTORA DE ANIMALES DE LA CALLE'],
+    ['813230', 'MILAGRO CANINO DE NAVOJOA | MILAGRO CANINO DE NAVOJOA AC'],
+    ['541941', 'GRANOS DE ARENA | GRANOS DE ARENA FUNDACION DE BIENESTAR ANIMAL'],
+    ['813230', 'REFUGIO LUPIS ANIMALISTA'],
+    ['541942', 'UNIDAD DE PROTECCION ANIMAL'],
+  ])('takes %s %s', (code, names) => {
+    expect(isAnimalWelfare(code, names)).toBe(true);
+  });
+
+  it.each([
+    ['541941', 'VETERINARIA EL REFUGIO'],
+    ['541941', 'VETERINARIA BIENESTAR ANIMAL'],
+    ['541942', 'CENTRO DE RESCATE ANIMAL Y CONTROL DE ZONOSIS'],
+    ['541942', 'UNIDAD DE CONTROL Y PROTECCION ANIMAL'],
+    ['813230', 'EQUINOTERAPIA HOSSANA | FUNDACION'],
+    ['812990', 'ESCUELA PARA ENTRENAMIENTO DE PERROS GUIA PARA CIEGOS IAP'],
+    ['813210', 'SANTUARIO DE GUADALUPE'],
+    ['722514', 'TACOS EL REFUGIO DEL GATO BOLADOR'],
+    ['813230', 'ALBERGUE PARA MIGRANTES'],
+  ])('leaves out %s %s', (code, names) => {
+    expect(isAnimalWelfare(code, names)).toBe(false);
+  });
+
+  it('imports civil associations only by name, alongside a vet category', () => {
+    expect(categorize('813230', 'ASOCIACION DE COLONOS').map((c) => c.slug)).toEqual([]);
+    expect(
+      categorize('541941', 'ANGELES DEL REINO ANIMAL', 'ANGELES DEL REINO ANIMAL AC').map(
+        (c) => c.slug,
+      ),
+    ).toEqual(['veterinarian', 'animal_welfare']);
   });
 });
 

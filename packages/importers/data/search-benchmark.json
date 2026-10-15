@@ -278,6 +278,29 @@
       }
     },
     {
+      "id": "welfare-adoption-cdmx",
+      "q": "adopción de perros",
+      "near": "cdmx-zocalo",
+      "radiusKm": 25,
+      "tags": ["service", "animal-welfare", "multi-token"],
+      "relevant": {
+        "categories": ["animal_welfare"]
+      },
+      "note": "Adoption, rescue and protection (Phase 22)."
+    },
+    {
+      "id": "welfare-shelter-central",
+      "q": "refugio canino",
+      "near": "cdmx-zocalo",
+      "mode": "typed",
+      "radiusKm": 160,
+      "tags": ["service", "animal-welfare"],
+      "relevant": {
+        "categories": ["animal_welfare"]
+      },
+      "note": "Shelters around central Mexico (Phase 22)."
+    },
+    {
       "id": "vet-in-colonia-cdmx",
       "q": "veterinaria en Coyoacán",
       "near": "cdmx-zocalo",

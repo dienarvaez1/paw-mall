@@ -38,6 +38,7 @@ export const CATEGORY_ICONS: Partial<Record<CategorySlug, ImageSource>> = {
   pet_store: require('../../assets/icons/cat-pet_store.svg') as ImageSource,
   feed_store: require('../../assets/icons/cat-feed_store.svg') as ImageSource,
   pet_funeral: require('../../assets/icons/cat-pet_funeral.svg') as ImageSource,
+  animal_welfare: require('../../assets/icons/cat-animal_welfare.svg') as ImageSource,
   dog_trainer: require('../../assets/icons/cat-dog_trainer.svg') as ImageSource,
   restaurant: require('../../assets/icons/cat-restaurant.svg') as ImageSource,
   cafe: require('../../assets/icons/cat-cafe.svg') as ImageSource,
