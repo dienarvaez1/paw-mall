@@ -193,6 +193,13 @@ describe('searching an area', () => {
     expect((await search('animalia')).area).toBeNull();
   });
 
+  it('finds a place\'s vets on Explorar and nothing on Pet-friendly ("Tlaxcala vet")', async () => {
+    const explore = await search('plaza prueba paw vet', '&group=pet_business');
+    expect(explore.items.map((p) => p.name)).toEqual(['Veterinaria de la Plaza']);
+    const petFriendly = await search('plaza prueba paw vet', '&group=pet_friendly');
+    expect(petFriendly).toMatchObject({ area: { name: 'Plaza Prueba Paw' }, total: 0 });
+  });
+
   it('searches every word in names, no keyword, when asked for exact words', async () => {
     const exact = await search('veterinaria junto', '&namesOnly=true&exactWords=true');
     expect(exact).toMatchObject({ area: null, searchCategory: null });
