@@ -20,7 +20,8 @@ Wikidata) plus hand-collected pet policies. Spanish first (`es-MX`), English alo
 Paw Mall's main quality risk isn't whether the app runs. It's whether the app reliably leads
 people to the right pet businesses, including ones they would otherwise miss, and whether those
 listings can be trusted. Quality work is organized around five pillars. Each one is backed by
-automated checks, reports and release criteria in this repository.
+automated checks, reports and release criteria in this repository; the full approach is in
+[docs/QA-STRATEGY.md](docs/QA-STRATEGY.md).
 
 | Pillar                                   | What is verified                                                                                                                                                           | Evidence                                                                                                                                                                       |
 | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -87,16 +88,17 @@ pnpm --filter mobile start             # Metro; scan the QR code with Expo Go
 
 ## Documentation
 
-| Document                                       | For                                                          |
-| ---------------------------------------------- | ------------------------------------------------------------ |
-| [docs/USER-GUIDE.md](docs/USER-GUIDE.md)       | How the app works, screen by screen                          |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)   | How the pieces fit: app, API, database, data pipeline        |
-| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)     | Setting up, running, conventions and troubleshooting         |
-| [docs/TESTING-E2E.md](docs/TESTING-E2E.md)     | End-to-end flows, test data and the GitHub Actions workflows |
-| [docs/GOOGLE-PLACES.md](docs/GOOGLE-PLACES.md) | Google "Ver horario" and the Android Maps key                |
-| [docs/PLAN.md](docs/PLAN.md)                   | The build plan, phase by phase, and open decisions           |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)       | The rollout log: what each phase and PR delivered            |
-| [CLAUDE.md](CLAUDE.md)                         | Standing rules for working in this repo                      |
+| Document                                       | For                                                                  |
+| ---------------------------------------------- | -------------------------------------------------------------------- |
+| [docs/USER-GUIDE.md](docs/USER-GUIDE.md)       | How the app works, screen by screen                                  |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)   | How the pieces fit: app, API, database, data pipeline                |
+| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)     | Setting up, running, conventions and troubleshooting                 |
+| [docs/TESTING-E2E.md](docs/TESTING-E2E.md)     | End-to-end flows, test data and the GitHub Actions workflows         |
+| [docs/QA-STRATEGY.md](docs/QA-STRATEGY.md)     | Quality objectives, risk priorities, test strategy and release gates |
+| [docs/GOOGLE-PLACES.md](docs/GOOGLE-PLACES.md) | Google "Ver horario" and the Android Maps key                        |
+| [docs/PLAN.md](docs/PLAN.md)                   | The build plan, phase by phase, and open decisions                   |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)       | The rollout log: what each phase and PR delivered                    |
+| [CLAUDE.md](CLAUDE.md)                         | Standing rules for working in this repo                              |
 
 ## Screenshots
 
