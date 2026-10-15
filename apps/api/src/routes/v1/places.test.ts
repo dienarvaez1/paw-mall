@@ -177,6 +177,17 @@ describe('GET /v1/places search and filters', () => {
     expect(await parse('q=vet&group=pet_friendly')).toMatchObject({ searchCategory: null });
   });
 
+  it('matches a short word only at the start of a word, a longer one anywhere', async () => {
+    const names = async (q: string) =>
+      placeListResponseSchema
+        .parse((await getPlaces(`q=${q}&namesOnly=true`)).body)
+        .items.map((p) => p.name);
+    expect(await names('cer')).toEqual(['Veterinaria Cercana']);
+    // "erc" is inside "Cercana", not at a word's start (search benchmark: "vet me" found "Gómez").
+    expect(await names('erc')).toEqual([]);
+    expect(await names('ercana')).toEqual(['Veterinaria Cercana']);
+  });
+
   it('keeps only places with a phone or a live website', async () => {
     const phone = placeListResponseSchema.parse((await getPlaces('withPhone=true')).body);
     expect(phone.items.map((p) => p.name)).toEqual(['Veterinaria Cercana']);
