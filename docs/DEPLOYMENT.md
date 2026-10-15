@@ -1199,8 +1199,8 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Status:** In review.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
-  - [x] `pnpm test`: 372 tests (shared 41, mobile 97, api 110, importers 124)
-  - [x] `pnpm search:bench`: 47 queries, 0 of 41 regressed against Phase 18's baseline; the six new
+  - [x] `pnpm test`: 373 tests (shared 41, mobile 97, api 111, importers 124)
+  - [x] `pnpm search:bench`: 49 queries (47 after the place-with-words change), 0 of 41 regressed against Phase 18's baseline; the six new
         ones score 90–100% (both orders and "veterinaria en Mascota" find Mascota's 4 vets; "vet
         tlaxcala" from Puebla; "veterinaria mi mascota" by name; "puerto vallarta taco" 9 of 10);
         precision@10 99%, recall@10 97%; new baseline committed (`ac3cc90`)
@@ -1223,6 +1223,11 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
      venues) and six queries.
   5. **Flows:** new `service-in-place` (both orders, and "Paw Tlaxcala"); `search-typed-fit` now
      types "forrajeria" (no place in it; 5 → 10 km).
+  6. **A pet-business keyword finds nothing on Pet-friendly** (owner's rule, 2026-10-14): "vet",
+     "Tlaxcala vet" and similar list no venue (they used to list every pet-friendly venue in
+     Tlaxcala, the keyword dropped); Explorar lists Tlaxcala's vets, and the app's tab pick moves
+     there. Venue words on Explorar ("hotel") still read as words in names ("Hotel Canino"). Two
+     negative benchmark queries; 9 search flows pass on the emulator against it.
 - **Notes:**
   - "veterinaria mascota" always asks: "Mascota" is also a pet word, and 70 vets within 25 km of
     the Zócalo have both words in their names.

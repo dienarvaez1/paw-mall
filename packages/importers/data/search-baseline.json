@@ -1,17 +1,17 @@
 {
   "createdOn": "2026-10-14",
-  "commit": "ac3cc90",
+  "commit": "d154fa6",
   "visiblePlaces": 813169,
   "summary": {
-    "queries": 47,
+    "queries": 49,
     "precisionAt10": 0.9904761904761905,
     "recallAt10": 0.9674418604651163,
     "zeroResultRate": 0,
     "knownItemRate": 1,
     "negativePassRate": 1,
     "areaIntentRate": 1,
-    "latencyP50Ms": 30,
-    "latencyP95Ms": 43
+    "latencyP50Ms": 29,
+    "latencyP95Ms": 42
   },
   "results": [
     {
@@ -28,7 +28,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 34
+      "latencyMs": 29
     },
     {
       "id": "vet-short-gdl",
@@ -44,7 +44,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 27
+      "latencyMs": 30
     },
     {
       "id": "vet-typo-mty",
@@ -60,7 +60,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 24
+      "latencyMs": 27
     },
     {
       "id": "vet-clinic-puebla",
@@ -92,7 +92,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 27
+      "latencyMs": 28
     },
     {
       "id": "hospital-cdmx",
@@ -124,7 +124,7 @@
       "knownTotal": 1,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 30
+      "latencyMs": 28
     },
     {
       "id": "vet-24h-cdmx",
@@ -140,7 +140,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 32
+      "latencyMs": 31
     },
     {
       "id": "groomer-accents-cdmx",
@@ -204,7 +204,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 27
+      "latencyMs": 30
     },
     {
       "id": "pet-store-gdl",
@@ -220,7 +220,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 26
+      "latencyMs": 25
     },
     {
       "id": "pet-store-english-tijuana",
@@ -252,7 +252,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 30
+      "latencyMs": 27
     },
     {
       "id": "pet-food-phrase-merida",
@@ -268,7 +268,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 27
+      "latencyMs": 25
     },
     {
       "id": "aquarium-gdl",
@@ -284,7 +284,7 @@
       "knownTotal": 1,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 29
+      "latencyMs": 36
     },
     {
       "id": "boarding-qro",
@@ -316,7 +316,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 41
+      "latencyMs": 39
     },
     {
       "id": "feed-store-oaxaca",
@@ -364,7 +364,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 26
+      "latencyMs": 30
     },
     {
       "id": "vet-in-colonia-cdmx",
@@ -380,7 +380,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 33
+      "latencyMs": 37
     },
     {
       "id": "groomer-city-word-gdl",
@@ -396,7 +396,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 31
+      "latencyMs": 35
     },
     {
       "id": "name-farmanimals",
@@ -412,7 +412,7 @@
       "knownTotal": 1,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 31
+      "latencyMs": 28
     },
     {
       "id": "name-vet-me",
@@ -428,7 +428,7 @@
       "knownTotal": 1,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 32
+      "latencyMs": 31
     },
     {
       "id": "name-chain-petco-mty",
@@ -444,7 +444,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 30
+      "latencyMs": 26
     },
     {
       "id": "name-chain-kota-gdl",
@@ -460,7 +460,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 23
+      "latencyMs": 24
     },
     {
       "id": "place-coyoacan",
@@ -476,7 +476,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": true,
-      "latencyMs": 50
+      "latencyMs": 51
     },
     {
       "id": "place-zapopan",
@@ -492,7 +492,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": true,
-      "latencyMs": 43
+      "latencyMs": 41
     },
     {
       "id": "place-polanco",
@@ -508,7 +508,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": true,
-      "latencyMs": 37
+      "latencyMs": 38
     },
     {
       "id": "place-queretaro-no-accents",
@@ -540,7 +540,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": true,
-      "latencyMs": 39
+      "latencyMs": 36
     },
     {
       "id": "service-place-vet-mascota",
@@ -556,7 +556,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": true,
-      "latencyMs": 32
+      "latencyMs": 27
     },
     {
       "id": "service-place-mascota-vet",
@@ -636,7 +636,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": true,
-      "latencyMs": 42
+      "latencyMs": 40
     },
     {
       "id": "pf-cafe-condesa",
@@ -652,7 +652,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 25
+      "latencyMs": 27
     },
     {
       "id": "pf-restaurant-condesa",
@@ -668,7 +668,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 31
+      "latencyMs": 26
     },
     {
       "id": "pf-hotel-gdl",
@@ -684,7 +684,7 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 28
+      "latencyMs": 27
     },
     {
       "id": "pf-dog-park-cdmx",
@@ -700,7 +700,39 @@
       "knownTotal": 0,
       "negativePass": null,
       "areaMatched": null,
-      "latencyMs": 26
+      "latencyMs": 28
+    },
+    {
+      "id": "neg-pf-vet-tlaxcala",
+      "tags": ["negative", "geo", "service-in-place"],
+      "returned": 0,
+      "relevantReturned": 0,
+      "relevantInCircle": 0,
+      "relevantReturnedInCircle": 0,
+      "precision": null,
+      "recall": null,
+      "zeroResult": false,
+      "knownFound": 0,
+      "knownTotal": 0,
+      "negativePass": true,
+      "areaMatched": true,
+      "latencyMs": 36
+    },
+    {
+      "id": "neg-pf-vet",
+      "tags": ["negative"],
+      "returned": 0,
+      "relevantReturned": 0,
+      "relevantInCircle": 0,
+      "relevantReturnedInCircle": 0,
+      "precision": null,
+      "recall": null,
+      "zeroResult": false,
+      "knownFound": 0,
+      "knownTotal": 0,
+      "negativePass": true,
+      "areaMatched": null,
+      "latencyMs": 35
     },
     {
       "id": "neg-puppy-mill",
@@ -716,7 +748,7 @@
       "knownTotal": 0,
       "negativePass": true,
       "areaMatched": null,
-      "latencyMs": 34
+      "latencyMs": 31
     },
     {
       "id": "neg-cockfighting",
@@ -732,7 +764,7 @@
       "knownTotal": 0,
       "negativePass": true,
       "areaMatched": null,
-      "latencyMs": 32
+      "latencyMs": 31
     },
     {
       "id": "neg-other-business",
@@ -748,7 +780,7 @@
       "knownTotal": 0,
       "negativePass": true,
       "areaMatched": null,
-      "latencyMs": 40
+      "latencyMs": 42
     },
     {
       "id": "neg-gibberish",
@@ -764,7 +796,7 @@
       "knownTotal": 0,
       "negativePass": true,
       "areaMatched": null,
-      "latencyMs": 31
+      "latencyMs": 28
     }
   ]
 }
