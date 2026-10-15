@@ -120,7 +120,7 @@ database. Results on 2026-10-14 (M-series Mac, Docker with 4 CPUs, 813k places):
 
 ### Search benchmark
 
-`packages/importers/data/search-benchmark.json` holds 41 labeled Spanish and English searches
+`packages/importers/data/search-benchmark.json` holds 47 labeled Spanish and English searches
 from nine cities: services, synonyms, accents, a typo, English words, business names, place names
 and negative cases (puppy mills, cockfighting, unrelated words). Each is sent to the API as the
 app sends it (typed text as names only; Pet-friendly with its default filter), and its top 10 are
@@ -145,7 +145,9 @@ so CI can't run it; a re-import changes the data and the results (the report say
 Labels are drafts until the owner reviews them (`review.status` in the file). Baseline after
 Phase 18's fixes (2026-10-14, 813k visible places): precision@10 99%, recall@10 96%, zero
 results 0%, known items, negative cases and place intent 100%, latency p50 29 ms and p95 48 ms.
-Phase 17's first baseline was precision 93%, recall 72%, zero results 5%.
+Phase 17's first baseline was precision 93%, recall 72%, zero results 5%. Phase 19 added six
+queries (a place with other words, in both orders; `exact` mode for "by that name"; `widened`
+for Pet-friendly's unconfirmed venues): 47 queries, precision 99%, recall 97%, p95 43 ms.
 
 ## Conventions (summary of CLAUDE.md)
 

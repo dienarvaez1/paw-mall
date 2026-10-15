@@ -75,7 +75,7 @@ Responses are localized by `Accept-Language` (`es` default, `en`).
 | `GET /v1/categories`                 | Categories with names and counts                                                                                                                       |
 | `GET /v1/places`                     | The list: places within a radius, nearest first, paged; text search, category, filters                                                                 |
 | `GET /v1/places/map`                 | The map: places in the visible box and the radius — one by one up to `limit` (the app's pin button: 50–300, default 200), otherwise a grid of clusters |
-| `GET /v1/places/area`                | Whether a text is exactly a place's name (for the place-or-business question)                                                                          |
+| `GET /v1/places/area`                | Whether a text is a place's name, or a place with other words in any order (`business`, `category`, `ambiguous`), for the app's question               |
 | `GET /v1/places/area-suggestions`    | Place names for the search box's autocomplete (order-invariant word starts)                                                                            |
 | `GET /v1/places/urgent`              | Emergency vets: hospitals and 24-hour vets, nearest and open first                                                                                     |
 | `GET /v1/places/:id`                 | One place, with its policy, hours and sources                                                                                                          |
@@ -213,10 +213,10 @@ use `Intl` with the active locale.
   database down (`database-down.test.ts`: `/health` reports it, every route answers a bare
   `INTERNAL_ERROR`), and a DENUE import that fails part way (`denue/save.test.ts`: one
   transaction, so nothing is left behind).
-- **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 41 labeled
+- **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 47 labeled
   searches to the local API and judges the top 10 in SQL against the labels, then compares with
   the committed baseline ([DEVELOPMENT.md](DEVELOPMENT.md), "Search benchmark").
-- **End to end:** Maestro flows in `apps/mobile/.maestro` (30 flows, 34 journeys) on fixed test
+- **End to end:** Maestro flows in `apps/mobile/.maestro` (31 flows, 36 journeys) on fixed test
   data, on the Android build and on iOS in Expo Go — see [TESTING-E2E.md](TESTING-E2E.md).
 - **CI:** `.github/workflows/ci.yml` (lint, typecheck, tests on every PR) and `e2e.yml` (Maestro on
   an Android emulator: nightly, manual or the `run-e2e` label).
