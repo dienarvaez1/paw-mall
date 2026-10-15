@@ -145,7 +145,7 @@ Counts are from the DENUE edition of May 2026, measured on October 5, 2026.
 
 ## Phased roadmap
 
-Seven phases were planned at the start; phases 8 to 19 were added as the work went on. Each ends
+Seven phases were planned at the start; phases 8 to 20 were added as the work went on. Each ends
 with a check you can run on your phone. Finish and commit one phase before starting the next. No deploys in any phase until the owner decides.
 
 1. **Foundation (1–2 days).** Monorepo, TypeScript, lint, Prettier, Vitest, `CLAUDE.md`, Expo app
@@ -253,6 +253,12 @@ with a check you can run on your phone. Finish and commit one phase before start
     near the user has all the words in its name or the place's name is a pet word.
     - Done when: both orders find the vets in Mascota, Jalisco, "puerto vallarta taco" finds taco
       places there, and the benchmark and the end-to-end flows pass.
+
+20. **Full-text search (added 2026-10-14, owner's choice).** PostgreSQL full-text search with
+    Spanish stems and a synonyms table, alongside the letter-for-letter matching; ordering stays
+    nearest first. No new dependency or service.
+    - Done when: plurals and synonyms find more of the relevant places, the benchmark shows no
+      regression, and the load test stays under its threshold.
 
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when

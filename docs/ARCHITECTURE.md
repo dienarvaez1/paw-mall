@@ -40,6 +40,7 @@ Drizzle schema in `apps/api/src/db/schema.ts`, SQL migrations in `apps/api/src/d
 | `policy_answers`, `pet_answers`       | Users' "is this policy right?" and "does it take dogs?" answers, one per phone (random app id)                                                                                                                                 |
 | `place_reports`                       | "Closed" and "animal cruelty" reports, one per phone; a report hides the place until reviewed                                                                                                                                  |
 | `place_claims`                        | Owners' claims, reviewed by hand (`pnpm places:claims`); the SAT certificate check is deferred by the owner                                                                                                                    |
+| `search_synonyms`                     | Words that mean the same in names ("taco", "taquería"), each with its alternatives; loaded by `pnpm search:synonyms`                                                                                                     |
 | `search_areas`                        | Colonias, towns, municipalities and landmarks with a normalized `name_key` (trigram index), for searching "around a place" and the search box's suggestions                                                                    |
 | `google_usage`, `google_lookups`      | The Google Places free-tier counters and per-phone daily limits                                                                                                                                                                |
 | `import_runs`                         | One row per importer run: counts and timing                                                                                                                                                                                    |
@@ -95,7 +96,10 @@ Responses are localized by `Accept-Language` (`es` default, `en`).
   it's searched in names: "vet" with Restaurantes); a place name
   ("Coyoacán", "Zócalo", or "vet en Coyoacán") moves the circle there; the remaining words must
   each appear in the name, city or state (`searchWords`; "CDMX"/"DF" read as Ciudad de México),
-  and a word of 3 letters or fewer must start a word of the name.
+  and a word of 3 letters or fewer must start a word of the name. Each word also matches by
+  full-text search (Phase 20): `places.search_words` holds the name, city and state as Spanish
+  stems, and `search_word_query()` ORs the word's stem with its synonyms' (`search_synonyms`), so
+  plurals find singular names and "tacos" finds "Taquería". Ordering stays nearest first.
   The app can force "business names only" (`namesOnly`) or "around this place".
 - **Nearest first:** pages are read from the location index in distance order
   (`p.location <-> point`), so a page stops after its places; the total comes from a separate
@@ -125,6 +129,7 @@ Each loader is a command (`pnpm places:*`), safe to re-run, writing to the same 
 | 7     | `places:chains`                                       | Chain-wide pet policies (`data/pet-friendly-chains.json`)                                                                                                                 |
 | —     | `places:landmarks`                                    | Refreshes the Wikidata landmarks snapshot                                                                                                                                 |
 | —     | `places:claims`, `places:reports`, `places:policies`  | Owner review of claims, reports and policy answers                                                                                                                        |
+| —     | `search:synonyms`                                     | Words that mean the same in names (`data/search-synonyms.json`) for full-text search                                                                                      |
 | —     | `search:bench`                                        | Search quality benchmark: labeled searches scored against the API (precision and recall at 10, regressions)                                                               |
 | —     | `places:integrity`                                    | Read-only data-integrity report: duplicates, bad coordinates or hours, Urgencias gaps, stale data                                                                         |
 | —     | `e2e:seed`                                            | The fixed test data for end-to-end tests (`paw_mall_e2e`)                                                                                                                 |
@@ -213,7 +218,7 @@ use `Intl` with the active locale.
   database down (`database-down.test.ts`: `/health` reports it, every route answers a bare
   `INTERNAL_ERROR`), and a DENUE import that fails part way (`denue/save.test.ts`: one
   transaction, so nothing is left behind).
-- **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 49 labeled
+- **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 51 labeled
   searches to the local API and judges the top 10 in SQL against the labels, then compares with
   the committed baseline ([DEVELOPMENT.md](DEVELOPMENT.md), "Search benchmark").
 - **End to end:** Maestro flows in `apps/mobile/.maestro` (31 flows, 36 journeys) on fixed test

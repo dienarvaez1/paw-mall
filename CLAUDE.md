@@ -66,7 +66,8 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 - App: `pnpm --filter mobile start`, then scan the QR code with Expo Go.
 - Data: `pnpm places:import` (DENUE, about 15 s from the cached zips), then
   `pnpm places:enrich-overture` and `pnpm places:check-websites` (visits each business website
-  once), then `pnpm places:areas` (colonias, cities and landmarks for the search box). Each is
+  once), then `pnpm places:areas` (colonias, cities and landmarks for the search box) and
+  `pnpm search:synonyms` (words that mean the same in names, `data/search-synonyms.json`). Each is
   safe to re-run; `pnpm places:import --dry-run` reports without writing.
 - Pet-friendly and hours: after `pnpm places:import`, run `pnpm places:curated` (hand-collected
   places), `pnpm places:osm` (OpenStreetMap dog parks and venues, snapshot
@@ -83,7 +84,7 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
   read-only data-integrity report (about 20 s on the full data).
 - Load test: `pnpm --filter api dev:load`, then `pnpm load` (k6, local only; see
   `docs/DEVELOPMENT.md`, "Load test").
-- Search benchmark: with the dev API running, `pnpm search:bench` scores 49 labeled searches
+- Search benchmark: with the dev API running, `pnpm search:bench` scores 51 labeled searches
   against `packages/importers/data/search-baseline.json`; run it before and after any search
   change and commit a new baseline (`--save`) with it (`docs/DEVELOPMENT.md`, "Search benchmark").
 - End-to-end: Maestro flows in `apps/mobile/.maestro/` on the Android development build and fixed

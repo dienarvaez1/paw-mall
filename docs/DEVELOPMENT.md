@@ -33,6 +33,7 @@ pnpm places:import            # INEGI DENUE, all 32 states (zips cached after th
 pnpm places:enrich-overture   # phones, websites, social pages from Overture Maps
 pnpm places:check-websites    # visits each website once (about an hour for all of Mexico)
 pnpm places:areas             # colonias, cities and landmarks for the search box
+pnpm search:synonyms          # words that mean the same in names (data/search-synonyms.json)
 pnpm places:curated           # hand-collected pet-friendly places
 pnpm places:osm               # OpenStreetMap dog parks and venues (--refresh for a new snapshot)
 pnpm places:osm-hours         # OpenStreetMap opening hours
@@ -120,7 +121,7 @@ database. Results on 2026-10-14 (M-series Mac, Docker with 4 CPUs, 813k places):
 
 ### Search benchmark
 
-`packages/importers/data/search-benchmark.json` holds 49 labeled Spanish and English searches
+`packages/importers/data/search-benchmark.json` holds 51 labeled Spanish and English searches
 from nine cities: services, synonyms, accents, a typo, English words, business names, place names
 and negative cases (puppy mills, cockfighting, unrelated words). Each is sent to the API as the
 app sends it (typed text as names only; Pet-friendly with its default filter), and its top 10 are
@@ -147,7 +148,9 @@ Phase 18's fixes (2026-10-14, 813k visible places): precision@10 99%, recall@10 
 results 0%, known items, negative cases and place intent 100%, latency p50 29 ms and p95 48 ms.
 Phase 17's first baseline was precision 93%, recall 72%, zero results 5%. Phase 19 added six
 queries (a place with other words, in both orders; `exact` mode for "by that name"; `widened`
-for Pet-friendly's unconfirmed venues): 47 queries, precision 99%, recall 97%, p95 43 ms.
+for Pet-friendly's unconfirmed venues): 47 queries, precision 99%, recall 97%, p95 43 ms. Phase 20
+(full-text search) added two ("perritos": 60% → 100% recall; "tacos"): 51 queries, precision 99%,
+recall 97%, p95 47 ms, no regression.
 
 ## Conventions (summary of CLAUDE.md)
 
