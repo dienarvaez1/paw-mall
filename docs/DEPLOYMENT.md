@@ -1153,4 +1153,4 @@ Play readiness").
 | 2026-10-14 | Phase 15 merged (`1e95d14`)                                  | #27 |
 | 2026-10-14 | Phase 16 started                                             | #28 |
 | 2026-10-14 | Phase 16 merged (`501415d`)                                  | #28 |
-| 2026-10-14 | README screenshots, docs brought up to date                  | #30 |
+| 2026-10-14 | README screenshots, docs brought up to date (`112bf1e`)      | #30 |
