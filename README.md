@@ -15,21 +15,6 @@ Wikidata) plus hand-collected pet policies. Spanish first (`es-MX`), English alo
 **Status:** development only. Nothing is deployed; everything runs on a developer machine. See
 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for what's built so far.
 
-## Screenshots
-
-Taken on 2026-10-14 in Colonia Condesa, Mexico City, with the full development data. Android is
-the release build on the emulator (Pixel 10, Google Maps); iOS is Expo Go on the simulator
-(iPhone 17 Pro Max, Apple Maps). [docs/USER-GUIDE.md](docs/USER-GUIDE.md) describes each screen.
-
-| Screen                                                                     | Android                                                             | iOS                                                             |
-| -------------------------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- |
-| **Explorar, map:** pet businesses within the radius, grouped into clusters | <img src="docs/screenshots/android-1-map.jpg" width="220">          | <img src="docs/screenshots/ios-1-map.jpg" width="220">          |
-| **Explorar, list:** nearest first, with category, address and contact      | <img src="docs/screenshots/android-2-list.jpg" width="220">         | <img src="docs/screenshots/ios-2-list.jpg" width="220">         |
-| **Place page:** verification, directions, website, hours and reports       | <img src="docs/screenshots/android-3-place.jpg" width="220">        | <img src="docs/screenshots/ios-3-place.jpg" width="220">        |
-| **Pet-friendly:** parks, restaurants, cafés and lodging with their policy  | <img src="docs/screenshots/android-4-pet-friendly.jpg" width="220"> | <img src="docs/screenshots/ios-4-pet-friendly.jpg" width="220"> |
-| **Urgencias:** vet hospitals nearest first, with call and share            | <img src="docs/screenshots/android-5-urgent.jpg" width="220">       | <img src="docs/screenshots/ios-5-urgent.jpg" width="220">       |
-| **Ajustes:** language, distance units, pet and listing filters             | <img src="docs/screenshots/android-6-settings.jpg" width="220">     | <img src="docs/screenshots/ios-6-settings.jpg" width="220">     |
-
 ## Repository
 
 A pnpm + Turborepo monorepo:
@@ -83,6 +68,21 @@ pnpm --filter mobile start             # Metro; scan the QR code with Expo Go
 | [docs/PLAN.md](docs/PLAN.md)                   | The build plan, phase by phase, and open decisions           |
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)       | The rollout log: what each phase and PR delivered            |
 | [CLAUDE.md](CLAUDE.md)                         | Standing rules for working in this repo                      |
+
+## Screenshots
+
+Taken on 2026-10-14 in Colonia Condesa, Mexico City, with the full development data. Android is
+the release build on the emulator (Pixel 10, Google Maps); iOS is Expo Go on the simulator
+(iPhone 17 Pro Max, Apple Maps). [docs/USER-GUIDE.md](docs/USER-GUIDE.md) describes each screen.
+
+| Screen                                                                     | Android                                                             | iOS                                                             |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- |
+| **Explorar, map:** pet businesses within the radius, grouped into clusters | <img src="docs/screenshots/android-1-map.jpg" width="220">          | <img src="docs/screenshots/ios-1-map.jpg" width="220">          |
+| **Explorar, list:** nearest first, with category, address and contact      | <img src="docs/screenshots/android-2-list.jpg" width="220">         | <img src="docs/screenshots/ios-2-list.jpg" width="220">         |
+| **Place page:** verification, directions, website, hours and reports       | <img src="docs/screenshots/android-3-place.jpg" width="220">        | <img src="docs/screenshots/ios-3-place.jpg" width="220">        |
+| **Pet-friendly:** parks, restaurants, cafés and lodging with their policy  | <img src="docs/screenshots/android-4-pet-friendly.jpg" width="220"> | <img src="docs/screenshots/ios-4-pet-friendly.jpg" width="220"> |
+| **Urgencias:** vet hospitals nearest first, with call and share            | <img src="docs/screenshots/android-5-urgent.jpg" width="220">       | <img src="docs/screenshots/ios-5-urgent.jpg" width="220">       |
+| **Ajustes:** language, distance units, pet and listing filters             | <img src="docs/screenshots/android-6-settings.jpg" width="220">     | <img src="docs/screenshots/ios-6-settings.jpg" width="220">     |
 
 ## Data sources
 
