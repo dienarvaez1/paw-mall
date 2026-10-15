@@ -1,6 +1,7 @@
-# Typed text that isn't a place's name, sent with the search key, fits the radius too: "Paw
-# Tlaxcala" finds nothing within 5 km and the vet in Tlaxcala about 110 km away, so the radius
-# opens out to 160 km and lists it (owner's rule, 2026-10-13).
+# Typed text with no place in it, sent with the search key, fits the radius too: "forrajeria"
+# finds nothing within 5 km on either tab and the feed store 7 km away, so the radius opens out to
+# 10 km and lists it (owner's rule, 2026-10-13). Until Phase 19 this was "Paw Tlaxcala", which now reads
+# as a place plus a name (service-in-place).
 appId: ${APP_ID || 'dev.pawmall.app'}
 ---
 - runFlow: common/launch.yaml
@@ -8,10 +9,11 @@ appId: ${APP_ID || 'dev.pawmall.app'}
     id: mode-list
 - tapOn:
     id: search-input
-- inputText: Paw Tlaxcala
+# The trailing space commits the last word as typed (see service-in-place).
+- inputText: 'forrajeria '
 - pressKey: Enter
 - extendedWaitUntil:
-    visible: Veterinaria Paw Tlaxcala.*
+    visible: Forrajería Guadalupe Paw.*
     timeout: 20000
-- assertVisible: '(.*\D)?160 km.*'
+- assertVisible: '(.*\D)?10 km.*'
 - assertNotVisible: Como nombre de negocio|As a business name

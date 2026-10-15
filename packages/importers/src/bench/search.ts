@@ -21,9 +21,15 @@ const benchmarkQuery = z.object({
   near: z.string(),
   radiusKm: z.number().positive().default(DEFAULT_RADIUS_KM),
   group: z.enum(['pet_business', 'pet_friendly']).default('pet_business'),
-  /** typed: text sent with the search key (names only); place: a place picked from suggestions. */
-  mode: z.enum(['typed', 'place']).default('typed'),
+  /**
+   * typed: text sent with the search key (names only); place: a place picked from the suggestions,
+   * or a kind of business in a place (the app goes there, or asks and the user says "in the
+   * place"); exact: "by that name" after that question (every word in names, no keyword).
+   */
+  mode: z.enum(['typed', 'place', 'exact']).default('typed'),
   tags: z.array(z.string()).default([]),
+  /** Pet-friendly widened to venues nobody has answered for, as the app does when none is confirmed. */
+  widened: z.boolean().default(false),
   /** The user's intent; null for a negative case (any result is wrong). */
   relevant: z
     .object({
@@ -78,9 +84,11 @@ export function apiParams(query: BenchmarkQuery, near: { lat: number; lng: numbe
     page: '1',
     pageSize: String(TOP_K),
   };
-  if (query.mode === 'typed') params.namesOnly = 'true';
+  if (query.mode !== 'place') params.namesOnly = 'true';
+  if (query.mode === 'exact') params.exactWords = 'true';
   // Pet-friendly's default: only places confirmed to take pets (Ajustes, "Solo lugares confirmados").
   if (query.group === 'pet_friendly') params.petFriendly = 'true';
+  if (query.widened) params.withUnconfirmed = 'true';
   return params;
 }
 

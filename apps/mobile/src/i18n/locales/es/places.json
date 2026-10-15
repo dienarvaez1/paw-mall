@@ -267,6 +267,13 @@
       "landmark": "zona o lugar conocido"
     }
   },
+  "serviceAsk": {
+    "title": "¿Qué buscas?",
+    "message": "«{{text}}»: ¿{{what}} en {{place}}, {{state}}, o negocios que se llamen así cerca de ti?",
+    "words": "«{{words}}»",
+    "inPlace": "En {{place}}",
+    "byName": "Con ese nombre"
+  },
   "suggestions": {
     "label": "Lugares sugeridos",
     "kind": {

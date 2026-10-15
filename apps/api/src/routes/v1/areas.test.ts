@@ -63,6 +63,11 @@ beforeAll(async () => {
   await addArea('landmark', 'Plazita Paw', 6, 0, 'Plazita Paw');
   await addArea('landmark', 'Plazita Paw', 6, 0, 'Plazita Paw Mayor');
   await addArea('colonia', 'Vallarta Paw Viejo', 7, 1);
+  // A kind of business in a place: a vet 20 km from the user named after a colonia far away makes
+  // "veterinaria barrio ambiguo paw" ambiguous; a town named like a pet word always is.
+  await addArea('colonia', 'Barrio Ambiguo Paw', 150);
+  await addPlace('named-ambiguo', 'Veterinaria Barrio Ambiguo Paw', 20);
+  await addArea('town', 'Perros', 350);
 });
 
 afterAll(async () => {
@@ -188,6 +193,12 @@ describe('searching an area', () => {
     expect((await search('animalia')).area).toBeNull();
   });
 
+  it('searches every word in names, no keyword, when asked for exact words', async () => {
+    const exact = await search('veterinaria junto', '&namesOnly=true&exactWords=true');
+    expect(exact).toMatchObject({ area: null, searchCategory: null });
+    expect(exact.items.map((p) => p.name)).toEqual(['Veterinaria Junto al Usuario']);
+  });
+
   it('searches business names when the text is no area, or when asked to', async () => {
     const names = await search('junto al usuario');
     expect(names.area).toBeNull();
@@ -240,8 +251,42 @@ describe('GET /v1/places/area', () => {
       name: 'Plaza Prueba Paw',
       kind: 'landmark',
     });
-    expect((await lookup('veterinaria en plaza prueba paw')).area).toBeNull();
-    expect((await lookup('tacos')).area).toBeNull();
+    expect(await lookup('tacos')).toMatchObject({ area: null, business: null });
+  });
+
+  it('reads a kind of business in a place, in either order', async () => {
+    for (const q of [
+      'veterinaria en plaza prueba paw',
+      'veterinaria plaza prueba paw',
+      'plaza prueba paw veterinaria',
+    ]) {
+      expect(await lookup(q)).toMatchObject({
+        area: { name: 'Plaza Prueba Paw' },
+        category: 'veterinarian',
+        ambiguous: false,
+      });
+    }
+  });
+
+  it('reads any other words in a place too ("puerto vallarta taco")', async () => {
+    expect(await lookup('plaza prueba paw tacos')).toMatchObject({
+      area: { name: 'Plaza Prueba Paw' },
+      business: 'tacos',
+      category: null,
+      ambiguous: false,
+    });
+  });
+
+  it('is ambiguous when a business nearby has that name, or the place is a pet word', async () => {
+    expect(await lookup('veterinaria barrio ambiguo paw')).toMatchObject({
+      area: { name: 'Barrio Ambiguo Paw' },
+      category: 'veterinarian',
+      ambiguous: true,
+    });
+    expect(await lookup('veterinaria perros')).toMatchObject({
+      area: { name: 'Perros' },
+      ambiguous: true,
+    });
   });
 });
 

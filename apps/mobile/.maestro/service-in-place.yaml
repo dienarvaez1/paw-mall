@@ -1,0 +1,46 @@
+# A place with other words, typed in either order and sent with the search key: a kind of
+# business ("veterinaria Tlaxcala") or any words ("Paw Tlaxcala", as "puerto vallarta taco"). The
+# search goes there with no question, since no business near the user has that name (Phase 19).
+# The question for an ambiguous text ("veterinaria mascota") is covered by the API's tests.
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: mode-list
+- tapOn:
+    id: search-input
+- inputText: veterinaria Tlaxcala
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: Veterinaria Paw Tlaxcala.*
+    timeout: 30000
+- assertNotVisible: Veterinaria Paw Centro.*
+- assertNotVisible: Como nombre de negocio|As a business name
+- assertVisible:
+    id: near-me
+    selected: false
+# The other order reads the same.
+- tapOn:
+    id: search-clear
+- tapOn:
+    id: search-input
+# The trailing space commits the last word as typed: pressing Enter on a word still being typed
+# can let the emulator's keyboard swap in its suggestion ("Veterinarian") first.
+- inputText: 'Tlaxcala veterinaria '
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: Veterinaria Paw Tlaxcala.*
+    timeout: 30000
+- assertNotVisible: Veterinaria Paw Centro.*
+# Any other words with a place go there too: the vet in Tlaxcala, not a 160 km business search.
+- tapOn:
+    id: search-clear
+- tapOn:
+    id: search-input
+- inputText: 'Paw Tlaxcala '
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: Veterinaria Paw Tlaxcala.*
+    timeout: 30000
+- assertNotVisible: Como nombre de negocio|As a business name
+- assertNotVisible: '(.*\D)?160 km.*'

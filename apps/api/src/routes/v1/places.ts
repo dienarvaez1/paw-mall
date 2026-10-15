@@ -18,9 +18,9 @@ import type { z } from 'zod';
 import type { AppEnv } from '../../env';
 import { GoogleError } from '../../lib/google-places';
 import { errorResponse, parseInput } from '../../lib/http';
-import { resolveArea, suggestAreas } from '../../queries/areas';
+import { suggestAreas } from '../../queries/areas';
 import { lookupGoogleDetails, userKey } from '../../queries/google';
-import { getPlace, listPlaces, placesForMap, urgentPlaces } from '../../queries/places';
+import { getPlace, listPlaces, lookupArea, placesForMap, urgentPlaces } from '../../queries/places';
 import { answerPet, answerPolicy, createClaim, reportPlace } from '../../queries/trust';
 
 type Received = z.infer<typeof receivedResponseSchema>;
@@ -37,12 +37,12 @@ export const placesRoute = new Hono<AppEnv>()
     if (!query.ok) return query.response;
     return c.json(await placesForMap(c.var.db, query.data, c.var.locale));
   })
-  // The search box text as a place's name, so the app can ask whether it means the place.
+  // The search box text as a place, or a kind of business in a place, for the app's question.
   .get('/area', async (c) => {
     const query = parseInput(c, areaLookupQuerySchema, c.req.query());
     if (!query.ok) return query.response;
     const { q, lat, lng } = query.data;
-    return c.json({ area: await resolveArea(c.var.db, q, { lat, lng }) });
+    return c.json(await lookupArea(c.var.db, q, { lat, lng }));
   })
   // Place names for the search box's suggestions while typing ("Puerto V" -> Puerto Vallarta).
   .get('/area-suggestions', async (c) => {

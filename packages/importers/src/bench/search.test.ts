@@ -71,6 +71,13 @@ describe('apiParams', () => {
     expect(apiParams(query({ id: 'b', mode: 'place' }), near).namesOnly).toBeUndefined();
   });
 
+  it('sends "by that name" as exact words', () => {
+    expect(apiParams(query({ id: 'a', mode: 'exact' }), near)).toMatchObject({
+      namesOnly: 'true',
+      exactWords: 'true',
+    });
+  });
+
   it("uses Pet-friendly's default filter", () => {
     expect(apiParams(query({ id: 'a', group: 'pet_friendly' }), near).petFriendly).toBe('true');
   });
