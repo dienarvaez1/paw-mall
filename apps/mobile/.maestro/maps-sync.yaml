@@ -1,0 +1,31 @@
+# One map for both tabs (owner's rule): a confirmed search fits the radius once, on the tab that
+# shows it; switching tabs afterwards keeps the same circle (2026-10-14).
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: search-input
+- inputText: Tlaxcala
+- extendedWaitUntil:
+    visible:
+      id: suggestion-0
+    timeout: 20000
+- tapOn:
+    id: suggestion-0
+- extendedWaitUntil:
+    visible: '[1-9]\d* (lugar|lugares|place|places) .*5 km (de|of) Tlaxcala.*'
+    timeout: 20000
+- tapOn:
+    id: tab-pet-friendly
+- extendedWaitUntil:
+    visible:
+      id: map-count
+      text: .*5 km (de|of) Tlaxcala.*
+    timeout: 20000
+- assertVisible: '(.*\D)?5 km.*'
+- assertNotVisible: '(.*\D)?160 km.*'
+- tapOn:
+    id: tab-explore
+- assertVisible:
+    id: map-count
+    text: .*5 km (de|of) Tlaxcala.*

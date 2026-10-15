@@ -204,6 +204,7 @@ export function usePlacesMap(
       group,
       name,
       namesOnly,
+      settings.mapPinLimit,
     ],
     enabled: area !== null,
     placeholderData: (previous) => previous,
@@ -224,6 +225,8 @@ export function usePlacesMap(
           fixedAreaRadius: (name && pickedKm !== null) || undefined,
           // A busy city's circle in the user's units, so the radius button shows it as a preset.
           cityRadiusKm: name ? startRadiusKm(settings.units) : undefined,
+          // Pins up to this many places in view, then clusters (the map's pin button).
+          limit: settings.mapPinLimit,
           ...filters,
         },
         locale,
@@ -254,9 +257,11 @@ const URGENT_REFRESH_MS = 60 * 1000;
  * Pet-friendly maps and with the Ajustes place switches; around the area the search box names
  * ("Xochimilco"), if it does, else around the user.
  */
-export function useUrgentPlaces(coords: Coords, q = '') {
+/** `areaRadiusKm`: the radius the map gives a searched place, instead of Ajustes' radius. */
+export function useUrgentPlaces(coords: Coords, q = '', areaRadiusKm?: number) {
   const locale = useLocale();
-  const { radiusKm } = useSettings();
+  const { radiusKm: settingKm } = useSettings();
+  const radiusKm = areaRadiusKm ?? settingKm;
   const { withPhone, withWebsite, withSocial, named, openNow } = usePlaceFilters();
   const filters = { withPhone, withWebsite, withSocial, named, openNow };
   return useQuery({

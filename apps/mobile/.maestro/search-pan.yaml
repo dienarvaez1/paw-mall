@@ -1,0 +1,49 @@
+# A picked place holds the search until the map is moved by hand: the search lets go of it, the
+# box empties and the search follows the map, with "Mi ubicación" still off (owner's rule,
+# 2026-10-14). With nothing in the moved circle, the map, the list and Urgencias name the nearest
+# municipality instead of a place's city.
+appId: ${APP_ID || 'dev.pawmall.app'}
+---
+- runFlow: common/launch.yaml
+- tapOn:
+    id: search-input
+- inputText: Tlaxcala
+- extendedWaitUntil:
+    visible:
+      id: suggestion-0
+    timeout: 20000
+- tapOn:
+    id: suggestion-0
+- extendedWaitUntil:
+    visible: '[1-9]\d* (lugar|lugares|place|places) .*(de|of) Tlaxcala.*'
+    timeout: 20000
+- repeat:
+    times: 2
+    commands:
+      - swipe:
+          start: 80%, 60%
+          end: 10%, 60%
+- extendedWaitUntil:
+    visible:
+      id: map-count
+      text: 0 (lugares|places) .*5 km (de|of) Tlaxcala
+    timeout: 20000
+# The box is empty again (it shows its placeholder).
+- assertVisible:
+    id: search-input
+    text: Nombre del negocio.*|Business name.*
+- assertVisible:
+    id: near-me
+    selected: false
+- tapOn:
+    id: mode-list
+- extendedWaitUntil:
+    visible: No hay lugares a menos de 5 km de Tlaxcala\.|No places within 5 km of Tlaxcala\.
+    timeout: 20000
+- tapOn:
+    id: mode-map
+- tapOn:
+    id: tab-urgent
+- extendedWaitUntil:
+    visible: No encontramos hospitales veterinarios a menos de 5 km de Tlaxcala\.|We couldn't find veterinary hospitals within 5 km of Tlaxcala\.
+    timeout: 20000

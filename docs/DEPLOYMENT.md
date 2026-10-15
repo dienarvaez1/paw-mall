@@ -43,7 +43,8 @@ checked) · **Blocked**.
 | 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
 | 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
 | 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done      | 2026-10-14 | 2026-10-14 |
-| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | In review | 2026-10-14 | —          |
+| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done      | 2026-10-14 | 2026-10-14 |
+| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | In review | 2026-10-14 | —          |
 
 ## Pending owner reviews
 
@@ -1024,7 +1025,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Scope:** the owner's pick from Phase 14's follow-ups: fill phones of vets (and vet hospitals,
   for Urgencias) that have none, from OpenStreetMap.
 - **Branch / PR:** `phase-15/osm-vet-phones` / #27
-- **Status:** In review.
+- **Status:** Done. Squash-merged into `main` as `1e95d14` on 2026-10-14; branch deleted.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
   - [x] `pnpm test`: 339 tests (shared 36, mobile 93, api 102, importers 108)
@@ -1042,6 +1043,66 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
     listed vets without a phone matched, 3 of them hospitals. Urgencias without a phone: 165 → 162. First Overpass request got 504 (busy); the retry worked.
 - **Follow-ups (owner):**
   - The other 162: owner claims, or "Ver horario" (Google, on demand) for a phone.
+
+### Phase 16 — Bug fixes 2
+
+- **Scope:** bugs the owner found after Phase 15 (2026-10-14).
+- **Branch / PR:** `phase-16/bug-fixes` / #28
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 345 tests (shared 36, mobile 96, api 105, importers 108)
+  - [x] Android emulator (release build of this branch): new `search-pan` flow, plus
+        `search-zoom`, `search-zoom-out`, `place-question`, `place-question-business`,
+        `search-clear`, `near-me`, `search-section`, `search-typed-fit`, `map-buttons`,
+        `emergencies`, `map-list`, `pet-friendly`, `empty`, `chips`, `pet-friendly-widen`,
+        `radius`, `search-pan`, and new `urgent-sync` and `maps-sync`: all pass
+- **Fixes:**
+  1. **A hand pan lets go of a searched place.** After picking a place from the suggestions or
+     answering "As a place", the map ignored pans. Now a pan away from the place empties the
+     search box and the search follows the map. It keeps the place's radius, or the zoomed one,
+     and "Mi ubicación" stays off (`leaveArea` in `explore-view.tsx`). A zoom alone still keeps
+     the place and changes its radius. Business-name searches never fix the map on a place, so
+     they already followed pans.
+  2. **Urgencias agrees with the map.**
+     - Its counter counts every urgent place in the circle; it used to count the cards, which
+       stop at 20. The API now returns `total`.
+     - Around a searched place it uses the place's radius from the map, not Ajustes'.
+     - It names the circle exactly as the list or map on screen does (`circleName`). Both tabs
+       keep a map mounted, and the hidden one's nearest place is of the other kind (a restaurant
+       vs a vet), so only the tab on screen shares its name (`useScreenFocused`). This was the
+       drift the owner still saw after the first fix. Flow `urgent-sync` compares the two names.
+  3. **Pins up to 200:** the map shows places one by one up to 200 in view (was 100), then
+     clusters (`MAP_MAX_PLACES`).
+  4. **Urgencias with none found says where:** "We couldn't find veterinary hospitals within 5 km
+     of Tlaxcala." The name is the same one as the summary uses: the searched area, or the list's
+     or map's city. With an empty circle (no place to take a city from), the API returns the
+     nearest municipality (`nearestMunicipality`; looked up only then). `search-pan` checks it.
+  5. **Empty map and list say where:** with nothing in the circle (often after moving the map),
+     the map reads "0 places within 5 km of Chiautempan" and the list's empty messages "No places
+     within 5 km of Chiautempan." The name is the searched area, or the nearest municipality: the
+     list response's `nearestMunicipality`, and the map's `nearestCity`, which falls back to it.
+     `search-pan` checks the map, the list and Urgencias.
+  6. **Pin button on the map:** a round button above the map-style button shows how many places
+     in view the map draws as pins before it groups them into clusters. Each tap steps through 50,
+     100, 150, 200 and 300 (`MAP_PIN_LIMITS`; default 200). It's saved with Ajustes (`mapPinLimit`)
+     and both maps follow it. The app sends it as `limit`, and the API now accepts up to 300.
+     `map-buttons` checks the steps.
+  7. **Bigger compass icon:** 28 pt instead of 20, in the same 36 pt circle.
+  8. **The two maps drifted again.** Reproduced on the emulator: pick Tlaxcala on Explorar (5 km),
+     open Pet-friendly, and it refit to 160 km. The search fit ran once per tab, so each tab fit
+     its own matches and the second fit moved the shared map. It now runs once per search
+     (`search-fit.ts`). Also, a hand zoom saves the view's center along with the radius, so the
+     other map shows exactly the same view; a pinch shifts the center up to 5%, which used to
+     stay unsaved. New flow `maps-sync`.
+  9. **Hide-keyboard button on the keyboard's edge:** it floated 8 pt above the keyboard; now it's
+     a tab joined to the keyboard's top edge, in a keyboard gray (`keyboard-bar.tsx`). The system
+     keyboard is its own window over the app, so nothing can be drawn inside it. `map-buttons`
+     checks the tab closes the keyboard.
+- **Notes:**
+  - The first E2E attempt "failed" because `common/hide-keyboard.yaml` pressed Back after picking a
+    suggestion had already closed the keyboard, which sent the app home; `search-pan` doesn't use
+    it.
 
 ## Production deployment
 
@@ -1089,3 +1150,5 @@ Play readiness").
 | 2026-10-14 | Phase 14 started                                             | #25 |
 | 2026-10-14 | Phase 14 merged (`472c7cc`)                                  | #25 |
 | 2026-10-14 | Phase 15 started                                             | #27 |
+| 2026-10-14 | Phase 15 merged (`1e95d14`)                                  | #27 |
+| 2026-10-14 | Phase 16 started                                             | #28 |

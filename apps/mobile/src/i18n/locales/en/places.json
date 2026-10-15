@@ -12,6 +12,7 @@
   "website": "Website",
   "social": "Social media",
   "noPlaces": "No places within {{distance}}.",
+  "noPlacesIn": "No places within {{distance}} of {{area}}.",
   "noPlacesHint": "Try another category or widen your radius in Settings.",
   "unnamed": "Unnamed business",
   "sourceDenue": "Source: INEGI, DENUE",
@@ -23,6 +24,7 @@
   "searchPlaceholder": "Business name, city, colonia or landmark",
   "clearSearch": "Clear search",
   "noMatchesNearby": "No places matching “{{query}}” within {{distance}}.",
+  "noMatchesNearbyIn": "No places matching “{{query}}” within {{distance}} of {{area}}.",
   "noMatchesHint": "Check the spelling or try fewer words. Search covers your radius; you can widen it in Settings.",
   "clusterLabel_one": "{{count}} place. Tap to zoom in.",
   "clusterLabel_other": "{{count}} places. Tap to zoom in.",
@@ -34,6 +36,8 @@
   "mapUnavailableHint": "This Android test build has no Google Maps key. Use List meanwhile.",
   "mapSatellite": "Show satellite map",
   "mapStandard": "Show standard map",
+  "mapPins": "Pins for up to {{count}} places in view; more are grouped.",
+  "mapPinsHint": "Tap to change: 50, 100, 150, 200 or 300.",
   "categoriesLabel": "Categories",
   "open24hHint": "Its name says “24 horas”. Hours not confirmed.",
   "chips": {
@@ -55,6 +59,7 @@
     "park": "Parks"
   },
   "noOpenPlaces": "No places open now with confirmed hours within {{distance}}.",
+  "noOpenPlacesIn": "No places open now with confirmed hours within {{distance}} of {{area}}.",
   "noOpenPlacesHint": "Few businesses have confirmed hours yet. Turn off “Only places open now” in Settings to see them all, or check each one with “See hours”.",
   "hours": {
     "title": "Hours",
@@ -152,6 +157,7 @@
     "forProfile": "For your pet: {{profile}}. Change it in Settings."
   },
   "noPetFriendlyPlaces": "No pet-friendly places within {{distance}} for your pet",
+  "noPetFriendlyPlacesIn": "No pet-friendly places within {{distance}} of {{area}} for your pet",
   "noPetFriendlyPlacesHint": "For now we have restaurants, cafés, hotels, museums and parks in Mexico City. Try a larger radius or change your pet in Settings.",
   "sourceCurated": "Pet policy: collected by Paw Mall from the source shown. Location and phone: Overture Maps Foundation.",
   "pets": {

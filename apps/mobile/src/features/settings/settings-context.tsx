@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   DOG_SIZES,
   type DogSize,
+  MAP_DEFAULT_PINS,
+  MAP_PIN_LIMITS,
   MAX_RADIUS_KM,
   PET_SPECIES,
   type PetSpecies,
@@ -31,6 +33,8 @@ type Settings = {
   dogSize: DogSize | null;
   /** Pet-friendly shows only places confirmed to take pets; off, also unanswered venues. */
   onlyConfirmedPetPlaces: boolean;
+  /** Places in view the map shows as pins before clustering (MAP_PIN_LIMITS; the map's button). */
+  mapPinLimit: number;
 };
 type SettingsContextValue = Settings & {
   setRadiusKm: (radiusKm: number) => void;
@@ -43,6 +47,7 @@ type SettingsContextValue = Settings & {
   setPetSpecies: (petSpecies: PetSpecies | null) => void;
   setDogSize: (dogSize: DogSize | null) => void;
   setOnlyConfirmedPetPlaces: (onlyConfirmedPetPlaces: boolean) => void;
+  setMapPinLimit: (mapPinLimit: number) => void;
 };
 
 const STORAGE_KEY = 'settings.preferences';
@@ -58,6 +63,7 @@ const DEFAULTS: Settings = {
   petSpecies: null,
   dogSize: null,
   onlyConfirmedPetPlaces: true,
+  mapPinLimit: MAP_DEFAULT_PINS,
 };
 
 /**
@@ -90,6 +96,9 @@ export function parseSettings(raw: string | null): Settings {
         ? (value.dogSize as DogSize)
         : null,
       onlyConfirmedPetPlaces: value.onlyConfirmedPetPlaces !== false,
+      mapPinLimit: (MAP_PIN_LIMITS as readonly unknown[]).includes(value.mapPinLimit)
+        ? (value.mapPinLimit as number)
+        : MAP_DEFAULT_PINS,
     };
   } catch {
     return DEFAULTS;
@@ -108,6 +117,7 @@ const SettingsContext = createContext<SettingsContextValue>({
   setPetSpecies: () => {},
   setDogSize: () => {},
   setOnlyConfirmedPetPlaces: () => {},
+  setMapPinLimit: () => {},
 });
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
@@ -145,6 +155,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setPetSpecies: (petSpecies) => update({ petSpecies }),
       setDogSize: (dogSize) => update({ dogSize }),
       setOnlyConfirmedPetPlaces: (onlyConfirmedPetPlaces) => update({ onlyConfirmedPetPlaces }),
+      setMapPinLimit: (mapPinLimit) => update({ mapPinLimit }),
     };
   }, [settings]);
 

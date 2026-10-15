@@ -16,3 +16,31 @@ appId: ${APP_ID || 'dev.pawmall.app'}
     id: map-compass
 - assertVisible:
     id: search-input
+# The pin button (above the map style) steps the cutoff between pins and clusters: 200 → 300 →
+# 50 (owner's rule, 2026-10-14).
+- assertVisible:
+    id: map-pins
+    text: '(Pines hasta|Pins for up to) 200 .*'
+- tapOn:
+    id: map-pins
+- assertVisible:
+    id: map-pins
+    text: '(Pines hasta|Pins for up to) 300 .*'
+- tapOn:
+    id: map-pins
+- assertVisible:
+    id: map-pins
+    text: '(Pines hasta|Pins for up to) 50 .*'
+# The hide-keyboard tab sits on the keyboard's top edge while it's open, and closes it.
+- tapOn:
+    id: search-input
+- extendedWaitUntil:
+    visible:
+      id: keyboard-hide
+    timeout: 10000
+- tapOn:
+    id: keyboard-hide
+- extendedWaitUntil:
+    notVisible:
+      id: keyboard-hide
+    timeout: 10000

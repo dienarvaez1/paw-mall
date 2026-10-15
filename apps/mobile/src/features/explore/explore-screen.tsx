@@ -51,6 +51,9 @@ import {
 import { uniqueById } from '@/lib/unique';
 import { circleForCluster, isAwayFrom, radiusForRegion, regionForRadius } from '@/lib/map-region';
 import { MAP_TYPE, MAPS_AVAILABLE } from '@/lib/map-type';
+import { useScreenFocused } from '@/lib/use-screen-focused';
+
+import { nextPinLimit } from './pin-limit';
 import { useDebounced } from '@/lib/use-debounced';
 import { useDismissKeyboardOnBlur } from '@/lib/use-dismiss-keyboard-on-blur';
 import { useOnWake } from '@/lib/use-on-wake';
@@ -426,6 +429,21 @@ function PlacesList({
   }, [noConfirmedMatch, onWiden]);
   // Area searches use 5 km (3 mi); everything around the user uses the shared radius.
   const distance = formatDistance(area ? area.radiusKm : radiusKm, locale, units);
+  // The list is nearest first: its first place's city names the circle (Urgencias names it too,
+  // from the tab on screen only).
+  const nearestCity =
+    places.data?.pages[0]?.items[0]?.city ?? places.data?.pages[0]?.nearestMunicipality ?? null;
+  const summaryArea = area
+    ? area.municipality
+      ? `${area.name}, ${area.municipality}`
+      : area.name
+    : nearestCity;
+  const { setCircleName } = useExploreView();
+  const focused = useScreenFocused();
+  const listLoaded = places.data !== undefined;
+  useEffect(() => {
+    if (focused && listLoaded) setCircleName(summaryArea);
+  }, [focused, listLoaded, summaryArea, setCircleName]);
 
   if (places.isPending) return <SkeletonList />;
   if (places.isError)
@@ -434,12 +452,6 @@ function PlacesList({
   // The summary stays put above the list while it scrolls: "69 lugares a menos de 5 km de
   // Tlaxcala", or around the user (or a moved circle) named by the nearest place's city: "1,237
   // lugares a menos de 5 km de Coyoacán" (the list is nearest first).
-  const nearestCity = places.data?.pages[0]?.items[0]?.city ?? null;
-  const summaryArea = area
-    ? area.municipality
-      ? `${area.name}, ${area.municipality}`
-      : area.name
-    : nearestCity;
   const summary = summaryArea
     ? t('places.areaCount', {
         count: total,
@@ -482,24 +494,42 @@ function PlacesList({
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         ListEmptyComponent={
+          // Named where the circle is (the searched area, or the municipality nearest a moved or
+          // user's circle; owner's rule, 2026-10-14).
           name ? (
             <EmptyState
-              title={t('places.noMatchesNearby', { query: name, distance })}
+              title={
+                summaryArea
+                  ? t('places.noMatchesNearbyIn', { query: name, distance, area: summaryArea })
+                  : t('places.noMatchesNearby', { query: name, distance })
+              }
               hint={t('places.noMatchesHint')}
             />
           ) : petMode ? (
             <EmptyState
-              title={t('places.noPetFriendlyPlaces', { distance })}
+              title={
+                summaryArea
+                  ? t('places.noPetFriendlyPlacesIn', { distance, area: summaryArea })
+                  : t('places.noPetFriendlyPlaces', { distance })
+              }
               hint={t('places.noPetFriendlyPlacesHint')}
             />
           ) : onlyOpenNow ? (
             <EmptyState
-              title={t('places.noOpenPlaces', { distance })}
+              title={
+                summaryArea
+                  ? t('places.noOpenPlacesIn', { distance, area: summaryArea })
+                  : t('places.noOpenPlaces', { distance })
+              }
               hint={t('places.noOpenPlacesHint')}
             />
           ) : (
             <EmptyState
-              title={t('places.noPlaces', { distance })}
+              title={
+                summaryArea
+                  ? t('places.noPlacesIn', { distance, area: summaryArea })
+                  : t('places.noPlaces', { distance })
+              }
               hint={t('places.noPlacesHint')}
             />
           )
@@ -542,7 +572,8 @@ function PlacesMap({
   onLeaveMyLocation: () => void;
 }) {
   const { t } = useAppTranslation();
-  const { radiusKm, setRadiusKm } = useSettings();
+  const { radiusKm, setRadiusKm, mapPinLimit, setMapPinLimit } = useSettings();
+  const locale = useLocale();
   const router = useRouter();
   const location = useUserLocation();
   const scheme = useColorScheme();
@@ -647,7 +678,7 @@ function PlacesMap({
     return () => clearTimeout(timer);
   }, [region]);
 
-  // Places inside the radius circle: up to 100 one by one; with more in view, clusters (counting
+  // Places inside the radius circle: up to 200 one by one; with more in view, clusters (counting
   // only places inside the circle) that zoom in when tapped.
   const center = focus ?? location.coords;
   const places = usePlacesMap(
@@ -664,10 +695,17 @@ function PlacesMap({
   // A searched area ("Zócalo") moves the circle there with its own radius; otherwise the circle is
   // the user's radius around the user.
   const searchedArea = places.data?.area ?? null;
-  const { setShownArea, setAreaRadius } = useExploreView();
+  const { setShownArea, setAreaRadius, leaveArea, setCircleName } = useExploreView();
   useEffect(() => {
     if (places.data) setShownArea(searchedArea);
   }, [places.data, searchedArea, setShownArea]);
+  // The name under the map (MapCountLegend), shared only by the tab on screen: both tabs keep a
+  // map, and the hidden one's nearest place is of the other kind.
+  const focused = useScreenFocused();
+  const mapName = searchedArea?.name ?? places.data?.nearestCity ?? null;
+  useEffect(() => {
+    if (focused && places.data) setCircleName(mapName);
+  }, [focused, places.data, mapName, setCircleName]);
   const circle = searchedArea
     ? { center: searchedArea.location, radiusKm: searchedArea.radiusKm }
     : { center, radiusKm };
@@ -774,18 +812,28 @@ function PlacesMap({
             // follows to the map's new center. Both maps take it (owner's rules).
             const handRadiusKm = radiusForRegion(next, MAX_RADIUS_KM);
             const zoomed = !sameRadius(handRadiusKm, circle.radiusKm);
-            const panned = !searchedArea && isAwayFrom(next, circle.center);
-            // Zoomed around a searched area: its circle takes the zoomed radius (owner's rule).
-            if (searchedArea && zoomed) {
+            const panned = isAwayFrom(next, circle.center);
+            if (searchedArea && panned) {
+              // Panned off a searched place: the search lets go of it and follows the map, with
+              // the place's radius (or the zoomed one); the box empties (owner's rule, 2026-10-14).
+              shownArea.current = null;
+              showingArea.current = false;
+              const center = { lat: next.latitude, lng: next.longitude };
+              saveCircle(zoomed ? handRadiusKm : circle.radiusKm, center);
+              leaveArea(center);
+            } else if (searchedArea && zoomed) {
+              // Zoomed around a searched area: its circle takes the zoomed radius (owner's rule).
               shownArea.current = `${centerLat},${centerLng},${handRadiusKm}`;
               setAreaRadius({ text: name, km: handRadiusKm });
               setRadiusKm(handRadiusKm);
             }
-            if ((zoomed && !searchedArea) || panned) {
-              saveCircle(
-                zoomed ? handRadiusKm : radiusKm,
-                panned ? { lat: next.latitude, lng: next.longitude } : null,
-              );
+            if (!searchedArea && (zoomed || panned)) {
+              // A zoom keeps the view's center too (a pinch shifts it a little), so the other
+              // tab's map shows exactly this view (owner's rule: the maps stay in sync).
+              saveCircle(zoomed ? handRadiusKm : radiusKm, {
+                lat: next.latitude,
+                lng: next.longitude,
+              });
             }
             // Any zoom or pan by hand turns "Mi ubicación" off (owner's rule).
             if (nearMe && (zoomed || isAwayFrom(next, location.coords))) onLeaveMyLocation();
@@ -845,6 +893,21 @@ function PlacesMap({
           onPress={fitCircle}
         />
       ) : null}
+      {/* Pins up to this many places in view, then clusters: steps through MAP_PIN_LIMITS (owner's
+          rule, 2026-10-14). Saved in Ajustes' storage; both maps follow it. */}
+      <Pressable
+        accessibilityRole="button"
+        testID="map-pins"
+        accessibilityLabel={t('places.mapPins', { count: mapPinLimit })}
+        accessibilityHint={t('places.mapPinsHint')}
+        onPress={() => setMapPinLimit(nextPinLimit(mapPinLimit))}
+        hitSlop={BUTTON_HIT_SLOP}
+        className="absolute bottom-[120px] right-3 h-9 w-9 items-center justify-center rounded-full bg-white shadow active:bg-neutral-100 dark:bg-neutral-900 dark:active:bg-neutral-800"
+      >
+        <Text className="text-[11px] font-bold text-teal-800 dark:text-teal-300">
+          {formatCount(mapPinLimit, locale)}
+        </Text>
+      </Pressable>
       <Pressable
         accessibilityRole="button"
         testID="map-layers"
@@ -874,7 +937,8 @@ function PlacesMap({
       >
         <Image
           source={ICONS.compass}
-          style={{ width: 20, height: 20, transform: [{ rotate: `${-heading}deg` }] }}
+          // Larger than the other map icons, in the same 36 pt circle (owner's rule, 2026-10-14).
+          style={{ width: 28, height: 28, transform: [{ rotate: `${-heading}deg` }] }}
         />
       </Pressable>
       {places.isError ? (
@@ -1090,7 +1154,10 @@ function MapCountLegend({
         onPress={onPress}
         className="items-center rounded-2xl bg-white/95 px-4 py-2 active:bg-neutral-100 dark:bg-neutral-900/95 dark:active:bg-neutral-800"
       >
-        <Text className="text-center text-sm font-semibold text-neutral-800 dark:text-neutral-100">
+        <Text
+          testID="map-count"
+          className="text-center text-sm font-semibold text-neutral-800 dark:text-neutral-100"
+        >
           {label}
         </Text>
         {partial ? (

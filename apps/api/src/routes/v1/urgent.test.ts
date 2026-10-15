@@ -2,6 +2,7 @@ import {
   type PlaceHours,
   isOpenAt,
   placeListResponseSchema,
+  placeMapResponseSchema,
   urgentResponseSchema,
 } from '@paw-mall/shared';
 import postgres from 'postgres';
@@ -75,11 +76,17 @@ beforeAll(async () => {
     VALUES ('town', 'Pueblo Urgente Paw', ${nameKey('Pueblo Urgente Paw')}, 'Estado',
             ST_SetSRID(ST_MakePoint(${ORIGIN.lng + 100 / 111.32}, ${ORIGIN.lat}), 4326)::geography)`;
   await addPlace('hospital-in-town', 100.4, ['veterinarian', 'vet_hospital']);
+  // A municipality 50 km west, with no urgent place near it.
+  await sql`DELETE FROM search_areas WHERE name = 'Municipio Vacio Paw'`;
+  await sql`
+    INSERT INTO search_areas (kind, name, name_key, state, location)
+    VALUES ('municipality', 'Municipio Vacio Paw', ${nameKey('Municipio Vacio Paw')}, 'Estado',
+            ST_SetSRID(ST_MakePoint(${ORIGIN.lng - 50 / 111.32}, ${ORIGIN.lat}), 4326)::geography)`;
 });
 
 afterAll(async () => {
   await sql`DELETE FROM places WHERE external_id LIKE 'test-urgent-%'`;
-  await sql`DELETE FROM search_areas WHERE name = 'Pueblo Urgente Paw'`;
+  await sql`DELETE FROM search_areas WHERE name IN ('Pueblo Urgente Paw', 'Municipio Vacio Paw')`;
   await sql.end();
 });
 
@@ -127,6 +134,54 @@ describe('GET /v1/places/urgent with a searched area', () => {
     const { area, items } = urgentResponseSchema.parse(await res.json());
     expect(area).toBeNull();
     expect(items).toHaveLength(5);
+  });
+});
+
+describe('GET /v1/places/urgent total', () => {
+  it('counts every urgent place in the radius', async () => {
+    const res = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10`,
+      {},
+      testEnv,
+    );
+    const { items, total } = urgentResponseSchema.parse(await res.json());
+    expect(total).toBe(items.length);
+    const tight = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng}&radiusKm=10&openNow=true`,
+      {},
+      testEnv,
+    );
+    expect(urgentResponseSchema.parse(await tight.json()).total).toBe(2);
+  });
+
+  it('names the nearest municipality when the circle has none', async () => {
+    const res = await app.request(
+      `/v1/places/urgent?lat=${ORIGIN.lat}&lng=${ORIGIN.lng - 49 / 111.32}&radiusKm=5`,
+      {},
+      testEnv,
+    );
+    const { items, nearestMunicipality } = urgentResponseSchema.parse(await res.json());
+    expect(items).toEqual([]);
+    expect(nearestMunicipality).toBe('Municipio Vacio Paw');
+  });
+
+  it('names it in the list and on the map too', async () => {
+    const lng = ORIGIN.lng - 49 / 111.32;
+    const list = await app.request(
+      `/v1/places?lat=${ORIGIN.lat}&lng=${lng}&radiusKm=5`,
+      {},
+      testEnv,
+    );
+    const listed = placeListResponseSchema.parse(await list.json());
+    expect(listed.total).toBe(0);
+    expect(listed.nearestMunicipality).toBe('Municipio Vacio Paw');
+    const bbox = [lng - 0.05, ORIGIN.lat - 0.05, lng + 0.05, ORIGIN.lat + 0.05].join(',');
+    const map = await app.request(
+      `/v1/places/map?lat=${ORIGIN.lat}&lng=${lng}&radiusKm=5&bbox=${bbox}`,
+      {},
+      testEnv,
+    );
+    expect(placeMapResponseSchema.parse(await map.json()).nearestCity).toBe('Municipio Vacio Paw');
   });
 });
 

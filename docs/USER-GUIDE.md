@@ -27,8 +27,12 @@ search — the other shows too.
 - **Map / List** switch the view; both count the same places.
 - The **green circle** is the search radius around you (or around a place you searched). The
   count at the bottom says how many places are inside it; tap it to see the whole circle.
-- With many places the map groups them into **clusters** (turquoise bubbles with a count). Tap one
-  to zoom to it: the circle moves to where those places are.
+- With more places in view than the **pin button** shows (200 at first), the map groups them into
+  **clusters** (turquoise bubbles with a count). Tap one to zoom to it: the circle moves to where
+  those places are. The pin button, above the layers button, steps through 50, 100, 150, 200 and
+  300; the choice is kept.
+- With nothing in the circle, the count and the empty message still say where: "No places within
+  5 km of Chiautempan" (the nearest municipality, or the place you searched).
 - **Pins** have their category's color and icon; tap a pin, then its bubble, to open the place.
 - **Satellite** (layers button) and the **compass** (turns the map north up) are at the bottom
   right.
@@ -63,11 +67,13 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
   first, then businesses nearby. Every word you type must start a word of the suggestion, in any
   order: "puerto vall", "vallarta puerto" and "v puerto" all suggest Puerto Vallarta.
   "CDMX" and "DF" mean Ciudad de México; small words like "en", "near" or "para" are ignored.
-  - Tap a **place** to search around it (the circle moves there).
+  - Tap a **place** to search around it (the circle moves there). Moving the map by hand
+    afterwards lets go of the place: the search box empties and the search follows the map, with
+    the place's radius ("Mi ubicación" stays off). Zooming keeps the place and changes its radius.
   - Tap a **business** to open its page.
 - **A place's name with the search key** (e.g. type "Guadalajara" and press 🔍): the app asks
   whether you mean the place or businesses with that name:
-  - **As a place** — search around Guadalajara.
+  - **As a place** — search around Guadalajara (moving the map lets go of it, as above).
   - **As a business name** — businesses called "Guadalajara" near you.
   - **Cancel** — keep editing.
 - **Other text with the search key** (e.g. "Tlaxcala Casona", not a place's name): searched as
@@ -75,8 +81,8 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 - **The radius fits a confirmed search** (a place picked from the suggestions, the question
   answered, or other text sent with the search key): it closes in to the smallest preset that still holds every match, or, when nothing
   matches inside it, opens out to the smallest preset that reaches the nearest match (e.g.
-  "Guadalupe" as a business name: nothing within 5 km, so 10 km). Once per answer; the radius
-  button still changes it after.
+  "Guadalupe" as a business name: nothing within 5 km, so 10 km). Once per answer, on the tab
+  that shows it; switching tabs keeps the same circle. The radius button still changes it after.
 - **The tab that finds more takes the focus**: after a confirmed search, if the other tab
   (Explorar or Pet-friendly) finds more places inside the circle, or, with none inside either, a
   nearer one, the app switches to it (e.g. "Toluca" on Explorar finds only a café, so it opens
