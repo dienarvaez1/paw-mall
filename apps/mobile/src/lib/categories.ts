@@ -6,6 +6,7 @@ export const EXPLORE_CHIPS = [
   'veterinarian',
   'vet_hospital',
   'animal_welfare',
+  'public_vet_service',
   'pet_store',
   'boutique',
   'groomer',
@@ -13,7 +14,6 @@ export const EXPLORE_CHIPS = [
   'feed_store',
   'dog_trainer',
   'pet_funeral',
-  'public_vet_service',
 ] as const satisfies readonly (CategorySlug | null)[];
 
 /** The Pet-friendly tab's chips, in order; null is "Todos" (places that take pets). */
