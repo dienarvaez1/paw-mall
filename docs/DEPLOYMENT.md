@@ -1302,7 +1302,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
     private and public vets and pet stores. Left out: animal control (control, zoonosis,
     antirrábico, perrera), "El Refugio"/"El Santuario" as a vet's name, animal-assisted therapy,
     guide-dog schools, and every other class (churches named "Santuario").
-  - **Found:** 111 in 28 states: 39 civil associations, 32 shelters under personal services, 29
+  - **Found:** 111 in 27 states: 39 civil associations, 32 shelters under personal services, 29
     vets (shelters with a clinic, foundations' clinics), 10 municipal protection units, 1 store
     run by a rescue foundation. 2 animal sanctuaries (Pachuca; Ahuacatlán).
   - **Search words:** "adopción", "adoptar", "rescatistas", "refugio canino", "albergue de perros",
