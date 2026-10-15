@@ -1336,3 +1336,4 @@ Play readiness").
 | 2026-10-14 | Phase 18 merged (`688d6c3`)                                  | #33 |
 | 2026-10-14 | Phase 19 merged (`c54913d`; #34 replaced by #36)             | #36 |
 | 2026-10-14 | Phase 20 merged (`f580b20`)                                  | #35 |
+| 2026-10-14 | Phases 18-20 bookkeeping (`76c5c5a`)                         | #37 |
