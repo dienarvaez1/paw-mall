@@ -15,6 +15,35 @@ Wikidata) plus hand-collected pet policies. Spanish first (`es-MX`), English alo
 **Status:** development only. Nothing is deployed; everything runs on a developer machine. See
 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for what's built so far.
 
+## Quality engineering
+
+Paw Mall's main quality risk isn't whether the app runs. It's whether the app reliably leads
+people to the right pet businesses, including ones they would otherwise miss, and whether those
+listings can be trusted. Quality work is organized around five pillars. Each one is backed by
+automated checks, reports and release criteria in this repository.
+
+| Pillar                                   | What is verified                                                                                                                                                           | Evidence                                                                                                                                                                       |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Search quality and relevance**         | Accent- and order-insensitive matching, place-versus-business intent, radius fitting, nearest-first ranking, consistent results across the map, list and Urgencias         | Unit tests (`search-tokens`, `search-filter`, `search-keywords`); API route tests; 11 Maestro search journeys on fixed fixtures that assert exact names and order              |
+| **Business-data integrity and trust**    | Duplicate merging, coordinates inside Mexico, valid hours, Urgencias places without a phone, stale sources, cruelty-linked businesses kept out, every data source credited | `pnpm places:integrity` (read-only report on the full data); importer tests with sample files; a verification status on every place (`packages/shared/src/verification.ts`)    |
+| **API, database and mobile reliability** | Behavior with the database down, an interrupted import, a slow or unreachable API, no connection; performance under concurrent load                                        | `database-down.test.ts`, `denue/save.test.ts`; `offline` and `api-down` flows; k6 load test (`pnpm load`): 50 concurrent users, p95 229 ms against a 500 ms threshold          |
+| **Security and privacy**                 | Write rate limits, a cap on pending claims, CORS restricted to known origins, no personal data from reporters, secrets kept out of the repository                          | `rate-limit.test.ts` (limits and CORS), `trust.test.ts`; reporter-privacy rule in [CLAUDE.md](CLAUDE.md); keys only in git-ignored local files                                 |
+| **Continuous and AI-assisted quality**   | Every change passes lint, type checks and tests before merge; each phase has an explicit "Done when" release criterion and a recorded outcome                              | CI on every pull request; Maestro on an Android emulator (nightly or by label); [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) rollout log; standing rules in [CLAUDE.md](CLAUDE.md) |
+
+**Current baseline (2026-10-14):** 345 unit and API tests (shared 36, mobile 96, API 105, importers
+108); 30 end-to-end flows covering 34 user journeys on Android, and all but one on iOS; load-test
+p95 of 229 ms at 77 requests per second.
+
+**AI-assisted development:** the app is built with Claude Code under written standing rules
+([CLAUDE.md](CLAUDE.md)). Every change goes through a phase branch and a pull request, must pass
+the same automated gates, and is merged only on the owner's explicit approval after checks pass.
+Bugs found in manual review become regression flows (for example `search-pan`, `urgent-sync` and
+`maps-sync` in Phase 16).
+
+**Known gaps:** search relevance is checked against fixed fixtures, not yet measured on real
+queries; iOS runs in Expo Go rather than a development build; the end-to-end workflow in CI has
+not run yet; nothing is deployed, so there is no production monitoring.
+
 ## Repository
 
 A pnpm + Turborepo monorepo:
