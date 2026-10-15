@@ -8,6 +8,17 @@ designed to help pet owners discover relevant pet businesses and pet-friendly pl
 Quality assurance focuses on search relevance, business-data integrity, application reliability,
 security, and a consistent mobile user experience.
 
+The work is organized around five quality pillars, used in this document and in the
+[README](../README.md#quality-engineering), where each pillar is mapped to its current evidence:
+
+| Pillar                                   | Objectives (§2)                                                      | Main risks (§3)                                                       | Strategy sections |
+| ---------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------- | ----------------- |
+| **Search quality and relevance**         | Multi-token search, relevance, consistency across platforms          | Search failures, ranking, missing results, false positives            | §4, §5            |
+| **Business-data integrity and trust**    | Trustworthy listings with provenance and verification                | Emergency information, duplicate or stale listings, importer failures | §4, §6            |
+| **API, database and mobile reliability** | Regressions detected; consistent mobile behavior                     | Database or API failures, location and navigation defects, load       | §4                |
+| **Security and privacy**                 | User data protected; no unauthorized API operations                  | Unauthorized write or administrative operations                       | §4, §7            |
+| **Continuous and AI-assisted quality**   | Automated regression detection; measurable criteria before the pilot | All of the above, caught before merge                                 | §7, §8, §9        |
+
 ## 2. Quality objectives
 
 - Enable users to discover relevant businesses through flexible multi-token searches.
@@ -112,14 +123,24 @@ No quality metric should be reported as achieved until supported by reproducible
 Paw Mall is in development. Production readiness, pilot quality thresholds, and
 search-performance baselines must be established and verified before public rollout.
 
-Where the current checks and results are recorded:
+Status of each part of this strategy on 2026-10-14. The measured results are in the
+[README's current baseline](../README.md#quality-engineering); the README's known gaps are the
+rows below that are not yet in place.
 
-- [README.md](../README.md), "Quality engineering": the quality pillars, current baseline and
-  known gaps.
-- [TESTING-E2E.md](TESTING-E2E.md): the end-to-end flows and the user-journey coverage list.
-- [DEVELOPMENT.md](DEVELOPMENT.md), "Load test": the load test and its latest results.
-- [DEPLOYMENT.md](DEPLOYMENT.md): each phase's checks, release criterion ("Done when") and
-  outcome.
+| Strategy area                        | Status      | Evidence or gap                                                                                                                                                                      |
+| ------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Unit testing (§4)                    | In place    | 345 Vitest tests across the four packages, including tokenization, normalization, search matching and shared schemas                                                                 |
+| API and database integration (§4)    | In place    | API tests on their own database (`paw_mall_test`, migrated by the test setup): filters, paging, radius, errors, rate limits, CORS, the database down                                 |
+| Data quality testing (§4, §6)        | In place    | `pnpm places:integrity`; importer tests with sample files, including an interrupted import; verification status on every place                                                       |
+| Mobile end-to-end testing (§4)       | Partial     | 30 Maestro flows, 34 journeys on Android; iOS in Expo Go (all but `offline`), not a development build; the CI end-to-end workflow has not run yet ([TESTING-E2E.md](TESTING-E2E.md)) |
+| Nonfunctional testing (§4)           | Partial     | Local k6 load test, p95 229 ms ([DEVELOPMENT.md](DEVELOPMENT.md#load-test)); failure tests for the API and database; no measurement of a deployed system                             |
+| Search quality benchmark (§5)        | Not started | No labeled query benchmark yet, so Recall@10, Precision@10 and the zero-result rate are not measured; search is checked against fixed fixtures                                       |
+| Priority-listing evidence (§6)       | Partial     | Urgencias cards show their verification status; 162 Urgencias places still have no phone                                                                                             |
+| Pull request gates (§7)              | Partial     | CI runs lint, type checks and tests on every pull request; formatting is checked locally (`pnpm format:check`), not in CI; no search regression check yet                            |
+| Release records (§7)                 | Partial     | Each phase records its branch, merge commit, checks, "Done when" outcome and follow-ups in [DEPLOYMENT.md](DEPLOYMENT.md); nothing has been released yet                             |
+| Pilot requirements (§7)              | Not started | No production database, backup and restore procedure, monitoring or privacy disclosure yet                                                                                           |
+| AI-assisted quality engineering (§8) | In place    | Built with Claude Code under [CLAUDE.md](../CLAUDE.md); every change is reviewed in a pull request and merged on the owner's approval; keys are never printed or committed           |
+| Quality reporting (§9)               | Partial     | Test results in CI and in [DEPLOYMENT.md](DEPLOYMENT.md); open issues are tracked as phase follow-ups and open decisions there, not yet by severity                                  |
 
 This strategy is a living document and should evolve as test evidence, user feedback, and pilot
 results become available.
