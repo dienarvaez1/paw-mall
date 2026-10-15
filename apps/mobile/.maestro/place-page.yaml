@@ -11,6 +11,9 @@ appId: ${APP_ID || 'dev.pawmall.app'}
       text: Veterinaria Paw Centro.*
     timeout: 15000
 - assertVisible: '(Llamar|Call)( .*)?'
+# Not owner-verified, with a phone: the call-first ⓘ across from it, from Explorar too (2026-10-15).
+- assertVisible:
+    id: urgent-note
 - assertVisible: '(Sitio web|Website)( .*)?'
 - assertVisible: '(Redes sociales|Social media)( .*)?'
 - waitForAnimationToEnd
@@ -34,3 +37,6 @@ appId: ${APP_ID || 'dev.pawmall.app'}
     timeout: 15000
 - assertVisible: Cómo llegar|Directions
 - assertNotVisible: '(Llamar|Call)( .*)?'
+# No phone, no call-first ⓘ (owner's rule, 2026-10-15).
+- assertNotVisible:
+    id: urgent-note

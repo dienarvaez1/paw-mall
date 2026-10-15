@@ -120,11 +120,15 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 ## A place's page
 
-- **Map** with the place, its **name**, **category** and a **heart** to save it to Favorites.
+- **Map** with the place, its **name** with a **heart** beside it to save it to Favorites, and its
+  **categories**.
 - **Address** — tap it to copy the name and address; the share button sends them to any app.
 - **How far it's confirmed**, under the address: verified by the owner, confirmed by Paw Mall users,
-  confirmed by its own website, or only from a public directory (with the date it was last
-  checked); places users reported show "under review".
+  or confirmed by its own website (with the date it was last checked); places users reported show
+  "under review". A place only known from a public directory shows no line.
+- **Call first (ⓘ)**: a place with a phone whose owner hasn't verified its details has a pink ⓘ
+  across from the phone; tap it to read "Call before going: details aren't confirmed by the
+  owner" (or that users reported it).
 - **Directions** (Apple Maps, Google Maps or Waze), **Call**, **Website**, **Social media**.
 - **Hours**: confirmed hours with "open now", or "Hours not confirmed" with **See hours**, which
   asks Google once (a small free allowance; the answer is shown for this visit only).
@@ -141,7 +145,8 @@ The nearest vet hospitals and 24-hour vets within your radius (or around a place
 the first one highlighted. The count at the top names the same circle as the map ("29 places
 within 5 km of Cuauhtémoc"); with none inside, it says where. "Open now" refreshes every minute. Small icons show which have a
 phone, website or social page; open a card for directions and call. Cards whose details the owner
-hasn't verified say to call before going, and reported ones say they're under review.
+hasn't verified have a pink ⓘ on their page, across from the phone (when they list one), that says
+to call before going, or that they're under review.
 
 ## Favorites
 

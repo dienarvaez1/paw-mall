@@ -15,7 +15,8 @@ import { OpenStatus } from '@/components/open-status';
 import { CategoryLine, usePlaceName } from '@/components/place-row';
 import { SECTION, SECTION_TITLE } from '@/components/section';
 import { ErrorState, SkeletonList } from '@/components/states';
-import { VerificationLine } from '@/components/verification';
+import { InfoTip } from '@/components/info-tip';
+import { VerificationLine, useUrgentNote } from '@/components/verification';
 import { FavoriteButton } from '@/features/favorites/favorite-button';
 import {
   GoogleHours,
@@ -56,6 +57,7 @@ function PlaceDetail({ place: p }: { place: Place }) {
   const googleHours = useGoogleHours(p.id);
   const router = useRouter();
   const scheme = useColorScheme();
+  const urgentNote = useUrgentNote(p.verification);
   // "Copiado" shows for a moment after tapping the address.
   const [copied, setCopied] = useState(false);
   useEffect(() => {
@@ -82,15 +84,17 @@ function PlaceDetail({ place: p }: { place: Place }) {
       ) : null}
 
       <View className="gap-1.5 px-4 pt-4">
-        <Text testID="place-name" className="text-xl font-bold text-neutral-900 dark:text-white">
-          {name}
-        </Text>
-        <View className="flex-row items-center gap-3">
-          <View className="flex-1">
-            <CategoryLine place={p} selected={null} />
-          </View>
+        {/* The heart on the name's line (owner's rule, 2026-10-15). */}
+        <View className="flex-row items-start gap-3">
+          <Text
+            testID="place-name"
+            className="flex-1 text-xl font-bold text-neutral-900 dark:text-white"
+          >
+            {name}
+          </Text>
           <FavoriteButton placeId={p.id} name={name} />
         </View>
+        <CategoryLine place={p} selected={null} />
         <View className="mt-2.5 border-t border-neutral-200 pt-4 dark:border-neutral-800">
           <View className="flex-row items-start gap-3">
             <Pressable
@@ -125,9 +129,14 @@ function PlaceDetail({ place: p }: { place: Place }) {
             </Text>
           ) : null}
           {p.phone ? (
-            <Text selectable className="text-sm text-neutral-700 dark:text-neutral-300">
-              {p.phone}
-            </Text>
+            // The phone, and the call-first notice across from it under the share icon; no phone,
+            // no notice (owner's rules, 2026-10-15).
+            <View className="flex-row items-center gap-3">
+              <Text selectable className="flex-1 text-sm text-neutral-700 dark:text-neutral-300">
+                {p.phone}
+              </Text>
+              {urgentNote ? <InfoTip message={urgentNote} testID="urgent-note" /> : null}
+            </View>
           ) : null}
         </View>
         {p.ownerVerifiedOn ? (

@@ -1311,6 +1311,16 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
     (`orderedCategories`, `CategoryLine`); the place page and map bubbles use the same order.
     Checked on the emulator with the dev data (Condesa: "Vet Me Hospital Veterinario" reads
     Hospital veterinario first under Hospitales, Veterinaria first under Veterinarias).
+  - **Place page and cards** (owner's requests, 2026-10-15):
+    - Urgencias' cards no longer say "Llama antes de ir…"; every place page has a pink ⓘ (20 pt,
+      as the share icon) across from the phone, under the share icon, whose tooltip (a tap: phones
+      have no hover) says to call first, or that users reported the place. Only with a phone and
+      when the owner hasn't verified the details; the same from Explorar, Pet-friendly and
+      Urgencias (`InfoTip`, `useUrgentNote`).
+    - "De un directorio público; sin confirmar" is no longer shown under the address.
+    - The heart sits on the name's line.
+    - Flows: `emergencies` opens the ⓘ and checks the place without a phone has none;
+      `place-page` checks both cases from Explorar.
   - **Search words:** "adopción", "adoptar", "rescatistas", "refugio canino", "albergue de perros",
     "santuario de animales", "protectora de animales", "animal shelter"… ("refugio" alone stays
     a name: "Tacos el Refugio").
