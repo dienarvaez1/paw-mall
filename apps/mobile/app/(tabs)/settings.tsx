@@ -1,5 +1,6 @@
 import { DOG_SIZES, PET_SPECIES, SUPPORTED_LOCALES } from '@paw-mall/shared';
 import Constants from 'expo-constants';
+import { useRouter } from 'expo-router';
 import type { ReactNode } from 'react';
 import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
 
@@ -14,6 +15,7 @@ export default function SettingsScreen() {
   const { t } = useAppTranslation();
   const locale = useLocale();
   const settings = useSettings();
+  const router = useRouter();
 
   return (
     <ScrollView className="flex-1 bg-off-bg dark:bg-neutral-950" contentContainerClassName="pb-10">
@@ -110,6 +112,16 @@ export default function SettingsScreen() {
         <Text className="px-4 pb-3 text-sm text-neutral-500 dark:text-neutral-400">
           {t('settings.dataSources')}
         </Text>
+        <Pressable
+          testID="settings-disclaimer"
+          accessibilityRole="link"
+          onPress={() => router.push('/disclaimer?mode=review')}
+          className="px-4 pb-3"
+        >
+          <Text className="text-sm font-semibold text-teal-700 dark:text-teal-300">
+            {t('disclaimer.settingsLink')}
+          </Text>
+        </Pressable>
       </Section>
     </ScrollView>
   );

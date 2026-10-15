@@ -1,0 +1,47 @@
+{
+  "title": "Important notice",
+  "intro": "Before using Paw Mall, please read this notice. It explains where the information comes from, what it's for and what it can't guarantee.",
+  "version": "Version of {{date}}",
+  "sections": {
+    "information": {
+      "title": "Information for guidance only",
+      "body": "Paw Mall brings together public data (INEGI, Overture Maps Foundation, OpenStreetMap, Wikidata, the press, and Google Maps when you ask for it) and what its users contribute. It may be incomplete, out of date or wrong: hours, phone numbers, addresses and services change without notice."
+    },
+    "veterinary": {
+      "title": "Not a substitute for veterinary care",
+      "body": "Paw Mall gives no medical or veterinary advice. In an emergency, call before you go to confirm the place is open and can treat your pet. If your pet's life is at risk, go to the nearest veterinary service you can confirm."
+    },
+    "petFriendly": {
+      "title": "Pet-friendly places",
+      "body": "Pet policies come from the businesses themselves, public sources or other users, and they can change. Check with the place before you go, and follow its rules."
+    },
+    "endorsement": {
+      "title": "No endorsement or affiliation",
+      "body": "A business appearing in Paw Mall doesn't mean we recommend it or are related to it. Only those marked as verified by their owner were confirmed by the owner."
+    },
+    "privacy": {
+      "title": "Your location and your privacy",
+      "body": "The app uses your phone's location only to find places nearby, and doesn't store it. You don't need an account. Reports and answers are anonymous: we keep only a random id from the app. Only if you claim a business as its owner do we ask for contact details, to verify it."
+    },
+    "thirdParties": {
+      "title": "Third-party services",
+      "body": "Maps, directions, calls, websites and social media open in other apps or sites, under their own terms and privacy notices."
+    },
+    "liability": {
+      "title": "Responsibility",
+      "body": "You use the information at your own discretion and risk. To the extent permitted by Mexican law, Paw Mall isn't liable for damage or loss arising from its use."
+    },
+    "animals": {
+      "title": "Animal welfare",
+      "body": "We don't list puppy mills, animal fights, slaughterhouses or butchers. If you see animal cruelty, you can report it from each place's page."
+    }
+  },
+  "acceptHint": "By accepting you confirm you've read and understood this notice. If you cancel, you can only use Emergencies and read the notice again.",
+  "accept": "I accept",
+  "cancel": "Cancel",
+  "close": "Close",
+  "tabTitle": "Notice",
+  "declined": "For now you can only use Emergencies. To use Explore, Pet-friendly, Favorites and Settings, read and accept the notice.",
+  "acceptNow": "I've read the notice and accept it",
+  "settingsLink": "Important notice"
+}

@@ -35,8 +35,8 @@ back it today.
 **Current baseline (2026-10-14),** reproducible with `pnpm test`, `pnpm --filter mobile e2e`,
 `pnpm load` and `pnpm search:bench`:
 
-- 378 unit and API tests (shared 41, mobile 97, API 112, importers 128).
-- 31 end-to-end flows covering 36 user journeys on Android, and all but one on iOS.
+- 381 unit and API tests (shared 41, mobile 100, API 112, importers 128).
+- 32 end-to-end flows covering 39 user journeys on Android, and all but one on iOS.
 - Load test: p95 of 195 ms at 79 requests per second (Phase 20; 229 ms at 77 in Phase 13).
 - Search benchmark (51 queries): precision@10 99%, recall@10 97%, zero results 0%, known items,
   negative cases and place intent 100%, p95 43 ms (Phase 18; Phase 17's first baseline was 93%,
