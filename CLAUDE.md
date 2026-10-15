@@ -83,7 +83,7 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
   read-only data-integrity report (about 20 s on the full data).
 - Load test: `pnpm --filter api dev:load`, then `pnpm load` (k6, local only; see
   `docs/DEVELOPMENT.md`, "Load test").
-- Search benchmark: with the dev API running, `pnpm search:bench` scores 47 labeled searches
+- Search benchmark: with the dev API running, `pnpm search:bench` scores 49 labeled searches
   against `packages/importers/data/search-baseline.json`; run it before and after any search
   change and commit a new baseline (`--save`) with it (`docs/DEVELOPMENT.md`, "Search benchmark").
 - End-to-end: Maestro flows in `apps/mobile/.maestro/` on the Android development build and fixed

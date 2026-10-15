@@ -213,7 +213,7 @@ use `Intl` with the active locale.
   database down (`database-down.test.ts`: `/health` reports it, every route answers a bare
   `INTERNAL_ERROR`), and a DENUE import that fails part way (`denue/save.test.ts`: one
   transaction, so nothing is left behind).
-- **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 47 labeled
+- **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 49 labeled
   searches to the local API and judges the top 10 in SQL against the labels, then compares with
   the committed baseline ([DEVELOPMENT.md](DEVELOPMENT.md), "Search benchmark").
 - **End to end:** Maestro flows in `apps/mobile/.maestro` (31 flows, 36 journeys) on fixed test

@@ -103,6 +103,8 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 ### Pet-friendly specifics
 
+- Searching for a kind of pet business ("vet", "Tlaxcala vet", "estética") finds nothing on
+  Pet-friendly, since no venue is one; Explorar lists them, and the app switches there.
 - By default only places **confirmed** to take pets show, filtered by **your pet** (Settings →
   My pet: dog or cat, and your dog's size).
 - When nothing confirmed matches a search, it **widens** to venues nobody has answered for yet,
