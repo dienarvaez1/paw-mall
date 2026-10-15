@@ -6,7 +6,7 @@ phase at a time. The rollout of each phase (branch, pull request, status, checks
 
 Project docs: `README.md` (overview, quick start), `docs/ARCHITECTURE.md` (how the pieces fit),
 `docs/DEVELOPMENT.md` (setup, commands, troubleshooting), `docs/USER-GUIDE.md` (the app, screen
-by screen). Keep them current when a change affects what they describe.
+by screen), `docs/QA-STRATEGY.md` (quality objectives, risks and release gates). Keep them current when a change affects what they describe.
 
 ## Conventions
 
