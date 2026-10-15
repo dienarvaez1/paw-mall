@@ -118,6 +118,34 @@ nothing is stored. It measures the queries and the database, not Cloudflare or a
 database. Results on 2026-10-14 (M-series Mac, Docker with 4 CPUs, 813k places): p95 229 ms at
 77 requests/s.
 
+### Search benchmark
+
+`packages/importers/data/search-benchmark.json` holds 41 labeled Spanish and English searches
+from nine cities: services, synonyms, accents, a typo, English words, business names, place names
+and negative cases (puppy mills, cockfighting, unrelated words). Each is sent to the API as the
+app sends it (typed text as names only; Pet-friendly with its default filter), and its top 10 are
+judged against the label in SQL, never by the search code. QA strategy, section 5.
+
+```sh
+pnpm --filter api dev          # the API on :8787 with the dev data
+pnpm search:bench              # scores and compares with data/search-baseline.json
+pnpm search:bench --only vet-cdmx   # one query, with its results
+pnpm search:bench --check      # exits 1 when a query regressed
+pnpm search:bench --save       # records a new baseline (commit it)
+```
+
+Metrics: precision@10 (results that match the intent), recall@10 (relevant places in the judged
+circle that made the top 10, out of at most 10), zero results (none, and no nearer match for the
+app to widen to), known items found, negative cases passed, place intent (a place search moved to
+the right place) and latency. A regression is precision or recall down by more than 0.1, a known
+item lost, a new zero result, a negative case returning places, or a wrong place. Run it before
+and after any change to search, and commit a new baseline with the change. It reads the dev data,
+so CI can't run it; a re-import changes the data and the results (the report says so).
+
+Labels are drafts until the owner reviews them (`review.status` in the file). Baseline on
+2026-10-14 (813k visible places): precision@10 93%, recall@10 72%, zero results 5%, known items
+100%, negative cases 100%, place intent 100%, latency p50 31 ms and p95 46 ms.
+
 ## Conventions (summary of CLAUDE.md)
 
 - Code, identifiers, comments, commits and docs in English; every visible text through

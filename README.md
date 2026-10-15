@@ -24,18 +24,22 @@ listings can be trusted. Quality work is organized around five pillars, defined 
 release gates. The table maps each pillar to its section of the strategy and to the checks that
 back it today.
 
-| Pillar                                   | Strategy                                                                 | What is verified                                                                                                                                                           | Evidence                                                                                                                                                                       |
-| ---------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Search quality and relevance**         | [§4, §5](docs/QA-STRATEGY.md#5-search-quality-evaluation)                | Accent- and order-insensitive matching, place-versus-business intent, radius fitting, nearest-first ranking, consistent results across the map, list and Urgencias         | Unit tests (`search-tokens`, `search-filter`, `search-keywords`); API route tests; 11 Maestro search journeys on fixed fixtures that assert exact names and order              |
-| **Business-data integrity and trust**    | [§4, §6](docs/QA-STRATEGY.md#6-data-quality-and-trust)                   | Duplicate merging, coordinates inside Mexico, valid hours, Urgencias places without a phone, stale sources, cruelty-linked businesses kept out, every data source credited | `pnpm places:integrity` (read-only report on the full data); importer tests with sample files; a verification status on every place (`packages/shared/src/verification.ts`)    |
-| **API, database and mobile reliability** | [§4](docs/QA-STRATEGY.md#4-test-strategy)                                | Behavior with the database down, an interrupted import, a slow or unreachable API, no connection; performance under concurrent load                                        | `database-down.test.ts`, `denue/save.test.ts`; `offline` and `api-down` flows; k6 load test (`pnpm load`): 50 concurrent users, p95 229 ms against a 500 ms threshold          |
-| **Security and privacy**                 | [§4, §7](docs/QA-STRATEGY.md#7-continuous-integration-and-release-gates) | Write rate limits, a cap on pending claims, CORS restricted to known origins, no personal data from reporters, secrets kept out of the repository                          | `rate-limit.test.ts` (limits and CORS), `trust.test.ts`; reporter-privacy rule in [CLAUDE.md](CLAUDE.md); keys only in git-ignored local files                                 |
-| **Continuous and AI-assisted quality**   | [§7–§9](docs/QA-STRATEGY.md#8-ai-assisted-quality-engineering)           | Every change passes lint, type checks and tests before merge; each phase has an explicit "Done when" release criterion and a recorded outcome                              | CI on every pull request; Maestro on an Android emulator (nightly or by label); [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) rollout log; standing rules in [CLAUDE.md](CLAUDE.md) |
+| Pillar                                   | Strategy                                                                 | What is verified                                                                                                                                                           | Evidence                                                                                                                                                                                                |
+| ---------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Search quality and relevance**         | [§4, §5](docs/QA-STRATEGY.md#5-search-quality-evaluation)                | Accent- and order-insensitive matching, place-versus-business intent, radius fitting, nearest-first ranking, consistent results across the map, list and Urgencias         | Search benchmark (`pnpm search:bench`): 41 labeled queries, precision and recall at 10 against a baseline; unit tests (`search-tokens`, `search-filter`, `search-keywords`); 11 Maestro search journeys |
+| **Business-data integrity and trust**    | [§4, §6](docs/QA-STRATEGY.md#6-data-quality-and-trust)                   | Duplicate merging, coordinates inside Mexico, valid hours, Urgencias places without a phone, stale sources, cruelty-linked businesses kept out, every data source credited | `pnpm places:integrity` (read-only report on the full data); importer tests with sample files; a verification status on every place (`packages/shared/src/verification.ts`)                             |
+| **API, database and mobile reliability** | [§4](docs/QA-STRATEGY.md#4-test-strategy)                                | Behavior with the database down, an interrupted import, a slow or unreachable API, no connection; performance under concurrent load                                        | `database-down.test.ts`, `denue/save.test.ts`; `offline` and `api-down` flows; k6 load test (`pnpm load`): 50 concurrent users, p95 229 ms against a 500 ms threshold                                   |
+| **Security and privacy**                 | [§4, §7](docs/QA-STRATEGY.md#7-continuous-integration-and-release-gates) | Write rate limits, a cap on pending claims, CORS restricted to known origins, no personal data from reporters, secrets kept out of the repository                          | `rate-limit.test.ts` (limits and CORS), `trust.test.ts`; reporter-privacy rule in [CLAUDE.md](CLAUDE.md); keys only in git-ignored local files                                                          |
+| **Continuous and AI-assisted quality**   | [§7–§9](docs/QA-STRATEGY.md#8-ai-assisted-quality-engineering)           | Every change passes lint, type checks and tests before merge; each phase has an explicit "Done when" release criterion and a recorded outcome                              | CI on every pull request; Maestro on an Android emulator (nightly or by label); [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) rollout log; standing rules in [CLAUDE.md](CLAUDE.md)                          |
 
-**Current baseline (2026-10-14),** reproducible with `pnpm test`, `pnpm --filter mobile e2e` and
-`pnpm load`: 345 unit and API tests (shared 36, mobile 96, API 105, importers 108); 30 end-to-end
-flows covering 34 user journeys on Android, and all but one on iOS; load-test p95 of 229 ms at 77
-requests per second.
+**Current baseline (2026-10-14),** reproducible with `pnpm test`, `pnpm --filter mobile e2e`,
+`pnpm load` and `pnpm search:bench`:
+
+- 360 unit and API tests (shared 36, mobile 96, API 105, importers 123).
+- 30 end-to-end flows covering 34 user journeys on Android, and all but one on iOS.
+- Load test: p95 of 229 ms at 77 requests per second.
+- Search benchmark (41 queries): precision@10 93%, recall@10 72%, zero results 5%, known items,
+  negative cases and place intent 100%, p95 46 ms.
 
 **AI-assisted development** ([QA strategy §8](docs/QA-STRATEGY.md#8-ai-assisted-quality-engineering)):
 the app is built with Claude Code under written standing rules ([CLAUDE.md](CLAUDE.md)). Every change goes through a phase branch and a pull request, must pass
@@ -46,9 +50,11 @@ Bugs found in manual review become regression flows (for example `search-pan`, `
 **Known gaps** (the strategy's [status table](docs/QA-STRATEGY.md#10-current-project-status)
 tracks each one):
 
-- No labeled search benchmark yet (§5): relevance is checked against fixed fixtures, and Recall@10,
-  Precision@10 and the zero-result rate are not measured.
-- Formatting is checked locally, not in CI; there is no search regression check (§7).
+- The search benchmark's labels are drafts awaiting the owner's review, so no release thresholds
+  are set yet; it runs locally on the dev data, not in CI (§5, §7). It found where search misses:
+  typos, and generic words left after a service word ("hotel para perros", "urgencias
+  veterinarias", "dog grooming") that must then appear in names.
+- Formatting is checked locally, not in CI (§7).
 - iOS runs in Expo Go rather than a development build, and the end-to-end workflow in CI has not
   run yet (§4).
 - 162 Urgencias places have no phone (§6).
@@ -91,6 +97,7 @@ pnpm --filter mobile start             # Metro; scan the QR code with Expo Go
 | `pnpm db:up` / `pnpm db:down`            | Start or stop the database                                       |
 | `pnpm db:migrate`                        | Apply the API's migrations                                       |
 | `pnpm places:*`                          | Data loaders (list in [DEVELOPMENT.md](docs/DEVELOPMENT.md))     |
+| `pnpm search:bench`                      | Search quality benchmark against the baseline (local API)        |
 | `pnpm --filter mobile e2e`               | Maestro end-to-end flows ([TESTING-E2E.md](docs/TESTING-E2E.md)) |
 | `pnpm --filter mobile e2e:ios`           | The same flows on the iOS simulator in Expo Go                   |
 | `pnpm --filter mobile android:dev`       | Build and run the Android development build                      |

@@ -27,24 +27,25 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done   | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done   | 2026-10-13 | 2026-10-13 |
-| 13    | Load test             | `phase-13/load-test`         | #24 | Done   | 2026-10-14 | 2026-10-14 |
-| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done   | 2026-10-14 | 2026-10-14 |
-| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done   | 2026-10-14 | 2026-10-14 |
-| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done   | 2026-10-14 | 2026-10-14 |
+| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
+| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done      | 2026-10-14 | 2026-10-14 |
+| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done      | 2026-10-14 | 2026-10-14 |
+| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done      | 2026-10-14 | 2026-10-14 |
+| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | In review | 2026-10-14 | —          |
 
 ## Pending owner reviews
 
@@ -1104,6 +1105,50 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
     suggestion had already closed the keyboard, which sent the app home; `search-pan` doesn't use
     it.
 
+### Phase 17 — Search benchmark
+
+- **Scope:** the QA strategy's section 5 (owner's request, 2026-10-14): a version-controlled
+  benchmark of labeled searches, with precision and recall at 10, zero results, latency and
+  regressions against a baseline.
+- **Branch / PR:** `phase-17/search-benchmark` / #31
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`
+  - [x] `pnpm test`: 360 tests (shared 36, mobile 96, api 105, importers 123; 15 new)
+  - [x] "Done when": `pnpm search:bench` runs the 41 queries on the full data (813,169 visible
+        places) in under a minute; the baseline is committed; with two results changed in a copy of
+        the baseline, `--check` reported both (`emergency-cdmx: recall@10 0.60 → 0.20`,
+        `trainer-mty: no results`) and exited 1
+- **What it adds:**
+  - `packages/importers/data/search-benchmark.json`: 41 queries from nine cities, tagged by kind
+    (service, synonym, accents, spelling, English, multi-token, geography, known item, chain,
+    pet-friendly, negative). Labels describe the intent (categories, words in the name, city,
+    takes pets), the circle to judge, known items that must be in the top 10, and negative cases
+    where any result is wrong (puppy mills, cockfighting, "pizza", gibberish). The labels are drafts
+    for the owner to review.
+  - `packages/importers/src/bench/`: the runner sends each query as the app does (typed text as
+    names only; Pet-friendly with its confirmed-only default), judges the top 10 in SQL against
+    the label, never through the API's search code, and compares with
+    `data/search-baseline.json`. `--check` exits 1 on a regression; `--save` writes a baseline.
+  - Docs: DEVELOPMENT ("Search benchmark"), ARCHITECTURE, README (baseline, known gaps), the QA
+    strategy's status table, PLAN (phase 17), CLAUDE.md (local setup).
+- **Baseline (2026-10-14):** precision@10 93%, recall@10 72%, zero results 5% (2 of 37), known
+  items 6 of 6, negative cases 4 of 4, place intent 5 of 5, latency p50 31 ms, p95 46 ms.
+- **What it found** (for a later phase; nothing changed in search here):
+  1. **No typo tolerance:** "veterinria" finds nothing (80 vets in the circle). The shared schema's
+     comment said small typos were ignored; corrected.
+  2. **Generic words left after a service word must be in the name:** "urgencias veterinarias"
+     finds 2 of 29 hospitals ("veterinarias" must be in the name), "pensión para perros" 1 of 6,
+     "dog grooming" 6 of 92, "parque para perros" 1 of 36, "adiestrador de perros" none.
+  3. **Synonyms missing:** "hotel para perros" returns only a shelter (boarding not understood);
+     "croquetas" only finds names with the word (5 of 777 stores).
+  4. **Short words match inside words:** "vet me" lists vets with "me" inside the name (Gómez), so
+     only 1 of 10 is the business.
+  5. **Pet-friendly "restaurante"** also lists a hotel with a restaurant in its name (a label
+     question for the owner).
+- **Not covered:** comparison with other services (§5's last metric): Google results can't be
+  collected without billed requests or scraping, so it needs the owner's decision.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -1154,3 +1199,4 @@ Play readiness").
 | 2026-10-14 | Phase 16 started                                             | #28 |
 | 2026-10-14 | Phase 16 merged (`501415d`)                                  | #28 |
 | 2026-10-14 | README screenshots, docs brought up to date (`112bf1e`)      | #30 |
+| 2026-10-14 | Phase 17 started                                             | #31 |

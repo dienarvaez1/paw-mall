@@ -122,6 +122,7 @@ Each loader is a command (`pnpm places:*`), safe to re-run, writing to the same 
 | 7     | `places:chains`                                       | Chain-wide pet policies (`data/pet-friendly-chains.json`)                                                                                                                 |
 | —     | `places:landmarks`                                    | Refreshes the Wikidata landmarks snapshot                                                                                                                                 |
 | —     | `places:claims`, `places:reports`, `places:policies`  | Owner review of claims, reports and policy answers                                                                                                                        |
+| —     | `search:bench`                                        | Search quality benchmark: labeled searches scored against the API (precision and recall at 10, regressions)                                                               |
 | —     | `places:integrity`                                    | Read-only data-integrity report: duplicates, bad coordinates or hours, Urgencias gaps, stale data                                                                         |
 | —     | `e2e:seed`                                            | The fixed test data for end-to-end tests (`paw_mall_e2e`)                                                                                                                 |
 
@@ -209,6 +210,9 @@ use `Intl` with the active locale.
   database down (`database-down.test.ts`: `/health` reports it, every route answers a bare
   `INTERNAL_ERROR`), and a DENUE import that fails part way (`denue/save.test.ts`: one
   transaction, so nothing is left behind).
+- **Search quality:** `pnpm search:bench` (`packages/importers/src/bench`) sends 41 labeled
+  searches to the local API and judges the top 10 in SQL against the labels, then compares with
+  the committed baseline ([DEVELOPMENT.md](DEVELOPMENT.md), "Search benchmark").
 - **End to end:** Maestro flows in `apps/mobile/.maestro` (30 flows, 34 journeys) on fixed test
   data, on the Android build and on iOS in Expo Go — see [TESTING-E2E.md](TESTING-E2E.md).
 - **CI:** `.github/workflows/ci.yml` (lint, typecheck, tests on every PR) and `e2e.yml` (Maestro on
