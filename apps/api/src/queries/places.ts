@@ -355,14 +355,26 @@ function searchCircleSql(point: Point, radiusKm: number, namedAfter: string | nu
 }
 
 /**
+ * Words this short must start a word of the business's name: "vet me" isn't "Gómez", nor every
+ * place in "Ciudad de México". Longer ones can be anywhere in the name, city or state.
+ */
+const WORD_START_MAX_LENGTH = 3;
+
+/**
  * Every word of `q` in the name, city or state of places aliased `p`, letter for letter, ignoring
- * only case and accents (owner's rule): "tlaxcala" never matches "Ixtacala".
+ * only case and accents (owner's rule): "tlaxcala" never matches "Ixtacala". A short word must
+ * start a word of the name ("me" finds "Vet Me", not "Gómez"; search benchmark, Phase 17); a
+ * longer one can be inside one ("kota" finds "Maskota").
  */
 function allWordsSql(q: string): SQL {
   const searchText = sql`place_search_text(p.name, p.city, p.state)`;
   const words = sql.join(
     searchWords(q).map((word) => {
       const text = sql`lower(f_unaccent(${word}))`;
+      if (plain(word).length <= WORD_START_MAX_LENGTH && !word.includes(' ')) {
+        const name = sql`lower(f_unaccent(coalesce(p.name, '')))`;
+        return sql`(${name} ~ ('\\m' || lower(f_unaccent(${escapeRegex(word)}))))`;
+      }
       return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!')`;
     }),
     sql` AND `,
@@ -493,6 +505,11 @@ export function searchWords(q: string): string[] {
     const alias = SEARCH_ALIASES[plain(word)];
     return alias ? alias.join(' ') : word;
   });
+}
+
+/** Treats regular-expression characters typed by a user as plain characters. */
+function escapeRegex(text: string) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /** Treats % and _ typed by a user as plain characters in LIKE. */
