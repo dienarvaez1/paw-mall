@@ -48,6 +48,7 @@ checked) · **Blocked**.
 | 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done      | 2026-10-14 | 2026-10-14 |
 | 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | In review | 2026-10-14 | —          |
 | 19    | Place with words      | `phase-19/service-in-place`  | #34 | In review | 2026-10-14 | —          |
+| 20    | Full-text search      | `phase-20/full-text-search`  | #35 | In review | 2026-10-14 | —          |
 
 ## Pending owner reviews
 
@@ -1239,6 +1240,43 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - The Android keyboard can swap in its suggestion when Enter is pressed mid-word; the flows type
     a trailing space. The emulator crashed twice during builds; cold boots fixed it.
 
+### Phase 20 — Full-text search
+
+- **Scope:** option 1 of the search-library review (owner's choice, 2026-10-14): PostgreSQL's own
+  full-text search with Spanish stems and a synonyms table; no new dependency or service.
+  Ordering stays nearest first (the owner's rule; relevance ranking not added).
+- **Branch / PR:** `phase-20/full-text-search` / #35, stacked on Phase 19 (#34) and Phase 18
+  (#33), not merged yet.
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`
+  - [x] `pnpm test`: 378 tests (shared 41, mobile 97, api 112, importers 128)
+  - [x] Migration 0014 on the dev data: 23 s for 813k places
+  - [x] `pnpm search:bench`: 51 queries, 0 of 49 regressed; "perritos" recall@10 60% → 100%
+        (measured with the old matching swapped back in); precision@10 99%, recall@10 97%; new
+        baseline committed
+  - [x] `pnpm load`: reads p95 195 ms at 79 requests/s (threshold 500 ms; Phase 13: 229 ms)
+  - [x] Android emulator (the app is unchanged; e2e API on this branch): 29 of 30; `settings-units`
+        failed once (the emulator dropped to its home screen while its system services were
+        crash-looping; no app crash logged) and passed on the rerun
+- **What changed:**
+  1. **Migration 0014:** `places.search_words`, a stored tsvector of the name, city and state in
+     Spanish stems (GIN index); `search_synonyms`; `search_word_query(word)`, a word's stem OR its
+     synonyms' (a phrase's words all present), null for Spanish stop words.
+  2. **Matching:** each search word matches letter for letter as before (short words at a word's
+     start), or by full-text search. Nothing that matched before stops matching.
+  3. **Synonyms:** `data/search-synonyms.json` (7 groups: tacos/taquería, croquetas/alimento,
+     acuario/peces, café/cafetería, restaurante/fonda, hotel/hostal/posada, parque/jardín), loaded
+     by `pnpm search:synonyms`. Generic pet words (perro, gato, mascota) were tried and dropped:
+     "perritos" then listed every "perro" and "dog" name.
+  4. **Benchmark:** `anyNameWords` labels (a taquería counts for "tacos"), two new queries.
+- **Gains in the data:** "tacos" around Condesa (5 km) 849 → 1,384 places; "perritos" around the
+  Zócalo (10 km) 3 → 5; "veterinarias" as a name word 5 → 1,039. Broad queries were already 100%
+  in the top 10, so the benchmark's averages barely move; the gain is in how many matches exist.
+- **Notes:**
+  - Spanish stems don't join every form: "feliz" and "felices" stay apart.
+  - Fresh databases need `pnpm search:synonyms` after the migration (CLAUDE.md, DEVELOPMENT.md).
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -1293,3 +1331,4 @@ Play readiness").
 | 2026-10-14 | Phase 17 merged (`998af42`)                                  | #31 |
 | 2026-10-14 | Phase 18 started                                             | #33 |
 | 2026-10-14 | Phase 19 started                                             | #34 |
+| 2026-10-14 | Phase 20 started                                             | #35 |

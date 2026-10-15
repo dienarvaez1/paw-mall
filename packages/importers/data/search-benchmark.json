@@ -548,9 +548,33 @@
       },
       "relevant": {
         "categories": ["restaurant", "cafe"],
-        "nameWords": ["taco"]
+        "anyNameWords": ["taco", "taqueria"]
       },
       "note": "Owner's report (2026-10-14): a place with any other words goes there. No confirmed policy there, so Pet-friendly widens."
+    },
+    {
+      "id": "fts-plural-perritos",
+      "q": "perritos",
+      "near": "cdmx-zocalo",
+      "radiusKm": 10,
+      "tags": ["full-text", "plural"],
+      "relevant": {
+        "anyNameWords": ["perrito"]
+      },
+      "note": "A plural finds singular names (Spanish stems, Phase 20)."
+    },
+    {
+      "id": "fts-synonym-tacos",
+      "q": "tacos",
+      "near": "cdmx-condesa",
+      "group": "pet_friendly",
+      "widened": true,
+      "tags": ["full-text", "synonym", "pet-friendly"],
+      "relevant": {
+        "categories": ["restaurant", "cafe"],
+        "anyNameWords": ["taco", "taqueria"]
+      },
+      "note": "\"Tacos\" also finds \"Taco …\" and \"Taquería …\" (stems and synonyms, Phase 20)."
     },
     {
       "id": "pf-cafe-condesa",
