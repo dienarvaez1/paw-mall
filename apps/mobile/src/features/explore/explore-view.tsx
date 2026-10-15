@@ -1,4 +1,4 @@
-import { type SearchArea, areaLookupResponseSchema } from '@paw-mall/shared';
+import { type CategorySlug, type SearchArea, areaLookupResponseSchema } from '@paw-mall/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { type ReactNode, createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { Alert, Keyboard } from 'react-native';
@@ -7,6 +7,7 @@ import { apiGet } from '@/api/client';
 import { useUserLocation } from '@/features/location/location-context';
 import { useAppTranslation } from '@/i18n/use-app-translation';
 import { useLocale } from '@/i18n/use-locale';
+import type { ChipCategory } from '@/lib/categories';
 import { useOnWake } from '@/lib/use-on-wake';
 
 export type ExploreMode = 'map' | 'list';
@@ -69,7 +70,11 @@ type ExploreView = {
 export type AreaRadius = { text: string; km: number };
 
 type Point = { lat: number; lng: number };
-export type PlaceChoice = { text: string; asPlace: boolean };
+/**
+ * How the user said to read the text. exactWords: "by that name" after the service-in-place
+ * question, so "veterinaria mascota" is searched word for word in names.
+ */
+export type PlaceChoice = { text: string; asPlace: boolean; exactWords?: boolean };
 
 /** Shorter texts are never looked up as places (as the API). */
 const MIN_PLACE_LOOKUP = 3;
@@ -81,6 +86,16 @@ const MIN_PLACE_LOOKUP = 3;
  */
 export function readsAsPlace(choice: PlaceChoice | null, text: string): boolean {
   return choice !== null && choice.text === text.trim() && choice.asPlace;
+}
+
+/** The API's reading of the search text (namesOnly, exactWords), as usePlaces and the map send it. */
+export function searchReading(
+  choice: PlaceChoice | null,
+  text: string,
+): { namesOnly?: true; exactWords?: true } {
+  if (text === '' || readsAsPlace(choice, text)) return {};
+  const exact = choice !== null && choice.text === text.trim() && choice.exactWords === true;
+  return exact ? { namesOnly: true, exactWords: true } : { namesOnly: true };
 }
 
 const ExploreViewContext = createContext<ExploreView>({
@@ -157,13 +172,16 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
     choice: placeChoice,
     choosePlace,
     askAboutPlace,
+    askAboutService,
     confirmBusinessName,
   } = usePlaceChoice(text, setText, setNearMe, setFocus);
   const queryClient = useQueryClient();
   const locale = useLocale();
   const { coords } = useUserLocation();
-  // The search key: a place's name asks how to read it; any other text ("Tlaxcala Casona") is
-  // confirmed as a business-name search, so the tab and radius fit its matches (search-fit.ts).
+  // The search key: a place's name asks how to read it. A place with other words ("veterinaria
+  // tlaxcala", "puerto vallarta taco", any order) goes there, or asks when it could also be a
+  // business's name. Text with no place in it ("forrajeria") is confirmed as a business-name
+  // search, so the tab and radius fit its matches (search-fit.ts).
   const submitSearch = useCallback(() => {
     const q = text.trim();
     if (!q || placeChoice?.text === q) return;
@@ -178,12 +196,24 @@ export function ExploreViewProvider({ children }: { children: ReactNode }) {
           apiGet('/v1/places/area', { q, ...coords }, locale, areaLookupResponseSchema),
         staleTime: Infinity,
       })
-      .then(({ area }) => {
-        if (area) askAboutPlace(area);
-        else confirmBusinessName(q);
+      .then(({ area, business, category, ambiguous }) => {
+        if (!area) confirmBusinessName(q);
+        else if (business === null) askAboutPlace(area);
+        else if (ambiguous) askAboutService(q, area, category, business);
+        else choosePlace({ ...area, name: q });
       })
       .catch(() => {});
-  }, [text, placeChoice, queryClient, locale, coords, askAboutPlace, confirmBusinessName]);
+  }, [
+    text,
+    placeChoice,
+    queryClient,
+    locale,
+    coords,
+    askAboutPlace,
+    askAboutService,
+    choosePlace,
+    confirmBusinessName,
+  ]);
   const searchText = text.trim();
   const value = useMemo(
     () => ({
@@ -252,6 +282,12 @@ function usePlaceChoice(
   choice: PlaceChoice | null;
   choosePlace: (place: Pick<SearchArea, 'name' | 'kind'>) => void;
   askAboutPlace: (place: Pick<SearchArea, 'name' | 'kind'>) => void;
+  askAboutService: (
+    text: string,
+    place: Pick<SearchArea, 'name' | 'state'>,
+    category: CategorySlug | null,
+    business: string,
+  ) => void;
   confirmBusinessName: (text: string) => void;
 } {
   const { t } = useAppTranslation();
@@ -259,9 +295,9 @@ function usePlaceChoice(
   const current = text.trim();
   if (choice && choice.text !== current) setChoice(null);
   const answer = useCallback(
-    (name: string, asPlace: boolean) => {
+    (name: string, asPlace: boolean, exactWords = false) => {
       setText(name);
-      setChoice({ text: name, asPlace });
+      setChoice({ text: name, asPlace, ...(exactWords ? { exactWords } : {}) });
       // As a place: "Mi ubicación" off, the search goes around the place. As a business name:
       // "Mi ubicación" on, those businesses around the user (owner's rules).
       setNearMe(!asPlace);
@@ -293,13 +329,51 @@ function usePlaceChoice(
     },
     [t, answer, setNearMe],
   );
+  // A place with other words that could also be a business's name ("veterinaria mascota": vets in
+  // Mascota, Jalisco, or the many "Veterinaria Mi Mascota"): the user says which.
+  const askAboutService = useCallback(
+    (
+      text: string,
+      place: Pick<SearchArea, 'name' | 'state'>,
+      category: CategorySlug | null,
+      business: string,
+    ) => {
+      setNearMe(false);
+      Alert.alert(
+        t('places.serviceAsk.title'),
+        t('places.serviceAsk.message', {
+          text,
+          // A kind of business by its chip's name (every slug a keyword names has a chip), else
+          // the words as typed.
+          what: category
+            ? t(`places.chips.${category as Exclude<ChipCategory, null>}`).toLocaleLowerCase()
+            : t('places.serviceAsk.words', { words: business }),
+          place: place.name,
+          state: place.state,
+        }),
+        [
+          {
+            text: t('places.serviceAsk.byName'),
+            onPress: () => answer(text, false, true),
+          },
+          {
+            text: t('places.serviceAsk.inPlace', { place: place.name }),
+            onPress: () => answer(text, true),
+          },
+          { text: t('common.cancel'), style: 'cancel' },
+        ],
+        { cancelable: false },
+      );
+    },
+    [t, answer, setNearMe],
+  );
   // Text that isn't a place's name, sent with the search key: a business-name search, confirmed
   // as is ("Mi ubicación" and the circle stay as they are).
   const confirmBusinessName = useCallback((name: string) => {
     setChoice({ text: name, asPlace: false });
     Keyboard.dismiss();
   }, []);
-  return { choice, choosePlace, askAboutPlace, confirmBusinessName };
+  return { choice, choosePlace, askAboutPlace, askAboutService, confirmBusinessName };
 }
 
 export function useExploreView(): ExploreView {

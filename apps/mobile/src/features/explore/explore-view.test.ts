@@ -7,7 +7,7 @@ vi.mock('@/i18n/use-locale', () => ({ useLocale: () => 'es' }));
 vi.mock('@/api/client', () => ({ apiGet: () => {} }));
 vi.mock('@/features/location/location-context', () => ({ useUserLocation: () => ({}) }));
 
-const { readsAsPlace } = await import('./explore-view');
+const { readsAsPlace, searchReading } = await import('./explore-view');
 
 describe('readsAsPlace', () => {
   it('reads a picked place as the place only when the user said so, for that text', () => {
@@ -19,5 +19,22 @@ describe('readsAsPlace', () => {
 
   it('reads typed text as a business name: the search never moves to an unconfirmed place', () => {
     expect(readsAsPlace(null, 'Tlaxcala')).toBe(false);
+  });
+});
+
+describe('searchReading', () => {
+  it('sends a place as a place, typed text as names, and "by that name" word for word', () => {
+    const text = 'veterinaria mascota';
+    expect(searchReading({ text, asPlace: true }, text)).toEqual({});
+    expect(searchReading(null, text)).toEqual({ namesOnly: true });
+    expect(searchReading({ text, asPlace: false, exactWords: true }, text)).toEqual({
+      namesOnly: true,
+      exactWords: true,
+    });
+    // Editing the text forgets the answer.
+    expect(searchReading({ text, asPlace: false, exactWords: true }, 'veterinaria')).toEqual({
+      namesOnly: true,
+    });
+    expect(searchReading(null, '')).toEqual({});
   });
 });

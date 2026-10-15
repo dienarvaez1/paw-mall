@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { detectCategory, editDistance } from './search-keywords';
+import { detectCategory, editDistance, isPetWord } from './search-keywords';
 
 describe('detectCategory', () => {
   it('turns business keywords into a category, in Spanish or English', () => {
@@ -57,6 +57,15 @@ describe('detectCategory', () => {
     expect(detectCategory('Café').category).toBe('cafe');
     expect(detectCategory('restaurante').category).toBe('restaurant');
     expect(detectCategory('parque para perros')).toEqual({ category: 'park', words: '' });
+  });
+});
+
+describe('isPetWord', () => {
+  it('tells words about the pet from other names', () => {
+    expect(isPetWord('Mascota')).toBe(true);
+    expect(isPetWord('perros')).toBe(true);
+    expect(isPetWord('Tlaxcala')).toBe(false);
+    expect(isPetWord('mi mascota')).toBe(false);
   });
 });
 

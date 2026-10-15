@@ -1,5 +1,6 @@
 import {
   AREA_NAME_RADIUS_KM,
+  type AreaLookupResponse,
   CITY_BUSY_MATCHES,
   type Category,
   type CategorySlug,
@@ -25,6 +26,7 @@ import {
   WEBSITE_VERIFIED_DAYS,
   categoryGroup,
   detectCategory,
+  isPetWord,
   SEARCH_ALIASES,
 } from '@paw-mall/shared';
 import { type SQL, sql } from 'drizzle-orm';
@@ -275,6 +277,7 @@ export async function listPlaces(
 type SearchQuery = PlaceFilters & {
   q?: string;
   namesOnly?: boolean;
+  exactWords?: boolean;
   lat: number;
   lng: number;
   radiusKm: number;
@@ -306,7 +309,8 @@ async function interpretSearch(db: Database, query: SearchQuery) {
       text = found.business ?? '';
     }
   }
-  const detected = detectCategory(text);
+  // "As a business name" after the service-in-place question: the words as typed, in names.
+  const detected = query.exactWords ? { category: null, words: text } : detectCategory(text);
   // A keyword names a category only where it fits: not against a chip of another category, nor
   // on the other tab ("vet" on Pet-friendly). There the chip wins and the keyword is dropped when
   // something else is left to search by (a place, other words: "estética Plaza X" with
@@ -376,6 +380,49 @@ function allWordsSql(q: string): SQL {
         return sql`(${name} ~ ('\\m' || lower(f_unaccent(${escapeRegex(word)}))))`;
       }
       return sql`(${searchText} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!')`;
+    }),
+    sql` AND `,
+  );
+  return sql`(${words})`;
+}
+
+/**
+ * What the search key's text names, for the app's question (GET /v1/places/area): a place by its
+ * whole name, or a place with other words, in any order ("veterinaria mascota", "puerto vallarta
+ * taco", "veterinaria en Mascota"). The latter is ambiguous when a business within
+ * AREA_NAME_RADIUS_KM of the user has every word in its name, or when the place's name is a word
+ * about pets; the app asks then, and otherwise goes straight to the place.
+ */
+export async function lookupArea(
+  db: Database,
+  q: string,
+  near: { lat: number; lng: number },
+): Promise<AreaLookupResponse> {
+  const whole = await resolveArea(db, q, near);
+  if (whole) return { area: whole, business: null, category: null, ambiguous: false };
+  const found = await findAreaSearch(db, q, near);
+  if (!found?.business) return { area: null, business: null, category: null, ambiguous: false };
+  const named = await countPlaces(db, [
+    visibleSql,
+    withinRadiusSql(near, AREA_NAME_RADIUS_KM),
+    nameWordsSql(q),
+  ]);
+  const service = detectCategory(found.business);
+  return {
+    area: found.area,
+    business: found.business,
+    category: service.words === '' ? service.category : null,
+    ambiguous: named > 0 || isPetWord(found.area.name),
+  };
+}
+
+/** Every word of `q` in the name of places aliased `p` (accents and case aside). */
+function nameWordsSql(q: string): SQL {
+  const name = sql`lower(f_unaccent(coalesce(p.name, '')))`;
+  const words = sql.join(
+    searchWords(q).map((word) => {
+      const text = sql`lower(f_unaccent(${word}))`;
+      return sql`(${name} LIKE '%' || ${escapeLike(text)} || '%' ESCAPE '!')`;
     }),
     sql` AND `,
   );

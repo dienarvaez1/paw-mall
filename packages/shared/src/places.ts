@@ -156,6 +156,11 @@ export const placeListQuerySchema = z.object({
   cityRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(CITY_AREA_RADIUS_KM),
   /** "true" searches `q` in business names only, even when it names an area. */
   namesOnly: z.stringbool().optional(),
+  /**
+   * With namesOnly: every word as typed, no keyword read as a category ("veterinaria mascota" as a
+   * name, after the user said so).
+   */
+  exactWords: z.stringbool().optional(),
   ...placeFilters,
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),
@@ -181,8 +186,22 @@ export const areaLookupQuerySchema = z.object({
 export type AreaLookupQuery = z.infer<typeof areaLookupQuerySchema>;
 
 export const areaLookupResponseSchema = z.object({
-  /** The nearest place with that exact name (accents and case aside), or null. */
+  /**
+   * The nearest place with that exact name (accents and case aside), or the place named in a
+   * longer text, in any order ("veterinaria mascota", "puerto vallarta taco", "vet en Coyoacán");
+   * null otherwise.
+   */
   area: searchAreaSchema.omit({ radiusKm: true }).nullable(),
+  /** The other words of a longer text ("taco", "veterinaria"); null when the text is the name. */
+  business: z.string().nullable().default(null),
+  /** The kind of business those words name ("veterinaria" → veterinarian), if they do. */
+  category: categorySlugSchema.nullable().default(null),
+  /**
+   * With business words: whether the text could also be a business's name, so the app asks. True
+   * when a business near the user has every word in its name, or the place's name is a word about
+   * pets ("tienda de mascota" next to the town of Mascota).
+   */
+  ambiguous: z.boolean().default(false),
 });
 export type AreaLookupResponse = z.infer<typeof areaLookupResponseSchema>;
 
@@ -255,6 +274,7 @@ export const placeMapQuerySchema = z.object({
   /** A busy city's radius in the user's units: 3 mi, or 5 km (the closest km preset). */
   cityRadiusKm: z.coerce.number().positive().max(MAX_RADIUS_KM).default(CITY_AREA_RADIUS_KM),
   namesOnly: z.stringbool().optional(),
+  exactWords: z.stringbool().optional(),
   ...placeFilters,
   /** Most places to return one by one before clustering (tests use a small number). */
   limit: z.coerce.number().int().min(1).max(MAP_MAX_PLACES).default(MAP_DEFAULT_PINS),

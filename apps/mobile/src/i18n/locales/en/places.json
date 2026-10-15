@@ -267,6 +267,13 @@
       "landmark": "landmark"
     }
   },
+  "serviceAsk": {
+    "title": "What are you looking for?",
+    "message": "“{{text}}”: {{what}} in {{place}}, {{state}}, or businesses with that name near you?",
+    "words": "“{{words}}”",
+    "inPlace": "In {{place}}",
+    "byName": "By that name"
+  },
   "suggestions": {
     "label": "Place suggestions",
     "kind": {

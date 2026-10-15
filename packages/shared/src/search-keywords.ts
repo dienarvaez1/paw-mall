@@ -149,6 +149,12 @@ const PET_WORDS = new Set([
   'pets',
 ]);
 
+/** Whether a word is about the pet, not the business ("perros", "mascota"); accents and case aside. */
+export function isPetWord(text: string): boolean {
+  const words = plainWords(text);
+  return words.length === 1 && PET_WORDS.has(words[0]!);
+}
+
 /** A typo is forgiven only in a word this long, and only one (veterinria → veterinaria). */
 const TYPO_MIN_LENGTH = 7;
 
