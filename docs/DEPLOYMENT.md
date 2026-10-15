@@ -27,28 +27,29 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done   | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done   | 2026-10-13 | 2026-10-13 |
-| 13    | Load test             | `phase-13/load-test`         | #24 | Done   | 2026-10-14 | 2026-10-14 |
-| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done   | 2026-10-14 | 2026-10-14 |
-| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done   | 2026-10-14 | 2026-10-14 |
-| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done   | 2026-10-14 | 2026-10-14 |
-| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done   | 2026-10-14 | 2026-10-14 |
-| 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | Done   | 2026-10-14 | 2026-10-14 |
-| 19    | Place with words      | `phase-19/service-in-place`  | #36 | Done   | 2026-10-14 | 2026-10-14 |
-| 20    | Full-text search      | `phase-20/full-text-search`  | #35 | Done   | 2026-10-14 | 2026-10-14 |
+| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
+| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done      | 2026-10-14 | 2026-10-14 |
+| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done      | 2026-10-14 | 2026-10-14 |
+| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done      | 2026-10-14 | 2026-10-14 |
+| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done      | 2026-10-14 | 2026-10-14 |
+| 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | Done      | 2026-10-14 | 2026-10-14 |
+| 19    | Place with words      | `phase-19/service-in-place`  | #36 | Done      | 2026-10-14 | 2026-10-14 |
+| 20    | Full-text search      | `phase-20/full-text-search`  | #35 | Done      | 2026-10-14 | 2026-10-14 |
+| 22    | Adoption and rescue   | `phase-22/animal-welfare`    | #39 | In review | 2026-10-15 | —          |
 
 ## Pending owner reviews
 
@@ -1278,6 +1279,44 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - Spanish stems don't join every form: "feliz" and "felices" stay apart.
   - Fresh databases need `pnpm search:synonyms` after the migration (CLAUDE.md, DEVELOPMENT.md).
 
+### Phase 22 — Adoption, rescue and animal protection
+
+- **Scope:** the owner's choice (2026-10-14): one category for shelters, sanctuaries, adoption
+  centers, rescuers and non-profits that help animals; DENUE first, with a reviewed list.
+  Branched from `main` alongside Phase 21 (#38, not merged yet).
+- **Branch / PR:** `phase-22/animal-welfare` / #39
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 395 tests (shared 41, mobile 97, api 112, importers 145)
+  - [x] "Done when": `pnpm places:import` puts 111 places under the new category, each reviewed
+        ([list](reviews/animal-welfare-2026-10-14.md)); control centers stay out;
+        `pnpm search:bench` 53 queries, 0 of 51 regressed; new queries 100%
+  - [x] Android emulator (release build): all 30 flows pass
+- **What it adds:**
+  - **Category** `animal_welfare` (migration 0015): "Adopción, rescate y protección animal"; chip
+    "Adopción y rescate" on Explorar (emerald, house-and-heart icon), before vets in pin order.
+  - **DENUE rules** (`isAnimalWelfare` in `denue/map.ts`): a shelter, rescue, adoption, sanctuary
+    or protection word, or a non-profit's legal form (A.C., I.A.P., fundación), plus an animal
+    word, in civil associations (813230, now read by name), other personal services (812990),
+    private and public vets and pet stores. Left out: animal control (control, zoonosis,
+    antirrábico, perrera), "El Refugio"/"El Santuario" as a vet's name, animal-assisted therapy,
+    guide-dog schools, and every other class (churches named "Santuario").
+  - **Found:** 111 in 28 states: 39 civil associations, 32 shelters under personal services, 29
+    vets (shelters with a clinic, foundations' clinics), 10 municipal protection units, 1 store
+    run by a rescue foundation. 2 animal sanctuaries (Pachuca; Ahuacatlán).
+  - **Search words:** "adopción", "adoptar", "rescatistas", "refugio canino", "albergue de perros",
+    "santuario de animales", "protectora de animales", "animal shelter"… ("refugio" alone stays
+    a name: "Tacos el Refugio").
+- **Open:**
+  - The owner's decision on municipal control centers (they may put animals down): today public
+    services only; municipal protection units are in the new category.
+  - Next sources: OpenStreetMap shelters (both Overpass servers gave no answer on 2026-10-15),
+    Overture's `animal_shelter` category (needs a new query), SAT's authorized donees as a
+    "registered non-profit" mark, and a sign-up form for informal rescuers and foster networks.
+  - No end-to-end flow for the new chip: adding a fixture place changes the counts other flows
+    check.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -1336,3 +1375,4 @@ Play readiness").
 | 2026-10-14 | Phase 18 merged (`688d6c3`)                                  | #33 |
 | 2026-10-14 | Phase 19 merged (`c54913d`; #34 replaced by #36)             | #36 |
 | 2026-10-14 | Phase 20 merged (`f580b20`)                                  | #35 |
+| 2026-10-15 | Phase 22 started                                             | #39 |

@@ -145,7 +145,7 @@ Counts are from the DENUE edition of May 2026, measured on October 5, 2026.
 
 ## Phased roadmap
 
-Seven phases were planned at the start; phases 8 to 20 were added as the work went on. Each ends
+Seven phases were planned at the start; phases 8 to 22 were added as the work went on. Each ends
 with a check you can run on your phone. Finish and commit one phase before starting the next. No deploys in any phase until the owner decides.
 
 1. **Foundation (1–2 days).** Monorepo, TypeScript, lint, Prettier, Vitest, `CLAUDE.md`, Expo app
@@ -259,6 +259,13 @@ with a check you can run on your phone. Finish and commit one phase before start
     nearest first. No new dependency or service.
     - Done when: plurals and synonyms find more of the relevant places, the benchmark shows no
       regression, and the load test stays under its threshold.
+
+21. **Adoption, rescue and animal protection (added 2026-10-14, owner's choice).** A new pet
+    business category for shelters, sanctuaries, adoption centers, rescuers and non-profits that
+    help animals: from DENUE names now (reviewed), OpenStreetMap and Overture next, and SAT's
+    authorized-donee list later as a "registered non-profit" mark.
+    - Done when: the reviewed DENUE places show under "Adopción y rescate", municipal control
+      centers stay out of it, and the benchmark shows no regression.
 
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when

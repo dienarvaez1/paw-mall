@@ -6,13 +6,13 @@ in parentheses the first time.
 
 ## Tabs
 
-| Tab                         | For                                                                                                                 |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| **Explore** (Explorar)      | Pet businesses: vets, vet hospitals, pet stores, boutiques, groomers, boarding, feed stores, pet funerals, trainers |
-| **Pet-friendly**            | Places you can go with your pet: restaurants, cafés, lodging, museums, parks                                        |
-| **Emergencies** (Urgencias) | The nearest vet hospitals and 24-hour vets, open ones first                                                         |
-| **Favorites** (Favoritos)   | Places you saved, newest first                                                                                      |
-| **Settings** (Ajustes)      | Language, units, your pet, which places to show                                                                     |
+| Tab                         | For                                                                                                                                                                                                            |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Explore** (Explorar)      | Pet businesses: vets, vet hospitals, pet stores, boutiques, groomers, boarding, feed stores, pet funerals, trainers, and adoption, rescue and animal protection (shelters, sanctuaries, rescuers, non-profits) |
+| **Pet-friendly**            | Places you can go with your pet: restaurants, cafés, lodging, museums, parks                                                                                                                                   |
+| **Emergencies** (Urgencias) | The nearest vet hospitals and 24-hour vets, open ones first                                                                                                                                                    |
+| **Favorites** (Favoritos)   | Places you saved, newest first                                                                                                                                                                                 |
+| **Settings** (Ajustes)      | Language, units, your pet, which places to show                                                                                                                                                                |
 
 The ⓘ at the top right of a tab explains it.
 
@@ -56,7 +56,7 @@ in miles). Zooming the map by hand also sets the radius to what you zoomed to.
 
 ### Category chips
 
-**All** (Todos) or one category at a time: Vets, Hospitals, Stores, Boutiques… on Explore;
+**All** (Todos) or one category at a time: Vets, Hospitals, Stores, Boutiques, … Adoption & rescue (Adopción y rescate) on Explore;
 Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 ### Search box
