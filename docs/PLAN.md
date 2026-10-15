@@ -145,7 +145,7 @@ Counts are from the DENUE edition of May 2026, measured on October 5, 2026.
 
 ## Phased roadmap
 
-Seven phases were planned at the start; phases 8 to 17 were added as the work went on. Each ends
+Seven phases were planned at the start; phases 8 to 18 were added as the work went on. Each ends
 with a check you can run on your phone. Finish and commit one phase before starting the next. No deploys in any phase until the owner decides.
 
 1. **Foundation (1–2 days).** Monorepo, TypeScript, lint, Prettier, Vitest, `CLAUDE.md`, Expo app
@@ -240,6 +240,12 @@ with a check you can run on your phone. Finish and commit one phase before start
     known items, latency and regressions against a committed baseline (`pnpm search:bench`).
     - Done when: the benchmark runs on the full data, the baseline is committed, and a changed
       result shows up as a regression.
+
+18. **Search gap fixes (added 2026-10-14, from the Phase 17 benchmark).** Typo tolerance in
+    keywords, pet words dropped after a keyword, synonyms (pet food, pet hotels, Pet-friendly
+    venue words), and short words matched at a word's start.
+    - Done when: the benchmark shows higher recall with no regression, and the search flows pass
+      on the emulator.
 
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when

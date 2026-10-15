@@ -63,6 +63,11 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 
 - **Type a business name** ("Huellitas", "estética canina"): the list and map show businesses
   with those words, around you. Word order doesn't matter, and accents and capitals don't either.
+  Short words (up to 3 letters) must start a word of the name: "vet me" finds "Vet Me".
+- **Type a kind of business** ("veterinaria", "pensión para perros", "croquetas", "hotel para
+  perros", "dog grooming"; on Pet-friendly "café", "restaurante", "hotel", "parque"): you get
+  every place of that kind, whatever its name. One typo in a long word is fine ("veterinria"),
+  and words about the pet ("perros", "mascotas", "dog") are then ignored.
 - **Suggestions** drop down as you type (from 3 letters): places (cities, colonias, landmarks)
   first, then businesses nearby. Every word you type must start a word of the suggestion, in any
   order: "puerto vall", "vallarta puerto" and "v puerto" all suggest Puerto Vallarta.

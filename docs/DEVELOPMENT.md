@@ -142,9 +142,10 @@ item lost, a new zero result, a negative case returning places, or a wrong place
 and after any change to search, and commit a new baseline with the change. It reads the dev data,
 so CI can't run it; a re-import changes the data and the results (the report says so).
 
-Labels are drafts until the owner reviews them (`review.status` in the file). Baseline on
-2026-10-14 (813k visible places): precision@10 93%, recall@10 72%, zero results 5%, known items
-100%, negative cases 100%, place intent 100%, latency p50 31 ms and p95 46 ms.
+Labels are drafts until the owner reviews them (`review.status` in the file). Baseline after
+Phase 18's fixes (2026-10-14, 813k visible places): precision@10 99%, recall@10 96%, zero
+results 0%, known items, negative cases and place intent 100%, latency p50 29 ms and p95 48 ms.
+Phase 17's first baseline was precision 93%, recall 72%, zero results 5%.
 
 ## Conventions (summary of CLAUDE.md)
 

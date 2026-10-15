@@ -35,11 +35,12 @@ back it today.
 **Current baseline (2026-10-14),** reproducible with `pnpm test`, `pnpm --filter mobile e2e`,
 `pnpm load` and `pnpm search:bench`:
 
-- 360 unit and API tests (shared 36, mobile 96, API 105, importers 123).
+- 362 unit and API tests (shared 40, mobile 96, API 106, importers 123).
 - 30 end-to-end flows covering 34 user journeys on Android, and all but one on iOS.
 - Load test: p95 of 229 ms at 77 requests per second.
-- Search benchmark (41 queries): precision@10 93%, recall@10 72%, zero results 5%, known items,
-  negative cases and place intent 100%, p95 46 ms.
+- Search benchmark (41 queries): precision@10 99%, recall@10 96%, zero results 0%, known items,
+  negative cases and place intent 100%, p95 48 ms (Phase 18; Phase 17's first baseline was 93%,
+  72% and 5%).
 
 **AI-assisted development** ([QA strategy §8](docs/QA-STRATEGY.md#8-ai-assisted-quality-engineering)):
 the app is built with Claude Code under written standing rules ([CLAUDE.md](CLAUDE.md)). Every change goes through a phase branch and a pull request, must pass
@@ -51,9 +52,8 @@ Bugs found in manual review become regression flows (for example `search-pan`, `
 tracks each one):
 
 - The search benchmark's labels are drafts awaiting the owner's review, so no release thresholds
-  are set yet; it runs locally on the dev data, not in CI (§5, §7). It found where search misses:
-  typos, and generic words left after a service word ("hotel para perros", "urgencias
-  veterinarias", "dog grooming") that must then appear in names.
+  are set yet; it runs locally on the dev data, not in CI (§5, §7). Its gaps from Phase 17 were
+  fixed in Phase 18; two weak queries remain ("veterinaria 24 horas", "vet me").
 - Formatting is checked locally, not in CI (§7).
 - iOS runs in Expo Go rather than a development build, and the end-to-end workflow in CI has not
   run yet (§4).

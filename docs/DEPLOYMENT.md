@@ -27,25 +27,26 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done   | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done   | 2026-10-13 | 2026-10-13 |
-| 13    | Load test             | `phase-13/load-test`         | #24 | Done   | 2026-10-14 | 2026-10-14 |
-| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done   | 2026-10-14 | 2026-10-14 |
-| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done   | 2026-10-14 | 2026-10-14 |
-| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done   | 2026-10-14 | 2026-10-14 |
-| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done   | 2026-10-14 | 2026-10-14 |
+| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
+| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done      | 2026-10-14 | 2026-10-14 |
+| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done      | 2026-10-14 | 2026-10-14 |
+| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done      | 2026-10-14 | 2026-10-14 |
+| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done      | 2026-10-14 | 2026-10-14 |
+| 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | In review | 2026-10-14 | —          |
 
 ## Pending owner reviews
 
@@ -1149,6 +1150,45 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Not covered:** comparison with other services (§5's last metric): Google results can't be
   collected without billed requests or scraping, so it needs the owner's decision.
 
+### Phase 18 — Search gap fixes
+
+- **Scope:** the gaps Phase 17's benchmark found (owner's request, 2026-10-14).
+- **Branch / PR:** `phase-18/search-gaps` / #33
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`
+  - [x] `pnpm test`: 362 tests (shared 40, mobile 96, api 106, importers 123)
+  - [x] "Done when": `pnpm search:bench` against Phase 17's baseline: 0 of 41 queries regressed;
+        precision@10 93% → 99%, recall@10 72% → 96%, zero results 5% → 0%; new baseline
+        committed (`c6477a4`)
+  - [x] Android emulator (release build; the app is unchanged, the e2e API runs this branch):
+        `search-clear`, `pet-friendly-widen`, `pet-friendly`, `place-question`,
+        `place-question-business`, `search-typed-fit`, `search-section`, `search-zoom`,
+        `search-zoom-out`, `chips`, `emergencies`, `search-pan`: 12 of 12 pass
+- **Fixes** (`detectCategory` in `packages/shared/src/search-keywords.ts`; `allWordsSql` in
+  `apps/api/src/queries/places.ts`):
+  1. **Typos:** a word of 7 or more letters one edit (or one swap) away from a keyword of a single
+     category names that category: "veterinria" finds the 80 vets (was none).
+  2. **Pet words and later keywords dropped:** once a keyword names the category, "perros",
+     "mascotas", "dog" and similar, and further keywords, are no longer required in names.
+     "urgencias veterinarias" 2 → 10 of 29 hospitals, "dog grooming" 6 → 10, "pensión para
+     perros" 1 → 6 of 6, "adiestrador de perros" 0 → 1 of 1, "parque para perros" 1 → 10.
+  3. **Synonyms:** pet food ("croquetas", "alimento/comida para perro…", "pet food") as pet
+     stores (5 → 10); "hotel para perros", "hotel canino", "hospedaje para mascotas"… as boarding
+     (the shelter it found is gone); Pet-friendly venue words ("café", "restaurante", "hotel",
+     "parque", "museo") as their categories, so "restaurante" no longer lists a hotel with the
+     word in its name.
+  4. **Short words:** a word of 3 letters or fewer must start a word of the business's name;
+     longer words still match anywhere ("kota" finds "Maskota"). "vet me" 1 → 7 of 10.
+- **Notes:**
+  - On Explorar, "hotel" alone is still a name search (lodging isn't a pet business), and on
+    Pet-friendly "hotel para perros" is too (boarding isn't a venue).
+  - Remaining weak queries: "veterinaria 24 horas" (the "horas" must be in the name; the one
+    match in 10 km is "Veterinaria 24 Siete", so the label may need a review) and "vet me" (7 of
+    10).
+  - A town named like a pet word (Mascota, Jalisco) typed after a keyword ("veterinaria
+    mascota") loses the town; picking it from the suggestions still works.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -1201,3 +1241,4 @@ Play readiness").
 | 2026-10-14 | README screenshots, docs brought up to date (`112bf1e`)      | #30 |
 | 2026-10-14 | Phase 17 started                                             | #31 |
 | 2026-10-14 | Phase 17 merged (`998af42`)                                  | #31 |
+| 2026-10-14 | Phase 18 started                                             | #33 |
