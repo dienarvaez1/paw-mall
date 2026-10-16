@@ -1381,7 +1381,9 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   the repo and outside it. The name is the same in Spanish and English; everything around it stays
   translated.
 - **Branch / PR:** `phase-23/rename` / #41
-- **Status:** Done. Squash-merged into `main` as `a2cb2ca` on 2026-10-15; branch deleted.
+- **Status:** Done. Squash-merged into `main` as `a2cb2ca` on 2026-10-15; branch deleted. The old
+  volume `paw-mall_db-data` and the previous Android key in `apps/mobile/.env.local` were
+  removed after the merge.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
   - [x] `pnpm test`: 404 tests (shared 42, mobile 105, api 112, importers 145)
@@ -1413,8 +1415,6 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - The Android map now uses `paw-mall-app`'s "Maps Platform API Key" (the previous key in
     `apps/mobile/.env.local` wasn't in this project). It has no application restriction: restrict
     it to `dev.pethelper.app` + the debug SHA-1 once nothing else uses it (owner).
-  - The old volume `paw-mall_db-data` and the previous key in `apps/mobile/.env.local`: remove
-    them once the merge and the new key are confirmed.
 
 ## Production deployment
 
