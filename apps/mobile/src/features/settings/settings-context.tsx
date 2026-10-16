@@ -7,7 +7,7 @@ import {
   MAX_RADIUS_KM,
   PET_SPECIES,
   type PetSpecies,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { closestRadiusKm, startRadiusKm, type DistanceUnit, UNIT_OPTIONS } from './radius';

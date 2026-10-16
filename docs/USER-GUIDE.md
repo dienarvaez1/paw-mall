@@ -1,4 +1,4 @@
-# Paw Mall — User Guide
+# Pet Helper — User Guide
 
 How the app works for pet owners. The app is in Spanish by default and in English with the globe
 switch in the search box or in Ajustes; this guide uses the English names, with the Spanish ones
@@ -136,7 +136,7 @@ Restaurants, Cafés, Lodging, Museums, Parks on Pet-friendly.
 - **Map** with the place, its **name** with a **heart** beside it to save it to Favorites, and its
   **categories**.
 - **Address** — tap it to copy the name and address; the share button sends them to any app.
-- **How far it's confirmed**, under the address: verified by the owner, confirmed by Paw Mall users,
+- **How far it's confirmed**, under the address: verified by the owner, confirmed by Pet Helper users,
   or confirmed by its own website (with the date it was last checked); places users reported show
   "under review". A place only known from a public directory shows no line.
 - **Call first (ⓘ)**: a place with a phone whose owner hasn't verified its details has a pink ⓘ

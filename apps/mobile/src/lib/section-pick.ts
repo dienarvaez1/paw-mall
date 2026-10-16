@@ -1,4 +1,4 @@
-import type { CategoryGroup } from '@paw-mall/shared';
+import type { CategoryGroup } from '@pet-helper/shared';
 
 /** What a tab shows for a search: matches inside the circle, and the nearest one beyond it. */
 export type SectionReach = { total: number; nearestBeyondKm: number | null };

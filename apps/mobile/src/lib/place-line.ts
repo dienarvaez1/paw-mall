@@ -1,4 +1,4 @@
-import type { Place } from '@paw-mall/shared';
+import type { Place } from '@pet-helper/shared';
 
 /** "Coyoacán, Ciudad de México", or just the state when the city has the same name. */
 export function placeLine(place: Pick<Place, 'city' | 'state'>): string {

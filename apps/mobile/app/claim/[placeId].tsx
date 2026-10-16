@@ -4,7 +4,7 @@ import {
   type PetArea,
   placeClaimSchema,
   receivedResponseSchema,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 import { useMutation } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { type ReactNode, useState } from 'react';

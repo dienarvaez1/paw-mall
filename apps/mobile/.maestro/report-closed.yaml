@@ -1,5 +1,5 @@
 # "¿Este lugar cerró?" asks to confirm, then thanks the user (only a random id is sent).
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

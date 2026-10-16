@@ -1,4 +1,9 @@
-import { type CategoryGroup, MAX_RADIUS_KM, type Place, type PlaceCluster } from '@paw-mall/shared';
+import {
+  type CategoryGroup,
+  MAX_RADIUS_KM,
+  type Place,
+  type PlaceCluster,
+} from '@pet-helper/shared';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';

@@ -1,4 +1,4 @@
-import type { Verification } from '@paw-mall/shared';
+import type { Verification } from '@pet-helper/shared';
 import { Text } from 'react-native';
 
 import { formatLongDate } from '@/i18n/format';

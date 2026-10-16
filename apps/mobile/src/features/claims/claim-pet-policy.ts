@@ -3,7 +3,7 @@ import {
   type PetArea,
   type PetPolicyInput,
   dogSizeForWeightLimit,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 
 /** The claim form's pet policy fields, as typed. */
 export type PetPolicyForm = {

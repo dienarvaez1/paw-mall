@@ -1,4 +1,4 @@
-import type { PetFee, PetPolicy } from '@paw-mall/shared';
+import type { PetFee, PetPolicy } from '@pet-helper/shared';
 
 import { useSettings } from '@/features/settings/settings-context';
 import { formatMoney, formatShortDate, formatWeightKg } from '@/i18n/format';
@@ -41,7 +41,7 @@ export function feeText(fee: PetFee | null, t: T, language: Language): string | 
     : t('places.pets.fee.amount', { amount });
 }
 
-/** Who said it: the owner, Paw Mall's users, OpenStreetMap, or the curated source's name. */
+/** Who said it: the owner, Pet Helper's users, OpenStreetMap, or the curated source's name. */
 export function sourceText(policy: PetPolicy, t: T): string {
   switch (policy.source) {
     case 'owner':

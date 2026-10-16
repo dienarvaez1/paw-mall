@@ -1,6 +1,6 @@
-# Paw Mall — Developer Guide
+# Pet Helper — Developer Guide
 
-Setting up, running and changing Paw Mall on a Mac. How the parts fit together is in
+Setting up, running and changing Pet Helper on a Mac. How the parts fit together is in
 [ARCHITECTURE.md](ARCHITECTURE.md); the standing rules for this repo are in
 [CLAUDE.md](../CLAUDE.md).
 
@@ -75,7 +75,7 @@ The phone and the Mac must be on the same network.
 ### Android development build
 
 Expo Go's Google Maps key doesn't work on the Android emulator, so Android uses a development
-build (package `dev.pawmall.app`) with Paw Mall's own key:
+build (package `dev.pethelper.app`) with Pet Helper's own key:
 
 1. Put the key in `apps/mobile/.env.local` ([GOOGLE-PLACES.md](GOOGLE-PLACES.md) has the
    package + SHA-1 restriction).
@@ -98,7 +98,7 @@ pnpm i18n:check               # every Spanish string has an English one
 pnpm format:check
 ```
 
-The API tests use their own database (`paw_mall_test`), created and migrated by the test setup;
+The API tests use their own database (`pet_helper_test`), created and migrated by the test setup;
 they never touch the dev data. End-to-end flows: [TESTING-E2E.md](TESTING-E2E.md).
 
 ### Load test

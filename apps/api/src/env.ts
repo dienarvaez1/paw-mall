@@ -1,4 +1,4 @@
-import type { Locale } from '@paw-mall/shared';
+import type { Locale } from '@pet-helper/shared';
 
 import type { Database } from './db/client';
 

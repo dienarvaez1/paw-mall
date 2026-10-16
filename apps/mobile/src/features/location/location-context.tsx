@@ -1,4 +1,4 @@
-import { FALLBACK_LOCATION } from '@paw-mall/shared';
+import { FALLBACK_LOCATION } from '@pet-helper/shared';
 import * as Location from 'expo-location';
 import {
   type ReactNode,

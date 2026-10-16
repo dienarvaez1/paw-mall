@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES, isSupportedLocale } from './constants';
+import { APP_NAME, DEFAULT_LOCALE, SUPPORTED_LOCALES, isSupportedLocale } from './constants';
 
 describe('locales', () => {
   it('defaults to Spanish, listed first', () => {
@@ -12,5 +12,11 @@ describe('locales', () => {
     expect(isSupportedLocale('en')).toBe(true);
     expect(isSupportedLocale('fr')).toBe(false);
     expect(isSupportedLocale(undefined)).toBe(false);
+  });
+});
+
+describe('app name', () => {
+  it('is Pet Helper', () => {
+    expect(APP_NAME).toBe('Pet Helper');
   });
 });

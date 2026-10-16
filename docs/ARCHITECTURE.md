@@ -1,4 +1,4 @@
-# Paw Mall — Architecture
+# Pet Helper — Architecture
 
 How the pieces fit together. For setup and commands see [DEVELOPMENT.md](DEVELOPMENT.md); for
 the reasons behind each phase see [PLAN.md](PLAN.md) and [DEPLOYMENT.md](DEPLOYMENT.md).
@@ -132,7 +132,7 @@ Each loader is a command (`pnpm places:*`), safe to re-run, writing to the same 
 | —     | `search:synonyms`                                     | Words that mean the same in names (`data/search-synonyms.json`) for full-text search                                                                                      |
 | —     | `search:bench`                                        | Search quality benchmark: labeled searches scored against the API (precision and recall at 10, regressions)                                                               |
 | —     | `places:integrity`                                    | Read-only data-integrity report: duplicates, bad coordinates or hours, Urgencias gaps, stale data                                                                         |
-| —     | `e2e:seed`                                            | The fixed test data for end-to-end tests (`paw_mall_e2e`)                                                                                                                 |
+| —     | `e2e:seed`                                            | The fixed test data for end-to-end tests (`pet_helper_e2e`)                                                                                                               |
 
 The importers exclude cruelty-linked businesses (puppy mills, slaughterhouses, butchers) by
 activity and name, and merge duplicates across sources by name and distance.
@@ -219,7 +219,7 @@ use `Intl` with the active locale.
 ## Testing
 
 - **Unit and API tests:** Vitest in every package. The API tests run against their own database,
-  `paw_mall_test`, created and migrated by the test setup. Failure paths: the API with its
+  `pet_helper_test`, created and migrated by the test setup. Failure paths: the API with its
   database down (`database-down.test.ts`: `/health` reports it, every route answers a bare
   `INTERNAL_ERROR`), and a DENUE import that fails part way (`denue/save.test.ts`: one
   transaction, so nothing is left behind).

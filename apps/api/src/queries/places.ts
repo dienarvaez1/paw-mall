@@ -28,7 +28,7 @@ import {
   detectCategory,
   isPetWord,
   SEARCH_ALIASES,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 import { type SQL, sql } from 'drizzle-orm';
 
 import type { Database } from '../db/client';

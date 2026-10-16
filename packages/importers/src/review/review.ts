@@ -1,6 +1,6 @@
 // The owner's review of claims and reports (command-line until an admin page exists; see
 // docs/DEPLOYMENT.md, "Pending owner reviews").
-import type { PetPolicyInput } from '@paw-mall/shared';
+import type { PetPolicyInput } from '@pet-helper/shared';
 import type postgres from 'postgres';
 
 type Sql = postgres.Sql;

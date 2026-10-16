@@ -3,7 +3,7 @@
 Place pages without confirmed hours show **Ver horario**. When a user taps it, the API asks Google
 for the place's hours, phone and website, shows them for that visit only, and credits Google Maps.
 Everything is designed to stay within Google's free monthly allowances. The design is Ferre Mall's,
-in a **Google Cloud project of Paw Mall's own** (owner's decision, 2026-10-05), so the two apps
+in a **Google Cloud project of Pet Helper's own** (owner's decision, 2026-10-05), so the two apps
 never share an allowance.
 
 ## How it stays free
@@ -27,13 +27,13 @@ never share an allowance.
   never saved, and they never count as "confirmed" hours for "Abierto ahora".
 - Prices as of October 2026: <https://developers.google.com/maps/billing-and-pricing/pricing>.
 
-## Setup (a new Google Cloud project for Paw Mall)
+## Setup (a new Google Cloud project for Pet Helper)
 
-1. Create a project at <https://console.cloud.google.com> named **Paw Mall**, then attach a
+1. Create a project at <https://console.cloud.google.com> named **Pet Helper**, then attach a
    **billing account**. Google requires one even when usage stays within the free allowance.
 2. **APIs & Services → Library:** enable **Places API (New)**.
 3. **APIs & Services → Credentials → Create credentials → API key.** Edit it:
-   - **Name:** "Paw Mall API (server)".
+   - **Name:** "Pet Helper API (server)".
    - **API restrictions:** restrict the key to **Places API (New)** only.
    - Application restrictions: none; the key is only used by the API server, never in the app.
 4. **APIs & Services → Places API (New) → Quotas:** a second safety net in case of a bug on our
@@ -61,13 +61,13 @@ SELECT google_match_status, count(*) FROM places GROUP BY 1; -- matched / no_mat
 ## Android map key (development builds)
 
 Expo Go's own Google Maps key is refused on recent Android emulators ("Authorization failure"), so
-Android runs as a **development build** with Paw Mall's own key, in the same Google Cloud project.
+Android runs as a **development build** with Pet Helper's own key, in the same Google Cloud project.
 iOS keeps Apple Maps and Expo Go.
 
 1. **APIs & Services → Library:** enable **Maps SDK for Android**.
 2. **APIs & Services → Credentials → Create credentials → API key.** Edit it:
-   - **Name:** "Paw Mall Android maps (dev)".
-   - **Application restrictions:** Android apps → add package **`dev.pawmall.app`** with the debug
+   - **Name:** "Pet Helper Android maps (dev)".
+   - **Application restrictions:** Android apps → add package **`dev.pethelper.app`** with the debug
      signing SHA-1 **`5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25`** (the React
      Native template's debug keystore, `android/app/debug.keystore` after a prebuild).
    - **API restrictions:** Maps SDK for Android only.
@@ -85,4 +85,4 @@ The emulator doesn't read the Mac's location: `pnpm --filter mobile emulator:loc
 latitude and longitude. Then tap the app's location button.
 
 `pnpm --filter mobile start` keeps opening Expo Go (`--go`), for iPhones and quick checks.
-`dev.pawmall.app` is a development package name only, not the store ID (still an open decision).
+`dev.pethelper.app` is a development package name only, not the store ID (still an open decision).

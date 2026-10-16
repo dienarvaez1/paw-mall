@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, isSupportedLocale } from '@paw-mall/shared';
+import { DEFAULT_LOCALE, isSupportedLocale } from '@pet-helper/shared';
 import { createMiddleware } from 'hono/factory';
 
 import type { AppEnv } from '../env';

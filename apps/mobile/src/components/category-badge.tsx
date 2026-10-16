@@ -1,4 +1,4 @@
-import type { CategorySlug } from '@paw-mall/shared';
+import type { CategorySlug } from '@pet-helper/shared';
 import { Image } from 'expo-image';
 import { View } from 'react-native';
 

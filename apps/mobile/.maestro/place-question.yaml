@@ -1,7 +1,7 @@
 # "Tlaxcala" is a place's name and a business's. Picked from the suggestions it's the place: the
 # vets in Tlaxcala, not the store named after it near the user. Emptying the box (erased or ✕)
 # turns "Mi ubicación" back on.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

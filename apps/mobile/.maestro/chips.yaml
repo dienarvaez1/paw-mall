@@ -1,5 +1,5 @@
 # A category chip narrows the list to that category; Todos brings everything back.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

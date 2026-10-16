@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev --ip 0.0.0.0",
-    "dev:e2e": "wrangler dev --ip 0.0.0.0 --port 8788 --var DATABASE_URL:postgres://paw:paw@localhost:5434/paw_mall_e2e --var WRITE_RATE_LIMIT:off",
+    "dev:e2e": "wrangler dev --ip 0.0.0.0 --port 8788 --var DATABASE_URL:postgres://pet_helper:pet_helper@localhost:5434/pet_helper_e2e --var WRITE_RATE_LIMIT:off",
     "dev:load": "wrangler dev --port 8789 --var GOOGLE_PLACES_API_KEY:",
     "lint": "eslint .",
     "typecheck": "tsc",
@@ -14,7 +14,7 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "@paw-mall/shared": "workspace:*",
+    "@pet-helper/shared": "workspace:*",
     "drizzle-orm": "^0.45.3",
     "hono": "^4.13.13",
     "postgres": "^3.4.9",

@@ -1,4 +1,4 @@
-import type { Place } from '@paw-mall/shared';
+import type { Place } from '@pet-helper/shared';
 import { Text, View } from 'react-native';
 
 import { useAppTranslation } from '@/i18n/use-app-translation';

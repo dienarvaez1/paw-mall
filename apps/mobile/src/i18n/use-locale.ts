@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, type Locale, isSupportedLocale } from '@paw-mall/shared';
+import { DEFAULT_LOCALE, type Locale, isSupportedLocale } from '@pet-helper/shared';
 
 import { useAppTranslation } from './use-app-translation';
 

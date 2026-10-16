@@ -1,6 +1,6 @@
 # Closes the keyboard: hideKeyboard on Android; on iOS (where it often can't) the Return key, which
 # also leaves a single-line field.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow:
     when:

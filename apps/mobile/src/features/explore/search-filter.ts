@@ -1,4 +1,4 @@
-import { expandAlias, plainText, searchTokens } from '@paw-mall/shared';
+import { expandAlias, plainText, searchTokens } from '@pet-helper/shared';
 
 /**
  * What the search box's suggestions match against: a pet business or pet-friendly place (from

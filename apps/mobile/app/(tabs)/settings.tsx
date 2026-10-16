@@ -1,4 +1,4 @@
-import { DOG_SIZES, PET_SPECIES, SUPPORTED_LOCALES } from '@paw-mall/shared';
+import { DOG_SIZES, PET_SPECIES, SUPPORTED_LOCALES } from '@pet-helper/shared';
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import type { ReactNode } from 'react';

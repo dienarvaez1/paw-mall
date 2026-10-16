@@ -2,7 +2,7 @@
 // from its schema.org data (openingHoursSpecification or openingHours), and whether it says pets
 // are welcome (schema.org petsAllowed, or plain wording such as "pet friendly" or "aceptamos
 // mascotas", never when the page also says no to pets).
-import type { PlaceHours } from '@paw-mall/shared';
+import type { PlaceHours } from '@pet-helper/shared';
 
 import { parseHoursSpecification, parseOpeningHours } from '../hours/opening-hours.ts';
 

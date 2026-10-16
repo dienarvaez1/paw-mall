@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import app from './index';
 
 // Nothing listens on port 1: every query fails at once, as when the database is down.
-const env = { DATABASE_URL: 'postgres://paw:paw@127.0.0.1:1/paw_mall_down' };
+const env = { DATABASE_URL: 'postgres://pet_helper:pet_helper@127.0.0.1:1/pet_helper_down' };
 let consoleError: ReturnType<typeof vi.spyOn>;
 
 beforeAll(() => {

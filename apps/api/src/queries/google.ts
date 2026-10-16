@@ -1,4 +1,4 @@
-import type { GoogleDetailsResponse, Locale } from '@paw-mall/shared';
+import type { GoogleDetailsResponse, Locale } from '@pet-helper/shared';
 import { sql } from 'drizzle-orm';
 
 import type { Database } from '../db/client';

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { type PlaceReportReason, receivedResponseSchema } from '@paw-mall/shared';
+import { type PlaceReportReason, receivedResponseSchema } from '@pet-helper/shared';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 

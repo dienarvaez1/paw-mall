@@ -46,7 +46,8 @@ by screen), `docs/QA-STRATEGY.md` (quality objectives, risks and release gates).
 Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise:
 
 - Repo visibility: private.
-- App name and bundle ID: "Paw Mall" is a working name; don't set a store bundle ID.
+- App name: "Pet Helper" (owner's decision 2026-10-15; was "Paw Mall"), the same in every
+  language; translations insert it as `{{appName}}`. Don't set a store bundle ID.
 - Region: all of Mexico's 32 states (Phase 10, owner's decision 2026-10-11; before, the six
   central states plus Guerrero, Michoacán and Querétaro); locale `es-MX`.
 - Shared code with Ferre Mall: copy now, extract a package later.
@@ -61,7 +62,7 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
 ## Local setup
 
 - Database: `pnpm db:up` (Postgres 17 + PostGIS in Docker on port 5434), then `pnpm db:migrate`.
-  Tests use their own database, `paw_mall_test` on the same server, which the test setup creates
+  Tests use their own database, `pet_helper_test` on the same server, which the test setup creates
   and migrates; they never touch the dev data.
 - API: `pnpm --filter api dev` serves `http://localhost:8787` (and the LAN IP, for phones).
 - App: `pnpm --filter mobile start`, then scan the QR code with Expo Go.
@@ -89,7 +90,7 @@ Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise
   against `packages/importers/data/search-baseline.json`; run it before and after any search
   change and commit a new baseline (`--save`) with it (`docs/DEVELOPMENT.md`, "Search benchmark").
 - End-to-end: Maestro flows in `apps/mobile/.maestro/` on the Android development build and fixed
-  test data (`pnpm e2e:seed` → `paw_mall_e2e`), `pnpm --filter mobile e2e`; setup and the journey
+  test data (`pnpm e2e:seed` → `pet_helper_e2e`), `pnpm --filter mobile e2e`; setup and the journey
   list in `docs/TESTING-E2E.md`.
-- Google "Ver horario": Paw Mall's own Google Cloud project; setup and limits in
+- Google "Ver horario": Pet Helper's own Google Cloud project; setup and limits in
   `docs/GOOGLE-PLACES.md`. The key lives only in `apps/api/.dev.vars`; never print or commit it.

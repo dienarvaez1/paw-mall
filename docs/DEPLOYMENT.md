@@ -1,4 +1,6 @@
-# Paw Mall — Rollout Log
+# Pet Helper — Rollout Log
+
+The project was called Paw Mall until Phase 23 (2026-10-15); entries before it keep the old name.
 
 Tracks the actual rollout of [PLAN.md](PLAN.md), phase by phase: what was built, on which branch
 and pull request, how it was checked, and what's left.
@@ -27,30 +29,31 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done   | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done   | 2026-10-13 | 2026-10-13 |
-| 13    | Load test             | `phase-13/load-test`         | #24 | Done   | 2026-10-14 | 2026-10-14 |
-| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done   | 2026-10-14 | 2026-10-14 |
-| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done   | 2026-10-14 | 2026-10-14 |
-| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done   | 2026-10-14 | 2026-10-14 |
-| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done   | 2026-10-14 | 2026-10-14 |
-| 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | Done   | 2026-10-14 | 2026-10-14 |
-| 19    | Place with words      | `phase-19/service-in-place`  | #36 | Done   | 2026-10-14 | 2026-10-14 |
-| 20    | Full-text search      | `phase-20/full-text-search`  | #35 | Done   | 2026-10-14 | 2026-10-14 |
-| 21    | First-launch notice   | `phase-21/disclaimer`        | #38 | Done   | 2026-10-14 | 2026-10-15 |
-| 22    | Adoption and rescue   | `phase-22/animal-welfare`    | #39 | Done   | 2026-10-15 | 2026-10-15 |
+| Phase | Name                  | Branch                       | PR  | Status      | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | ----------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done        | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done        | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done        | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done        | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done        | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done        | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done        | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done        | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done        | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done        | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done        | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done        | 2026-10-13 | 2026-10-13 |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done        | 2026-10-14 | 2026-10-14 |
+| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done        | 2026-10-14 | 2026-10-14 |
+| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done        | 2026-10-14 | 2026-10-14 |
+| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done        | 2026-10-14 | 2026-10-14 |
+| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done        | 2026-10-14 | 2026-10-14 |
+| 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | Done        | 2026-10-14 | 2026-10-14 |
+| 19    | Place with words      | `phase-19/service-in-place`  | #36 | Done        | 2026-10-14 | 2026-10-14 |
+| 20    | Full-text search      | `phase-20/full-text-search`  | #35 | Done        | 2026-10-14 | 2026-10-14 |
+| 21    | First-launch notice   | `phase-21/disclaimer`        | #38 | Done        | 2026-10-14 | 2026-10-15 |
+| 22    | Adoption and rescue   | `phase-22/animal-welfare`    | #39 | Done        | 2026-10-15 | 2026-10-15 |
+| 23    | Rename to Pet Helper  | `phase-23/rename`            | —   | In progress | 2026-10-15 | —          |
 
 ## Pending owner reviews
 
@@ -1372,6 +1375,37 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - No end-to-end flow for the new chip: adding a fixture place changes the counts other flows
     check.
 
+### Phase 23 — Rename to Pet Helper
+
+- **Scope:** the owner's decision (2026-10-15): "Paw Mall" becomes "Pet Helper" everywhere, in
+  the repo and outside it. The name is the same in Spanish and English; everything around it stays
+  translated.
+- **Branch / PR:** `phase-23/rename` / not opened yet
+- **Status:** In progress.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 404 tests (shared 42, mobile 105, api 112, importers 145)
+  - [ ] "Done when": `pnpm search:bench` on the renamed database (the old dev APIs must be
+        stopped first)
+  - [ ] Android emulator (new development build `dev.pethelper.app`): all flows pass
+- **What it changes:**
+  - **One name:** `APP_NAME` in `packages/shared`; i18n inserts it as `{{appName}}` in every
+    language (`defaultVariables`), and `app-name.test.ts` fails if a translation writes it out.
+    Native app names and location prompts: "Pet Helper", prompts still translated.
+  - **Identifiers:** packages `@pet-helper/shared` and `@pet-helper/importers`, root package
+    `pet-helper`; Expo slug `pet-helper`, scheme `pethelper`, Android package
+    `dev.pethelper.app` (Maestro flows too); Worker `pet-helper-api`; User-Agents `pet-helper-dev`,
+    `PetHelper`.
+  - **Database:** user `pet_helper`, databases `pet_helper`, `pet_helper_test` and
+    `pet_helper_e2e`, renamed in place; Compose project `pet-helper` (fixed name), image
+    `pet-helper-postgres:17`, data copied to the volume `pet-helper_db-data`. The old volume
+    `paw-mall_db-data` is kept as a backup until the phase is merged.
+  - **Docs:** current docs renamed; this log's history and the diaries keep the old name.
+- **Open:**
+  - Outside the repo: Maps Android key restriction (`dev.pethelper.app`), the Google Cloud
+    project's display name (its ID can't change), the GitHub repo, the local folder.
+  - The owner's new logo (`apps/mobile/assets/images/logo.png` still reads "Paw-Mall"), last.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -1435,3 +1469,4 @@ Play readiness").
 | 2026-10-15 | Phase 22 started                                             | #39 |
 | 2026-10-15 | Phase 21 merged (`dd74573`)                                  | #38 |
 | 2026-10-15 | Phase 22 merged (`ebfe35b`)                                  | #39 |
+| 2026-10-15 | Phase 23 started                                             | —   |

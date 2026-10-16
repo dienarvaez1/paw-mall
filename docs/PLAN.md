@@ -1,10 +1,10 @@
-# Paw Mall — Build Plan for Claude Code
+# Pet Helper — Build Plan for Claude Code
 
 October 5, 2026 · Diego Narvaez
 
 ## Overview and goals
 
-Paw Mall (working name) is a mobile app (iOS and Android) for pet owners in and around Mexico City.
+Pet Helper is a mobile app (iOS and Android) for pet owners in and around Mexico City.
 It answers two everyday questions:
 
 1. **Where's the pet business I need?** Pet stores, boutiques, veterinarians, vet hospitals,
@@ -23,7 +23,7 @@ Principles:
 - **Real data from day one** where open data exists (INEGI DENUE, Overture Maps), instead of mock
   businesses.
 - **Development only, $0.** No deploys until the owner decides; everything runs locally.
-- **No animal cruelty.** Paw Mall never lists businesses tied to animal cruelty: puppy mills,
+- **No animal cruelty.** Pet Helper never lists businesses tied to animal cruelty: puppy mills,
   kill shelters, slaughterhouses or butchers. Pet stores that sell animals, and vets and feed
   stores that serve farm animals, are fine. Importers exclude cruelty-linked names, and owners or
   shoppers can report a listing that slips through.
@@ -35,11 +35,11 @@ Phase 10 (owner's decision, 2026-10-11).
 
 ## Relationship to Ferre Mall
 
-Paw Mall is a **separate project** (its own repo, folder and database). It starts by **copying the
+Pet Helper is a **separate project** (its own repo, folder and database). It starts by **copying the
 proven pieces** of Ferre Mall instead of sharing a package across both repos. Once both apps show
 what's really common, the shared parts can be extracted into a package later.
 
-| Copy from Ferre Mall                                                     | Where it lives there                                      | Changes for Paw Mall                     |
+| Copy from Ferre Mall                                                     | Where it lives there                                      | Changes for Pet Helper                   |
 | ------------------------------------------------------------------------ | --------------------------------------------------------- | ---------------------------------------- |
 | Monorepo, tooling, conventions                                           | root config, `CLAUDE.md`                                  | Names; same rules                        |
 | DENUE importer (streaming CSV, chains, merges)                           | `packages/importers/src/denue`                            | Pet classes and name-based picks (below) |
@@ -58,21 +58,21 @@ Not copied: products, prices, inventory, the Truper work, the image pipeline for
 The same stack as Ferre Mall, already proven together. See Ferre Mall's `docs/TECH-STACK.md` for
 detail.
 
-| Layer       | Choice                                                                                                                                                                                                                          |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Mobile app  | Expo (SDK 57) + React Native + TypeScript, Expo Router, NativeWind                                                                                                                                                              |
-| Data        | TanStack Query; react-native-maps; expo-location; AsyncStorage for device settings; expo-clipboard (copy an address, added 2026-10-12); expo-dev-client (Android development builds with Paw Mall's Maps key, added 2026-10-12) |
-| i18n        | i18next + react-i18next + expo-localization; `es` default, `en` alongside                                                                                                                                                       |
-| API         | Hono on Cloudflare Workers, run locally with `wrangler dev` (no deploys for now)                                                                                                                                                |
-| Database    | PostgreSQL + PostGIS + pg_trgm + unaccent, via Drizzle ORM; Docker locally                                                                                                                                                      |
-| Shared code | `packages/shared`: Zod schemas, types, constants                                                                                                                                                                                |
-| Importers   | Node.js scripts in `packages/importers`; DuckDB for Overture                                                                                                                                                                    |
-| Tooling     | Node 24, pnpm workspaces, Turborepo, TypeScript, ESLint 9, Prettier, Vitest; Maestro for end-to-end flows (added 2026-10-13); k6 for load tests (installed apart, added 2026-10-14)                                             |
+| Layer       | Choice                                                                                                                                                                                                                            |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Mobile app  | Expo (SDK 57) + React Native + TypeScript, Expo Router, NativeWind                                                                                                                                                                |
+| Data        | TanStack Query; react-native-maps; expo-location; AsyncStorage for device settings; expo-clipboard (copy an address, added 2026-10-12); expo-dev-client (Android development builds with Pet Helper's Maps key, added 2026-10-12) |
+| i18n        | i18next + react-i18next + expo-localization; `es` default, `en` alongside                                                                                                                                                         |
+| API         | Hono on Cloudflare Workers, run locally with `wrangler dev` (no deploys for now)                                                                                                                                                  |
+| Database    | PostgreSQL + PostGIS + pg_trgm + unaccent, via Drizzle ORM; Docker locally                                                                                                                                                        |
+| Shared code | `packages/shared`: Zod schemas, types, constants                                                                                                                                                                                  |
+| Importers   | Node.js scripts in `packages/importers`; DuckDB for Overture                                                                                                                                                                      |
+| Tooling     | Node 24, pnpm workspaces, Turborepo, TypeScript, ESLint 9, Prettier, Vitest; Maestro for end-to-end flows (added 2026-10-13); k6 for load tests (installed apart, added 2026-10-14)                                               |
 
 ## Repository structure
 
 ```
-paw-mall/
+pet-helper/
   apps/
     mobile/           Expo app: routes in app/, code in src/ (api, components, features, i18n, lib)
     api/              Hono API: routes, queries, lib, Drizzle schema and migrations
@@ -191,7 +191,7 @@ with a check you can run on your phone. Finish and commit one phase before start
    sources for hours and policies instead of Google: OpenStreetMap opening hours, businesses'
    homepages (schema.org hours, "pet friendly" wording) and chain-wide policies.
    - Done when: a name search in Pet-friendly finds an unanswered restaurant, two phones answering
-     yes make it appear under Restaurantes with "Según usuarios de Paw Mall", and OpenStreetMap is
+     yes make it appear under Restaurantes with "Según usuarios de Pet Helper", and OpenStreetMap is
      credited on its places.
 10. **All of Mexico (added 2026-10-11).** Every data source extended from the nine states to all
     32: DENUE pet businesses and restaurants, cafés and hotels; search areas (colonias, cities,
@@ -273,6 +273,14 @@ with a check you can run on your phone. Finish and commit one phase before start
     - Done when: the reviewed DENUE places show under "Adopción y rescate", municipal control
       centers stay out of it, and the benchmark shows no regression.
 
+23. **Rename to Pet Helper (added 2026-10-15, owner's decision).** "Paw Mall" becomes "Pet
+    Helper" everywhere: the app's name (the same in Spanish and English; translations insert it as
+    `{{appName}}`), packages `@pet-helper/*`, the Android package `dev.pethelper.app`, the
+    databases `pet_helper`, `pet_helper_test` and `pet_helper_e2e`, and, outside the repo, the
+    Maps key restriction, the Google Cloud project's name, the GitHub repo and the local folder.
+    - Done when: no "Paw Mall" is left outside the history, checks and the benchmark pass on the
+      renamed database, and every flow passes on a new Android development build.
+
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
 (icons, EAS builds, TestFlight and Play testing, privacy policy), and a production deployment when
 the owner decides.
@@ -311,7 +319,7 @@ Copy these rules into `CLAUDE.md` at the repo root.
 | Decision                        | Default assumed                                                                | Why it matters                                                                       |
 | ------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
 | Repo visibility                 | Private                                                                        | Public exposes plans and data work                                                   |
-| App name and bundle ID          | "Paw Mall" as a working name                                                   | Hard to change after store release                                                   |
+| App name and bundle ID          | "Pet Helper" (owner, 2026-10-15; was "Paw Mall"); no store bundle ID yet       | Hard to change after store release                                                   |
 | Region                          | All of Mexico (from Phase 10)                                                  | Data volume and the map center                                                       |
 | Shared code with Ferre Mall     | Copy now, extract a package later                                              | Avoids coupling two young projects                                                   |
 | Who uses it                     | Pet owners, no login                                                           | Owner claims and policy confirmations work without accounts; reviews would need them |

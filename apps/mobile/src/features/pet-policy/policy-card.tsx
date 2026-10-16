@@ -1,4 +1,4 @@
-import type { PetPolicy } from '@paw-mall/shared';
+import type { PetPolicy } from '@pet-helper/shared';
 import { Linking, Pressable, Text, View } from 'react-native';
 
 import { Button } from '@/components/button';

@@ -1,4 +1,4 @@
-import { type HealthResponse, healthResponseSchema } from '@paw-mall/shared';
+import { type HealthResponse, healthResponseSchema } from '@pet-helper/shared';
 import { Hono } from 'hono';
 
 import pkg from '../../package.json';

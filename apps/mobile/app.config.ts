@@ -1,10 +1,11 @@
 import type { ExpoConfig } from 'expo/config';
 
-// "Paw Mall" is a working name; the final app name and bundle ID are still open decisions.
+// The app's name, the same in every language (owner's decision, 2026-10-15; was "Paw Mall"). The
+// store bundle ID is still an open decision.
 const config: ExpoConfig = {
-  name: 'Paw Mall',
-  slug: 'paw-mall',
-  scheme: 'pawmall',
+  name: 'Pet Helper',
+  slug: 'pet-helper',
+  scheme: 'pethelper',
   version: '1.0.0',
   orientation: 'portrait',
   userInterfaceStyle: 'automatic',
@@ -18,9 +19,9 @@ const config: ExpoConfig = {
     predictiveBackGestureEnabled: false,
     // Development builds only (`pnpm --filter mobile android:dev`), not a store ID: Google Maps
     // keys are restricted to a package name. Expo Go ignores it.
-    package: 'dev.pawmall.app',
+    package: 'dev.pethelper.app',
     config: {
-      // Paw Mall's own Maps SDK for Android key, from apps/mobile/.env.local (never committed);
+      // Pet Helper's own Maps SDK for Android key, from apps/mobile/.env.local (never committed);
       // setup in docs/GOOGLE-PLACES.md.
       googleMaps: { apiKey: process.env.GOOGLE_MAPS_ANDROID_KEY },
     },
@@ -41,7 +42,7 @@ const config: ExpoConfig = {
       {
         // English default; the Spanish text comes from native-locales/es.json.
         locationWhenInUsePermission:
-          'Paw Mall uses your location to show nearby vets, pet stores and pet-friendly places.',
+          'Pet Helper uses your location to show nearby vets, pet stores and pet-friendly places.',
       },
     ],
   ],

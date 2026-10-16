@@ -1,4 +1,4 @@
-import { type GoogleDetailsResponse, googleDetailsResponseSchema } from '@paw-mall/shared';
+import { type GoogleDetailsResponse, googleDetailsResponseSchema } from '@pet-helper/shared';
 import { useMutation } from '@tanstack/react-query';
 import { Linking, Text, View } from 'react-native';
 

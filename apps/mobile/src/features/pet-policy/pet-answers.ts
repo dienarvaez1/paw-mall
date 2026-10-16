@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { type DogSize, type PetAnswer, receivedResponseSchema } from '@paw-mall/shared';
+import { type DogSize, type PetAnswer, receivedResponseSchema } from '@pet-helper/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 

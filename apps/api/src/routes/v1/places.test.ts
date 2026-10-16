@@ -3,7 +3,7 @@ import {
   placeListResponseSchema,
   placeMapResponseSchema,
   placeSchema,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 import postgres from 'postgres';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 

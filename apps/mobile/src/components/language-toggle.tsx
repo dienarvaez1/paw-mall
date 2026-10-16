@@ -1,4 +1,4 @@
-import { SUPPORTED_LOCALES } from '@paw-mall/shared';
+import { SUPPORTED_LOCALES } from '@pet-helper/shared';
 import { Image } from 'expo-image';
 import { Pressable, Text, useColorScheme } from 'react-native';
 

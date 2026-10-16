@@ -2,7 +2,7 @@
 // restaurants, cafés, vets and pet stores across Mexico. A match is
 // the same kind of place within MATCH_METERS with a similar name (pg_trgm). © OpenStreetMap
 // contributors, ODbL 1.0; the app credits the hours' source. Snapshot: data/osm-hours.json.
-import type { CategorySlug, PlaceHours } from '@paw-mall/shared';
+import type { CategorySlug, PlaceHours } from '@pet-helper/shared';
 import type postgres from 'postgres';
 
 import { parseOpeningHours } from '../hours/opening-hours.ts';

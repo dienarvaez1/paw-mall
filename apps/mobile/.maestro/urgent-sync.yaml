@@ -1,6 +1,6 @@
 # Urgencias names its circle as the map on screen does, also after the map moves and after
 # visiting the other tab, whose map's nearest place is of another kind (owner's rule, 2026-10-14).
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - extendedWaitUntil:

@@ -1,6 +1,6 @@
 # Back to the previous screen: the system back on Android; on iOS (no back button in Maestro) the
 # edge swipe of the native stack.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow:
     when:

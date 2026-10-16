@@ -1,5 +1,5 @@
 # Typed text searches business names without asking; ✕ brings the full list back.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

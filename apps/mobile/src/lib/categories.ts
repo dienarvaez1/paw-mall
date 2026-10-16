@@ -1,4 +1,4 @@
-import { type CategorySlug, PET_FRIENDLY_CATEGORIES, type Place } from '@paw-mall/shared';
+import { type CategorySlug, PET_FRIENDLY_CATEGORIES, type Place } from '@pet-helper/shared';
 
 /** Explorar's category chips (pet businesses), in order; null is "Todos". */
 export const EXPLORE_CHIPS = [

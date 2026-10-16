@@ -22,7 +22,7 @@ function TabIcon({ name, color }: { name: TabIconName; color: string }) {
 const LOGO = require('../../assets/images/logo.png') as ImageSource;
 
 /**
- * Every tab's header: the Paw-Mall logo centered (3:1, transparent, readable in light and dark),
+ * Every tab's header: the Pet Helper logo centered (3:1, transparent, readable in light and dark),
  * and, for a tab with a description, an ⓘ at the right. Phones have no hover, so tapping it opens
  * the description as a tooltip under the header; a tap anywhere closes it. The tab's name stays
  * on the tab bar and is read aloud as the header.

@@ -1,4 +1,4 @@
-name = "paw-mall-api"
+name = "pet-helper-api"
 main = "src/index.ts"
 compatibility_date = "2026-10-01"
 # postgres.js needs Node's net/tls APIs.
@@ -9,7 +9,7 @@ preview_urls = false
 
 [vars]
 # The Docker DB from `pnpm db:up`. A deployed Worker would use Hyperdrive instead.
-DATABASE_URL = "postgres://paw:paw@localhost:5434/paw_mall"
+DATABASE_URL = "postgres://pet_helper:pet_helper@localhost:5434/pet_helper"
 # "Ver horario" from Google, kept free: paid detail requests per month (Google gives 1,000 free)
 # and lookups per user per day. The key itself is a secret: GOOGLE_PLACES_API_KEY in .dev.vars
 # locally (see docs/GOOGLE-PLACES.md); without it the feature says hours are unavailable.

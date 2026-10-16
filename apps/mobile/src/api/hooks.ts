@@ -7,7 +7,7 @@ import {
   placeMapResponseSchema,
   placeSchema,
   urgentResponseSchema,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { searchReading, useExploreView } from '@/features/explore/explore-view';

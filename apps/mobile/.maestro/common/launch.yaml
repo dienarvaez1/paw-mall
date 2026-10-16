@@ -3,7 +3,7 @@
 # (port 8788). With BUNDLED=true (CI): a release build with the code and the e2e API's address
 # built in, so there is no development server or menu to go through. With IOS=true and
 # APP_ID=host.exp.Exponent: Expo Go on the iOS simulator, opened on the iOS e2e Metro (port 8085).
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 # LAT / LNG: another spot for a flow that needs one (default: the Zócalo).
 - setLocation:
@@ -53,7 +53,7 @@ appId: ${APP_ID || 'dev.pawmall.app'}
       - retry:
           maxRetries: 2
           commands:
-            - openLink: exp+paw-mall://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8084
+            - openLink: exp+pet-helper://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8084
             # A fresh install shows the dev menu's welcome over the app (it hides the search box),
             # then the menu itself: both are closed below.
             - extendedWaitUntil:

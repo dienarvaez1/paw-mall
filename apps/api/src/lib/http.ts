@@ -1,4 +1,4 @@
-import type { ErrorCode, ErrorResponse } from '@paw-mall/shared';
+import type { ErrorCode, ErrorResponse } from '@pet-helper/shared';
 import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import type { z } from 'zod';

@@ -1,5 +1,5 @@
 {
-  "appName": "Paw Mall",
+  "appName": "{{appName}}",
   "retry": "Try again",
   "language": {
     "es": "Spanish",

@@ -1,6 +1,6 @@
 // Database schema. Kept free of relative imports (and value imports from packages) so the
 // importers can load it with plain Node.
-import type { PetFee, PetPolicyInput, PlaceHours } from '@paw-mall/shared';
+import type { PetFee, PetPolicyInput, PlaceHours } from '@pet-helper/shared';
 import { sql } from 'drizzle-orm';
 import {
   boolean,

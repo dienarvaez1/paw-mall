@@ -1,5 +1,5 @@
 # Pet-friendly lists places confirmed to take pets; unconfirmed ones stay out by default.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 # Tap again if the first tap came while the dev menu was still closing.

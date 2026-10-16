@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  APP_NAME,
   DEFAULT_LOCALE,
   type Locale,
   SUPPORTED_LOCALES,
   isSupportedLocale,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 import { createInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
@@ -39,6 +40,8 @@ export async function initI18n(): Promise<void> {
     interpolation: {
       // React already escapes rendered values.
       escapeValue: false,
+      // The app's name isn't translated; every language inserts the same one.
+      defaultVariables: { appName: APP_NAME },
     },
   });
 }

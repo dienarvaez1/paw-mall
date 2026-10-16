@@ -1,7 +1,7 @@
 # The disclaimer on a fresh start (Phase 21). Cancelar leaves only Urgencias and the notice tab,
 # and Urgencias still works; accepting from the notice tab opens all five tabs, and Ajustes opens
 # the notice again to read.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow:
     file: common/launch.yaml

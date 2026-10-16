@@ -1,4 +1,4 @@
-import { KM_PER_MILE, MAX_RADIUS_KM } from '@paw-mall/shared';
+import { KM_PER_MILE, MAX_RADIUS_KM } from '@pet-helper/shared';
 
 export const UNIT_OPTIONS = ['km', 'mi'] as const;
 export type DistanceUnit = (typeof UNIT_OPTIONS)[number];

@@ -2,7 +2,7 @@
 # box empties and the search follows the map, with "Mi ubicación" still off (owner's rule,
 # 2026-10-14). With nothing in the moved circle, the map, the list and Urgencias name the nearest
 # municipality instead of a place's city.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

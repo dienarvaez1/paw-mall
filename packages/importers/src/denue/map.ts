@@ -1,6 +1,6 @@
 // Maps INEGI DENUE rows to places. DENUE: Directorio Estadístico Nacional de Unidades Económicas,
 // reusable under INEGI's free-use terms with attribution ("Fuente: INEGI, DENUE").
-import type { CategorySlug } from '@paw-mall/shared';
+import type { CategorySlug } from '@pet-helper/shared';
 
 /** SCIAN classes imported with a category of their own. */
 const ACTIVITY_CATEGORIES: Record<string, CategorySlug> = {
@@ -91,7 +91,7 @@ const HOSPITAL = /\bHOSPITAL\b/;
 const OPEN_24H = /\b24 ?(HORAS|HRS|HR|H)\b/;
 
 /**
- * Names linked to animal cruelty, which Paw Mall never lists (docs/PLAN.md, "No animal cruelty"):
+ * Names linked to animal cruelty, which Pet Helper never lists (docs/PLAN.md, "No animal cruelty"):
  * slaughterhouses and butchers, cockfighting and bullfighting. Checked against both the business
  * name and the legal name. "El Rastro" alone is a common place name, so it doesn't count.
  * Cockfighting also shows up as its gear and breeders: blades (navajas), cages and accessories for

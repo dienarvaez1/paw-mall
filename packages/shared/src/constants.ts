@@ -1,3 +1,9 @@
+/**
+ * The app's name: the same in every language (owner's rule, 2026-10-15). Translations insert it as
+ * `{{appName}}` instead of writing it.
+ */
+export const APP_NAME = 'Pet Helper';
+
 /** Locales the app and API can serve. The first one is the default and fallback. */
 export const SUPPORTED_LOCALES = ['es', 'en'] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];

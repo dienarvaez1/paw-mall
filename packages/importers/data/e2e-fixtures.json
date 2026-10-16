@@ -1,5 +1,5 @@
 {
-  "_comment": "Fixed places for the Maestro flows (docs/TESTING-E2E.md). All fake, around the Zócalo (19.4326, -99.1332), plus Tlaxcala as a place's name. Loaded into paw_mall_e2e by `pnpm e2e:seed`.",
+  "_comment": "Fixed places for the Maestro flows (docs/TESTING-E2E.md). All fake, around the Zócalo (19.4326, -99.1332), plus Tlaxcala as a place's name. Loaded into pet_helper_e2e by `pnpm e2e:seed`.",
   "user": {
     "lat": 19.4326,
     "lng": -99.1332

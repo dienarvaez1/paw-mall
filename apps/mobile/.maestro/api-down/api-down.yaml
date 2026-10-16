@@ -2,7 +2,7 @@
 # offline banner) and offers to try again. Run with the e2e API stopped, after the other flows:
 # `pnpm --filter mobile e2e:api-down` (docs/TESTING-E2E.md). Kept out of `.maestro/*.yaml` so the
 # main run, which needs the API, doesn't pick it up.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: ../common/launch.yaml
 - extendedWaitUntil:

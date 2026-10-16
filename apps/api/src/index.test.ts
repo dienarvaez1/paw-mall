@@ -1,4 +1,4 @@
-import { errorResponseSchema, healthResponseSchema } from '@paw-mall/shared';
+import { errorResponseSchema, healthResponseSchema } from '@pet-helper/shared';
 import { describe, expect, it } from 'vitest';
 
 import { testEnv } from '../test/env';
