@@ -53,7 +53,7 @@ checked) · **Blocked**.
 | 20    | Full-text search      | `phase-20/full-text-search`  | #35 | Done        | 2026-10-14 | 2026-10-14 |
 | 21    | First-launch notice   | `phase-21/disclaimer`        | #38 | Done        | 2026-10-14 | 2026-10-15 |
 | 22    | Adoption and rescue   | `phase-22/animal-welfare`    | #39 | Done        | 2026-10-15 | 2026-10-15 |
-| 23    | Rename to Pet Helper  | `phase-23/rename`            | —   | In progress | 2026-10-15 | —          |
+| 23    | Rename to Pet Helper  | `phase-23/rename`            | #41 | In review   | 2026-10-15 | —          |
 
 ## Pending owner reviews
 
@@ -1380,8 +1380,8 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Scope:** the owner's decision (2026-10-15): "Paw Mall" becomes "Pet Helper" everywhere, in
   the repo and outside it. The name is the same in Spanish and English; everything around it stays
   translated.
-- **Branch / PR:** `phase-23/rename` / not opened yet
-- **Status:** In progress.
+- **Branch / PR:** `phase-23/rename` / #41
+- **Status:** In review.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
   - [x] `pnpm test`: 404 tests (shared 42, mobile 105, api 112, importers 145)
@@ -1479,4 +1479,4 @@ Play readiness").
 | 2026-10-15 | Phase 22 started                                             | #39 |
 | 2026-10-15 | Phase 21 merged (`dd74573`)                                  | #38 |
 | 2026-10-15 | Phase 22 merged (`ebfe35b`)                                  | #39 |
-| 2026-10-15 | Phase 23 started                                             | —   |
+| 2026-10-15 | Phase 23 started                                             | #41 |
