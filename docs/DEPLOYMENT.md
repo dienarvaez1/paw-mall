@@ -1385,8 +1385,8 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
   - [x] `pnpm test`: 404 tests (shared 42, mobile 105, api 112, importers 145)
-  - [ ] "Done when": `pnpm search:bench` on the renamed database (the old dev APIs must be
-        stopped first)
+  - [x] "Done when": `pnpm search:bench --check` on the renamed database: 53 queries, 0
+        regressed; p95 61 ms
   - [ ] Android emulator (new development build `dev.pethelper.app`): all flows pass
 - **What it changes:**
   - **One name:** `APP_NAME` in `packages/shared`; i18n inserts it as `{{appName}}` in every
