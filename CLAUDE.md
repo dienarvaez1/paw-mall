@@ -46,7 +46,7 @@ by screen), `docs/QA-STRATEGY.md` (quality objectives, risks and release gates).
 Defaults from "Open decisions" in `docs/PLAN.md`, until the owner says otherwise:
 
 - Repo visibility: private.
-- App name: "Pet Helper" (owner's decision 2026-10-15; was "Paw Mall"), the same in every
+- App name: "Pet Helper" (owner's decision 2026-10-15), the same in every
   language; translations insert it as `{{appName}}`. Don't set a store bundle ID.
 - Region: all of Mexico's 32 states (Phase 10, owner's decision 2026-10-11; before, the six
   central states plus Guerrero, Michoacán and Querétaro); locale `es-MX`.

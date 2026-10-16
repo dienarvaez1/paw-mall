@@ -1,6 +1,6 @@
 # Pet Helper
 
-Pet Helper (called Paw Mall until 2026-10-15) is a mobile app for pet owners in Mexico. It answers two everyday
+Pet Helper is a mobile app for pet owners in Mexico. It answers two everyday
 questions:
 
 - **Where's the pet business I need?** Vets and vet hospitals, pet stores, boutiques, groomers,

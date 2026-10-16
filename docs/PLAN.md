@@ -273,12 +273,12 @@ with a check you can run on your phone. Finish and commit one phase before start
     - Done when: the reviewed DENUE places show under "Adopción y rescate", municipal control
       centers stay out of it, and the benchmark shows no regression.
 
-23. **Rename to Pet Helper (added 2026-10-15, owner's decision).** "Paw Mall" becomes "Pet
-    Helper" everywhere: the app's name (the same in Spanish and English; translations insert it as
-    `{{appName}}`), packages `@pet-helper/*`, the Android package `dev.pethelper.app`, the
+23. **Rename to Pet Helper (added 2026-10-15, owner's decision).** The app's previous name becomes
+    "Pet Helper" everywhere: the app's name (the same in Spanish and English; translations insert
+    it as `{{appName}}`), packages `@pet-helper/*`, the Android package `dev.pethelper.app`, the
     databases `pet_helper`, `pet_helper_test` and `pet_helper_e2e`, and, outside the repo, the
     Maps key restriction, the Google Cloud project's name, the GitHub repo and the local folder.
-    - Done when: no "Paw Mall" is left outside the history, checks and the benchmark pass on the
+    - Done when: the previous name is left nowhere, checks and the benchmark pass on the
       renamed database, and every flow passes on a new Android development build.
 
 **Later:** business model (featured listings, pet brands, pet-friendly hotels), app store readiness
@@ -319,7 +319,7 @@ Copy these rules into `CLAUDE.md` at the repo root.
 | Decision                        | Default assumed                                                                | Why it matters                                                                       |
 | ------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
 | Repo visibility                 | Private                                                                        | Public exposes plans and data work                                                   |
-| App name and bundle ID          | "Pet Helper" (owner, 2026-10-15; was "Paw Mall"); no store bundle ID yet       | Hard to change after store release                                                   |
+| App name and bundle ID          | "Pet Helper" (owner, 2026-10-15); no store bundle ID yet                       | Hard to change after store release                                                   |
 | Region                          | All of Mexico (from Phase 10)                                                  | Data volume and the map center                                                       |
 | Shared code with Ferre Mall     | Copy now, extract a package later                                              | Avoids coupling two young projects                                                   |
 | Who uses it                     | Pet owners, no login                                                           | Owner claims and policy confirmations work without accounts; reviews would need them |

@@ -1,6 +1,6 @@
 # Pet Helper — Rollout Log
 
-The project was called Paw Mall until Phase 23 (2026-10-15); entries before it keep the old name.
+The app took its current name in Phase 23 (2026-10-15); entries before it use the current names.
 
 Tracks the actual rollout of [PLAN.md](PLAN.md), phase by phase: what was built, on which branch
 and pull request, how it was checked, and what's left.
@@ -93,7 +93,7 @@ a task (and a note in the phase that applies it).
         from the LAN IP
   - [x] `expo export` bundles for iOS and Android
   - [x] Done-when check: Expo Go on the iPhone 17 Pro Max simulator (iOS 26.5) shows
-        "¡Bienvenido a Paw Mall!", "Conectado al servidor (versión 0.1.0)" and "Base de datos
+        "¡Bienvenido a Pet Helper!", "Conectado al servidor (versión 0.1.0)" and "Base de datos
         lista (PostGIS 3.6.4)"; the API logged `GET /health 200`
   - [x] Verified by the owner in Expo Go on a physical iPhone and a physical Android phone
 - **Notes:**
@@ -201,7 +201,7 @@ a task (and a note in the phase that applies it).
     buttons), search box, list rows, place page, directions chooser, Settings (language, radius
     and units, contact filters), location with the Zócalo fallback, offline banner, and the API's
     search (word by word over name, city and state, typo-tolerant) and map clustering.
-  - New for Paw Mall: category chips (Todos, Veterinarias, Hospitales, Tiendas, Estéticas,
+  - New for Pet Helper: category chips (Todos, Veterinarias, Hospitales, Tiendas, Estéticas,
     Pensiones, Forrajerías, Servicios públicos) filtering both list and map; pins and dots
     colored by category; the "24 horas" name hint shown as unconfirmed; attribution for INEGI
     (with the edition date) and Overture Maps Foundation in the list, place page and Settings.
@@ -219,7 +219,7 @@ a task (and a note in the phase that applies it).
   - No app icon yet: Expo logs "Asset not found: assets/icon.png" (harmless in Expo Go); add
     icons with the app store readiness work.
   - Favoritos tab: not in any phase of PLAN.md; schedule it with the owner.
-  - The simulator had English saved as Paw Mall's language (from Phase 1's language switch), so
+  - The simulator had English saved as Pet Helper's language (from Phase 1's language switch), so
     it opens in English there; Settings switches it.
 
 ### Phase 4 — Emergency vets
@@ -247,8 +247,8 @@ a task (and a note in the phase that applies it).
         card. Taps can't be automated here, so this was handed to the owner, who approved the
         merge on 2026-10-05 without reporting problems.
 - **Notes:**
-  - **Owner decision (2026-10-05):** "Ver horario" uses a **new Google Cloud project for Paw
-    Mall**, not Ferre Mall's, since Ferre Mall may not resume soon. Setup steps are in
+  - **Owner decision (2026-10-05):** "Ver horario" uses a **new Google Cloud project for Pet
+    Helper**, not Ferre Mall's, since Ferre Mall may not resume soon. Setup steps are in
     `docs/GOOGLE-PLACES.md`; the key goes in `apps/api/.dev.vars` (gitignored), never in chat
     or a commit. Until then "Ver horario" says hours aren't available.
   - **No place has confirmed hours yet:** DENUE and Overture don't publish hours. Confirmed hours
@@ -314,7 +314,7 @@ a task (and a note in the phase that applies it).
     species treated can come later).
   - Adopted from Ferre Mall: the claim form (without the SAT section), claim review command,
     closed reports with the 3-phones-in-90-days rule, report review command, verified badge.
-  - New for Paw Mall: "Reportar maltrato animal" (hides after 2 phones, pending review); vet
+  - New for Pet Helper: "Reportar maltrato animal" (hides after 2 phones, pending review); vet
     answers in claims (open 24 hours replaces the name hint with an owner answer; takes
     emergencies), shown only for vets; overnight hours in the claim form; a privacy line on every
     report confirm ("no enviamos tu ubicación ni tus datos"); API rejects any extra field on a
@@ -678,7 +678,7 @@ a task (and a note in the phase that applies it).
     test places use source `curated`. `pnpm places:curated` removes every curated place not in its
     file, so running it during a test run deleted the test place and the Google tests found
     nothing (`expected null`). Tests also wrote to and deleted real rows (the Google usage
-    counters, old lookups). Tests now use their own database, `paw_mall_test` on the same Docker
+    counters, old lookups). Tests now use their own database, `pet_helper_test` on the same Docker
     server, created and migrated by the test setup (`apps/api/test/test-db.ts`, shared by the
     API and importer runs, with a lock so parallel runs don't migrate at once). Override with
     `TEST_DATABASE_URL`.
@@ -693,7 +693,7 @@ a task (and a note in the phase that applies it).
 - **Scope:** OpenStreetMap dog parks, parks and venues with a dog rule; DENUE restaurants and
   cafés in Ciudad de México with users' "¿Acepta mascotas?" answers making their policy.
 - **Done when:** a name search in Pet-friendly finds an unanswered restaurant, two phones
-  answering yes make it appear under Restaurantes with "Según usuarios de Paw Mall", and
+  answering yes make it appear under Restaurantes with "Según usuarios de Pet Helper", and
   OpenStreetMap is credited on its places.
 - **Branch / PR:** `phase-9/pet-friendly-scale` / #12, stacked on Phase 8 (#11); rebased onto
   `main` after #11 merged.
@@ -860,7 +860,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
     question only for a typed place name sent with the search key.
   - **"Mi ubicación":** the button returns to the user at the smallest preset; off after a place
     pick, "as a place", moving, zooming or a cluster tap; on after "as a business name".
-  - **Android:** development build with Paw Mall's own Maps key (`dev.pawmall.app`,
+  - **Android:** development build with Pet Helper's own Maps key (`dev.pethelper.app`,
     `apps/mobile/.env.local`); `pnpm --filter mobile emulator:location`.
   - **Testing and CI:** Maestro flows in `apps/mobile/.maestro/`, test data `pnpm e2e:seed`;
     `.github/workflows/ci.yml` (every PR) and `e2e.yml` (nightly, manual or `run-e2e` label);
@@ -879,7 +879,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 
 ### Phase 11 — Hardening
 
-- **Scope:** recommendations 1–4 of an external review (`Paw_Mall_Project_Review.pdf`, 2026-10-13):
+- **Scope:** recommendations 1–4 of an external review (a project review PDF, 2026-10-13):
   rate limits on writes, CORS, a data-integrity report, a verification status per place.
 - **Branch / PR:** `phase-11/hardening` / #18
 - **Status:** Done. Squash-merged into `main` as `bf1d4e7` on 2026-10-13; branch deleted.
@@ -912,7 +912,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
     (same name within 50 m, mostly DENUE twins a few metres apart), 0 invalid hours, **165
     Urgencias places without a phone**, **5 "24 horas" vets known only from the name**, 0 stale
     sources, websites or policies, 0 places without a category, empty review queue.
-  - `@paw-mall/shared/hours` subpath export: Node runs the importer CLIs' TypeScript directly and
+  - `@pet-helper/shared/hours` subpath export: Node runs the importer CLIs' TypeScript directly and
     can't load the package index.
 - **Follow-ups:**
   - Decide what to do with the 5,782 probable duplicates (merge rule, or hide the newer twin).
@@ -920,7 +920,7 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
     and `data/osm-hours.json`; left as is.
   - Review items 5–7 (E2E gaps, failure tests, load test) are the next candidate phase.
 - **CI fix:** the first CI run failed in `pet-policies.test.ts`: the importer and API tests share
-  `paw_mall_test` in parallel, and `osm/hours.test.ts` puts places with partial hours within the
+  `pet_helper_test` in parallel, and `osm/hours.test.ts` puts places with partial hours within the
   pet-policy test's 1 km around (2, −131) (also behind a `main` failure earlier on 2026-10-13).
   The pet-policy test now uses its own spot at −137.
 
@@ -1377,13 +1377,13 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
 
 ### Phase 23 — Rename to Pet Helper
 
-- **Scope:** the owner's decision (2026-10-15): "Paw Mall" becomes "Pet Helper" everywhere, in
-  the repo and outside it. The name is the same in Spanish and English; everything around it stays
-  translated.
+- **Scope:** the owner's decision (2026-10-15): the app's previous name becomes "Pet Helper"
+  everywhere, in the repo and outside it. The name is the same in Spanish and English; everything
+  around it stays translated.
 - **Branch / PR:** `phase-23/rename` / #41
-- **Status:** Done. Squash-merged into `main` as `a2cb2ca` on 2026-10-15; branch deleted. The old
-  volume `paw-mall_db-data` and the previous Android key in `apps/mobile/.env.local` were
-  removed after the merge.
+- **Status:** Done. Squash-merged into `main` as `a2cb2ca` on 2026-10-15; branch deleted. The
+  pre-rename database volume and image and the previous Android key in `apps/mobile/.env.local`
+  were removed after the merge; the log's history and the docs now use only the current names.
 - **Checks:**
   - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
   - [x] `pnpm test`: 404 tests (shared 42, mobile 105, api 112, importers 145)
@@ -1401,9 +1401,9 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
     `PetHelper`.
   - **Database:** user `pet_helper`, databases `pet_helper`, `pet_helper_test` and
     `pet_helper_e2e`, renamed in place; Compose project `pet-helper` (fixed name), image
-    `pet-helper-postgres:17`, data copied to the volume `pet-helper_db-data`. The old volume
-    `paw-mall_db-data` is kept as a backup until the phase is merged.
-  - **Docs:** current docs renamed; this log's history and the diaries keep the old name.
+    `pet-helper-postgres:17`, data copied to the volume `pet-helper_db-data`; the old volume was
+    kept as a backup until the merge.
+  - **Docs:** current docs renamed.
   - **GitHub:** the repo is `dienarvaez1/pet-helper` (renamed 2026-10-15; the old URL
     redirects), and `origin` points at it.
   - **Google Cloud:** the project `paw-mall-app` is now named "Pet Helper" (the ID can't change).
