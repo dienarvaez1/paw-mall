@@ -1,4 +1,4 @@
-import type { CategoryGroup, SearchArea } from '@paw-mall/shared';
+import type { CategoryGroup, SearchArea } from '@pet-helper/shared';
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 

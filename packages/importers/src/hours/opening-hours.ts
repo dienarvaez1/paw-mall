@@ -3,7 +3,7 @@
 // schema.org's openingHoursSpecification. Only the common, unambiguous forms are read; anything
 // else (split shifts, holidays, months, "sunrise", comments) returns null rather than a guess,
 // since these hours drive "Abierto ahora".
-import type { PlaceHours } from '@paw-mall/shared';
+import type { PlaceHours } from '@pet-helper/shared';
 
 type Weekday = keyof PlaceHours;
 type DayHours = PlaceHours[Weekday];

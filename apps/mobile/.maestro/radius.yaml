@@ -1,5 +1,5 @@
 # The radius button steps 5 → 10 → … → 160 km; at 160 km the vet in Tlaxcala (about 110 km) shows.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

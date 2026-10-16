@@ -1,4 +1,4 @@
-import { placeListResponseSchema, placeSchema } from '@paw-mall/shared';
+import { placeListResponseSchema, placeSchema } from '@pet-helper/shared';
 import postgres from 'postgres';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 

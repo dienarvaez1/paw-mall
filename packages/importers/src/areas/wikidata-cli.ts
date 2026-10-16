@@ -17,7 +17,7 @@ import {
 } from './wikidata.ts';
 
 const ENDPOINT = 'https://query.wikidata.org/sparql';
-const USER_AGENT = 'PawMall/0.1 (development; landmark search areas)';
+const USER_AGENT = 'PetHelper/0.1 (development; landmark search areas)';
 
 type Bindings = Parameters<typeof parseLandmarks>[0];
 

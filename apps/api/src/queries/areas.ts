@@ -3,7 +3,7 @@ import {
   type SearchArea,
   detectCategory,
   searchTokens,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 import { sql } from 'drizzle-orm';
 
 import type { Database } from '../db/client';

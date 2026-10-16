@@ -1,6 +1,6 @@
-# Paw Mall
+# Pet Helper
 
-Paw Mall (working name) is a mobile app for pet owners in Mexico. It answers two everyday
+Pet Helper (called Paw Mall until 2026-10-15) is a mobile app for pet owners in Mexico. It answers two everyday
 questions:
 
 - **Where's the pet business I need?** Vets and vet hospitals, pet stores, boutiques, groomers,
@@ -17,7 +17,7 @@ Wikidata) plus hand-collected pet policies. Spanish first (`es-MX`), English alo
 
 ## Quality engineering
 
-Paw Mall's main quality risk isn't whether the app runs. It's whether the app reliably leads
+Pet Helper's main quality risk isn't whether the app runs. It's whether the app reliably leads
 people to the right pet businesses, including ones they would otherwise miss, and whether those
 listings can be trusted. Quality work is organized around five pillars, defined in the
 **[QA strategy](docs/QA-STRATEGY.md)** with its objectives, risk priorities, test strategy and
@@ -93,7 +93,7 @@ pnpm --filter mobile start             # Metro; scan the QR code with Expo Go
 | Command                                  | Does                                                             |
 | ---------------------------------------- | ---------------------------------------------------------------- |
 | `pnpm lint` / `pnpm typecheck`           | ESLint and TypeScript in every package                           |
-| `pnpm test`                              | Vitest in every package (the API tests use `paw_mall_test`)      |
+| `pnpm test`                              | Vitest in every package (the API tests use `pet_helper_test`)    |
 | `pnpm db:up` / `pnpm db:down`            | Start or stop the database                                       |
 | `pnpm db:migrate`                        | Apply the API's migrations                                       |
 | `pnpm places:*`                          | Data loaders (list in [DEVELOPMENT.md](docs/DEVELOPMENT.md))     |
@@ -122,7 +122,8 @@ pnpm --filter mobile start             # Metro; scan the QR code with Expo Go
 
 Taken on 2026-10-14 in Colonia Condesa, Mexico City, with the full development data. Android is
 the release build on the emulator (Pixel 10, Google Maps); iOS is Expo Go on the simulator
-(iPhone 17 Pro Max, Apple Maps). [docs/USER-GUIDE.md](docs/USER-GUIDE.md) describes each screen.
+(iPhone 17 Pro Max, Apple Maps). They predate the rename and still show the Paw-Mall logo.
+[docs/USER-GUIDE.md](docs/USER-GUIDE.md) describes each screen.
 
 | Screen                                                                     | Android                                                             | iOS                                                             |
 | -------------------------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- |
@@ -138,5 +139,5 @@ the release build on the emulator (Pixel 10, Google Maps); iOS is Expo Go on the
 Business data: INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE). Phones,
 websites and social media: Overture Maps Foundation. Landmarks: Wikidata. Dog parks, venues,
 hours and some vets' phones: © OpenStreetMap contributors (ODbL). Pet policies: hotel chains' and businesses' own
-websites, the press and Paw Mall users. Hours on request: Google Maps. Each source is credited
+websites, the press and Pet Helper users. Hours on request: Google Maps. Each source is credited
 in the app wherever its data appears.

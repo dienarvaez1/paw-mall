@@ -10,7 +10,7 @@ module.exports = {
           DEFAULT: '#0F766E',
           dark: '#115E59',
         },
-        // The Paw-Mall logo's turquoise (#00C1C0), lightened three times by 10% white, for buttons
+        // The Pet Helper logo's turquoise (#00C1C0), lightened three times by 10% white, for buttons
         // and selected controls. White text on it is too faint, so labels use teal-950 (#042F2E).
         paw: {
           DEFAULT: '#46D2D1',

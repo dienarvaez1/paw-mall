@@ -1,4 +1,6 @@
-# Paw Mall — Rollout Log
+# Pet Helper — Rollout Log
+
+The project was called Paw Mall until Phase 23 (2026-10-15); entries before it keep the old name.
 
 Tracks the actual rollout of [PLAN.md](PLAN.md), phase by phase: what was built, on which branch
 and pull request, how it was checked, and what's left.
@@ -27,47 +29,48 @@ checked) · **Blocked**.
 
 ## Status at a glance
 
-| Phase | Name                  | Branch                       | PR  | Status | Started    | Merged     |
-| ----- | --------------------- | ---------------------------- | --- | ------ | ---------- | ---------- |
-| 1     | Foundation            | `phase-1/foundation`         | #2  | Done   | 2026-10-05 | 2026-10-05 |
-| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done   | 2026-10-05 | 2026-10-05 |
-| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done   | 2026-10-05 | 2026-10-05 |
-| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done   | 2026-10-05 | 2026-10-05 |
-| 5     | Trust                 | `phase-5/trust`              | #6  | Done   | 2026-10-05 | 2026-10-06 |
-| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done   | 2026-10-10 | 2026-10-10 |
-| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done   | 2026-10-10 | 2026-10-10 |
-| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done   | 2026-10-10 | 2026-10-11 |
-| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done   | 2026-10-10 | 2026-10-11 |
-| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done   | 2026-10-11 | 2026-10-12 |
-| 11    | Hardening             | `phase-11/hardening`         | #18 | Done   | 2026-10-13 | 2026-10-13 |
-| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done   | 2026-10-13 | 2026-10-13 |
-| 13    | Load test             | `phase-13/load-test`         | #24 | Done   | 2026-10-14 | 2026-10-14 |
-| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done   | 2026-10-14 | 2026-10-14 |
-| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done   | 2026-10-14 | 2026-10-14 |
-| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done   | 2026-10-14 | 2026-10-14 |
-| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done   | 2026-10-14 | 2026-10-14 |
-| 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | Done   | 2026-10-14 | 2026-10-14 |
-| 19    | Place with words      | `phase-19/service-in-place`  | #36 | Done   | 2026-10-14 | 2026-10-14 |
-| 20    | Full-text search      | `phase-20/full-text-search`  | #35 | Done   | 2026-10-14 | 2026-10-14 |
-| 21    | First-launch notice   | `phase-21/disclaimer`        | #38 | Done   | 2026-10-14 | 2026-10-15 |
-| 22    | Adoption and rescue   | `phase-22/animal-welfare`    | #39 | Done   | 2026-10-15 | 2026-10-15 |
+| Phase | Name                  | Branch                       | PR  | Status    | Started    | Merged     |
+| ----- | --------------------- | ---------------------------- | --- | --------- | ---------- | ---------- |
+| 1     | Foundation            | `phase-1/foundation`         | #2  | Done      | 2026-10-05 | 2026-10-05 |
+| 2     | Pet businesses        | `phase-2/pet-businesses`     | #3  | Done      | 2026-10-05 | 2026-10-05 |
+| 3     | Search and map        | `phase-3/search-and-map`     | #4  | Done      | 2026-10-05 | 2026-10-05 |
+| 4     | Emergency vets        | `phase-4/emergency-vets`     | #5  | Done      | 2026-10-05 | 2026-10-05 |
+| 5     | Trust                 | `phase-5/trust`              | #6  | Done      | 2026-10-05 | 2026-10-06 |
+| 6     | Pet-friendly layer    | `phase-6/pet-friendly`       | #8  | Done      | 2026-10-10 | 2026-10-10 |
+| 7     | Tourism and museums   | `phase-7/tourism-museums`    | #9  | Done      | 2026-10-10 | 2026-10-10 |
+| 8     | Bug fixes             | `phase-8/bug-fixes`          | #11 | Done      | 2026-10-10 | 2026-10-11 |
+| 9     | Pet-friendly at scale | `phase-9/pet-friendly-scale` | #12 | Done      | 2026-10-10 | 2026-10-11 |
+| 10    | All of Mexico         | `phase-10/all-mexico`        | #14 | Done      | 2026-10-11 | 2026-10-12 |
+| 11    | Hardening             | `phase-11/hardening`         | #18 | Done      | 2026-10-13 | 2026-10-13 |
+| 12    | Failure coverage      | `phase-12/failure-coverage`  | #20 | Done      | 2026-10-13 | 2026-10-13 |
+| 13    | Load test             | `phase-13/load-test`         | #24 | Done      | 2026-10-14 | 2026-10-14 |
+| 14    | Data cleanup          | `phase-14/data-cleanup`      | #25 | Done      | 2026-10-14 | 2026-10-14 |
+| 15    | OSM vet phones        | `phase-15/osm-vet-phones`    | #27 | Done      | 2026-10-14 | 2026-10-14 |
+| 16    | Bug fixes 2           | `phase-16/bug-fixes`         | #28 | Done      | 2026-10-14 | 2026-10-14 |
+| 17    | Search benchmark      | `phase-17/search-benchmark`  | #31 | Done      | 2026-10-14 | 2026-10-14 |
+| 18    | Search gap fixes      | `phase-18/search-gaps`       | #33 | Done      | 2026-10-14 | 2026-10-14 |
+| 19    | Place with words      | `phase-19/service-in-place`  | #36 | Done      | 2026-10-14 | 2026-10-14 |
+| 20    | Full-text search      | `phase-20/full-text-search`  | #35 | Done      | 2026-10-14 | 2026-10-14 |
+| 21    | First-launch notice   | `phase-21/disclaimer`        | #38 | Done      | 2026-10-14 | 2026-10-15 |
+| 22    | Adoption and rescue   | `phase-22/animal-welfare`    | #39 | Done      | 2026-10-15 | 2026-10-15 |
+| 23    | Rename to Pet Helper  | `phase-23/rename`            | #41 | In review | 2026-10-15 | —          |
 
 ## Pending owner reviews
 
 Decisions and discussions the owner has left for later. Each one, once decided, becomes a rule or
 a task (and a note in the phase that applies it).
 
-| Opened     | Review                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Status                                                                                 |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| 2026-10-05 | **Which other businesses aren't suitable for Paw Mall.** The owner accepted Phase 2's data as is and will list unsuitable businesses once they can browse it in the app (Phase 3). Candidates raised so far: Petland (sells puppies), wholesale vet-medicine distributors in 434112, live-animal sellers, municipal control centers, the 29 pet businesses inside Mercado Sonora (known for live animal sales; reported in the press for illegal wildlife trade), and rooster names that may or may not be cockfighting: "Alimento para gallos", "Gallo giro", "Galleritos", "Forrajería El Jaripeo" (a rodeo), "La Espuela" / "Espuela de Oro" (a spur: horses or fighting cocks), all kept for now; and "Navajas y afilación" (excluded as cockfighting blades, possibly a knife sharpener). | Open: review in the app after Phase 3                                                  |
-| 2026-10-05 | **SAT check for owner claims (RFC + idCIF), deferred by the owner.** Phase 5 was planned with Ferre Mall's check of the owner's Constancia de Situación Fiscal through SAT's public QR validation page. The owner deferred it on 2026-10-05; decide whether and when to add it before claims are opened to real owners.                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Open: deferred from Phase 5                                                            |
-| 2026-10-05 | **An admin page for Paw Mall.** Reviewing claims and reports is command-line only (`pnpm places:claims`, `pnpm places:reports`). The owner wants to discuss an admin page later, probably after all phases are completed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Open: after Phase 7                                                                    |
-| 2026-10-05 | **How to show "sin nombre" businesses and INEGI's dates.** 1,689 places (about 7%) are named "… Sin Nombre" in DENUE: real, still-listed businesses without a trade name, not a sign of closure. Options: hide them by default (Ajustes switch on), show "(sin nombre comercial)", or both. Also whether "Registrado por INEGI en 2010" should read "En el directorio del INEGI desde 2010" (July 2010 is DENUE's first edition, not an opening date).                                                                                                                                                                                                                                                                                                                                         | Open: owner to choose                                                                  |
-| 2026-10-05 | **More DENUE fields to use.** Market or plaza and stall number (1,938 places, e.g. Mercado Sonora), interior numbers missing from addresses (1,504), staff size for ranking Urgencias (960 with 6+ people), business email (2,883), semi-fixed stalls (187). Suggested: market/stall and interior numbers in addresses first.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Open: owner to choose                                                                  |
-| 2026-10-05 | **Area search on the map, and more landmarks.** Area search works in the list; the map still shows the area around the user (search is off in map mode, as in Ferre Mall). Options: center the map on a searched area; add landmarks outside Mexico City (Puebla, Cuernavaca, Toluca, Querétaro…) to `data/landmarks.json`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Open: owner to choose                                                                  |
-| 2026-10-05 | **Dog walkers and pet sitters.** No category: DENUE has 4. Options: import Overture's dog walkers and pet sitters as listings (about 105 in CDMX; many are individuals, so review privacy first), or a "register your business" flow so walkers can add themselves.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Open: owner to choose                                                                  |
-| 2026-10-10 | **Press sources for pet-friendly restaurants.** Restaurants and cafés rarely publish a pet policy, so Phase 6's 11 come from Time Out México, Chilango and Ciudad de México Secreta (credited, with links); hotels come from their own sites. Keep press sources, replace them as venues confirm, or show only venue and owner statements?                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Decided 2026-10-10: keep press sources (credited); replace as venues or owners confirm |
-| 2026-10-05 | **Import neighboring states for the 100-mile radius?** Guerrero, Michoacán and Querétaro are now imported (owner's decision, 2026-10-05).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Done in Phase 5 (#6)                                                                   |
+| Opened     | Review                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Status                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| 2026-10-05 | **Which other businesses aren't suitable for Pet Helper.** The owner accepted Phase 2's data as is and will list unsuitable businesses once they can browse it in the app (Phase 3). Candidates raised so far: Petland (sells puppies), wholesale vet-medicine distributors in 434112, live-animal sellers, municipal control centers, the 29 pet businesses inside Mercado Sonora (known for live animal sales; reported in the press for illegal wildlife trade), and rooster names that may or may not be cockfighting: "Alimento para gallos", "Gallo giro", "Galleritos", "Forrajería El Jaripeo" (a rodeo), "La Espuela" / "Espuela de Oro" (a spur: horses or fighting cocks), all kept for now; and "Navajas y afilación" (excluded as cockfighting blades, possibly a knife sharpener). | Open: review in the app after Phase 3                                                  |
+| 2026-10-05 | **SAT check for owner claims (RFC + idCIF), deferred by the owner.** Phase 5 was planned with Ferre Mall's check of the owner's Constancia de Situación Fiscal through SAT's public QR validation page. The owner deferred it on 2026-10-05; decide whether and when to add it before claims are opened to real owners.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Open: deferred from Phase 5                                                            |
+| 2026-10-05 | **An admin page for Pet Helper.** Reviewing claims and reports is command-line only (`pnpm places:claims`, `pnpm places:reports`). The owner wants to discuss an admin page later, probably after all phases are completed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Open: after Phase 7                                                                    |
+| 2026-10-05 | **How to show "sin nombre" businesses and INEGI's dates.** 1,689 places (about 7%) are named "… Sin Nombre" in DENUE: real, still-listed businesses without a trade name, not a sign of closure. Options: hide them by default (Ajustes switch on), show "(sin nombre comercial)", or both. Also whether "Registrado por INEGI en 2010" should read "En el directorio del INEGI desde 2010" (July 2010 is DENUE's first edition, not an opening date).                                                                                                                                                                                                                                                                                                                                           | Open: owner to choose                                                                  |
+| 2026-10-05 | **More DENUE fields to use.** Market or plaza and stall number (1,938 places, e.g. Mercado Sonora), interior numbers missing from addresses (1,504), staff size for ranking Urgencias (960 with 6+ people), business email (2,883), semi-fixed stalls (187). Suggested: market/stall and interior numbers in addresses first.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Open: owner to choose                                                                  |
+| 2026-10-05 | **Area search on the map, and more landmarks.** Area search works in the list; the map still shows the area around the user (search is off in map mode, as in Ferre Mall). Options: center the map on a searched area; add landmarks outside Mexico City (Puebla, Cuernavaca, Toluca, Querétaro…) to `data/landmarks.json`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Open: owner to choose                                                                  |
+| 2026-10-05 | **Dog walkers and pet sitters.** No category: DENUE has 4. Options: import Overture's dog walkers and pet sitters as listings (about 105 in CDMX; many are individuals, so review privacy first), or a "register your business" flow so walkers can add themselves.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Open: owner to choose                                                                  |
+| 2026-10-10 | **Press sources for pet-friendly restaurants.** Restaurants and cafés rarely publish a pet policy, so Phase 6's 11 come from Time Out México, Chilango and Ciudad de México Secreta (credited, with links); hotels come from their own sites. Keep press sources, replace them as venues confirm, or show only venue and owner statements?                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Decided 2026-10-10: keep press sources (credited); replace as venues or owners confirm |
+| 2026-10-05 | **Import neighboring states for the 100-mile radius?** Guerrero, Michoacán and Querétaro are now imported (owner's decision, 2026-10-05).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Done in Phase 5 (#6)                                                                   |
 
 ## Phase details
 
@@ -1372,6 +1375,47 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - No end-to-end flow for the new chip: adding a fixture place changes the counts other flows
     check.
 
+### Phase 23 — Rename to Pet Helper
+
+- **Scope:** the owner's decision (2026-10-15): "Paw Mall" becomes "Pet Helper" everywhere, in
+  the repo and outside it. The name is the same in Spanish and English; everything around it stays
+  translated.
+- **Branch / PR:** `phase-23/rename` / #41
+- **Status:** In review.
+- **Checks:**
+  - [x] `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`
+  - [x] `pnpm test`: 404 tests (shared 42, mobile 105, api 112, importers 145)
+  - [x] "Done when": `pnpm search:bench --check` on the renamed database: 53 queries, 0
+        regressed; p95 61 ms
+  - [x] Android emulator (new development build `dev.pethelper.app`, debug): all 31 flows pass
+        (32 min)
+- **What it changes:**
+  - **One name:** `APP_NAME` in `packages/shared`; i18n inserts it as `{{appName}}` in every
+    language (`defaultVariables`), and `app-name.test.ts` fails if a translation writes it out.
+    Native app names and location prompts: "Pet Helper", prompts still translated.
+  - **Identifiers:** packages `@pet-helper/shared` and `@pet-helper/importers`, root package
+    `pet-helper`; Expo slug `pet-helper`, scheme `pethelper`, Android package
+    `dev.pethelper.app` (Maestro flows too); Worker `pet-helper-api`; User-Agents `pet-helper-dev`,
+    `PetHelper`.
+  - **Database:** user `pet_helper`, databases `pet_helper`, `pet_helper_test` and
+    `pet_helper_e2e`, renamed in place; Compose project `pet-helper` (fixed name), image
+    `pet-helper-postgres:17`, data copied to the volume `pet-helper_db-data`. The old volume
+    `paw-mall_db-data` is kept as a backup until the phase is merged.
+  - **Docs:** current docs renamed; this log's history and the diaries keep the old name.
+  - **GitHub:** the repo is `dienarvaez1/pet-helper` (renamed 2026-10-15; the old URL
+    redirects), and `origin` points at it.
+  - **Google Cloud:** the project `paw-mall-app` is now named "Pet Helper" (the ID can't change).
+  - **Local folder:** `pet-helper-app`.
+  - **Logo:** the owner's "Pet-Helper" logo, fitted to the header's 720 × 240 transparent PNG
+    (`apps/mobile/assets/images/logo.png`); its turquoise (#00C4C6) matches the old one, so the
+    button colors stay.
+- **Open:**
+  - The Android map now uses `paw-mall-app`'s "Maps Platform API Key" (the previous key in
+    `apps/mobile/.env.local` wasn't in this project). It has no application restriction: restrict
+    it to `dev.pethelper.app` + the debug SHA-1 once nothing else uses it (owner).
+  - The old volume `paw-mall_db-data` and the previous key in `apps/mobile/.env.local`: remove
+    them once the merge and the new key are confirmed.
+
 ## Production deployment
 
 Not planned. When the owner decides to deploy, add a section here covering environments, cloud
@@ -1435,3 +1479,4 @@ Play readiness").
 | 2026-10-15 | Phase 22 started                                             | #39 |
 | 2026-10-15 | Phase 21 merged (`dd74573`)                                  | #38 |
 | 2026-10-15 | Phase 22 merged (`ebfe35b`)                                  | #39 |
+| 2026-10-15 | Phase 23 started                                             | #41 |

@@ -1,6 +1,6 @@
 # A search no confirmed place matches widens by itself to unconfirmed venues, with a notice; on
 # such a venue's page the user can answer whether it takes dogs.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 # Tap again if the first tap came while the dev menu was still closing.

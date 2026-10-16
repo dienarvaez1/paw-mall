@@ -1,4 +1,4 @@
-import type { CategoryListResponse } from '@paw-mall/shared';
+import type { CategoryListResponse } from '@pet-helper/shared';
 import { Hono } from 'hono';
 
 import type { AppEnv } from '../../env';

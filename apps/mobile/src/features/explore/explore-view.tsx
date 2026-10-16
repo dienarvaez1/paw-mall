@@ -1,4 +1,4 @@
-import { type CategorySlug, type SearchArea, areaLookupResponseSchema } from '@paw-mall/shared';
+import { type CategorySlug, type SearchArea, areaLookupResponseSchema } from '@pet-helper/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { type ReactNode, createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { Alert, Keyboard } from 'react-native';

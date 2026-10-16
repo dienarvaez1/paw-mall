@@ -24,7 +24,7 @@ where every flow puts the user, plus "Tlaxcala", "Guadalupe" and "Toluca" as pla
 | Forrajería Guadalupe Paw          | Feed store 7 km away, named like a place ("Guadalupe", Zacatecas) |
 | Café Toluca Paw                   | Café (no policy) named like a place: only Pet-friendly finds it   |
 
-`pnpm e2e:seed` loads it into its own database, **`paw_mall_e2e`** (never the dev or the Vitest
+`pnpm e2e:seed` loads it into its own database, **`pet_helper_e2e`** (never the dev or the Vitest
 one): creates it if missing, applies the API's migrations, empties the place tables and inserts the
 fixtures. Safe to re-run; run it before each Maestro run, since flows report and save things. No
 flow taps "Ver horario" (each Google answer uses part of the free monthly allowance).
@@ -141,7 +141,7 @@ and a database outage behind a running API (covered by the API's tests, `databas
   and on main, with Postgres started by `pnpm db:up` (about 5 minutes).
 - `.github/workflows/e2e.yml`: every flow on an Android emulator (API 34) — nightly, by hand
   (Actions > E2E > Run workflow), or on a pull request labeled `run-e2e`; about an hour. It seeds
-  `paw_mall_e2e`, starts the API on 8788, builds a **release** APK with the code and
+  `pet_helper_e2e`, starts the API on 8788, builds a **release** APK with the code and
   `EXPO_PUBLIC_API_URL=http://10.0.2.2:8788` built in (no Metro, so no bundle-loading stalls), and
   runs `apps/mobile/scripts/e2e-ci.sh` (`maestro test -e BUNDLED=true`, which skips the development
   server steps in `common/launch.yaml`). The `e2e-results` artifact holds the per-flow logs and

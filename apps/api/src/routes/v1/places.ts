@@ -11,7 +11,7 @@ import {
   urgentQuerySchema,
   areaLookupQuerySchema,
   areaSuggestQuerySchema,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 import { Hono } from 'hono';
 import type { z } from 'zod';
 

@@ -1,4 +1,4 @@
-import type { PlaceHours } from '@paw-mall/shared';
+import type { PlaceHours } from '@pet-helper/shared';
 
 export type DayRange = { closed: boolean; open: string; close: string };
 export type HoursForm = { weekdays: DayRange; saturday: DayRange; sunday: DayRange };

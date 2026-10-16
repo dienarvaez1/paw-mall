@@ -2,7 +2,7 @@
 # business ("veterinaria Tlaxcala") or any words ("Paw Tlaxcala", as "puerto vallarta taco"). The
 # search goes there with no question, since no business near the user has that name (Phase 19).
 # The question for an ambiguous text ("veterinaria mascota") is covered by the API's tests.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

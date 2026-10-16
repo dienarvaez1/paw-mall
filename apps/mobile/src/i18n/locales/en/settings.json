@@ -17,7 +17,7 @@
   "hideUnnamedHint": "Hides businesses registered as “sin nombre” or without a trade name.",
   "about": "About",
   "version": "Version {{version}}",
-  "dataSources": "Business data: INEGI, National Statistical Directory of Economic Units (DENUE). Phones, websites and social media: Overture Maps Foundation. Search landmarks: Wikidata. Pet policies: each hotel's website and the press (Time Out México, Chilango, Ciudad de México Secreta, Mexico News Daily); Bosque de Chapultepec rules: Sedema's Programa de Manejo. Dog parks and other places: © OpenStreetMap contributors (ODbL). Restaurants and cafés: INEGI, DENUE; their pet policy, from hotel chains' policies, their own website or Paw Mall users. Hours: owners, business websites and © OpenStreetMap contributors.",
+  "dataSources": "Business data: INEGI, National Statistical Directory of Economic Units (DENUE). Phones, websites and social media: Overture Maps Foundation. Search landmarks: Wikidata. Pet policies: each hotel's website and the press (Time Out México, Chilango, Ciudad de México Secreta, Mexico News Daily); Bosque de Chapultepec rules: Sedema's Programa de Manejo. Dog parks and other places: © OpenStreetMap contributors (ODbL). Restaurants and cafés: INEGI, DENUE; their pet policy, from hotel chains' policies, their own website or {{appName}} users. Hours: owners, business websites and © OpenStreetMap contributors.",
   "onlyOpenNow": "Only places open now",
   "onlyOpenNowHint": "Shows only places with confirmed hours that are open right now. Very few have confirmed hours for now.",
   "pet": {

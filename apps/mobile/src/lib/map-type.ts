@@ -9,7 +9,7 @@ import type { MapType } from 'react-native-maps';
 export const MAP_TYPE: MapType = Platform.OS === 'ios' ? 'mutedStandard' : 'standard';
 
 /**
- * Whether a map can be drawn. An Android development build without Paw Mall's Maps key
+ * Whether a map can be drawn. An Android development build without Pet Helper's Maps key
  * (GOOGLE_MAPS_ANDROID_KEY, docs/GOOGLE-PLACES.md) crashes on a map, so it shows none instead;
  * iOS (Apple Maps) and Expo Go (its own key) always can.
  */

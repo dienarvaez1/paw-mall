@@ -4,7 +4,7 @@ import { z } from 'zod';
  * How far a place's details are confirmed, strongest doubt first (the first that applies wins):
  * - needs_review: a phone reported it (closed or cruelty) or its pet policy is disputed;
  * - owner_verified: the owner's claim was approved;
- * - community_confirmed: its pet policy comes from Paw Mall users' answers;
+ * - community_confirmed: its pet policy comes from Pet Helper users' answers;
  * - website_verified: its own website answered the last check, within WEBSITE_VERIFIED_DAYS;
  * - listed: only a public directory (INEGI, OpenStreetMap, Overture) or a curated list says so.
  */

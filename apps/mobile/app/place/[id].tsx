@@ -1,4 +1,4 @@
-import { type Place, type PlaceReportReason, WEEK_ORDER } from '@paw-mall/shared';
+import { type Place, type PlaceReportReason, WEEK_ORDER } from '@pet-helper/shared';
 import * as Clipboard from 'expo-clipboard';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';

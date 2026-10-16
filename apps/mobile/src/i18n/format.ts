@@ -1,4 +1,4 @@
-import { KM_PER_MILE, type Locale, REGION } from '@paw-mall/shared';
+import { KM_PER_MILE, type Locale, REGION } from '@pet-helper/shared';
 
 /** BCP 47 tag for `Intl`, for example `es-MX`. */
 export function intlLocale(language: Locale): string {

@@ -1,5 +1,5 @@
 # The globe in the search box switches the whole app between Spanish and English.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - assertVisible: Explorar

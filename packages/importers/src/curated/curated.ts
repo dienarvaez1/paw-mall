@@ -5,7 +5,7 @@
 // Importer scripts run on plain Node, which can't load packages/shared's values (its imports have
 // no file extensions), so this file imports only its types: the lists below must match them
 // (`satisfies` checks that at typecheck) and curated.test.ts checks the size rule against shared.
-import type { CategorySlug, DogSize, PetArea, PetFee, PetPolicyInput } from '@paw-mall/shared';
+import type { CategorySlug, DogSize, PetArea, PetFee, PetPolicyInput } from '@pet-helper/shared';
 import { z } from 'zod';
 
 import { isCrueltyLinked } from '../denue/map.ts';

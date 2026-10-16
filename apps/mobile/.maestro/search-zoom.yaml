@@ -1,7 +1,7 @@
 # A confirmed search zooms the map in to the smallest radius that still holds what it found: at
 # 15 km, "Tlaxcala" answered as a business name finds the store 0.7 km away, so the radius goes
 # to 5 km (owner's rule, 2026-10-13).
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - repeat:

@@ -1,4 +1,4 @@
-import { type ErrorCode, type Locale, errorResponseSchema } from '@paw-mall/shared';
+import { type ErrorCode, type Locale, errorResponseSchema } from '@pet-helper/shared';
 import Constants from 'expo-constants';
 import type { z } from 'zod';
 

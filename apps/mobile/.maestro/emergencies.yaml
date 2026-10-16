@@ -1,5 +1,5 @@
 # Urgencias: vet hospitals closest first, the closest highlighted; a card opens its page.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

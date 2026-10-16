@@ -1,4 +1,4 @@
-import type { AreaSuggestResponse, Place } from '@paw-mall/shared';
+import type { AreaSuggestResponse, Place } from '@pet-helper/shared';
 import { useMemo } from 'react';
 
 import { useAppTranslation } from '@/i18n/use-app-translation';

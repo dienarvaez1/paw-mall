@@ -29,7 +29,7 @@ if (args.refresh) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'User-Agent': 'paw-mall-dev/0.1 (local development)',
+      'User-Agent': 'pet-helper-dev/0.1 (local development)',
     },
     body: new URLSearchParams({ data: OSM_PHONES_QUERY }),
   });

@@ -1,8 +1,8 @@
-# Paw Mall — Quality Assurance Strategy
+# Pet Helper — Quality Assurance Strategy
 
 ## 1. Purpose
 
-This document defines the quality engineering approach for Paw Mall, a mobile application
+This document defines the quality engineering approach for Pet Helper, a mobile application
 designed to help pet owners discover relevant pet businesses and pet-friendly places in Mexico.
 
 Quality assurance focuses on search relevance, business-data integrity, application reliability,
@@ -120,7 +120,7 @@ No quality metric should be reported as achieved until supported by reproducible
 
 ## 10. Current project status
 
-Paw Mall is in development. Production readiness, pilot quality thresholds, and
+Pet Helper is in development. Production readiness, pilot quality thresholds, and
 search-performance baselines must be established and verified before public rollout.
 
 Status of each part of this strategy on 2026-10-14. The measured results are in the
@@ -130,7 +130,7 @@ rows below that are not yet in place.
 | Strategy area                        | Status      | Evidence or gap                                                                                                                                                                                                                                                                                      |
 | ------------------------------------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Unit testing (§4)                    | In place    | 400 Vitest tests across the four packages, including tokenization, normalization, search matching and shared schemas                                                                                                                                                                                 |
-| API and database integration (§4)    | In place    | API tests on their own database (`paw_mall_test`, migrated by the test setup): filters, paging, radius, errors, rate limits, CORS, the database down                                                                                                                                                 |
+| API and database integration (§4)    | In place    | API tests on their own database (`pet_helper_test`, migrated by the test setup): filters, paging, radius, errors, rate limits, CORS, the database down                                                                                                                                               |
 | Data quality testing (§4, §6)        | In place    | `pnpm places:integrity`; importer tests with sample files, including an interrupted import; verification status on every place                                                                                                                                                                       |
 | Mobile end-to-end testing (§4)       | Partial     | 32 Maestro flows, 39 journeys on Android; iOS in Expo Go (all but `offline`), not a development build; the CI end-to-end workflow has not run yet ([TESTING-E2E.md](TESTING-E2E.md))                                                                                                                 |
 | Nonfunctional testing (§4)           | Partial     | Local k6 load test, p95 229 ms ([DEVELOPMENT.md](DEVELOPMENT.md#load-test)); failure tests for the API and database; no measurement of a deployed system                                                                                                                                             |

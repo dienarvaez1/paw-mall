@@ -1,6 +1,6 @@
 # One map for both tabs (owner's rule): a confirmed search fits the radius once, on the tab that
 # shows it; switching tabs afterwards keeps the same circle (2026-10-14).
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

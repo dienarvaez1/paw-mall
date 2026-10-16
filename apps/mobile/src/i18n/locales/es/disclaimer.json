@@ -1,15 +1,15 @@
 {
   "title": "Aviso importante",
-  "intro": "Antes de usar Paw Mall, lee este aviso. Explica de dónde viene la información, para qué sirve y qué no puede garantizar.",
+  "intro": "Antes de usar {{appName}}, lee este aviso. Explica de dónde viene la información, para qué sirve y qué no puede garantizar.",
   "version": "Versión del {{date}}",
   "sections": {
     "information": {
       "title": "Información orientativa",
-      "body": "Paw Mall reúne datos públicos (INEGI, Overture Maps Foundation, OpenStreetMap, Wikidata, prensa, y Google Maps cuando lo pides) y lo que aportan sus usuarios. Puede estar incompleta, desactualizada o contener errores: horarios, teléfonos, direcciones y servicios cambian sin aviso."
+      "body": "{{appName}} reúne datos públicos (INEGI, Overture Maps Foundation, OpenStreetMap, Wikidata, prensa, y Google Maps cuando lo pides) y lo que aportan sus usuarios. Puede estar incompleta, desactualizada o contener errores: horarios, teléfonos, direcciones y servicios cambian sin aviso."
     },
     "veterinary": {
       "title": "No sustituye la atención veterinaria",
-      "body": "Paw Mall no da consejo médico ni veterinario. En una urgencia, llama antes de ir para confirmar que el lugar está abierto y puede atender a tu mascota. Si su vida corre peligro, acude al servicio veterinario más cercano que puedas confirmar."
+      "body": "{{appName}} no da consejo médico ni veterinario. En una urgencia, llama antes de ir para confirmar que el lugar está abierto y puede atender a tu mascota. Si su vida corre peligro, acude al servicio veterinario más cercano que puedas confirmar."
     },
     "petFriendly": {
       "title": "Lugares pet-friendly",
@@ -17,7 +17,7 @@
     },
     "endorsement": {
       "title": "Sin recomendación ni relación",
-      "body": "Que un negocio aparezca en Paw Mall no significa que lo recomendemos ni que tengamos relación con él. Solo los marcados como verificados por su dueño fueron confirmados por él."
+      "body": "Que un negocio aparezca en {{appName}} no significa que lo recomendemos ni que tengamos relación con él. Solo los marcados como verificados por su dueño fueron confirmados por él."
     },
     "privacy": {
       "title": "Tu ubicación y tu privacidad",
@@ -29,7 +29,7 @@
     },
     "liability": {
       "title": "Responsabilidad",
-      "body": "Usas la información bajo tu propio criterio y riesgo. En la medida en que lo permita la ley mexicana, Paw Mall no se hace responsable de daños o pérdidas derivados de su uso."
+      "body": "Usas la información bajo tu propio criterio y riesgo. En la medida en que lo permita la ley mexicana, {{appName}} no se hace responsable de daños o pérdidas derivados de su uso."
     },
     "animals": {
       "title": "Bienestar animal",

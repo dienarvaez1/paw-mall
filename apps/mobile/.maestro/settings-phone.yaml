@@ -1,5 +1,5 @@
 # Ajustes "Solo lugares con teléfono" hides the hospital without a phone everywhere.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

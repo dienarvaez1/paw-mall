@@ -5,5 +5,7 @@ export default defineConfig({
   schema: './src/db/schema.ts',
   out: './src/db/migrations',
   casing: 'snake_case',
-  dbCredentials: { url: process.env.DATABASE_URL ?? 'postgres://paw:paw@localhost:5434/paw_mall' },
+  dbCredentials: {
+    url: process.env.DATABASE_URL ?? 'postgres://pet_helper:pet_helper@localhost:5434/pet_helper',
+  },
 });

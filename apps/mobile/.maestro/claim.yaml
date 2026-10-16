@@ -1,5 +1,5 @@
 # The owner's claim form says what's missing, then sends.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:
@@ -26,7 +26,7 @@ appId: ${APP_ID || 'dev.pawmall.app'}
     timeout: 20000
 - tapOn:
     id: claim-phone
-- inputText: "5512345678"
+- inputText: '5512345678'
 - runFlow: common/hide-keyboard.yaml
 - scrollUntilVisible:
     element:

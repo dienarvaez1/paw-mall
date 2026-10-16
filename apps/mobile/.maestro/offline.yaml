@@ -1,5 +1,5 @@
 # No connection: the offline banner shows; back online, the list loads again.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 # Airplane mode can only be switched on Android.
 tags:
   - android-only

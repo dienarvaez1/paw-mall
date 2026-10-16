@@ -1,4 +1,4 @@
-import { DOG_SIZES, type DogSize, PET_ANSWERS_TO_PUBLISH } from '@paw-mall/shared';
+import { DOG_SIZES, type DogSize, PET_ANSWERS_TO_PUBLISH } from '@pet-helper/shared';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { PET_FRIENDLY_CATEGORIES, dogSizeForWeightLimit as sharedSize } from '@paw-mall/shared';
+import { PET_FRIENDLY_CATEGORIES, dogSizeForWeightLimit as sharedSize } from '@pet-helper/shared';
 import postgres from 'postgres';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 

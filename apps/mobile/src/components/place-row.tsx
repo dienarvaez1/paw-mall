@@ -1,4 +1,4 @@
-import type { Place } from '@paw-mall/shared';
+import type { Place } from '@pet-helper/shared';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { Pressable, Text, useColorScheme, View } from 'react-native';

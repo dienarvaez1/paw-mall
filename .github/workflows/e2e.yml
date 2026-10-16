@@ -2,7 +2,7 @@
 # against the fixed test data. Slow (about an hour), so not on every pull request: nightly, by
 # hand (Actions > E2E > Run workflow), or on a pull request with the `run-e2e` label.
 #
-# Needs the repository secret GOOGLE_MAPS_ANDROID_KEY (Paw Mall's Maps SDK for Android key; see
+# Needs the repository secret GOOGLE_MAPS_ANDROID_KEY (Pet Helper's Maps SDK for Android key; see
 # docs/GOOGLE-PLACES.md). Without it the map screens show "map unavailable" and their flows fail.
 name: E2E
 

@@ -1,4 +1,4 @@
-import { googleDetailsResponseSchema } from '@paw-mall/shared';
+import { googleDetailsResponseSchema } from '@pet-helper/shared';
 import postgres from 'postgres';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 

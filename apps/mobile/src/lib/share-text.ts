@@ -1,4 +1,4 @@
-import type { Place } from '@paw-mall/shared';
+import type { Place } from '@pet-helper/shared';
 
 import { placeLine } from './place-line';
 

@@ -2,7 +2,7 @@
 // tagged dog=yes|leashed|designated|no. © OpenStreetMap contributors, under the Open Database License
 // (ODbL 1.0): credited wherever shown, and kept in their own rows (source 'osm'), never merged
 // into another source's records. The snapshot is data/osm-dogs.json (`pnpm places:osm`).
-import type { CategorySlug } from '@paw-mall/shared';
+import type { CategorySlug } from '@pet-helper/shared';
 
 import { isCrueltyLinked } from '../denue/map.ts';
 

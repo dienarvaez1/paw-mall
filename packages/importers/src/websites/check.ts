@@ -57,7 +57,7 @@ export async function inspectWebsite(
     const response = await fetcher(url, {
       redirect: 'follow',
       signal: AbortSignal.timeout(TIMEOUT_MS),
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PawMall link check)' },
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PetHelper link check)' },
     });
     const check = classifyStatus(response.status);
     if (check !== 'ok' || !(response.headers.get('content-type') ?? '').includes('html')) {

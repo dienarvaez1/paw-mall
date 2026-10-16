@@ -4,7 +4,7 @@
 //
 // Importer scripts run on plain Node, which can't load packages/shared's values, so this file
 // imports only its types (as curated.ts does).
-import type { CategorySlug, PetPolicyInput } from '@paw-mall/shared';
+import type { CategorySlug, PetPolicyInput } from '@pet-helper/shared';
 import type postgres from 'postgres';
 import { z } from 'zod';
 

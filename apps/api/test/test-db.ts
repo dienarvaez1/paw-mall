@@ -9,7 +9,8 @@ import postgres from 'postgres';
  * mix with real data, and `pnpm places:*` commands can't remove test places mid-run.
  */
 export const TEST_DATABASE_URL =
-  process.env.TEST_DATABASE_URL ?? 'postgres://paw:paw@localhost:5434/paw_mall_test';
+  process.env.TEST_DATABASE_URL ??
+  'postgres://pet_helper:pet_helper@localhost:5434/pet_helper_test';
 
 const quiet = { max: 1, connect_timeout: 3, onnotice: () => {} };
 // Any constant; it keeps the API and importer test runs from migrating at the same time.

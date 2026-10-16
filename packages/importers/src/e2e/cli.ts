@@ -1,5 +1,5 @@
 /**
- * Loads the fixed end-to-end data (data/e2e-fixtures.json) into its own database, paw_mall_e2e, never the
+ * Loads the fixed end-to-end data (data/e2e-fixtures.json) into its own database, pet_helper_e2e, never the
  * dev or the Vitest one: creates it if missing, migrates it, empties the place tables and inserts
  * the fixtures. Safe to re-run before every Maestro run.
  *
@@ -15,7 +15,7 @@ import postgres from 'postgres';
 import { nameKey } from '../areas/build.ts';
 
 export const E2E_DATABASE_URL =
-  process.env.E2E_DATABASE_URL ?? 'postgres://paw:paw@localhost:5434/paw_mall_e2e';
+  process.env.E2E_DATABASE_URL ?? 'postgres://pet_helper:pet_helper@localhost:5434/pet_helper_e2e';
 
 type Fixture = {
   name: string;
@@ -124,7 +124,7 @@ async function main() {
     }
     await sql`ANALYZE places`;
     console.log(
-      `paw_mall_e2e: ${fixtures.places.length} places, ${fixtures.areas.length} search areas.`,
+      `pet_helper_e2e: ${fixtures.places.length} places, ${fixtures.areas.length} search areas.`,
     );
   } finally {
     await sql.end();

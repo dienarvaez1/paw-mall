@@ -1,4 +1,4 @@
-import { MAP_DEFAULT_PINS, MAP_PIN_LIMITS } from '@paw-mall/shared';
+import { MAP_DEFAULT_PINS, MAP_PIN_LIMITS } from '@pet-helper/shared';
 
 /** The map's pin button: the next preset, back to the smallest after the largest. */
 export function nextPinLimit(current: number): number {

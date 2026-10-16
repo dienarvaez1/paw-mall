@@ -8,7 +8,7 @@ import {
   POLICY_ANSWER_WINDOW_DAYS,
   POLICY_DISPUTES_TO_REVIEW,
   type PolicyAnswer,
-} from '@paw-mall/shared';
+} from '@pet-helper/shared';
 import { sql } from 'drizzle-orm';
 
 import type { Database } from '../db/client';

@@ -1,5 +1,5 @@
 // The hours module alone: Node runs the CLIs' TypeScript directly and can't load the package index.
-import { placeHoursSchema } from '@paw-mall/shared/hours';
+import { placeHoursSchema } from '@pet-helper/shared/hours';
 import type { Sql } from 'postgres';
 
 /** One place a check flagged, with what's wrong in a few words. */

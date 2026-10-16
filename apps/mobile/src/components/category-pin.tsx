@@ -1,4 +1,4 @@
-import type { Place } from '@paw-mall/shared';
+import type { Place } from '@pet-helper/shared';
 import { useState } from 'react';
 import { Marker, type MapMarkerProps } from 'react-native-maps';
 

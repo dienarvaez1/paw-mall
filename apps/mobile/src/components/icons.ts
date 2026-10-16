@@ -1,5 +1,5 @@
 // The SVGs in assets/icons (Metro needs static requires).
-import type { CategorySlug } from '@paw-mall/shared';
+import type { CategorySlug } from '@pet-helper/shared';
 import type { ImageSource } from 'expo-image';
 
 export const ICONS = {

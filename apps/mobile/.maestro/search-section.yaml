@@ -1,7 +1,7 @@
 # A confirmed search moves to the tab that finds more: on Explorar, "Toluca" answered as a business
 # name finds no pet business but a café (unconfirmed) 1.4 km away, so Pet-friendly takes the
 # focus and lists it (owner's rule, 2026-10-13).
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:

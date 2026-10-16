@@ -1,5 +1,5 @@
 # Ajustes km → miles: distances and the radius read in miles.
-appId: ${APP_ID || 'dev.pawmall.app'}
+appId: ${APP_ID || 'dev.pethelper.app'}
 ---
 - runFlow: common/launch.yaml
 - tapOn:
