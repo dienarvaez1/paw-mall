@@ -1411,10 +1411,8 @@ places` at the end. Place searches ("Guadalajara", "Monterrey", "Mérida", "Tiju
   - **Logo:** the owner's "Pet-Helper" logo, fitted to the header's 720 × 240 transparent PNG
     (`apps/mobile/assets/images/logo.png`); its turquoise (#00C4C6) matches the old one, so the
     button colors stay.
-- **Open:**
-  - The Android map now uses `paw-mall-app`'s "Maps Platform API Key" (the previous key in
-    `apps/mobile/.env.local` wasn't in this project). It has no application restriction: restrict
-    it to `dev.pethelper.app` + the debug SHA-1 once nothing else uses it (owner).
+- **Open:** none. The Android map uses `paw-mall-app`'s key "Pet Helper Android maps (dev)",
+  restricted to `dev.pethelper.app` + the debug SHA-1 after the merge (2026-10-15).
 
 ## Production deployment
 

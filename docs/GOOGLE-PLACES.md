@@ -67,9 +67,9 @@ Expo Go's own Google Maps key is refused on recent Android emulators ("Authoriza
 Android runs as a **development build** with Pet Helper's own key, in the same Google Cloud project.
 iOS keeps Apple Maps and Expo Go.
 
-**Today (2026-10-15):** the build uses the project's "Maps Platform API Key", which has API
-restrictions but no application restriction yet. Restricting it as in step 2 is pending, once
-nothing else uses it.
+**Today (2026-10-15):** the key "Pet Helper Android maps (dev)" is restricted to Android app
+`dev.pethelper.app` with the debug SHA-1 below; its API restrictions allow Maps SDK for Android
+and Maps SDK for iOS (the iOS one is unused: iOS shows Apple Maps).
 
 1. **APIs & Services → Library:** enable **Maps SDK for Android**.
 2. **APIs & Services → Credentials → Create credentials → API key.** Edit it:
