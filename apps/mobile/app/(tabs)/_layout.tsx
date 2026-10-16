@@ -48,7 +48,7 @@ function TabHeader({ title, description }: { title: string; description?: string
       <View className="flex-1 items-center">
         <Image
           source={LOGO}
-          style={{ width: 181, height: 60 }}
+          style={{ width: 190, height: 63 }}
           contentFit="contain"
           accessible
           accessibilityRole="header"

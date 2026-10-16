@@ -29,6 +29,9 @@ never share an allowance.
 
 ## Setup (a new Google Cloud project for Pet Helper)
 
+The project exists: ID `paw-mall-app` (IDs can't be renamed), named **Pet Helper** since
+2026-10-15. For a new one:
+
 1. Create a project at <https://console.cloud.google.com> named **Pet Helper**, then attach a
    **billing account**. Google requires one even when usage stays within the free allowance.
 2. **APIs & Services → Library:** enable **Places API (New)**.
@@ -63,6 +66,10 @@ SELECT google_match_status, count(*) FROM places GROUP BY 1; -- matched / no_mat
 Expo Go's own Google Maps key is refused on recent Android emulators ("Authorization failure"), so
 Android runs as a **development build** with Pet Helper's own key, in the same Google Cloud project.
 iOS keeps Apple Maps and Expo Go.
+
+**Today (2026-10-15):** the build uses the project's "Maps Platform API Key", which has API
+restrictions but no application restriction yet. Restricting it as in step 2 is pending, once
+nothing else uses it.
 
 1. **APIs & Services → Library:** enable **Maps SDK for Android**.
 2. **APIs & Services → Credentials → Create credentials → API key.** Edit it:

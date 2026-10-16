@@ -21,7 +21,7 @@ Setting up, running and changing Pet Helper on a Mac. How the parts fit together
 
 ```sh
 pnpm install
-pnpm db:up            # Postgres 17 + PostGIS in Docker, port 5434 (user/password paw/paw)
+pnpm db:up            # Postgres 17 + PostGIS in Docker, port 5434 (user/password pet_helper/pet_helper)
 pnpm db:migrate       # applies apps/api/src/db/migrations
 ```
 
@@ -182,6 +182,34 @@ recall 97%, p95 47 ms, no regression.
 2. A test with a small sample file in `packages/importers/test/fixtures/`.
 3. Credit the source in the app (`settings.dataSources` and wherever its data shows).
 4. Document the step in this guide and in CLAUDE.md's Local setup.
+
+## Updating a checkout from before the rename
+
+The project was called Paw Mall until Phase 23 (2026-10-15). A machine set up before it needs,
+once, after pulling:
+
+```sh
+git remote set-url origin https://github.com/dienarvaez1/pet-helper.git
+pnpm install                     # links @pet-helper/* in place of @paw-mall/*
+docker compose -p paw-mall down  # stops the old container; its volume stays
+docker volume create pet-helper_db-data
+docker run --rm --entrypoint sh -v paw-mall_db-data:/from -v pet-helper_db-data:/to \
+  postgres:17 -c 'cp -a /from/. /to/'
+docker compose up -d --wait      # the Compose project is now always "pet-helper"
+docker exec pet-helper-db-1 psql -U paw -d postgres \
+  -c "CREATE ROLE rename_admin SUPERUSER LOGIN"
+docker exec pet-helper-db-1 psql -U rename_admin -d postgres \
+  -c "ALTER ROLE paw RENAME TO pet_helper" -c "ALTER ROLE pet_helper PASSWORD 'pet_helper'" \
+  -c "ALTER DATABASE paw_mall RENAME TO pet_helper" \
+  -c "ALTER DATABASE paw_mall_test RENAME TO pet_helper_test" \
+  -c "ALTER DATABASE paw_mall_e2e RENAME TO pet_helper_e2e"
+docker exec pet-helper-db-1 psql -U pet_helper -d postgres -c "DROP ROLE rename_admin"
+```
+
+Stop any `wrangler dev` or Metro still running from before, and restart them. On Android,
+uninstall `dev.pawmall.app` and rebuild (`npx expo prebuild --platform android --clean`, then
+`pnpm --filter mobile android:dev`): the new package starts with empty favorites and settings.
+Once everything works, `docker volume rm paw-mall_db-data` frees the old copy.
 
 ## Troubleshooting
 

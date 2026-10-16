@@ -1,6 +1,6 @@
 # Pet Helper
 
-Pet Helper is a mobile app for pet owners in Mexico. It answers two everyday
+Pet Helper (called Paw Mall until 2026-10-15) is a mobile app for pet owners in Mexico. It answers two everyday
 questions:
 
 - **Where's the pet business I need?** Vets and vet hospitals, pet stores, boutiques, groomers,
@@ -122,7 +122,8 @@ pnpm --filter mobile start             # Metro; scan the QR code with Expo Go
 
 Taken on 2026-10-14 in Colonia Condesa, Mexico City, with the full development data. Android is
 the release build on the emulator (Pixel 10, Google Maps); iOS is Expo Go on the simulator
-(iPhone 17 Pro Max, Apple Maps). [docs/USER-GUIDE.md](docs/USER-GUIDE.md) describes each screen.
+(iPhone 17 Pro Max, Apple Maps). They predate the rename and still show the Paw-Mall logo.
+[docs/USER-GUIDE.md](docs/USER-GUIDE.md) describes each screen.
 
 | Screen                                                                     | Android                                                             | iOS                                                             |
 | -------------------------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- |
