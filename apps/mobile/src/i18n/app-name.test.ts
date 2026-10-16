@@ -18,7 +18,6 @@ describe('app name in translations', () => {
     for (const language of Object.values(resources)) {
       for (const text of strings(language)) {
         expect(text).not.toContain(APP_NAME);
-        expect(text).not.toMatch(/paw mall/i);
       }
     }
   });

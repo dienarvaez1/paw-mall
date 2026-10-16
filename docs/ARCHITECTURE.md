@@ -203,8 +203,8 @@ before drawing: a map laid out at zero height opens on the whole world on Androi
 
 ### Map
 
-`ExploreScreen` → `PlacesMap`: Apple Maps on iOS (`mutedStandard`), Google Maps on Android (Paw
-Mall's own key in development builds; `MAPS_AVAILABLE` shows a notice instead of crashing without
+`ExploreScreen` → `PlacesMap`: Apple Maps on iOS (`mutedStandard`), Google Maps on Android (Pet
+Helper's own key in development builds; `MAPS_AVAILABLE` shows a notice instead of crashing without
 one). The map asks for places in the area actually on screen (it re-reads its boundaries after
 its own moves, since iOS doesn't always report them), draws the radius circle, pins and clusters
 (`cluster-size.ts`), and tells the user's hand moves from its own (`movedByHand`) to save a

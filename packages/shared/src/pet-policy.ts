@@ -60,8 +60,8 @@ export type PetPolicyInput = z.infer<typeof petPolicyInputSchema>;
 
 /**
  * Who stated the policy: the verified owner, the team from a public source (one venue, or a chain's
- * policy for all its branches), the business's own website, OpenStreetMap's contributors, or Paw
- * Mall's users (PET_ANSWERS_TO_PUBLISH phones agreeing).
+ * policy for all its branches), the business's own website, OpenStreetMap's contributors, or Pet
+ * Helper's users (PET_ANSWERS_TO_PUBLISH phones agreeing).
  */
 export const PET_POLICY_SOURCES = [
   'owner',

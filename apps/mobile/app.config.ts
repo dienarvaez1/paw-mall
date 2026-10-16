@@ -1,6 +1,6 @@
 import type { ExpoConfig } from 'expo/config';
 
-// The app's name, the same in every language (owner's decision, 2026-10-15; was "Paw Mall"). The
+// The app's name, the same in every language (owner's decision, 2026-10-15). The
 // store bundle ID is still an open decision.
 const config: ExpoConfig = {
   name: 'Pet Helper',
